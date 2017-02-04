@@ -1,0 +1,18 @@
+# IntellJ
+.idea
+biolaboratory.iml
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Maven
+log/
+target/
+
+# test-ng
+test-output/
+
+# Main
+Main.java
