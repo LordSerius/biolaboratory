@@ -1,22 +1,20 @@
 package hu.bioinformatics.biolaboratory.testutils;
 
 import com.google.common.base.Preconditions;
-import com.google.inject.Guice;
 import hu.bioinformatics.biolaboratory.guice.GuiceModule;
 import hu.bioinformatics.biolaboratory.sequence.dna.Dna;
 import hu.bioinformatics.biolaboratory.utils.DnaCollectors;
+import hu.bioinformatics.biolaboratory.utils.resource.ResourceLocalizer;
 import hu.bioinformatics.biolaboratory.utils.resource.ResourceReader;
-import hu.bioinformatics.biolaboratory.utils.resource.RowReader;
-import hu.bioinformatics.biolaboratory.utils.resource.file.FileResourceProvider;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Validate;
-import org.testng.annotations.Test;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
+
+import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * Loads the target file and translates it to a collection of {@link Dna}s
@@ -28,10 +26,13 @@ public class TestDnaCollectionLoader {
     private static final Pattern whitespacePattern = Pattern.compile("\\s+");
 
     private final ResourceReader resourceReader;
+    private final ResourceLocalizer resourceLocalizer;
 
     @Inject
-    public TestDnaCollectionLoader(@Named(value = GuiceModule.ROW_READER_NAME) ResourceReader resourceReader) {
-        this.resourceReader = Validate.notNull(resourceReader, "Resource reader should not be null");
+    public TestDnaCollectionLoader(@Named(value = GuiceModule.ROW_READER_NAME) ResourceReader resourceReader,
+                                   ResourceLocalizer resourceLocalizer) {
+        this.resourceReader = notNull(resourceReader, "Resource reader should not be null");
+        this.resourceLocalizer = notNull(resourceLocalizer);
     }
 
     /**
@@ -56,7 +57,7 @@ public class TestDnaCollectionLoader {
 
     private String readFile(String fileName) {
         Preconditions.checkArgument(StringUtils.isNotBlank(fileName), "The input file should not be blank");
-        String filePath = ResourceLoader.loadResourceFile(fileName);
+        String filePath = resourceLocalizer.localizeResource(fileName);
         return resourceReader.read(filePath).get(0);
     }
 }

@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import hu.bioinformatics.biolaboratory.sequence.SequenceElement;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 import java.util.Set;
@@ -70,15 +71,27 @@ public enum AminoAcid implements SequenceElement {
     }
 
     /**
+     * Find amino acid about its amino acid letter in {@link String} format.
+     *
+     * @param aminoAcidLetter The amino acid letter.
+     * @return The corresponding amino acid.
+     */
+    public static AminoAcid findAminoAcid(final String aminoAcidLetter) {
+        Preconditions.checkArgument(StringUtils.isNotBlank(aminoAcidLetter), "Amino acid letter should not be empty");
+        Preconditions.checkArgument(aminoAcidLetter.length() == 1, "This is not a letter");
+        return findAminoAcid(aminoAcidLetter.charAt(0));
+    }
+
+    /**
      * Find the amino acid about its amino acid letter.
      *
      * @param aminoAcidLetter The amino acid letter.
      * @return The corresponding amino acid.
      */
     public static AminoAcid findAminoAcid(final char aminoAcidLetter) {
-        AminoAcid dnaNucleotide = CHARACTER_AMINO_ACD_LOOKUP.get(Character.toUpperCase(aminoAcidLetter));
-        Preconditions.checkArgument(dnaNucleotide != null, "\"" + aminoAcidLetter + "\" is not a amino acid letter");
-        return dnaNucleotide;
+        AminoAcid aminoAcid = CHARACTER_AMINO_ACD_LOOKUP.get(Character.toUpperCase(aminoAcidLetter));
+        Preconditions.checkArgument(aminoAcid != null, "\"" + aminoAcidLetter + "\" is not a amino acid letter");
+        return aminoAcid;
     }
 
     private String name;

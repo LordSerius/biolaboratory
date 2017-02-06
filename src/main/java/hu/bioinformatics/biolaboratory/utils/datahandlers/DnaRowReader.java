@@ -11,6 +11,8 @@ import org.apache.commons.lang3.Validate;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import static org.apache.commons.lang3.Validate.notNull;
+
 /**
  * TODO: test it
  * 
@@ -25,7 +27,7 @@ public class DnaRowReader implements DnaDataReader {
 
     @Inject
     public DnaRowReader(@Named(value = GuiceModule.ROW_READER_NAME) ResourceReader resourceReader) {
-        this.rowReader = Validate.notNull(resourceReader);
+        this.rowReader = notNull(resourceReader);
     }
 
     /**

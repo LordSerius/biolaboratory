@@ -24,13 +24,6 @@ public class DnaNucleotideTest {
         };
     }
 
-    @Test(dataProvider = INVALID_FIND_DNA_NUCLEOTIDE_DATA_PROVIDER_NAME,
-            expectedExceptions = IllegalArgumentException.class)
-    public void shouldFindDnaNucleotideThrowException(char dnaLetter) {
-        DnaNucleotide.findDnaNucleotide(dnaLetter);
-        fail();
-    }
-
     private static final String VALID_FIND_DNA_NUCLEOTIDE_DATA_PROVIDER_NAME = "validFindDnaNucleotideDataProvider";
 
     @DataProvider(name = VALID_FIND_DNA_NUCLEOTIDE_DATA_PROVIDER_NAME)
@@ -47,16 +40,17 @@ public class DnaNucleotideTest {
         };
     }
 
-    @Test(dataProvider = VALID_FIND_DNA_NUCLEOTIDE_DATA_PROVIDER_NAME)
-    public void shouldFindDnaNucleotideReturn(char dnaLetter, DnaNucleotide controlDnaNucleotide) {
-        DnaNucleotide dnaNucleotide = DnaNucleotide.findDnaNucleotide(dnaLetter);
-        assertThat(dnaNucleotide, is(equalTo(controlDnaNucleotide)));
-    }
+    private static final String INVALID_FIND_DNA_NUCLEOTIDE_ABOUT_STRING_DATA_PROVIDER_NAME = "invalidFindDnaNucleotideAboutStringDataProvider";
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void shouldFindDnaNucleotideComplementThrowException() {
-        DnaNucleotide.findDnaNucleotide('x');
-        fail();
+    @DataProvider(name = INVALID_FIND_DNA_NUCLEOTIDE_ABOUT_STRING_DATA_PROVIDER_NAME)
+    private static Object[][] invalidFindAminoAcidAboutStringDataProvider() {
+        return new Object[][] {
+                { null },
+                { "" },
+                { " " },
+                { "-" },
+                { "AG" }
+        };
     }
 
     private static final String VALID_FIND_DNA_NUCLEOTIDE_COMPLEMENT_DATA_PROVIDER_NAME = "validFindDnaNucleotideComplementDataProvider";
@@ -75,9 +69,34 @@ public class DnaNucleotideTest {
         };
     }
 
+    @Test(dataProvider = INVALID_FIND_DNA_NUCLEOTIDE_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldFindDnaNucleotideThrowException(char dnaLetter) {
+        DnaNucleotide.findDnaNucleotide(dnaLetter);
+        fail();
+    }
+
+    @Test(dataProvider = VALID_FIND_DNA_NUCLEOTIDE_DATA_PROVIDER_NAME)
+    public void shouldFindDnaNucleotideReturn(char dnaLetter, DnaNucleotide controlDnaNucleotide) {
+        DnaNucleotide dnaNucleotide = DnaNucleotide.findDnaNucleotide(dnaLetter);
+        assertThat(dnaNucleotide, is(equalTo(controlDnaNucleotide)));
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void shouldFindDnaNucleotideComplementThrowException() {
+        DnaNucleotide.findDnaNucleotide('x');
+        fail();
+    }
+
     @Test(dataProvider = VALID_FIND_DNA_NUCLEOTIDE_COMPLEMENT_DATA_PROVIDER_NAME)
     public void shouldFindDnaNucleotideComplementReturn(char dnaLetter, DnaNucleotide controlDnaNucleotide) {
         DnaNucleotide dnaNucleotide = DnaNucleotide.findDnaNucleotideComplement(dnaLetter);
         assertThat(dnaNucleotide, is(equalTo(controlDnaNucleotide)));
+    }
+
+    @Test(dataProvider = INVALID_FIND_DNA_NUCLEOTIDE_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldFindDnaNucleotideAboutStringThrowException(String dnaLetter) {
+        fail();
     }
 }

@@ -28,7 +28,7 @@ public class RnaNucleotideTest {
     @Test(dataProvider = INVALID_FIND_DNA_NUCLEOTIDE_DATA_PROVIDER_NAME,
             expectedExceptions = IllegalArgumentException.class)
     public void shouldFindDnaNucleotideThrowException(char dnaLetter) {
-        RnaNucleotide.findDnaNucleotide(dnaLetter);
+        RnaNucleotide.findRnaNucleotide(dnaLetter);
         fail();
     }
 
@@ -50,7 +50,7 @@ public class RnaNucleotideTest {
 
     @Test(dataProvider = VALID_FIND_RNA_NUCLEOTIDE_DATA_PROVIDER_NAME)
     public void shouldFindRnaNucleotideReturn(char dnaLetter, RnaNucleotide controlDnaNucleotide) {
-        RnaNucleotide dnaNucleotide = RnaNucleotide.findDnaNucleotide(dnaLetter);
+        RnaNucleotide dnaNucleotide = RnaNucleotide.findRnaNucleotide(dnaLetter);
         assertThat(dnaNucleotide, is(equalTo(controlDnaNucleotide)));
     }
 }

@@ -5,8 +5,8 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import hu.bioinformatics.biolaboratory.sequence.SequenceElement;
+import org.apache.commons.lang3.StringUtils;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -41,6 +41,16 @@ public enum DnaNucleotide implements SequenceElement {
             ));
 
     /**
+     * Find the nucleotide complement about its {@link String} nucleotide letter.
+     *
+     * @param nucleotideLetter The nucleotide letter in {@link String} format.
+     * @return The corresponding nucleotide.
+     */
+    public static DnaNucleotide findDnaNucleotideComplement(final String nucleotideLetter) {
+        return NUCLEOTIDE_COMPLEMENTS.get(findDnaNucleotide(nucleotideLetter));
+    }
+
+    /**
      * Find the nucleotide complement about its nucleotide letter.
      *
      * @param nucleotideLetter The nucleotide letter.
@@ -48,6 +58,18 @@ public enum DnaNucleotide implements SequenceElement {
      */
     public static DnaNucleotide findDnaNucleotideComplement(final char nucleotideLetter) {
         return NUCLEOTIDE_COMPLEMENTS.get(findDnaNucleotide(nucleotideLetter));
+    }
+
+    /**
+     * Find DNA nucleotide about its nucleotide letter in {@link String} format.
+     *
+     * @param dnaNucleotideLetter The DNA nucleotide letter.
+     * @return The corresponding DNA nucleotide.
+     */
+    public static DnaNucleotide findDnaNucleotide(final String dnaNucleotideLetter) {
+        Preconditions.checkArgument(StringUtils.isNotBlank(dnaNucleotideLetter), "DNA nucleotide letter should not be empty");
+        Preconditions.checkArgument(dnaNucleotideLetter.length() == 1, "This is not a letter");
+        return findDnaNucleotide(dnaNucleotideLetter.charAt(0));
     }
 
     /**

@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import hu.bioinformatics.biolaboratory.sequence.SequenceElement;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 import java.util.Set;
@@ -32,15 +33,27 @@ public enum RnaNucleotide implements SequenceElement {
             ));
 
     /**
+     * Find RNA nucleotide about its nucleotide letter in {@link String} format.
+     *
+     * @param rnaNucleotideLetter The RNA nucleotide letter.
+     * @return The corresponding RNA nucleotide.
+     */
+    public static RnaNucleotide findAminoAcid(final String rnaNucleotideLetter) {
+        Preconditions.checkArgument(StringUtils.isNotBlank(rnaNucleotideLetter), "RNA nucleotide letter should not be empty");
+        Preconditions.checkArgument(rnaNucleotideLetter.length() == 1, "This is not a letter");
+        return findRnaNucleotide(rnaNucleotideLetter.charAt(0));
+    }
+
+    /**
      * Find the nucleotide about its nucleotide letter.
      *
      * @param nucleotideLetter The nucleotide letter.
      * @return The corresponding nucleotide.
      */
-    public static RnaNucleotide findDnaNucleotide(final char nucleotideLetter) {
-        RnaNucleotide dnaNucleotide = CHARACTER_NUCLEOTIDE_LOOKUP.get(Character.toUpperCase(nucleotideLetter));
-        Preconditions.checkArgument(dnaNucleotide != null, "\"" + nucleotideLetter + "\" is not a RNA nucleotide letter");
-        return dnaNucleotide;
+    public static RnaNucleotide findRnaNucleotide(final char nucleotideLetter) {
+        RnaNucleotide rnaNucleotide = CHARACTER_NUCLEOTIDE_LOOKUP.get(Character.toUpperCase(nucleotideLetter));
+        Preconditions.checkArgument(rnaNucleotide != null, "\"" + nucleotideLetter + "\" is not a RNA nucleotide letter");
+        return rnaNucleotide;
     }
 
     private String name;

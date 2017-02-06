@@ -62,7 +62,7 @@ public class Rna extends BiologicalSequence<Rna, RnaNucleotide> {
 
     @Override
     protected RnaNucleotide findSequenceElement(final char sequenceElementLetter) {
-        return RnaNucleotide.findDnaNucleotide(sequenceElementLetter);
+        return RnaNucleotide.findRnaNucleotide(sequenceElementLetter);
     }
 
     @Override

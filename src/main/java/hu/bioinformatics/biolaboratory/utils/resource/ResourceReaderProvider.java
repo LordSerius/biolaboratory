@@ -9,7 +9,7 @@ import java.io.Reader;
  *
  * @author Attila Radi
  */
-public interface ResourceProvider {
+public interface ResourceReaderProvider {
 
     /**
      * Provides a {@link Reader} for the resource.

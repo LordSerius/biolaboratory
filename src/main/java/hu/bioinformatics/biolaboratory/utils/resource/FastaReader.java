@@ -1,14 +1,10 @@
 package hu.bioinformatics.biolaboratory.utils.resource;
 
-import com.google.common.base.Preconditions;
-import hu.bioinformatics.biolaboratory.utils.resource.ResourceReader;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,13 +19,13 @@ public class FastaReader extends ResourceReader {
     private static final String PROMPT = "<";
 
     /**
-     * Constructor is waiting for a {@link ResourceProvider}.
+     * Constructor is waiting for a {@link ResourceReaderProvider}.
      *
-     * @param resourceProvider {@link ResourceProvider}
+     * @param resourceReaderProvider {@link ResourceReaderProvider}
      */
     @Inject
-    public FastaReader(ResourceProvider resourceProvider) {
-        super(resourceProvider);
+    public FastaReader(ResourceReaderProvider resourceReaderProvider) {
+        super(resourceReaderProvider);
     }
 
     @Override

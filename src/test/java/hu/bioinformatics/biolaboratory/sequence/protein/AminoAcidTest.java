@@ -15,7 +15,7 @@ import static org.testng.Assert.*;
  */
 public class AminoAcidTest {
 
-    private static final String INVALID_FIND_AMINO_ACID_DATA_PROVIDER_NAME = "invalidFindAminoAcidFindDataProvider";
+    private static final String INVALID_FIND_AMINO_ACID_DATA_PROVIDER_NAME = "invalidFindAminoAcidDataProvider";
 
     @DataProvider(name = INVALID_FIND_AMINO_ACID_DATA_PROVIDER_NAME)
     private static Object[][] invalidFindAminoAcidDataProvider() {
@@ -24,7 +24,7 @@ public class AminoAcidTest {
         };
     }
 
-    private static final String VALID_FIND_AMINO_ACID_DATA_PROVIDER_NAME = "validFindAminoAcidFindDataProvider";
+    private static final String VALID_FIND_AMINO_ACID_DATA_PROVIDER_NAME = "validFindAminoAcidDataProvider";
 
     @DataProvider(name = VALID_FIND_AMINO_ACID_DATA_PROVIDER_NAME)
     private static Object[][] validFindAminoAcidDataProvider() {
@@ -52,6 +52,19 @@ public class AminoAcidTest {
         };
     }
 
+    private static final String INVALID_FIND_AMINO_ACID_ABOUT_STRING_DATA_PROVIDER_NAME = "invalidFindAminoAcidAboutStringDataProvider";
+
+    @DataProvider(name = INVALID_FIND_AMINO_ACID_ABOUT_STRING_DATA_PROVIDER_NAME)
+    private static Object[][] invalidFindAminoAcidAboutStringDataProvider() {
+        return new Object[][] {
+                { null },
+                { "" },
+                { " " },
+                { "-" },
+                { "AL" }
+        };
+    }
+
     @Test(dataProvider = INVALID_FIND_AMINO_ACID_DATA_PROVIDER_NAME,
             expectedExceptions = IllegalArgumentException.class)
     public void shouldFindAminoAcidThrowException(char aminoAcidLetter) {
@@ -62,6 +75,20 @@ public class AminoAcidTest {
     @Test(dataProvider = VALID_FIND_AMINO_ACID_DATA_PROVIDER_NAME)
     public void shouldFindAminoAcidReturn(char aminoAcidLetter, AminoAcid controlAminoAcid) {
         AminoAcid aminoAcid = AminoAcid.findAminoAcid(aminoAcidLetter);
+        assertThat(aminoAcid, is(equalTo(controlAminoAcid)));
+    }
+
+    @Test(dataProvider = INVALID_FIND_AMINO_ACID_ABOUT_STRING_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldFindAminoAcidAboutStringThrowException(String aminoAcidLetter) {
+        AminoAcid.findAminoAcid(aminoAcidLetter);
+        fail();
+    }
+
+    @Test(dataProvider = VALID_FIND_AMINO_ACID_DATA_PROVIDER_NAME)
+    public void shouldFindAminoAcidAboutStringReturn(char aminoAcidLetter, AminoAcid controlAminoAcid) {
+        String aminoAcidLetterString = Character.toString(aminoAcidLetter);
+        AminoAcid aminoAcid = AminoAcid.findAminoAcid(aminoAcidLetterString);
         assertThat(aminoAcid, is(equalTo(controlAminoAcid)));
     }
 }

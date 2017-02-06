@@ -4,12 +4,14 @@ import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
+import javax.inject.Inject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.UncheckedIOException;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static org.apache.commons.lang3.Validate.*;
 
 /**
  * Provides the template for reading a resource.
@@ -18,15 +20,15 @@ import java.util.stream.Collectors;
  */
 public abstract class ResourceReader {
 
-    private final ResourceProvider resourceProvider;
+    private final ResourceReaderProvider resourceReaderProvider;
 
     /**
-     * Constructor is waiting for a {@link ResourceProvider}.
+     * Constructor is waiting for a {@link ResourceReaderProvider}.
      *
-     * @param resourceProvider {@link ResourceProvider}
+     * @param resourceReaderProvider {@link ResourceReaderProvider}
      */
-    public ResourceReader(ResourceProvider resourceProvider) {
-        this.resourceProvider = Validate.notNull(resourceProvider, "Resource provider should not be null");
+    public ResourceReader(ResourceReaderProvider resourceReaderProvider) {
+        this.resourceReaderProvider = notNull(resourceReaderProvider, "Resource provider should not be null");
     }
 
     /**
@@ -42,7 +44,7 @@ public abstract class ResourceReader {
         List<String> lines = null;
 
         try {
-            br = new BufferedReader(resourceProvider.provideReader(resourcePath));
+            br = new BufferedReader(resourceReaderProvider.provideReader(resourcePath));
             lines = processResource(br);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
