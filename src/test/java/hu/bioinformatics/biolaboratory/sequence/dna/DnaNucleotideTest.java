@@ -43,7 +43,7 @@ public class DnaNucleotideTest {
     private static final String INVALID_FIND_DNA_NUCLEOTIDE_ABOUT_STRING_DATA_PROVIDER_NAME = "invalidFindDnaNucleotideAboutStringDataProvider";
 
     @DataProvider(name = INVALID_FIND_DNA_NUCLEOTIDE_ABOUT_STRING_DATA_PROVIDER_NAME)
-    private static Object[][] invalidFindAminoAcidAboutStringDataProvider() {
+    private static Object[][] invalidFindDnaNucleotideAboutStringDataProvider() {
         return new Object[][] {
                 { null },
                 { "" },
@@ -84,7 +84,7 @@ public class DnaNucleotideTest {
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void shouldFindDnaNucleotideComplementThrowException() {
-        DnaNucleotide.findDnaNucleotide('x');
+        DnaNucleotide.findDnaNucleotideComplement('x');
         fail();
     }
 
@@ -94,9 +94,29 @@ public class DnaNucleotideTest {
         assertThat(dnaNucleotide, is(equalTo(controlDnaNucleotide)));
     }
 
-    @Test(dataProvider = INVALID_FIND_DNA_NUCLEOTIDE_DATA_PROVIDER_NAME,
+    @Test(dataProvider = INVALID_FIND_DNA_NUCLEOTIDE_ABOUT_STRING_DATA_PROVIDER_NAME,
             expectedExceptions = IllegalArgumentException.class)
     public void shouldFindDnaNucleotideAboutStringThrowException(String dnaLetter) {
+        DnaNucleotide.findDnaNucleotide(dnaLetter);
         fail();
+    }
+
+    @Test(dataProvider = VALID_FIND_DNA_NUCLEOTIDE_DATA_PROVIDER_NAME)
+    public void shouldFindDnaNucleotideAboutStringReturn(char dnaLetter, DnaNucleotide controlDnaNucleotide) {
+        DnaNucleotide dnaNucleotide = DnaNucleotide.findDnaNucleotide(Character.toString(dnaLetter));
+        assertThat(dnaNucleotide, is(equalTo(controlDnaNucleotide)));
+    }
+
+    @Test(dataProvider = INVALID_FIND_DNA_NUCLEOTIDE_ABOUT_STRING_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldFindDnaNucleotideComlementAboutStringThrowException(String dnaLetter) {
+        DnaNucleotide.findDnaNucleotide(dnaLetter);
+        fail();
+    }
+
+    @Test(dataProvider = VALID_FIND_DNA_NUCLEOTIDE_COMPLEMENT_DATA_PROVIDER_NAME)
+    public void shouldFindDnaNucleotideComplementAboutStringReturn(char dnaLetter, DnaNucleotide controlDnaNucleotide) {
+        DnaNucleotide dnaNucleotide = DnaNucleotide.findDnaNucleotideComplement(Character.toString(dnaLetter));
+        assertThat(dnaNucleotide, is(equalTo(controlDnaNucleotide)));
     }
 }

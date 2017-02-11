@@ -4,8 +4,11 @@ import com.google.common.base.Preconditions;
 import hu.bioinformatics.biolaboratory.sequence.BiologicalSequence;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
+
+import static org.apache.commons.lang3.Validate.noNullElements;
 
 /**
  * Represents a single protein about the amino acid sequence.
@@ -36,6 +39,26 @@ public class Protein extends BiologicalSequence<Protein, AminoAcid> {
         return new Protein(Protein.validateSequence(sequence));
     }
 
+    /**
+     * Build an {@link Protein} from the given {@link AminoAcid}s. The amino acids should not contain null value.
+     *
+     * @param aminoAcids The input amino acids.
+     * @return A new {@link Protein} object which stands from the amino acids.
+     */
+    public static Protein build(final AminoAcid... aminoAcids) {
+        return new Protein(validateElements(aminoAcids));
+    }
+
+    /**
+     * Build an {@link Protein} from the given {@link AminoAcid} {@link List}. The list should not contain null element.
+     *
+     * @param aminoAcidList The input nucleotides in a {@link List}.
+     * @return A new {@link Protein} object which stand from the nucleotides
+     */
+    public static Protein build(final List<AminoAcid> aminoAcidList) {
+        return new Protein(validateElementList(aminoAcidList));
+    }
+
     private static String validateSequence(final String sequence) {
         Preconditions.checkArgument(StringUtils.isNotBlank(sequence), "Protein sequence cannot be blank");
         String uppercaseSequence = sequence.trim().toUpperCase();
@@ -43,13 +66,36 @@ public class Protein extends BiologicalSequence<Protein, AminoAcid> {
         return uppercaseSequence;
     }
 
+    private static AminoAcid[] validateElements(final AminoAcid[] elements) {
+        Preconditions.checkArgument(elements != null && elements.length > 0, "Protein elements should not be empty");
+        return noNullElements(elements, "Protein elements should not contain null element");
+    }
+
+    private static List<AminoAcid> validateElementList(final List<AminoAcid> elementList) {
+        Preconditions.checkArgument(elementList != null && !elementList.isEmpty(), "Protein element list should not be empty");
+        return noNullElements(elementList, "Protein element list should not contain null element");
+    }
+
     private Protein(String sequence) {
         super(sequence);
+    }
+
+    private Protein(final AminoAcid... aminoAcids) {
+        super(aminoAcids);
+    }
+
+    private Protein(final List<AminoAcid> aminoAcidList) {
+        super(aminoAcidList);
     }
 
     @Override
     protected Protein construct(String sequence) {
         return new Protein(sequence);
+    }
+
+    @Override
+    protected AminoAcid[] createEmptyElementArray() {
+        return new AminoAcid[sequenceLength];
     }
 
     @Override

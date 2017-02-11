@@ -22,6 +22,7 @@ public class OccurrenceMaps {
      * @return The merge of the {@link OccurrenceMap}s.
      * @see OccurrenceMap#merge(OccurrenceMap)
      */
+    @SafeVarargs
     public static <K> OccurrenceMap<K> mergeOccurrenceMaps(final OccurrenceMap<K>... occurrenceMaps) {
         Predicate<Map.Entry<K, Integer>> greaterZeroPredicate = entry -> entry.getValue() > 0;
         return filterMergeOccurrenceMaps(greaterZeroPredicate, occurrenceMaps);
@@ -50,6 +51,7 @@ public class OccurrenceMaps {
      * @return The merge of the filtered {@link OccurrenceMap} collection.
      * @see OccurrenceMap#filterMerge(OccurrenceMap, Predicate)
      */
+    @SafeVarargs
     private static <K> OccurrenceMap<K> filterMergeOccurrenceMaps(
             final Predicate<Map.Entry<K, Integer>> filterPredicate, final OccurrenceMap<K>... occurrenceMaps) {
         validateVarargs(occurrenceMaps);
@@ -96,6 +98,7 @@ public class OccurrenceMaps {
      * @return An {@link OccurrenceMap} with the most frequent occurrences after the merging.
      * @see OccurrenceMap#filterMostFrequentOccurrences()
      */
+    @SafeVarargs
     public static <K> OccurrenceMap<K> getMostFrequentOccurrences(final OccurrenceMap<K>... occurrenceMaps) {
         validateVarargs(occurrenceMaps);
         return getMostFrequentOccurrences(Arrays.asList(occurrenceMaps));
@@ -138,6 +141,7 @@ public class OccurrenceMaps {
         Preconditions.checkArgument(occurrenceMapCollection != null, "Occurrence map collection should not be null");
     }
 
+    @SafeVarargs
     private static <K> void validateVarargs(final OccurrenceMap<K>... occurrenceMaps) {
         Preconditions.checkArgument(occurrenceMaps != null, "Given arguments should not be null");
     }

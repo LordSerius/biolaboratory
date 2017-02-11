@@ -5,6 +5,7 @@ import static org.testng.Assert.fail;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -30,6 +31,22 @@ public class DnaTest {
         Dna.build(sequence);
         fail();
     }
+
+    @Test(dataProviderClass = DnaTestDataProvider.class,
+            dataProvider = DnaTestDataProvider.INVALID_BUILD_FROM_ELEMENTS_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldBuildFromNucleotidesThrowException(DnaNucleotide[] dnaNucleotides) {
+        Dna.build(dnaNucleotides);
+        fail();
+    }
+
+    @Test(dataProviderClass = DnaTestDataProvider.class,
+            dataProvider = DnaTestDataProvider.INVALID_BUILD_FROM_ELEMENT_LIST_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldBuildFromNucleotideListThrowException(List<DnaNucleotide> dnaNucleotideList) {
+        Dna.build(dnaNucleotideList);
+        fail();
+    }
     
     @Test(dataProviderClass = DnaTestDataProvider.class,
             dataProvider = DnaTestDataProvider.VALID_DNA_SEQUENCES_DATA_PROVIDER_NAME)
@@ -37,6 +54,21 @@ public class DnaTest {
         Dna dna = Dna.build(sequence);
         String dnaSequence = dna.getSequence();
         assertThat(dnaSequence, is(equalTo(controlSequence)));
+    }
+
+    @Test(dataProviderClass = DnaTestDataProvider.class,
+            dataProvider = DnaTestDataProvider.VALID_BUILD_FROM_ELEMENTS_DATA_PROVIDER_NAME)
+    public void shouldBuildFromNucleotidesReturn(DnaNucleotide[] dnaNucleotides, String controlSequence) {
+        Dna dna = Dna.build(dnaNucleotides);
+        assertThat(dna.getSequence(), is(equalTo(controlSequence)));
+    }
+
+    @Test(dataProviderClass = DnaTestDataProvider.class,
+            dataProvider = DnaTestDataProvider.VALID_BUILD_FROM_ELEMENTS_DATA_PROVIDER_NAME)
+    public void shouldBuildFromNucleotideListReturn(DnaNucleotide[] rnaNucleotides, String controlSequence) {
+        List<DnaNucleotide> dnaNucleotideList = Arrays.asList(rnaNucleotides);
+        Dna dna = Dna.build(dnaNucleotideList);
+        assertThat(dna.getSequence(), is(equalTo(controlSequence)));
     }
     
     @Test(dataProviderClass = DnaTestDataProvider.class,

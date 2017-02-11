@@ -4,6 +4,7 @@ import java.util.HashSet;
 
 import com.google.common.collect.ImmutableMap;
 import hu.bioinformatics.biolaboratory.sequence.rna.Rna;
+import hu.bioinformatics.biolaboratory.sequence.rna.RnaNucleotide;
 import hu.bioinformatics.biolaboratory.testutils.TestDnaLoader;
 import hu.bioinformatics.biolaboratory.utils.DnaCollectors;
 import hu.bioinformatics.biolaboratory.utils.datastructures.CountableOccurrenceMap;
@@ -35,6 +36,28 @@ public class DnaTestDataProvider {
                 { "ACGU" }
         };
     }
+
+    static final String INVALID_BUILD_FROM_ELEMENTS_DATA_PROVIDER_NAME = "invalidBuildFromElementsDataProvider";
+
+    @DataProvider(name = INVALID_BUILD_FROM_ELEMENTS_DATA_PROVIDER_NAME)
+    static Object[][] invalidBuildFromElementsDataProvider() {
+        return new Object[][] {
+                { null },
+                { new DnaNucleotide[0] },
+                { new DnaNucleotide[] { DnaNucleotide.ADENINE, null } }
+        };
+    }
+
+    static final String INVALID_BUILD_FROM_ELEMENT_LIST_DATA_PROVIDER_NAME = "invalidBuildFromElementListDataProvider";
+
+    @DataProvider(name = INVALID_BUILD_FROM_ELEMENT_LIST_DATA_PROVIDER_NAME)
+    static Object[][] invalidBuildFromElementListDataProvider() {
+        return new Object[][] {
+                { null },
+                { Lists.newArrayList() },
+                { Lists.newArrayList(DnaNucleotide.ADENINE, null) }
+        };
+    }
     
     static final String VALID_DNA_SEQUENCES_DATA_PROVIDER_NAME = "validDnaSequencesDataProvider";
 
@@ -48,6 +71,16 @@ public class DnaTestDataProvider {
                 { "AGTC", "AGTC" },
                 { "aGtC", "AGTC" },
                 { "        agtc            ", "AGTC" }
+        };
+    }
+
+    static final String VALID_BUILD_FROM_ELEMENTS_DATA_PROVIDER_NAME = "validBuildFromElementsDataProvider";
+
+    @DataProvider(name = VALID_BUILD_FROM_ELEMENTS_DATA_PROVIDER_NAME)
+    static Object[][] validBuildFromElementsDataProvider() {
+        return new Object[][] {
+                { new DnaNucleotide[] { DnaNucleotide.ADENINE }, "A" },
+                { new DnaNucleotide[] { DnaNucleotide.ADENINE, DnaNucleotide.CYTOSINE, DnaNucleotide.GUANINE, DnaNucleotide.THYMINE }, "ACGT" }
         };
     }
     

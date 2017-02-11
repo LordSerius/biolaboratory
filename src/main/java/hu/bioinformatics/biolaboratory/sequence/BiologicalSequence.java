@@ -8,6 +8,7 @@ import com.sun.javafx.binding.StringFormatter;
 import hu.bioinformatics.biolaboratory.utils.datastructures.CountableOccurrenceMap;
 import hu.bioinformatics.biolaboratory.utils.datastructures.OccurrenceMap;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -23,13 +24,60 @@ import java.util.stream.IntStream;
 public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART extends SequenceElement> {
 
     protected final String sequence;
+    private  PART[] sequenceAsElements;
     protected final int sequenceLength;
 
     private CountableOccurrenceMap<PART> elementOccurrences = null;
 
+    /**
+     * Creates a biological sequence from its elements.
+     *
+     * @param sequenceElements The elements of the biological sequence in array.
+     */
+    @SafeVarargs
+    protected BiologicalSequence(final PART... sequenceElements) {
+        this(Arrays.asList(sequenceElements));
+        this.sequenceAsElements = sequenceElements;
+    }
+
+    /**
+     * Creates a biological sequence from its elements.
+     *
+     * @param sequenceElementList The elements of the biological sequence in {@link List} collection.
+     */
+    protected BiologicalSequence(final List<PART> sequenceElementList) {
+        this.sequence = new String(createLetterList(sequenceElementList));
+        this.sequenceLength = sequence.length();
+    }
+
+    /**
+     * Creates a biological sequence from {@link String}.
+     *
+     * @param sequence The biological sequence as {@link String}.
+     */
     protected BiologicalSequence(final String sequence) {
         this.sequence = sequence;
         this.sequenceLength = sequence.length();
+    }
+
+    @SafeVarargs
+    protected final TYPE construct(final PART... sequenceElements) {
+        return construct(Arrays.asList(sequenceElements));
+    }
+
+    protected TYPE construct(final List<PART> sequenceElementList) {
+        return construct(new String(createLetterList(sequenceElementList)));
+    }
+
+    private char[] createLetterList(final List<PART> sequenceElementList) {
+        int length = sequenceElementList.size();
+        char[] letters = new char[length];
+
+        int i = 0;
+        for (PART element : sequenceElementList) {
+            letters[i++] = element.getLetter();
+        }
+        return letters;
     }
 
     /**
@@ -38,7 +86,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
      * @param sequence The String sequence of the biological sequence.
      * @return The instance of the inherited class
      */
-    protected abstract TYPE construct(String sequence);
+    protected abstract TYPE construct(final String sequence);
 
     /**
      * Creates a copy of the {@link BiologicalSequence}.
@@ -55,6 +103,26 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
     public final String getSequence() {
         return sequence;
     }
+
+    /**
+     * Get the biological sequence as an immutable typed array of its elements. The method realizes a lazy loading method.
+     *
+     * @return An immutable map of typed elements.
+     */
+    public final PART[] getSequenceAsElements() {
+        return Arrays.copyOf(loadSequenceAsElements(), sequenceLength);
+    }
+
+    private synchronized PART[] loadSequenceAsElements() {
+        if (sequenceAsElements == null) {
+            sequenceAsElements = createEmptyElementArray();
+            IntStream.range(0, sequenceLength)
+                    .forEach(index -> sequenceAsElements[index] = findSequenceElement(sequence.charAt(index)));
+        }
+        return sequenceAsElements;
+    }
+
+    protected abstract PART[] createEmptyElementArray();
 
     /**
      * Getter of the biological sequence length.
@@ -77,9 +145,9 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
     protected final synchronized CountableOccurrenceMap<PART> collectSequenceElementOccurrences() {
         if (elementOccurrences == null) {
             elementOccurrences = CountableOccurrenceMap.build(getElementSet());
-            IntStream.range(0, sequence.length())
-                    .forEach(index ->
-                            elementOccurrences.increase(findSequenceElement(sequence.charAt(index))));
+            PART[] sequenceAsElements = loadSequenceAsElements();
+            IntStream.range(0, sequenceLength)
+                    .forEach(index -> elementOccurrences.increase(sequenceAsElements[index]));
         }
         return elementOccurrences;
     }
@@ -108,12 +176,36 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
     protected abstract String getName();
 
     /**
+     * Append the given biological sequence to the end.
+     *
+     * @param otherBiologicalSequence The biological sequence to append.
+     * @return A new {@link BiologicalSequence} which stands from the sequence of the original {@link BiologicalSequence}
+     *          and the sequence of the other {@link BiologicalSequence}.
+     */
+    public final TYPE append(final TYPE otherBiologicalSequence) {
+        Preconditions.checkArgument(otherBiologicalSequence != null, "Other biological sequence should not be null");
+        return construct(sequence + otherBiologicalSequence.getSequence());
+    }
+
+    /**
+     * Append the given biological sequence element to the end.
+     *
+     * @param element The element to append.
+     * @return A new {@link BiologicalSequence} which stands from the sequence of the original {@link BiologicalSequence}
+     *          and the appended element.
+     */
+    public final TYPE append(final PART element) {
+        Preconditions.checkArgument(element != null, "Element should not be null");
+        return construct(sequence + element.getLetter());
+    }
+
+    /**
      * Cuts a {@link BiologicalSequence} part from the start position to the end of the {@link BiologicalSequence}'s length.
      *
      * @param startPosition The beginning nucletide position in the {@link BiologicalSequence} inclusive.
      * @return The {@link BiologicalSequence} part from start position (inclusive) to the end.
      */
-    public final TYPE cut(int startPosition) {
+    public final TYPE cut(final int startPosition) {
         return cut(startPosition, sequenceLength);
     }
 
@@ -125,7 +217,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
      * @param endPosition The end element position in the {@link BiologicalSequence} exclusive.
      * @return The {@link BiologicalSequence} part from start position (inclusive) to end position (exclusive).
      */
-    public final TYPE cut(int startPosition, int endPosition) {
+    public final TYPE cut(final int startPosition, final int endPosition) {
         Preconditions.checkArgument(startPosition >= 0, "Start position should bigger than 0");
         Preconditions.checkArgument(endPosition <= sequenceLength, "End position should smaller or equals than the sequence length");
         Preconditions.checkArgument(startPosition < endPosition, "Start position should smaller than the end position");

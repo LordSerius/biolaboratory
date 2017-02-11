@@ -38,7 +38,7 @@ public enum RnaNucleotide implements SequenceElement {
      * @param rnaNucleotideLetter The RNA nucleotide letter.
      * @return The corresponding RNA nucleotide.
      */
-    public static RnaNucleotide findAminoAcid(final String rnaNucleotideLetter) {
+    public static RnaNucleotide findRnaNucleotide(final String rnaNucleotideLetter) {
         Preconditions.checkArgument(StringUtils.isNotBlank(rnaNucleotideLetter), "RNA nucleotide letter should not be empty");
         Preconditions.checkArgument(rnaNucleotideLetter.length() == 1, "This is not a letter");
         return findRnaNucleotide(rnaNucleotideLetter.charAt(0));

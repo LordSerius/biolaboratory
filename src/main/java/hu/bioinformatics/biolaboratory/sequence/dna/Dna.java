@@ -19,6 +19,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.regex.Pattern;
 
+import static org.apache.commons.lang3.Validate.noNullElements;
+
 /**
  * Represents a single DNA about the genome sequence in 5' -> 3' order.
  *
@@ -52,6 +54,26 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
         return new Dna(Dna.validateSequence(sequence));
     }
 
+    /**
+     * Build an {@link Dna} from the given {@link DnaNucleotide}s. The nucleotides should not contain null value.
+     *
+     * @param nucleotides The input nucleotides.
+     * @return A new {@link Dna} object which stands from the nucleotides.
+     */
+    public static Dna build(final DnaNucleotide... nucleotides) {
+        return new Dna(validateElements(nucleotides));
+    }
+
+    /**
+     * Build an {@link Dna} from the given {@link DnaNucleotide} {@link List}. The list should not contain null element.
+     *
+     * @param nucleotideList The input nucleotides in a {@link List}.
+     * @return A new {@link Dna} object which stand from the nucleotides
+     */
+    public static Dna build(final List<DnaNucleotide> nucleotideList) {
+        return new Dna(validateElementList(nucleotideList));
+    }
+
     private static String validateSequence(final String sequence) {
         Preconditions.checkArgument(StringUtils.isNotBlank(sequence), "DNA sequence cannot be blank");
         String uppercaseSequence = sequence.trim().toUpperCase();
@@ -59,13 +81,36 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
         return uppercaseSequence;
     }
 
+    private static DnaNucleotide[] validateElements(final DnaNucleotide[] elements) {
+        Preconditions.checkArgument(elements != null && elements.length > 0, "DNA elements should not be empty");
+        return noNullElements(elements, "DNA elements should not contain null element");
+    }
+
+    private static List<DnaNucleotide> validateElementList(final List<DnaNucleotide> elementList) {
+        Preconditions.checkArgument(elementList != null && !elementList.isEmpty(), "DNA element list should not be empty");
+        return noNullElements(elementList, "DNA element list should not contain null element");
+    }
+
     private Dna(String sequence) {
         super(sequence);
+    }
+
+    private Dna(final DnaNucleotide... dnaNucleotides) {
+        super(dnaNucleotides);
+    }
+
+    private Dna(final List<DnaNucleotide> dnaNucleotideList) {
+        super(dnaNucleotideList);
     }
 
     @Override
     protected Dna construct(String sequence) {
         return new Dna(sequence);
+    }
+
+    @Override
+    protected DnaNucleotide[] createEmptyElementArray() {
+        return new DnaNucleotide[sequenceLength];
     }
 
     @Override

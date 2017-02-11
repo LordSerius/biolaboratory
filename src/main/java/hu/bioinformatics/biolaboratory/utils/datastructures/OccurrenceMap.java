@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
-import org.apache.commons.lang3.builder.EqualsBuilder;
 
 /**
  * A data structure which contains different not null keys and the occurrence numbers.

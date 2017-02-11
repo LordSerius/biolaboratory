@@ -3,9 +3,12 @@ package hu.bioinformatics.biolaboratory.sequence.dna;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import hu.bioinformatics.biolaboratory.utils.datastructures.OccurrenceMap;
+import org.apache.commons.lang3.Validate;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static org.apache.commons.lang3.Validate.noNullElements;
 
 /**
  * A collection of {@link Dna}s which provide motif finding methods on them. Every included {@link Dna} should be the
@@ -46,8 +49,7 @@ public class DnaArray {
 
     private static void validateDnaArray(final List<Dna> dnaList) {
         Preconditions.checkArgument(dnaList != null && !dnaList.isEmpty(), "DNA list should not be empty");
-        Preconditions.checkArgument(dnaList.stream()
-                .allMatch(dna -> dna != null), "DNA list should not contain null element");
+        noNullElements(dnaList, "DNA list should not contain null element");
         int length = dnaList.get(0).getSequenceLength();
         Preconditions.checkArgument(dnaList.stream()
                 .allMatch(dna -> dna.getSequenceLength() == length), "DNA lengths inside DNA array should be the same");
