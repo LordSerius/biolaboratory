@@ -1,5 +1,6 @@
 package hu.bioinformatics.biolaboratory.utils.resource;
 
+import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
@@ -29,22 +30,29 @@ public class FastaReader extends ResourceReader {
     }
 
     @Override
-    protected List<String> processResource(BufferedReader reader) throws IOException {
+    protected List<CommentedLine> processResource(BufferedReader reader) throws IOException {
         List<String> lineList = reader.lines()
                                         .filter(StringUtils::isNotBlank)
                                         .collect(Collectors.toCollection(ArrayList::new));
-        List<String> concatenatedStringList = new ArrayList<>();
+        List<CommentedLine> commentedLineList = new ArrayList<>();
 
+        String description = null;
         String concatenatedSequence = "";
         for (String line : lineList) {
-            if (line.startsWith(PROMPT) && StringUtils.isNotBlank(concatenatedSequence)) {
-                concatenatedStringList.add(concatenatedSequence);
-                concatenatedSequence = "";
+            if (line.startsWith(PROMPT)) {
+                if (description != null) {
+                    Preconditions.checkArgument(concatenatedSequence.isEmpty(), "Multiple header is detected");
+                    commentedLineList.add(new CommentedLine(description, concatenatedSequence));
+                    concatenatedSequence = "";
+                }
+                description = line.substring(1, line.length());
             } else {
                 concatenatedSequence += line;
             }
         }
+        Preconditions.checkArgument(description != null &&concatenatedSequence.isEmpty(), "Multiple header is detected");
+        commentedLineList.add(new CommentedLine(description, concatenatedSequence));
 
-        return concatenatedStringList;
+        return commentedLineList;
     }
 }

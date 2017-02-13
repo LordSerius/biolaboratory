@@ -1,12 +1,12 @@
 package hu.bioinformatics.biolaboratory.utils.datastructures;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Maps;
+
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Maps;
 
 /**
  * A data structure which contains different not null keys and the occurrence numbers.
@@ -96,7 +96,7 @@ public class OccurrenceMap<K> {
     @Override
     public boolean equals(Object obj) {
         return obj != null
-                && obj.getClass().equals(OccurrenceMap.class)
+                && obj.getClass().equals(getClass())
                 && compareOccurrenceMapContent(((OccurrenceMap<K>) obj).occurrenceMap);
     }
 

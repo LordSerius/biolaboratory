@@ -6,6 +6,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import hu.bioinformatics.biolaboratory.guice.GuiceModule;
 import hu.bioinformatics.biolaboratory.sequence.protein.AminoAcid;
+import hu.bioinformatics.biolaboratory.utils.resource.CommentedLine;
 import hu.bioinformatics.biolaboratory.utils.resource.LineReader;
 import hu.bioinformatics.biolaboratory.utils.resource.ResourceLocalizer;
 import hu.bioinformatics.biolaboratory.utils.resource.ResourceReader;
@@ -31,8 +32,11 @@ public class RnaCodonTable {
 
     private static final Map<Rna, Optional<AminoAcid>> codonTable = initializeCodonTable();
 
+    static final Rna START_CODON = Rna.build("AUG");
+
     private static Map<Rna, Optional<AminoAcid>> initializeCodonTable() {
         return Maps.newHashMap(getRawCodonTable().stream()
+                .map(CommentedLine::getLine)
                 .map(TABULATOR_REGEX_PATTERN::split)
                 .map(rnaAminoAcid -> new AbstractMap.SimpleEntry<>(Rna.build(rnaAminoAcid[0]),
                         STOP_CODON_STRING.equalsIgnoreCase(rnaAminoAcid[1])
@@ -42,12 +46,12 @@ public class RnaCodonTable {
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
     }
 
-    private static List<String> getRawCodonTable() {
+    private static List<CommentedLine> getRawCodonTable() {
         Injector injector = Guice.createInjector(new GuiceModule());
         ResourceReader resourceReader = injector.getInstance(LineReader.class);
         ResourceLocalizer resourceLocalizer = injector.getInstance(ResourceLocalizer.class);
 
-        List<String> read = resourceReader.read(resourceLocalizer.localizeResource(RNA_CODON_TABLE_RESOURCE_NAME));
+        List<CommentedLine> read = resourceReader.read(resourceLocalizer.localizeResource(RNA_CODON_TABLE_RESOURCE_NAME));
         return read;
     }
 

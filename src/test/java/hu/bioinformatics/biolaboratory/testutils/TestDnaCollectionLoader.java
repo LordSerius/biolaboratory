@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import hu.bioinformatics.biolaboratory.guice.GuiceModule;
 import hu.bioinformatics.biolaboratory.sequence.dna.Dna;
 import hu.bioinformatics.biolaboratory.utils.DnaCollectors;
+import hu.bioinformatics.biolaboratory.utils.resource.CommentedLine;
 import hu.bioinformatics.biolaboratory.utils.resource.ResourceLocalizer;
 import hu.bioinformatics.biolaboratory.utils.resource.ResourceReader;
 import org.apache.commons.lang3.StringUtils;
@@ -13,6 +14,7 @@ import javax.inject.Named;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.Validate.notNull;
 
@@ -58,6 +60,9 @@ public class TestDnaCollectionLoader {
     private String readFile(String fileName) {
         Preconditions.checkArgument(StringUtils.isNotBlank(fileName), "The input file should not be blank");
         String filePath = resourceLocalizer.localizeResource(fileName);
-        return resourceReader.read(filePath).get(0);
+        return resourceReader.read(filePath).stream()
+                .map(CommentedLine::getLine)
+                .collect(Collectors.toList())
+                .get(0);
     }
 }

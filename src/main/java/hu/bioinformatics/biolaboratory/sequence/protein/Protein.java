@@ -32,11 +32,24 @@ public class Protein extends BiologicalSequence<Protein, AminoAcid> {
      * amino acids, case insensitive, and can contains blank characters at the beginning and the
      * end of the input.
      *
-     * @param sequence The input nucleotide sequence.
-     * @return A new {@link Protein} object which contains the nucleotide sequence in uppercase.
+     * @param sequence The input amino acid sequence.
+     * @return A new {@link Protein} object which contains the amino acid sequence in uppercase.
      */
     public static Protein build(final String sequence) {
         return new Protein(Protein.validateSequence(sequence));
+    }
+
+    /**
+     * Build a {@link Protein} from the given sequence. The sequence can be only the letters of the
+     * amino acids, case insensitive, and can contains blank characters at the beginning and the
+     * end of the input.
+     *
+     * @param name The name of the sequence.
+     * @param sequence The input amino acid sequence.
+     * @return A new {@link Protein} object which contains the amino acid sequence in uppercase.
+     */
+    public static Protein build(final String name, final String sequence) {
+        return new Protein(validateName(name), validateSequence(sequence));
     }
 
     /**
@@ -50,13 +63,40 @@ public class Protein extends BiologicalSequence<Protein, AminoAcid> {
     }
 
     /**
+     * Build an {@link Protein} from the given {@link AminoAcid}s. The amino acids should not contain null value.
+     *
+     * @param name The name of the sequence.
+     * @param aminoAcids The input amino acids.
+     * @return A new {@link Protein} object which stands from the amino acids.
+     */
+    public static Protein build(final String name, final AminoAcid... aminoAcids) {
+        return new Protein(validateName(name), validateElements(aminoAcids));
+    }
+
+    /**
      * Build an {@link Protein} from the given {@link AminoAcid} {@link List}. The list should not contain null element.
      *
-     * @param aminoAcidList The input nucleotides in a {@link List}.
-     * @return A new {@link Protein} object which stand from the nucleotides
+     * @param aminoAcidList The input amino acids in a {@link List}.
+     * @return A new {@link Protein} object which stand from the amino acids.
      */
     public static Protein build(final List<AminoAcid> aminoAcidList) {
         return new Protein(validateElementList(aminoAcidList));
+    }
+
+    /**
+     * Build an {@link Protein} from the given {@link AminoAcid} {@link List}. The list should not contain null element.
+     *
+     * @param name The name of the sequence.
+     * @param aminoAcidList The input amino acids in a {@link List}.
+     * @return A new {@link Protein} object which stand from the amino acids.
+     */
+    public static Protein build(final String name, final List<AminoAcid> aminoAcidList) {
+        return new Protein(validateName(name), validateElementList(aminoAcidList));
+    }
+
+    private static String validateName(final String name) {
+        Preconditions.checkArgument(name != null, "Name should not be null");
+        return name.trim();
     }
 
     private static String validateSequence(final String sequence) {
@@ -76,21 +116,33 @@ public class Protein extends BiologicalSequence<Protein, AminoAcid> {
         return noNullElements(elementList, "Protein element list should not contain null element");
     }
 
-    private Protein(String sequence) {
+    private Protein(final String sequence) {
         super(sequence);
+    }
+
+    private Protein(final String name, final String sequence) {
+        super(name, sequence);
     }
 
     private Protein(final AminoAcid... aminoAcids) {
         super(aminoAcids);
     }
 
+    private Protein(final String name, AminoAcid... aminoAcids) {
+        super(name, aminoAcids);
+    }
+
     private Protein(final List<AminoAcid> aminoAcidList) {
         super(aminoAcidList);
     }
 
+    private Protein(final String name, final List<AminoAcid> aminoAcidList) {
+        super(name, aminoAcidList);
+    }
+
     @Override
-    protected Protein construct(String sequence) {
-        return new Protein(sequence);
+    protected Protein construct(final String name, final String sequence) {
+        return new Protein(name, sequence);
     }
 
     @Override
@@ -115,13 +167,13 @@ public class Protein extends BiologicalSequence<Protein, AminoAcid> {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || obj.getClass() != getClass()) return false;
+        if (obj == null || !obj.getClass().equals(getClass())) return false;
         Protein rightHand = (Protein) obj;
         return sequenceLength == rightHand.sequenceLength && sequence.equals(rightHand.sequence);
     }
 
     @Override
-    protected String getName() {
+    protected String getBiologicalSequenceTypeName() {
         return "Protein";
     }
 }

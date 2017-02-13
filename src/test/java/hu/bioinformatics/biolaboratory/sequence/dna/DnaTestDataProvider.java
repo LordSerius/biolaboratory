@@ -1,18 +1,15 @@
 package hu.bioinformatics.biolaboratory.sequence.dna;
 
-import java.util.HashSet;
-
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import hu.bioinformatics.biolaboratory.sequence.rna.Rna;
-import hu.bioinformatics.biolaboratory.sequence.rna.RnaNucleotide;
 import hu.bioinformatics.biolaboratory.testutils.TestDnaLoader;
 import hu.bioinformatics.biolaboratory.utils.DnaCollectors;
 import hu.bioinformatics.biolaboratory.utils.datastructures.CountableOccurrenceMap;
 import org.testng.annotations.DataProvider;
 
-import com.google.common.collect.Lists;
-
 import javax.inject.Inject;
+import java.util.HashSet;
 
 /**
  * Test data provider for {@link DnaTest} test class.
@@ -29,11 +26,12 @@ public class DnaTestDataProvider {
     @DataProvider(name = INVALID_DNA_SEQUENCES_DATA_PROVIDER_NAME)
     Object[][] invalidDnaSequencesDataProvider() {
         return new Object[][] {
-                { null },
-                { "" },
-                { "            " },
-                { "LOL" },
-                { "ACGU" }
+                { "", null },
+                { "", "" },
+                { "", "            " },
+                { "", "LOL" },
+                { "", "ACGU" },
+                { null, "ACGT" }
         };
     }
 
@@ -64,13 +62,13 @@ public class DnaTestDataProvider {
     @DataProvider(name = VALID_DNA_SEQUENCES_DATA_PROVIDER_NAME)
     Object[][] validDnaSequencesDataProvider() {
         return new Object[][] {
-                { "A", "A" },
-                { "G", "G" },
-                { "T", "T" },
-                { "C", "C" },
-                { "AGTC", "AGTC" },
-                { "aGtC", "AGTC" },
-                { "        agtc            ", "AGTC" }
+                { "", "A", "", "A" },
+                { " ", "G", "", "G" },
+                { "name", "T", "name", "T" },
+                { " name", "C", "name", "C" },
+                { "name ", "AGTC", "name", "AGTC" },
+                { " name ", "aGtC", "name", "AGTC" },
+                { "", "        agtc            ", "", "AGTC" }
         };
     }
 
@@ -81,6 +79,29 @@ public class DnaTestDataProvider {
         return new Object[][] {
                 { new DnaNucleotide[] { DnaNucleotide.ADENINE }, "A" },
                 { new DnaNucleotide[] { DnaNucleotide.ADENINE, DnaNucleotide.CYTOSINE, DnaNucleotide.GUANINE, DnaNucleotide.THYMINE }, "ACGT" }
+        };
+    }
+
+    static final String INVALID_CHANGE_NAME_DATA_PROVIDER_NAME = "invalidChangeNameDataProvider";
+
+    @DataProvider(name = INVALID_CHANGE_NAME_DATA_PROVIDER_NAME)
+    Object[][] invalidChangeNameDataProvider() {
+        return new Object[][] {
+                { Dna.build("ACGT"), null }
+        };
+    }
+
+    static final String VALID_CHANGE_NAME_DATA_PROVIDER_NAME = "validChangeNameDataProvider";
+
+    @DataProvider(name = VALID_CHANGE_NAME_DATA_PROVIDER_NAME)
+    Object[][] validChangeNameDataProvider() {
+        return new Object[][] {
+                { Dna.build("ACGT"), "name", "name" },
+                { Dna.build("ACGT"), " name", "name" },
+                { Dna.build("ACGT"), "name ", "name" },
+                { Dna.build("ACGT"), " name ", "name" },
+                { Dna.build("name", "ACGT"), "", "" },
+                { Dna.build("name", "ACGT"), " ", "" }
         };
     }
     
@@ -103,7 +124,32 @@ public class DnaTestDataProvider {
                 { Dna.build("AGCTTTTCATTCTGACTGCAACGGGCAATATGTCTCTGTGTGGATTAAAAAAAGAGTGTCTGATAGCAGC"), CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 20, DnaNucleotide.CYTOSINE, 12, DnaNucleotide.GUANINE, 17, DnaNucleotide.THYMINE, 21)) }
         };
     }
-    
+
+    static final String INVALID_QUERY_MULTIPLE_NUCLEOBASE_OCCURRENCES_DATA_PROVIDER_NAME = "invalidQueryMultipleNucleobaseOccurrencesDataProvider";
+
+    @DataProvider(name = INVALID_QUERY_MULTIPLE_NUCLEOBASE_OCCURRENCES_DATA_PROVIDER_NAME)
+    Object[][] invalidSumMultipleNucleobaseOccurrencesDataProvider() {
+        return new Object[][] {
+                { Dna.build("ACGT"), null },
+                { Dna.build("ACGT"), new DnaNucleotide[] { DnaNucleotide.ADENINE, null } }
+        };
+    }
+
+    static final String VALID_QUERY_MULTIPLE_NUCLEOBASE_OCCURRENCES_DATA_PROVIDER_NAME = "validQueryMultipleNucleobaseOccurrencesDataProvider";
+
+    @DataProvider(name = VALID_QUERY_MULTIPLE_NUCLEOBASE_OCCURRENCES_DATA_PROVIDER_NAME)
+    Object[][] validSumMultipleNucleobaseOccurrencesDataProvider() {
+        return new Object[][] {
+                { Dna.build("ACGT"), new DnaNucleotide[] {}, 0 },
+                { Dna.build("ACGT"), new DnaNucleotide[] { DnaNucleotide.ADENINE }, 1 },
+                { Dna.build("ACGT"), new DnaNucleotide[] { DnaNucleotide.ADENINE, DnaNucleotide.CYTOSINE }, 2 },
+                { Dna.build("ACGT"), new DnaNucleotide[] { DnaNucleotide.ADENINE, DnaNucleotide.CYTOSINE, DnaNucleotide.GUANINE }, 3 },
+                { Dna.build("ACGT"), new DnaNucleotide[] { DnaNucleotide.ADENINE, DnaNucleotide.CYTOSINE, DnaNucleotide.GUANINE, DnaNucleotide.THYMINE }, 4 },
+                { Dna.build("ACGT"), new DnaNucleotide[] { DnaNucleotide.ADENINE, DnaNucleotide.ADENINE }, 1 },
+                { Dna.build("AAA"), new DnaNucleotide[] { DnaNucleotide.GUANINE }, 0 },
+        };
+    }
+
     static final String DNA_EQUALS_DATA_PROVIDER_NAME = "dnaEqualsDataProvider";
 
     @DataProvider(name = DNA_EQUALS_DATA_PROVIDER_NAME)
@@ -356,6 +402,19 @@ public class DnaTestDataProvider {
                 { Dna.build("A"), Dna.build("A"), false },
                 { Dna.build("A"), Dna.build("AA"), false },
                 { Dna.build("AA"), Dna.build("A"), false }
+        };
+    }
+
+    static final String GUANINE_CYTOSINE_RATIO_DATA_PROVIDER_NAME = "guanineCytosineRatioDataProvider";
+
+    @DataProvider(name = GUANINE_CYTOSINE_RATIO_DATA_PROVIDER_NAME)
+    Object[][] guanineCytosineDataProvider() {
+        return new Object[][] {
+                { Dna.build("AAAA"), 0.0 },
+                { Dna.build("GGCC"), 1.0 },
+                { Dna.build("ACGT"), 0.5 },
+                { Dna.build("AGCTATAG"), 0.375 },
+                { Dna.build("CCACCCTCGTGGTATGGCTAGGCATTCAGGAACCGGAGAACGCTTCAGACCAGCCCGGACTGGGAACCTGCGGGCAGTAGGTGGAAT"), 0.60919540 }
         };
     }
     

@@ -101,7 +101,7 @@ public class CountableOccurrenceMap<K> extends OccurrenceMap<K> {
     @Override
     public boolean equals(Object obj) {
         return obj != null
-                && obj.getClass().equals(CountableOccurrenceMap.class)
+                && obj.getClass().equals(getClass())
                 && compareOccurrenceMapContent(((CountableOccurrenceMap) obj).occurrenceMap);
     }
 

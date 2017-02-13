@@ -5,15 +5,12 @@ import hu.bioinformatics.biolaboratory.sequence.BiologicalSequence;
 import hu.bioinformatics.biolaboratory.sequence.protein.AminoAcid;
 import hu.bioinformatics.biolaboratory.sequence.protein.Protein;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Validate;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Pattern;
 
 import static org.apache.commons.lang3.Validate.noNullElements;
-import static org.apache.commons.lang3.Validate.notEmpty;
 
 /**
  * Represents a single RNA about the genome sequence.
@@ -30,6 +27,8 @@ public class Rna extends BiologicalSequence<Rna, RnaNucleotide> {
                                                                 + RnaNucleotide.URACIL.getLetter()
                                                                 + "]+");
 
+    private Protein translatedProtein = null;
+
     /**
      * Build an {@link Rna} from the given sequence. The sequence can be only the letters of the
      * nucleotides, case insensitive, and can contains blank characters at the beginning and the
@@ -43,12 +42,37 @@ public class Rna extends BiologicalSequence<Rna, RnaNucleotide> {
     }
 
     /**
+     * Build an {@link Rna} from the given sequence. The sequence can be only the letters of the
+     * nucleotides, case insensitive, and can contains blank characters at the beginning and the
+     * end of the input.
+     *
+     * @param name The name of the sequence.
+     * @param sequence The input nucleotide sequence.
+     * @return A new {@link Rna} object which contains the nucleotide sequence in uppercase.
+     */
+    public static Rna build(final String name, final String sequence) {
+        return new Rna(validateName(name), validateSequence(sequence));
+    }
+
+    /**
      * Build an {@link Rna} from the given {@link RnaNucleotide}s. The nucleotides should not contain null value.
      *
      * @param nucleotides The input nucleotides.
      * @return A new {@link Rna} object which stands from the nucleotides.
      */
-    public static Rna build(final RnaNucleotide... nucleotides) {return new Rna(validateElements(nucleotides));
+    public static Rna build(final RnaNucleotide... nucleotides) {
+        return new Rna(validateElements(nucleotides));
+    }
+
+    /**
+     * Build an {@link Rna} from the given {@link RnaNucleotide}s. The nucleotides should not contain null value.
+     *
+     * @param name The name of the sequence.
+     * @param nucleotides The input nucleotides.
+     * @return A new {@link Rna} object which stands from the nucleotides.
+     */
+    public static Rna build(final String name, final RnaNucleotide... nucleotides) {
+        return new Rna(validateName(name), validateElements(nucleotides));
     }
 
     /**
@@ -59,6 +83,22 @@ public class Rna extends BiologicalSequence<Rna, RnaNucleotide> {
      */
     public static Rna build(final List<RnaNucleotide> nucleotideList) {
         return new Rna(validateElementList(nucleotideList));
+    }
+
+    /**
+     * Build an {@link Rna} from the given {@link RnaNucleotide} {@link List}. The list should not contain null element.
+     *
+     * @param name The name of the sequence.
+     * @param nucleotideList The input nucleotides in a {@link List}.
+     * @return A new {@link Rna} object which stand from the nucleotides
+     */
+    public static Rna build(final String name, final List<RnaNucleotide> nucleotideList) {
+        return new Rna(validateName(name), validateElementList(nucleotideList));
+    }
+
+    private static String validateName(final String name) {
+        Preconditions.checkArgument(name != null, "Name should not be null");
+        return name.trim();
     }
 
     private static String validateSequence(final String sequence) {
@@ -78,21 +118,33 @@ public class Rna extends BiologicalSequence<Rna, RnaNucleotide> {
         return noNullElements(elementList, "RNA element list should not contain null element");
     }
 
-    private Rna(String sequence) {
+    private Rna(final String sequence) {
         super(sequence);
+    }
+
+    private Rna(final String name, final String sequence) {
+        super(name, sequence);
     }
 
     private Rna(final RnaNucleotide... rnaNucleotides) {
         super(rnaNucleotides);
     }
 
+    private Rna(final String name, final RnaNucleotide... rnaNucleotides) {
+        super(name, rnaNucleotides);
+    }
+
     private Rna(final List<RnaNucleotide> rnaNucleotideList) {
         super(rnaNucleotideList);
     }
 
+    private Rna(final String name, final List<RnaNucleotide> rnaNucleotideList) {
+        super(name, rnaNucleotideList);
+    }
+
     @Override
-    protected Rna construct(final String sequence) {
-        return new Rna(sequence);
+    protected Rna construct(final String name, final String sequence) {
+        return new Rna(name, sequence);
     }
 
     @Override
@@ -117,13 +169,13 @@ public class Rna extends BiologicalSequence<Rna, RnaNucleotide> {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || obj.getClass() != getClass()) return false;
+        if (obj == null || !obj.getClass().equals(getClass())) return false;
         Rna rightHand = (Rna) obj;
         return sequenceLength == rightHand.sequenceLength && sequence.equals(rightHand.sequence);
     }
 
     @Override
-    protected String getName() {
+    protected String getBiologicalSequenceTypeName() {
         return "RNA";
     }
 
@@ -135,20 +187,23 @@ public class Rna extends BiologicalSequence<Rna, RnaNucleotide> {
      * @throws RnaTranslationException If translation is not possible.
      */
     public Protein translate() throws RnaTranslationException {
-        validateTranslation();
+        if (translatedProtein == null) {
+            validateTranslation();
 
-        int translationSize = sequenceLength - 3;
-        AminoAcid[] aminoAcids = new AminoAcid[translationSize / 3];
-        int i  = 0;
-        int index = 0;
-        while (i < translationSize) {
-            int j = i + 3;
-            aminoAcids[index++] = RnaCodonTable.lookup(cut(i, j)).orElseThrow(() ->
-                    new RnaTranslationException("Found STOP codon inside RNA. Use alternate splicing for translation"));
-            i = j;
+            int translationSize = sequenceLength - 3;
+            AminoAcid[] aminoAcids = new AminoAcid[translationSize / 3];
+            int i = 0;
+            int index = 0;
+            while (i < translationSize) {
+                int j = i + 3;
+                aminoAcids[index++] = RnaCodonTable.lookup(cut(i, j)).orElseThrow(() ->
+                        new RnaTranslationException("Found STOP codon inside RNA. Use alternate splicing for translation"));
+                i = j;
+            }
+            translatedProtein = Protein.build(aminoAcids);
         }
 
-        return Protein.build(aminoAcids);
+        return translatedProtein;
     }
 
     private void validateTranslation() throws RnaTranslationException {
@@ -157,6 +212,9 @@ public class Rna extends BiologicalSequence<Rna, RnaNucleotide> {
         }
         if (sequenceLength % 3 != 0) {
             throw new RnaTranslationException("RNA cannot divided by 3");
+        }
+        if (!cut(0, 3).equals(RnaCodonTable.START_CODON)) {
+            throw new RnaTranslationException("RNA should start with AUG sequence");
         }
         if (RnaCodonTable.lookup(cut(sequenceLength - 3, sequenceLength)).isPresent()) {
             throw new RnaTranslationException("Last codon is not STOP codon");

@@ -16,11 +16,12 @@ public class RnaTestDataProvider {
     @DataProvider(name = INVALID_BUILD_DATA_PROVIDER_NAME)
     static Object[][] invalidBuildDataProvider() {
         return new Object[][] {
-                { null },
-                { "" },
-                { "            " },
-                { "LOL" },
-                { "ACGT" }
+                { "", null },
+                { "", "" },
+                { "", "            " },
+                { "", "LOL" },
+                { "", "ACGT" },
+                { null, "ACGU" }
         };
     }
 
@@ -51,13 +52,13 @@ public class RnaTestDataProvider {
     @DataProvider(name = VALID_BUILD_DATA_PROVIDER_NAME)
     static Object[][] validBuildDataProvider() {
         return new Object[][] {
-                { "A", "A" },
-                { "G", "G" },
-                { "U", "U" },
-                { "C", "C" },
-                { "AGUC", "AGUC" },
-                { "aGuC", "AGUC" },
-                { "        aguc            ", "AGUC" }
+                { "", "A", "", "A" },
+                { " ", "G", "", "G" },
+                { "name", "U", "name", "U" },
+                { " name", "C", "name", "C" },
+                { "name ", "AGUC", "name", "AGUC" },
+                { " name ", "aGuC", "name", "AGUC" },
+                { "", "        aguc            ", "", "AGUC" }
         };
     }
 
@@ -141,7 +142,9 @@ public class RnaTestDataProvider {
                 { Rna.build("AAAA") },
                 { Rna.build("AAAAAAA") },
                 { Rna.build("UAA") },
-                { Rna.build("AAAUAAAAA") }
+                { Rna.build("AAAUAAAAA") },
+                { Rna.build("AUGAAA") },
+                { Rna.build("AAAUGA") }
         };
     }
 
@@ -150,9 +153,10 @@ public class RnaTestDataProvider {
     @DataProvider(name = VALID_TRANSLATE_DATA_PROVIDER_NAME)
     static Object[][] validTranslateDataProvider() {
         return new Object[][] {
-                { Rna.build("ACAUAA"), Protein.build("T") },
-                { Rna.build("ACCUAG"), Protein.build("T") },
-                { Rna.build("ACGUGA"), Protein.build("T") },
+                { Rna.build("AUGUAA"), Protein.build("M") },
+                { Rna.build("AUGACAUAA"), Protein.build("MT") },
+                { Rna.build("AUGACCUAG"), Protein.build("MT") },
+                { Rna.build("AUGACGUGA"), Protein.build("MT") },
                 { Rna.build("AUGGCCAUGGCGCCCAGAACUGAGAUCAAUAGUACCCGUAUUAACGGGUGA"), Protein.build("MAMAPRTEINSTRING") }
         };
     }

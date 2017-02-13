@@ -41,6 +41,7 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
     private Dna reverseComplementThread = null;
     private List<Integer> skew = null;
     private Rna transcriptRna = null;
+    private Double guanineCytosineRatio = null;
 
     /**
      * Build a {@link Dna} from the given sequence. The sequence can be only the letters of the
@@ -55,6 +56,19 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
     }
 
     /**
+     * Build a {@link Dna} from the given sequence. The sequence can be only the letters of the
+     * nucleotides, case insensitive, and can contains blank characters at the beginning and the
+     * end of the input.
+     *
+     * @param name The name of the sequence.
+     * @param sequence The input nucleotide sequence.
+     * @return A new {@link Dna} object which contains the nucleotide sequence in uppercase.
+     */
+    public static Dna build(final String name, final String sequence) {
+        return new Dna(validateName(name), validateSequence(sequence));
+    }
+
+    /**
      * Build an {@link Dna} from the given {@link DnaNucleotide}s. The nucleotides should not contain null value.
      *
      * @param nucleotides The input nucleotides.
@@ -65,6 +79,17 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
     }
 
     /**
+     * Build an {@link Dna} from the given {@link DnaNucleotide}s. The nucleotides should not contain null value.
+     *
+     * @param name The name of the sequence.
+     * @param nucleotides The input nucleotides.
+     * @return A new {@link Dna} object which stands from the nucleotides.
+     */
+    public static Dna build(final String name, final DnaNucleotide... nucleotides) {
+        return new Dna(validateName(name), validateElements(nucleotides));
+    }
+
+    /**
      * Build an {@link Dna} from the given {@link DnaNucleotide} {@link List}. The list should not contain null element.
      *
      * @param nucleotideList The input nucleotides in a {@link List}.
@@ -72,6 +97,22 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
      */
     public static Dna build(final List<DnaNucleotide> nucleotideList) {
         return new Dna(validateElementList(nucleotideList));
+    }
+
+    /**
+     * Build an {@link Dna} from the given {@link DnaNucleotide} {@link List}. The list should not contain null element.
+     *
+     * @param name The name of the sequence.
+     * @param nucleotideList The input nucleotides in a {@link List}.
+     * @return A new {@link Dna} object which stand from the nucleotides
+     */
+    public static Dna build(final String name, final List<DnaNucleotide> nucleotideList) {
+        return new Dna(validateName(name), validateElementList(nucleotideList));
+    }
+
+    private static String validateName(final String name) {
+        Preconditions.checkArgument(name != null, "Name should not be null");
+        return name.trim();
     }
 
     private static String validateSequence(final String sequence) {
@@ -91,21 +132,33 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
         return noNullElements(elementList, "DNA element list should not contain null element");
     }
 
-    private Dna(String sequence) {
+    private Dna(final String sequence) {
         super(sequence);
+    }
+
+    private Dna(final String name, final String sequence) {
+        super(name, sequence);
     }
 
     private Dna(final DnaNucleotide... dnaNucleotides) {
         super(dnaNucleotides);
     }
 
+    private Dna(final String name, final DnaNucleotide... dnaNucleotides) {
+        super(name, dnaNucleotides);
+    }
+
     private Dna(final List<DnaNucleotide> dnaNucleotideList) {
         super(dnaNucleotideList);
     }
 
+    private Dna(final String name, final List<DnaNucleotide> dnaNucleotideList) {
+        super(name, dnaNucleotideList);
+    }
+
     @Override
-    protected Dna construct(String sequence) {
-        return new Dna(sequence);
+    protected Dna construct(final String name, final String sequence) {
+        return new Dna(name, sequence);
     }
 
     @Override
@@ -129,58 +182,17 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
     }
 
     @Override
-    protected String getName() {
+    protected String getBiologicalSequenceTypeName() {
         return "DNA";
-    }
-
-    /**
-     * Get the number adenine nucleotides inside the sequence.
-     *
-     * @return The number of adenine nucleotides.
-     */
-    public int getAdenineNumber() {
-        return collectSequenceElementOccurrences().getOccurrence(DnaNucleotide.ADENINE);
-    }
-
-    /**
-     * Get the number cytosine nucleotides inside the sequence.
-     *
-     * @return The number of cytosine nucleotides.
-     */
-    public int getCytosineNumber() {
-        return collectSequenceElementOccurrences().getOccurrence(DnaNucleotide.CYTOSINE);
-    }
-
-    /**
-     * Get the number guanine nucleotides inside the sequence.
-     *
-     * @return The number of guanine nucleotides.
-     */
-    public int getGuanineNumber() {
-        return collectSequenceElementOccurrences().getOccurrence(DnaNucleotide.GUANINE);
-    }
-
-    /**
-     * Get the number thymine nucleotides inside the sequence.
-     *
-     * @return The number of thymine nucleotides.
-     */
-    public int getThymineNumber() {
-        return collectSequenceElementOccurrences().getOccurrence(DnaNucleotide.THYMINE);
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || obj.getClass() != Dna.class) return false;
+        if (obj == null || !obj.getClass().equals(getClass())) return false;
         Dna rightHand = (Dna) obj;
         boolean returnValue = sequenceLength == rightHand.sequenceLength
                 && sequence.equals(rightHand.sequence);
         return returnValue;
-    }
-
-    @Override
-    public int hashCode() {
-        return sequence.hashCode();
     }
 
     /**
@@ -372,9 +384,21 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
     }
 
     /**
+     * Get the guanine-cytosine ratio in the sequence.
+     *
+     * @return The guanine-cytosine ratio.
+     */
+    public synchronized double getGuanineCytosineRatio() {
+        if (guanineCytosineRatio == null) {
+            guanineCytosineRatio = getElementsRatio(DnaNucleotide.GUANINE, DnaNucleotide.CYTOSINE);
+        }
+        return guanineCytosineRatio;
+    }
+
+    /**
      * Returns the possible starting positions of the <i>ori</i> of the DNA.
      * <p>
-     * The theory examines the deaminated cytosine into thymine density. Each guanine in the
+     * The theory examines the deamidated cytosine into thymine density. Each guanine in the
      * sequence positions add 1 to the skew value and each cytosine subtract 1 from the skew
      * value. Where the skew is minimal, there is a high chance the <i>ori</i> point is
      * nearby.
@@ -389,35 +413,35 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
     }
 
     private List<Integer> createSkew() {
-        int guanineCitosyneRatio = 0;
-        int minimumGuanineCytosineRatio = guanineCitosyneRatio;
-        List<Integer> minimumRatioGuanineCitosyneIndexList = Lists.newLinkedList();
+        int guanineCytosineRatio = 0;
+        int minimumGuanineCytosineRatio = guanineCytosineRatio;
+        List<Integer> minimumRatioGuanineCytosineIndexList = Lists.newLinkedList();
         for (int i = 0; i < sequenceLength; i++) {
             switch (DnaNucleotide.findDnaNucleotide(sequence.charAt(i))) {
                 case GUANINE:
-                    guanineCitosyneRatio++;
+                    guanineCytosineRatio++;
                     break;
                 case CYTOSINE:
-                    guanineCitosyneRatio--;
-                    if (guanineCitosyneRatio < minimumGuanineCytosineRatio) {
-                        minimumGuanineCytosineRatio = guanineCitosyneRatio;
-                        minimumRatioGuanineCitosyneIndexList.clear();
+                    guanineCytosineRatio--;
+                    if (guanineCytosineRatio < minimumGuanineCytosineRatio) {
+                        minimumGuanineCytosineRatio = guanineCytosineRatio;
+                        minimumRatioGuanineCytosineIndexList.clear();
                     }
-                    if (guanineCitosyneRatio == minimumGuanineCytosineRatio) {
-                        minimumRatioGuanineCitosyneIndexList.add(i);
+                    if (guanineCytosineRatio == minimumGuanineCytosineRatio) {
+                        minimumRatioGuanineCytosineIndexList.add(i);
                     }
                     break;
                 default:
-                    if (guanineCitosyneRatio == minimumGuanineCytosineRatio) {
-                        minimumRatioGuanineCitosyneIndexList.add(i);
+                    if (guanineCytosineRatio == minimumGuanineCytosineRatio) {
+                        minimumRatioGuanineCytosineIndexList.add(i);
                         break;
                     }
             }
         }
-        if (minimumRatioGuanineCitosyneIndexList.isEmpty()) {
-            minimumRatioGuanineCitosyneIndexList.add(0);
+        if (minimumRatioGuanineCytosineIndexList.isEmpty()) {
+            minimumRatioGuanineCytosineIndexList.add(0);
         }
-        return minimumRatioGuanineCitosyneIndexList;
+        return minimumRatioGuanineCytosineIndexList;
     }
 
     /**

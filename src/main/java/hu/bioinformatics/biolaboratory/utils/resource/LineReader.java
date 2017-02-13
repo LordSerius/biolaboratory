@@ -3,11 +3,12 @@ package hu.bioinformatics.biolaboratory.utils.resource;
 import javax.inject.Inject;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Reads a resource line by line.
+ * Reads a resource line by line. The lines contains only sequences.
  *
  * @author Attila Radi
  */
@@ -23,7 +24,9 @@ public class LineReader extends ResourceReader {
     }
 
     @Override
-    protected List<String> processResource(BufferedReader reader) throws IOException {
-        return reader.lines().collect(Collectors.toList());
+    protected List<CommentedLine> processResource(BufferedReader reader) throws IOException {
+        return reader.lines()
+                .map(line -> new CommentedLine("", line))
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 }

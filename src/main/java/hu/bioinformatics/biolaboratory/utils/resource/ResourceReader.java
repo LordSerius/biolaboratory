@@ -2,16 +2,14 @@ package hu.bioinformatics.biolaboratory.utils.resource;
 
 import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Validate;
 
-import javax.inject.Inject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.UncheckedIOException;
 import java.util.List;
 
-import static org.apache.commons.lang3.Validate.*;
+import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * Provides the template for reading a resource.
@@ -37,11 +35,11 @@ public abstract class ResourceReader {
      * @param resourcePath The resource path of the target resource.
      * @return The read lines.
      */
-    public final List<String> read(String resourcePath) {
+    public final List<CommentedLine> read(String resourcePath) {
         Preconditions.checkArgument(StringUtils.isNotBlank(resourcePath), "The input resource path should not be blank");
 
         BufferedReader br = null;
-        List<String> lines = null;
+        List<CommentedLine> lines = null;
 
         try {
             br = new BufferedReader(resourceReaderProvider.provideReader(resourcePath));
@@ -67,5 +65,5 @@ public abstract class ResourceReader {
      * @return The processed input data.
      * @throws IOException If exception occurs during the resource reading.
      */
-    protected abstract List<String> processResource(BufferedReader reader) throws IOException;
+    protected abstract List<CommentedLine> processResource(BufferedReader reader) throws IOException;
 }

@@ -14,10 +14,11 @@ public class ProteinTestDataProvider {
     @DataProvider(name = INVALID_BUILD_PROTEIN_DATA_PROVIDER_NAME)
     static Object[][] invalidBuildDataProvider() {
         return new Object[][] {
-                { null },
-                { "" },
-                { "            " },
-                { "LOL" }
+                { "", null },
+                { "", "" },
+                { "", "            " },
+                { "", "LOL" },
+                { null, "RHDESTNQCGPAILMFWYV" }
         };
     }
 
@@ -48,10 +49,10 @@ public class ProteinTestDataProvider {
     @DataProvider(name = VALID_BUILD_PROTEIN_DATA_PROVIDER_NAME)
     static Object[][] validBuildDataProvider() {
         return new Object[][] {
-                { "RHDESTNQCGPAILMFWYV", "RHDESTNQCGPAILMFWYV" },
-                { "rhde", "RHDE" },
-                { "     STNQ       ", "STNQ" },
-                { "cGpA", "CGPA" }
+                { "", "RHDESTNQCGPAILMFWYV", "", "RHDESTNQCGPAILMFWYV" },
+                { " ", "rhde", "", "RHDE" },
+                { "name", "     STNQ       ", "name", "STNQ" },
+                { " name ", "cGpA", "name", "CGPA" }
         };
     }
 

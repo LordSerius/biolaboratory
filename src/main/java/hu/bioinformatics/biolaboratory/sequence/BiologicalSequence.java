@@ -15,8 +15,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static org.apache.commons.lang3.Validate.noNullElements;
+
 /**
- * Represents an abstract biological sequence, which can be a DNA, RNA or a protein. Contains all of the common
+ * Represents an immutable abstract biological sequence, which can be a DNA, RNA or a protein. Contains all of the common
  * operations, what are interpretable for all biological sequences.
  *
  * @author Attila Radi
@@ -24,49 +26,92 @@ import java.util.stream.IntStream;
 public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART extends SequenceElement> {
 
     protected final String sequence;
-    private  PART[] sequenceAsElements;
     protected final int sequenceLength;
+    private final String name;
 
+    private PART[] sequenceAsElements;
     private CountableOccurrenceMap<PART> elementOccurrences = null;
 
     /**
-     * Creates a biological sequence from its elements.
+     * Creates a biological sequence from its elements. The name will be empty.
      *
      * @param sequenceElements The elements of the biological sequence in array.
      */
     @SafeVarargs
     protected BiologicalSequence(final PART... sequenceElements) {
-        this(Arrays.asList(sequenceElements));
-        this.sequenceAsElements = sequenceElements;
+        this("", sequenceElements);
     }
 
     /**
      * Creates a biological sequence from its elements.
      *
+     * @param name The name of the biological sequence.
+     * @param sequenceElements The elements of the biological sequence in array.
+     */
+    @SafeVarargs
+    protected BiologicalSequence(final String name, final PART... sequenceElements) {
+        this(name, Arrays.asList(sequenceElements));
+        this.sequenceAsElements = sequenceElements;
+    }
+
+    /**
+     * Creates a biological sequence from its elements. The name will be empty.
+     *
      * @param sequenceElementList The elements of the biological sequence in {@link List} collection.
      */
     protected BiologicalSequence(final List<PART> sequenceElementList) {
+        this("", sequenceElementList);
+    }
+
+    /**
+     * Creates a biological sequence from its elements.
+     *
+     * @param name The name of the biological sequence.
+     * @param sequenceElementList The elements of the biological sequence in {@link List} collection.
+     */
+    protected BiologicalSequence(final String name, final List<PART> sequenceElementList) {
         this.sequence = new String(createLetterList(sequenceElementList));
         this.sequenceLength = sequence.length();
+        this.name = name;
+    }
+
+    /**
+     * Creates a biological sequence from {@link String}. The name will be empty.
+     *
+     * @param sequence The biological sequence as {@link String}.
+     */
+    protected BiologicalSequence(final String sequence) {
+        this("", sequence);
     }
 
     /**
      * Creates a biological sequence from {@link String}.
      *
+     * @param name The name of the biological sequence.
      * @param sequence The biological sequence as {@link String}.
      */
-    protected BiologicalSequence(final String sequence) {
+    protected BiologicalSequence( final String name, final String sequence) {
         this.sequence = sequence;
         this.sequenceLength = sequence.length();
+        this.name = name;
     }
 
     @SafeVarargs
     protected final TYPE construct(final PART... sequenceElements) {
-        return construct(Arrays.asList(sequenceElements));
+        return construct("", sequenceElements);
     }
 
-    protected TYPE construct(final List<PART> sequenceElementList) {
-        return construct(new String(createLetterList(sequenceElementList)));
+    @SafeVarargs
+    protected final TYPE construct(final String name, final PART... sequenceElements) {
+        return construct(name, Arrays.asList(sequenceElements));
+    }
+
+    protected final TYPE construct(final List<PART> sequenceElementList) {
+        return construct("", sequenceElementList);
+    }
+
+    protected final TYPE construct(final String name, final List<PART> sequenceElementList) {
+        return construct(name, new String(createLetterList(sequenceElementList)));
     }
 
     private char[] createLetterList(final List<PART> sequenceElementList) {
@@ -80,13 +125,18 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
         return letters;
     }
 
+    protected final TYPE construct(final String sequence) {
+        return construct("", sequence);
+    }
+
     /**
      * Calls the constructor of the inherited class.
      *
+     * @param name The name of the sequence.
      * @param sequence The String sequence of the biological sequence.
      * @return The instance of the inherited class
      */
-    protected abstract TYPE construct(final String sequence);
+    protected abstract TYPE construct(final String name, final String sequence);
 
     /**
      * Creates a copy of the {@link BiologicalSequence}.
@@ -102,6 +152,26 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
      */
     public final String getSequence() {
         return sequence;
+    }
+
+    /**
+     * Getter of the name.
+     *
+     * @return The name.
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Returns with a new {@link BiologicalSequence} with the given name.
+     *
+     * @param name The new name.
+     * @return Tha new {@link BiologicalSequence} with the given name.
+     */
+    public TYPE changeName(final String name) {
+        Preconditions.checkArgument(name != null, "Sequence name should not be null");
+        return construct(name.trim(), sequence);
     }
 
     /**
@@ -142,6 +212,72 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
         return collectSequenceElementOccurrences().copy();
     }
 
+    /**
+     * Get the ratio of the target element according to the full sequence.
+     *
+     * @param element The desirable element.
+     * @return The ratio of the target element.
+     */
+    public final double getElementRatio(final PART element) {
+        return (double) getElementsNumber(element) / sequenceLength;
+    }
+
+    /**
+     * Get the ratio of the target elements according to the full sequence.
+     *
+     * @param elements The desirable elements.
+     * @return The ratio of the target elements.
+     */
+    @SafeVarargs
+    public final double getElementsRatio(final PART... elements) {
+        return (double) getElementsNumber(elements) / sequenceLength;
+    }
+
+    /**
+     * Get the ratio of the target elements according to the full sequence.
+     *
+     * @param elementSet The desirable elements.
+     * @return The ratio of the target elements.
+     */
+    public final double getElementsRatio(final Set<PART> elementSet) {
+        return (double) getElementsNumber(elementSet) / sequenceLength;
+    }
+
+    /**
+     * Get the number of the target element.
+     *
+     * @param element The desired element.
+     * @return The element number in the {@link BiologicalSequence}
+     */
+    public final int getElementNumber(final PART element) {
+        return getElementsNumber(Sets.newHashSet(element));
+    }
+
+    /**
+     * Get the number of the target elements.
+     *
+     * @param elements The desired elements.
+     * @return The sum of the target elements in the {@link BiologicalSequence}.
+     */
+    @SafeVarargs
+    public final int getElementsNumber(final PART... elements) {
+        Preconditions.checkArgument(elements != null, "Elements should not be null");
+        return getElementsNumber(Sets.newHashSet(elements));
+    }
+
+    /**
+     * Get the number of the target elements.
+     *
+     * @param elementSet The desired elements.
+     * @return The sum of the target elements in the {@link BiologicalSequence}.
+     */
+    public final int getElementsNumber(final Set<PART> elementSet) {
+        Preconditions.checkArgument(elementSet != null, "Elements should not be null");
+        noNullElements(elementSet, "Elements should not contain null value");
+        CountableOccurrenceMap<PART> occurrenceMap = collectSequenceElementOccurrences();
+        return elementSet.stream().mapToInt(occurrenceMap::getOccurrence).sum();
+    }
+
     protected final synchronized CountableOccurrenceMap<PART> collectSequenceElementOccurrences() {
         if (elementOccurrences == null) {
             elementOccurrences = CountableOccurrenceMap.build(getElementSet());
@@ -165,7 +301,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
 
     @Override
     public String toString() {
-        return getName() + " = {" + sequence + "}";
+        return getBiologicalSequenceTypeName() + " = {" + sequence + "}";
     }
 
     /**
@@ -173,7 +309,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
      *
      * @return The name of the sequence type.
      */
-    protected abstract String getName();
+    protected abstract String getBiologicalSequenceTypeName();
 
     /**
      * Append the given biological sequence to the end.
@@ -278,8 +414,8 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
     }
 
     private void validatePattern(final TYPE pattern) {
-        Preconditions.checkArgument(pattern != null, StringFormatter.format("%s should not be null", getName()));
-        Preconditions.checkArgument(pattern.sequenceLength <= sequenceLength, StringFormatter.format("Pattern length should smaller or equals than %s sequence length", getName()));
+        Preconditions.checkArgument(pattern != null, StringFormatter.format("%s should not be null", getBiologicalSequenceTypeName()));
+        Preconditions.checkArgument(pattern.sequenceLength <= sequenceLength, StringFormatter.format("Pattern length should smaller or equals than %s sequence length", getBiologicalSequenceTypeName()));
     }
 
     /**
@@ -589,7 +725,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
     }
 
     private void validateSameLengthBiologicalSequence(BiologicalSequence otherBiologicalSequence) {
-        Preconditions.checkArgument(otherBiologicalSequence != null, StringFormatter.format("Other %s should not be null", getName()));
-        Preconditions.checkArgument(sequenceLength == otherBiologicalSequence.sequenceLength, StringFormatter.format("The sequence length of the other %s should be the same as the sequence length", getName()));
+        Preconditions.checkArgument(otherBiologicalSequence != null, StringFormatter.format("Other %s should not be null", getBiologicalSequenceTypeName()));
+        Preconditions.checkArgument(sequenceLength == otherBiologicalSequence.sequenceLength, StringFormatter.format("The sequence length of the other %s should be the same as the sequence length", getBiologicalSequenceTypeName()));
     }
 }

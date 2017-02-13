@@ -1,15 +1,14 @@
 package hu.bioinformatics.biolaboratory.utils.datahandlers;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
-
 import hu.bioinformatics.biolaboratory.guice.GuiceModule;
 import hu.bioinformatics.biolaboratory.sequence.dna.Dna;
+import hu.bioinformatics.biolaboratory.utils.resource.CommentedLine;
 import hu.bioinformatics.biolaboratory.utils.resource.ResourceReader;
-import org.apache.commons.lang3.Validate;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 
 import static org.apache.commons.lang3.Validate.notNull;
 
@@ -40,7 +39,8 @@ public class DnaRowReader implements DnaDataReader {
     @Override
     public Dna load(String resourcePath) {
         DnaFileValidator.validateFilePath(resourcePath);
-        return Dna.build(rowReader.read(resourcePath).get(0));
+        CommentedLine commentedLine = rowReader.read(resourcePath).get(0);
+        return Dna.build(commentedLine.getComment(), commentedLine.getLine());
     }
 
 }
