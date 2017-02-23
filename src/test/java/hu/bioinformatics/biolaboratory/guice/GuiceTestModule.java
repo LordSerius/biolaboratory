@@ -1,5 +1,6 @@
 package hu.bioinformatics.biolaboratory.guice;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 import hu.bioinformatics.biolaboratory.testutils.TestDnaCollectionLoader;
 import hu.bioinformatics.biolaboratory.testutils.TestDnaLoader;
@@ -9,11 +10,10 @@ import hu.bioinformatics.biolaboratory.testutils.TestDnaLoader;
  *
  * @author Attila Radi
  */
-public class GuiceTestModule extends GuiceModule {
+public class GuiceTestModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        super.configure();
         bind(TestDnaCollectionLoader.class).in(Scopes.SINGLETON);
         bind(TestDnaLoader.class).in(Scopes.SINGLETON);
     }

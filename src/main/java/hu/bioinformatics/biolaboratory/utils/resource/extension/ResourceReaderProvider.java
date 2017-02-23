@@ -1,4 +1,4 @@
-package hu.bioinformatics.biolaboratory.utils.resource;
+package hu.bioinformatics.biolaboratory.utils.resource.extension;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -18,5 +18,5 @@ public interface ResourceReaderProvider {
      * @return The {@link Reader} of the target resource.
      * @throws IOException If exception occurs during the construction.
      */
-    Reader provideReader(String resourcePath) throws IOException;
+    Reader provideReader(final String resourcePath) throws IOException;
 }

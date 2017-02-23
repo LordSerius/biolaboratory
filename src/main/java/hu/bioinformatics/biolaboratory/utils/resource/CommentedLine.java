@@ -1,6 +1,7 @@
 package hu.bioinformatics.biolaboratory.utils.resource;
 
 import com.google.common.base.Preconditions;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
@@ -14,9 +15,9 @@ public class CommentedLine {
 
     public CommentedLine(String comment, String line) {
         Preconditions.checkArgument(comment != null, "Comment should not be null");
-        Preconditions.checkArgument(line != null, "Line should not be null");
-        this.comment = comment;
-        this.line = line;
+        Preconditions.checkArgument(StringUtils.isNotBlank(line), "Line should not be blank");
+        this.comment = comment.trim();
+        this.line = line.trim();
     }
 
     public String getComment() {
@@ -29,6 +30,7 @@ public class CommentedLine {
 
     @Override
     public boolean equals(Object obj) {
+        if (obj == this) return true;
         if (obj == null || !obj.getClass().equals(getClass())) return false;
         CommentedLine rightHand = (CommentedLine) obj;
         return this.comment.equals(rightHand.comment)
@@ -38,5 +40,10 @@ public class CommentedLine {
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(comment).append(line).toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "{ \"" + comment + "\", " + line + " }";
     }
 }

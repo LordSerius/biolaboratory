@@ -4,12 +4,13 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import hu.bioinformatics.biolaboratory.guice.GuiceModule;
+import hu.bioinformatics.biolaboratory.guice.GuiceCoreModule;
+import hu.bioinformatics.biolaboratory.guice.GuiceResourceModule;
 import hu.bioinformatics.biolaboratory.sequence.protein.AminoAcid;
 import hu.bioinformatics.biolaboratory.utils.resource.CommentedLine;
-import hu.bioinformatics.biolaboratory.utils.resource.LineReader;
-import hu.bioinformatics.biolaboratory.utils.resource.ResourceLocalizer;
-import hu.bioinformatics.biolaboratory.utils.resource.ResourceReader;
+import hu.bioinformatics.biolaboratory.utils.resource.read.LineReader;
+import hu.bioinformatics.biolaboratory.utils.resource.extension.ResourceLocalizer;
+import hu.bioinformatics.biolaboratory.utils.resource.read.ResourceReader;
 
 import java.util.AbstractMap;
 import java.util.List;
@@ -47,7 +48,7 @@ public class RnaCodonTable {
     }
 
     private static List<CommentedLine> getRawCodonTable() {
-        Injector injector = Guice.createInjector(new GuiceModule());
+        Injector injector = Guice.createInjector(new GuiceCoreModule(), new GuiceResourceModule());
         ResourceReader resourceReader = injector.getInstance(LineReader.class);
         ResourceLocalizer resourceLocalizer = injector.getInstance(ResourceLocalizer.class);
 

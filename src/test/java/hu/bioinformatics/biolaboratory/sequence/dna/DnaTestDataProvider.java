@@ -2,6 +2,7 @@ package hu.bioinformatics.biolaboratory.sequence.dna;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import hu.bioinformatics.biolaboratory.sequence.protein.Protein;
 import hu.bioinformatics.biolaboratory.sequence.rna.Rna;
 import hu.bioinformatics.biolaboratory.testutils.TestDnaLoader;
 import hu.bioinformatics.biolaboratory.utils.DnaCollectors;
@@ -159,7 +160,9 @@ public class DnaTestDataProvider {
                 { Dna.build("AGTC"), "AGTC", false },
                 { Dna.build("AGTC"), Dna.build("AGTC"), true },
                 { Dna.build("AGTC"), Dna.build("T"), false },
-                { Dna.build("AGTC"), Dna.build("CTGA"), false }
+                { Dna.build("AGTC"), Dna.build("CTGA"), false },
+                { Dna.build("AAAA") , Rna.build("AAAA"), false },
+                { Dna.build("AAAA"), Protein.build("AAAA"), false}
         };
     }
     

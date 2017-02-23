@@ -186,15 +186,6 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
         return "DNA";
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null || !obj.getClass().equals(getClass())) return false;
-        Dna rightHand = (Dna) obj;
-        boolean returnValue = sequenceLength == rightHand.sequenceLength
-                && sequence.equals(rightHand.sequence);
-        return returnValue;
-    }
-
     /**
      * Get all <i>k</i> long straight or reverse complement sequences which has at most
      * <i>d</i> different nucleotides and are greater or equals than <i>t</i> in the DNA

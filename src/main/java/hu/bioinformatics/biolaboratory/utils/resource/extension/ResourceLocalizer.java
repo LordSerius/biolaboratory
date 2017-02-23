@@ -1,4 +1,4 @@
-package hu.bioinformatics.biolaboratory.utils.resource;
+package hu.bioinformatics.biolaboratory.utils.resource.extension;
 
 /**
  * Provides an interface which can localizes external resources paths.

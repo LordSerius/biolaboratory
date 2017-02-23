@@ -295,6 +295,14 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
     protected abstract PART findSequenceElement(final char sequenceElementLetter);
 
     @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null || !obj.getClass().equals(getClass())) return false;
+        BiologicalSequence rightHand = (BiologicalSequence) obj;
+        return sequenceLength == rightHand.sequenceLength && sequence.equals(rightHand.sequence);
+    }
+
+    @Override
     public int hashCode() {
         return sequence.hashCode();
     }

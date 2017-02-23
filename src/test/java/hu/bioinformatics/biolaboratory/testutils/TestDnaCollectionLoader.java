@@ -1,12 +1,12 @@
 package hu.bioinformatics.biolaboratory.testutils;
 
 import com.google.common.base.Preconditions;
-import hu.bioinformatics.biolaboratory.guice.GuiceModule;
+import hu.bioinformatics.biolaboratory.guice.GuiceCoreModule;
 import hu.bioinformatics.biolaboratory.sequence.dna.Dna;
 import hu.bioinformatics.biolaboratory.utils.DnaCollectors;
 import hu.bioinformatics.biolaboratory.utils.resource.CommentedLine;
-import hu.bioinformatics.biolaboratory.utils.resource.ResourceLocalizer;
-import hu.bioinformatics.biolaboratory.utils.resource.ResourceReader;
+import hu.bioinformatics.biolaboratory.utils.resource.extension.ResourceLocalizer;
+import hu.bioinformatics.biolaboratory.utils.resource.read.ResourceReader;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
@@ -31,7 +31,7 @@ public class TestDnaCollectionLoader {
     private final ResourceLocalizer resourceLocalizer;
 
     @Inject
-    public TestDnaCollectionLoader(@Named(value = GuiceModule.ROW_READER_NAME) ResourceReader resourceReader,
+    public TestDnaCollectionLoader(@Named(GuiceCoreModule.ROW_READER_NAME) ResourceReader resourceReader,
                                    ResourceLocalizer resourceLocalizer) {
         this.resourceReader = notNull(resourceReader, "Resource reader should not be null");
         this.resourceLocalizer = notNull(resourceLocalizer);

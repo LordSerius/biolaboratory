@@ -1,7 +1,8 @@
-package hu.bioinformatics.biolaboratory.utils.resource.file;
+package hu.bioinformatics.biolaboratory.utils.resource.extension.impl;
 
 import com.google.common.base.Preconditions;
-import hu.bioinformatics.biolaboratory.utils.resource.ResourceLocalizer;
+import hu.bioinformatics.biolaboratory.utils.resource.extension.ResourceLocalizer;
+import org.apache.commons.lang3.StringUtils;
 
 import java.net.URL;
 import java.util.Optional;
@@ -22,6 +23,7 @@ public class LocalFileResourceLocalizer implements ResourceLocalizer {
      */
     @Override
     public String localizeResource(String resourceName) {
+        Preconditions.checkArgument(StringUtils.isNotBlank(resourceName), "Resource name should not be blank");
         Optional<URL> resourceUrl = Optional.ofNullable(getClass().getClassLoader().getResource(resourceName));
         Preconditions.checkArgument(resourceUrl.isPresent(), "Resource does not exist");
         return resourceUrl.get().getFile();

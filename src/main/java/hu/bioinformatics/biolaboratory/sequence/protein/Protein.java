@@ -166,13 +166,6 @@ public class Protein extends BiologicalSequence<Protein, AminoAcid> {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == null || !obj.getClass().equals(getClass())) return false;
-        Protein rightHand = (Protein) obj;
-        return sequenceLength == rightHand.sequenceLength && sequence.equals(rightHand.sequence);
-    }
-
-    @Override
     protected String getBiologicalSequenceTypeName() {
         return "Protein";
     }

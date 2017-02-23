@@ -98,13 +98,6 @@ public class CountableOccurrenceMap<K> extends OccurrenceMap<K> {
         return new CountableOccurrenceMap<K>(occurrenceMap);
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        return obj != null
-                && obj.getClass().equals(getClass())
-                && compareOccurrenceMapContent(((CountableOccurrenceMap) obj).occurrenceMap);
-    }
-
     /**
      * Decreases the occurrence of the target key.
      *

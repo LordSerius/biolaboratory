@@ -168,13 +168,6 @@ public class Rna extends BiologicalSequence<Rna, RnaNucleotide> {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == null || !obj.getClass().equals(getClass())) return false;
-        Rna rightHand = (Rna) obj;
-        return sequenceLength == rightHand.sequenceLength && sequence.equals(rightHand.sequence);
-    }
-
-    @Override
     protected String getBiologicalSequenceTypeName() {
         return "RNA";
     }

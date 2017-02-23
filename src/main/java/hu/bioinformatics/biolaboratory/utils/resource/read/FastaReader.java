@@ -1,9 +1,15 @@
-package hu.bioinformatics.biolaboratory.utils.resource;
+package hu.bioinformatics.biolaboratory.utils.resource.read;
 
 import com.google.common.base.Preconditions;
+import hu.bioinformatics.biolaboratory.guice.GuiceCoreModule;
+import hu.bioinformatics.biolaboratory.utils.resource.CommentedLine;
+import hu.bioinformatics.biolaboratory.utils.resource.extension.ResourceReaderProvider;
+import hu.bioinformatics.biolaboratory.utils.resource.extension.ResourceValidator;
+import hu.bioinformatics.biolaboratory.utils.resource.read.wrapper.ReaderWrapperFactory;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,16 +23,20 @@ import java.util.stream.Collectors;
  * @author Attila Radi
  */
 public class FastaReader extends ResourceReader {
-    private static final String PROMPT = "<";
+    private static final String PROMPT = ">";
 
     /**
      * Constructor is waiting for a {@link ResourceReaderProvider}.
      *
+     * @param resourceValidator {@link ResourceValidator}
      * @param resourceReaderProvider {@link ResourceReaderProvider}
+     * @param readerWrapperFactory {@link ReaderWrapperFactory}
      */
     @Inject
-    public FastaReader(ResourceReaderProvider resourceReaderProvider) {
-        super(resourceReaderProvider);
+    public FastaReader(@Named(GuiceCoreModule.FASTA_VALIDATOR_NAME) final ResourceValidator resourceValidator,
+                       final ResourceReaderProvider resourceReaderProvider,
+                       final ReaderWrapperFactory readerWrapperFactory) {
+        super(resourceValidator, resourceReaderProvider, readerWrapperFactory);
     }
 
     @Override
@@ -39,9 +49,10 @@ public class FastaReader extends ResourceReader {
         String description = null;
         String concatenatedSequence = "";
         for (String line : lineList) {
+            line = line.trim();
             if (line.startsWith(PROMPT)) {
                 if (description != null) {
-                    Preconditions.checkArgument(concatenatedSequence.isEmpty(), "Multiple header is detected");
+                    Preconditions.checkArgument(!concatenatedSequence.isEmpty(), "Multiple header is detected");
                     commentedLineList.add(new CommentedLine(description, concatenatedSequence));
                     concatenatedSequence = "";
                 }
@@ -50,7 +61,7 @@ public class FastaReader extends ResourceReader {
                 concatenatedSequence += line;
             }
         }
-        Preconditions.checkArgument(description != null &&concatenatedSequence.isEmpty(), "Multiple header is detected");
+        Preconditions.checkArgument(description != null && !concatenatedSequence.isEmpty(), "Multiple header is detected");
         commentedLineList.add(new CommentedLine(description, concatenatedSequence));
 
         return commentedLineList;

@@ -1,7 +1,10 @@
 package hu.bioinformatics.biolaboratory.utils.datahandlers;
 
+import hu.bioinformatics.biolaboratory.guice.GuiceCoreModule;
 import hu.bioinformatics.biolaboratory.sequence.dna.Dna;
+import hu.bioinformatics.biolaboratory.utils.resource.extension.ResourceValidator;
 
+import javax.inject.Named;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,6 +20,12 @@ import java.io.UncheckedIOException;
  */
 public class DnaFileWriter implements DnaDataWriter {
 
+    private final ResourceValidator resourceValidator;
+
+    public DnaFileWriter(@Named(GuiceCoreModule.DNA_VALIDATOR_NAME) final ResourceValidator resourceValidator) {
+        this.resourceValidator = resourceValidator;
+    }
+
     /**
      * Writes the given {@link Dna} to a file.
      * 
@@ -26,7 +35,7 @@ public class DnaFileWriter implements DnaDataWriter {
      */
     @Override
     public void save(Dna dna, String resourcePath) {
-        DnaFileValidator.validateFilePath(resourcePath);
+        resourceValidator.validate(resourcePath);
         FileWriter fw = null;
         BufferedWriter bw = null;
         try {

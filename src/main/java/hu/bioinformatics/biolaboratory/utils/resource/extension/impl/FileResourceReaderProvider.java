@@ -1,6 +1,6 @@
-package hu.bioinformatics.biolaboratory.utils.resource.file;
+package hu.bioinformatics.biolaboratory.utils.resource.extension.impl;
 
-import hu.bioinformatics.biolaboratory.utils.resource.ResourceReaderProvider;
+import hu.bioinformatics.biolaboratory.utils.resource.extension.ResourceReaderProvider;
 
 import java.io.FileReader;
 import java.io.IOException;

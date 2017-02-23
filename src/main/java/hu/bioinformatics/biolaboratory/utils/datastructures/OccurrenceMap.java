@@ -95,7 +95,8 @@ public class OccurrenceMap<K> {
     
     @Override
     public boolean equals(Object obj) {
-        return obj != null
+        return obj == this
+                || obj != null
                 && obj.getClass().equals(getClass())
                 && compareOccurrenceMapContent(((OccurrenceMap<K>) obj).occurrenceMap);
     }

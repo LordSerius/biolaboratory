@@ -8,7 +8,7 @@ import hu.bioinformatics.biolaboratory.sequence.dna.Dna;
  * @author Attila Radi
  *
  */
-public interface DnaDataReader {
+public interface DnaLoader {
 
     /**
      * Load a {@link Dna} from an external resource.
@@ -16,5 +16,5 @@ public interface DnaDataReader {
      * @param resourcePath The address of the external resource.
      * @return The {@link Dna} from the external resource.
      */
-    public Dna load(String resourcePath);
+    Dna load(final String resourcePath);
 }
