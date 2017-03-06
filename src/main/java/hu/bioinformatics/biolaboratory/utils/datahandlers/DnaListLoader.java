@@ -3,13 +3,15 @@ package hu.bioinformatics.biolaboratory.utils.datahandlers;
 import hu.bioinformatics.biolaboratory.sequence.dna.Dna;
 import hu.bioinformatics.biolaboratory.utils.resource.read.ResourceReader;
 
+import java.util.List;
+
 /**
- * Abstract class to load {@link Dna}s.
+ * Loads a list of {@link Dna}.
  *
  * @author Attila Radi
  */
-public abstract class DnaLoader extends ResourceLoader<Dna> {
-    public DnaLoader(final ResourceReader resourceReader) {
+public abstract class DnaListLoader extends ResourceLoader<List<Dna>> {
+    public DnaListLoader(final ResourceReader resourceReader) {
         super(resourceReader);
     }
 }

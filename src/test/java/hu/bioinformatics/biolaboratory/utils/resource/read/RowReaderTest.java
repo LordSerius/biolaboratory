@@ -2,7 +2,7 @@ package hu.bioinformatics.biolaboratory.utils.resource.read;
 
 import hu.bioinformatics.biolaboratory.guice.GuiceCoreModule;
 import hu.bioinformatics.biolaboratory.guice.GuiceMockModule;
-import hu.bioinformatics.biolaboratory.utils.resource.CommentedLine;
+import hu.bioinformatics.biolaboratory.utils.resource.CommentedString;
 import hu.bioinformatics.biolaboratory.utils.resource.extension.ResourceReaderProvider;
 import hu.bioinformatics.biolaboratory.utils.resource.read.wrapper.ReaderWrapperFactory;
 import org.mockito.Spy;
@@ -67,7 +67,7 @@ public class RowReaderTest {
     @DataProvider(name = VALID_PROCESS_RESOURCE_DATA_PROVIDER_NAME)
     private Object[][] validProcessResourceDataProvider() {
         return new Object[][] {
-                { Stream.builder().add("oneliner").build(), new CommentedLine("", "oneliner") }
+                { Stream.builder().add("oneliner").build(), new CommentedString("", "oneliner") }
         };
     }
 
@@ -80,10 +80,10 @@ public class RowReaderTest {
     }
 
     @Test(dataProvider = VALID_PROCESS_RESOURCE_DATA_PROVIDER_NAME)
-    public void shouldProcessResourcesReturn(Stream<String> content, CommentedLine controlLine) throws IOException {
+    public void shouldProcessResourcesReturn(Stream<String> content, CommentedString controlLine) throws IOException {
         ((MockReaderWrapperFactory) readerWrapperFactory).setLines(content);
-        List<CommentedLine> commentedLines = rowReader.read(PATH);
-        assertThat(commentedLines.size(), is(equalTo(1)));
-        assertThat(commentedLines.get(0), is(equalTo(controlLine)));
+        List<CommentedString> commentedStrings = rowReader.read(PATH);
+        assertThat(commentedStrings.size(), is(equalTo(1)));
+        assertThat(commentedStrings.get(0), is(equalTo(controlLine)));
     }
 }

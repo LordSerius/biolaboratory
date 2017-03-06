@@ -1,4 +1,4 @@
-package hu.bioinformatics.biolaboratory.utils.datahandlers;
+package hu.bioinformatics.biolaboratory.utils.datahandlers.implementation;
 
 import hu.bioinformatics.biolaboratory.guice.GuiceCoreModule;
 import hu.bioinformatics.biolaboratory.guice.GuiceMockModule;

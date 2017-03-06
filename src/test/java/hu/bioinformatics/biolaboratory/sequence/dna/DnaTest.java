@@ -1,7 +1,6 @@
 package hu.bioinformatics.biolaboratory.sequence.dna;
 
 import hu.bioinformatics.biolaboratory.guice.GuiceCoreModule;
-import hu.bioinformatics.biolaboratory.guice.GuiceResourceModule;
 import hu.bioinformatics.biolaboratory.guice.GuiceTestModule;
 import hu.bioinformatics.biolaboratory.sequence.rna.Rna;
 import hu.bioinformatics.biolaboratory.utils.datastructures.CountableOccurrenceMap;
@@ -25,7 +24,7 @@ import static org.testng.Assert.fail;
  * @author Attila Radi
  *
  */
-@Guice(modules = {GuiceCoreModule.class, GuiceResourceModule.class, GuiceTestModule.class})
+@Guice(modules = {GuiceCoreModule.class, GuiceTestModule.class})
 @Test(dataProviderClass = DnaTestDataProvider.class)
 public class DnaTest {
     

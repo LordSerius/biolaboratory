@@ -2,7 +2,7 @@ package hu.bioinformatics.biolaboratory.utils.resource.read;
 
 import com.google.common.base.Preconditions;
 import hu.bioinformatics.biolaboratory.guice.GuiceCoreModule;
-import hu.bioinformatics.biolaboratory.utils.resource.CommentedLine;
+import hu.bioinformatics.biolaboratory.utils.resource.CommentedString;
 import hu.bioinformatics.biolaboratory.utils.resource.extension.ResourceReaderProvider;
 import hu.bioinformatics.biolaboratory.utils.resource.extension.ResourceValidator;
 import hu.bioinformatics.biolaboratory.utils.resource.read.wrapper.ReaderWrapperFactory;
@@ -38,9 +38,9 @@ public class RowReader extends ResourceReader {
     }
 
     @Override
-    protected List<CommentedLine> processResource(BufferedReader reader) throws IOException {
-        List<CommentedLine> rawBiologicalSequenceList = reader.lines()
-                .map(line -> new CommentedLine("", line))
+    protected List<CommentedString> processResource(BufferedReader reader) throws IOException {
+        List<CommentedString> rawBiologicalSequenceList = reader.lines()
+                .map(line -> new CommentedString("", line))
                 .limit(2)
                 .collect(Collectors.toCollection(ArrayList::new));
         Preconditions.checkArgument(rawBiologicalSequenceList.size() == 1, "The resource should have exactly 1 lines");

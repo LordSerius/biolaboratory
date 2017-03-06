@@ -3,8 +3,8 @@ package hu.bioinformatics.biolaboratory.testutils;
 import com.google.common.base.Preconditions;
 import hu.bioinformatics.biolaboratory.guice.GuiceCoreModule;
 import hu.bioinformatics.biolaboratory.sequence.dna.Dna;
-import hu.bioinformatics.biolaboratory.utils.DnaCollectors;
-import hu.bioinformatics.biolaboratory.utils.resource.CommentedLine;
+import hu.bioinformatics.biolaboratory.utils.collectors.DnaCollectors;
+import hu.bioinformatics.biolaboratory.utils.resource.CommentedString;
 import hu.bioinformatics.biolaboratory.utils.resource.extension.ResourceLocalizer;
 import hu.bioinformatics.biolaboratory.utils.resource.read.ResourceReader;
 import org.apache.commons.lang3.StringUtils;
@@ -44,7 +44,7 @@ public class TestDnaCollectionLoader {
      * @return The contained {@link Dna} set of the file.
      */
     public Set<Dna> loadDnaSetFromFile(String fileName) {
-        return DnaCollectors.toDnaSet(whitespacePattern.split(readFile(fileName)));
+        return DnaCollectors.stringToDnaSet(whitespacePattern.split(readFile(fileName)));
     }
 
     /**
@@ -54,14 +54,14 @@ public class TestDnaCollectionLoader {
      * @return The contained {@link Dna} list of the file.
      */
     public List<Dna> loadDnaListFromFile(String fileName) {
-        return DnaCollectors.toDnaList(whitespacePattern.split(readFile(fileName)));
+        return DnaCollectors.stringToDnaList(whitespacePattern.split(readFile(fileName)));
     }
 
     private String readFile(String fileName) {
         Preconditions.checkArgument(StringUtils.isNotBlank(fileName), "The input file should not be blank");
         String filePath = resourceLocalizer.localizeResource(fileName);
         return resourceReader.read(filePath).stream()
-                .map(CommentedLine::getLine)
+                .map(CommentedString::getString)
                 .collect(Collectors.toList())
                 .get(0);
     }

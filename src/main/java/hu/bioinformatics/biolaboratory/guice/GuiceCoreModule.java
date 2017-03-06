@@ -3,13 +3,15 @@ package hu.bioinformatics.biolaboratory.guice;
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 import com.google.inject.name.Names;
+import hu.bioinformatics.biolaboratory.utils.datahandlers.DnaArrayLoader;
+import hu.bioinformatics.biolaboratory.utils.datahandlers.DnaListLoader;
 import hu.bioinformatics.biolaboratory.utils.datahandlers.DnaLoader;
-import hu.bioinformatics.biolaboratory.utils.datahandlers.DnaRowLoader;
-import hu.bioinformatics.biolaboratory.utils.resource.extension.ResourceLocalizer;
+import hu.bioinformatics.biolaboratory.utils.datahandlers.implementation.DnaArrayFastaLoader;
+import hu.bioinformatics.biolaboratory.utils.datahandlers.implementation.DnaListFastaLoader;
+import hu.bioinformatics.biolaboratory.utils.datahandlers.implementation.DnaRowLoader;
 import hu.bioinformatics.biolaboratory.utils.resource.extension.ResourceValidator;
 import hu.bioinformatics.biolaboratory.utils.resource.extension.impl.DnaFileValidator;
 import hu.bioinformatics.biolaboratory.utils.resource.extension.impl.FastaResourceValidator;
-import hu.bioinformatics.biolaboratory.utils.resource.extension.impl.LocalFileResourceLocalizer;
 import hu.bioinformatics.biolaboratory.utils.resource.extension.impl.SimpleResourceValidator;
 import hu.bioinformatics.biolaboratory.utils.resource.read.FastaReader;
 import hu.bioinformatics.biolaboratory.utils.resource.read.LineReader;
@@ -39,11 +41,13 @@ public class GuiceCoreModule extends AbstractModule {
         bind(ResourceValidator.class).annotatedWith(Names.named(FASTA_VALIDATOR_NAME)).to(FastaResourceValidator.class).in(Scopes.SINGLETON);
         bind(ResourceValidator.class).annotatedWith(Names.named(DNA_VALIDATOR_NAME)).to(DnaFileValidator.class).in(Scopes.SINGLETON);
 
-        bind(ResourceLocalizer.class).to(LocalFileResourceLocalizer.class).in(Scopes.SINGLETON);
         bind(ResourceReader.class).annotatedWith(Names.named(ROW_READER_NAME)).to(RowReader.class).in(Scopes.SINGLETON);
         bind(ResourceReader.class).annotatedWith(Names.named(DNA_ROW_READER_NAME)).to(DnaRowReader.class).in(Scopes.SINGLETON);
         bind(ResourceReader.class).annotatedWith(Names.named(LINE_READER_NAME)).to(LineReader.class).in(Scopes.SINGLETON);
         bind(ResourceReader.class).annotatedWith(Names.named(FASTA_READER_NAME)).to(FastaReader.class).in(Scopes.SINGLETON);
+
         bind(DnaLoader.class).to(DnaRowLoader.class).in(Scopes.SINGLETON);
+        bind(DnaArrayLoader.class).to(DnaArrayFastaLoader.class).in(Scopes.SINGLETON);
+        bind(DnaListLoader.class).to(DnaListFastaLoader.class).in(Scopes.SINGLETON);
     }
 }

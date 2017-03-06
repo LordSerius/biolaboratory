@@ -2,6 +2,8 @@ package hu.bioinformatics.biolaboratory.guice;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
+import hu.bioinformatics.biolaboratory.utils.datahandlers.implementation.DnaArrayFastaLoader;
+import hu.bioinformatics.biolaboratory.utils.datahandlers.implementation.DnaRowLoader;
 import hu.bioinformatics.biolaboratory.utils.resource.extension.ResourceReaderProvider;
 import hu.bioinformatics.biolaboratory.utils.resource.read.MockReaderWrapperFactory;
 import hu.bioinformatics.biolaboratory.utils.resource.read.wrapper.ReaderWrapperFactory;
@@ -33,6 +35,9 @@ public class GuiceMockModule extends AbstractModule {
 
         bind(ReaderWrapperFactory.class).to(MockReaderWrapperFactory.class).in(Scopes.SINGLETON);
         bind(ResourceReaderProvider.class).toInstance(resourceReaderProvider);
+
+        bind(DnaRowLoader.class).in(Scopes.SINGLETON);
+        bind(DnaArrayFastaLoader.class).in(Scopes.SINGLETON);
     }
 
     private void initializeMocks() {

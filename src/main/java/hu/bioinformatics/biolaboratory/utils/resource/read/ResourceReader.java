@@ -1,7 +1,7 @@
 package hu.bioinformatics.biolaboratory.utils.resource.read;
 
 import com.google.common.base.Preconditions;
-import hu.bioinformatics.biolaboratory.utils.resource.CommentedLine;
+import hu.bioinformatics.biolaboratory.utils.resource.CommentedString;
 import hu.bioinformatics.biolaboratory.utils.resource.extension.ResourceReaderProvider;
 import hu.bioinformatics.biolaboratory.utils.resource.extension.ResourceValidator;
 import hu.bioinformatics.biolaboratory.utils.resource.read.wrapper.ReaderWrapperFactory;
@@ -47,12 +47,12 @@ public abstract class ResourceReader {
      * @param resourcePath The resource path of the target resource.
      * @return The read lines.
      */
-    public final List<CommentedLine> read(final String resourcePath) {
+    public final List<CommentedString> read(final String resourcePath) {
         Preconditions.checkArgument(StringUtils.isNotBlank(resourcePath), "The input resource path should not be blank");
         resourceValidator.validate(resourcePath);
 
         BufferedReader br = null;
-        List<CommentedLine> lines = null;
+        List<CommentedString> lines = null;
 
         try {
             br = readerWrapperFactory.wrap(resourceReaderProvider.provideReader(resourcePath));
@@ -78,5 +78,5 @@ public abstract class ResourceReader {
      * @return The processed input data.
      * @throws IOException If exception occurs during the resource reading.
      */
-    protected abstract List<CommentedLine> processResource(BufferedReader reader) throws IOException;
+    protected abstract List<CommentedString> processResource(BufferedReader reader) throws IOException;
 }

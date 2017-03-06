@@ -2,7 +2,7 @@ package hu.bioinformatics.biolaboratory.utils.resource.read;
 
 import com.google.common.base.Preconditions;
 import hu.bioinformatics.biolaboratory.guice.GuiceCoreModule;
-import hu.bioinformatics.biolaboratory.utils.resource.CommentedLine;
+import hu.bioinformatics.biolaboratory.utils.resource.CommentedString;
 import hu.bioinformatics.biolaboratory.utils.resource.extension.ResourceReaderProvider;
 import hu.bioinformatics.biolaboratory.utils.resource.extension.ResourceValidator;
 import hu.bioinformatics.biolaboratory.utils.resource.read.wrapper.ReaderWrapperFactory;
@@ -40,11 +40,11 @@ public class FastaReader extends ResourceReader {
     }
 
     @Override
-    protected List<CommentedLine> processResource(BufferedReader reader) throws IOException {
+    protected List<CommentedString> processResource(BufferedReader reader) throws IOException {
         List<String> lineList = reader.lines()
                                         .filter(StringUtils::isNotBlank)
                                         .collect(Collectors.toCollection(ArrayList::new));
-        List<CommentedLine> commentedLineList = new ArrayList<>();
+        List<CommentedString> commentedStringList = new ArrayList<>();
 
         String description = null;
         String concatenatedSequence = "";
@@ -53,7 +53,7 @@ public class FastaReader extends ResourceReader {
             if (line.startsWith(PROMPT)) {
                 if (description != null) {
                     Preconditions.checkArgument(!concatenatedSequence.isEmpty(), "Multiple header is detected");
-                    commentedLineList.add(new CommentedLine(description, concatenatedSequence));
+                    commentedStringList.add(new CommentedString(description, concatenatedSequence));
                     concatenatedSequence = "";
                 }
                 description = line.substring(1, line.length());
@@ -62,8 +62,8 @@ public class FastaReader extends ResourceReader {
             }
         }
         Preconditions.checkArgument(description != null && !concatenatedSequence.isEmpty(), "Multiple header is detected");
-        commentedLineList.add(new CommentedLine(description, concatenatedSequence));
+        commentedStringList.add(new CommentedString(description, concatenatedSequence));
 
-        return commentedLineList;
+        return commentedStringList;
     }
 }

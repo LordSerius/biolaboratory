@@ -3,7 +3,7 @@ package hu.bioinformatics.biolaboratory.utils.resource.read;
 import com.google.common.collect.ImmutableList;
 import hu.bioinformatics.biolaboratory.guice.GuiceCoreModule;
 import hu.bioinformatics.biolaboratory.guice.GuiceMockModule;
-import hu.bioinformatics.biolaboratory.utils.resource.CommentedLine;
+import hu.bioinformatics.biolaboratory.utils.resource.CommentedString;
 import hu.bioinformatics.biolaboratory.utils.resource.read.wrapper.ReaderWrapperFactory;
 import org.mockito.Spy;
 import org.testng.annotations.BeforeMethod;
@@ -53,6 +53,7 @@ public class FastaReaderTest {
         return new Object[][] {
                 { Stream.empty() },
                 { Stream.builder().add("> comment").build() },
+                { Stream.builder().add("< comment").build() },
                 { Stream.builder().add("> comment").add("").build() },
                 { Stream.builder().add("> comment").add(" ").build() },
                 { Stream.builder().add("> comment1").add("> comment2").add("line").build() }
@@ -64,16 +65,16 @@ public class FastaReaderTest {
     @DataProvider(name = VALID_PROCESS_RESOURCE_DATA_PROVIDER_NAME)
     private Object[][] validProcessResourceDataProvider() {
         return new Object[][] {
-                { Stream.builder().add(">comment").add("line").build(), ImmutableList.of(new CommentedLine("comment", "line")) },
-                { Stream.builder().add("> comment ").add("line").build(), ImmutableList.of(new CommentedLine("comment", "line")) },
-                { Stream.builder().add(" >comment").add("line").build(), ImmutableList.of(new CommentedLine("comment", "line")) },
-                { Stream.builder().add(">").add("line").build(), ImmutableList.of(new CommentedLine("", "line")) },
-                { Stream.builder().add(">comment").add("").add("line").build(), ImmutableList.of(new CommentedLine("comment", "line")) },
-                { Stream.builder().add(">comment").add("line").add("").build(), ImmutableList.of(new CommentedLine("comment", "line")) },
-                { Stream.builder().add(">comment").add(" line ").build(), ImmutableList.of(new CommentedLine("comment", "line")) },
-                { Stream.builder().add(">comment").add("line1").add("line2").build(), ImmutableList.of(new CommentedLine("comment", "line1line2")) },
-                { Stream.builder().add("").add(">comment").add("").add("line1").add("").add("line2").add("").build(), ImmutableList.of(new CommentedLine("comment", "line1line2")) },
-                { Stream.builder().add(">comment1").add("line1").add(">comment2").add("line2").build(), ImmutableList.of(new CommentedLine("comment1", "line1"), new CommentedLine("comment2", "line2")) },
+                { Stream.builder().add(">comment").add("line").build(), ImmutableList.of(new CommentedString("comment", "line")) },
+                { Stream.builder().add("> comment ").add("line").build(), ImmutableList.of(new CommentedString("comment", "line")) },
+                { Stream.builder().add(" >comment").add("line").build(), ImmutableList.of(new CommentedString("comment", "line")) },
+                { Stream.builder().add(">").add("line").build(), ImmutableList.of(new CommentedString("", "line")) },
+                { Stream.builder().add(">comment").add("").add("line").build(), ImmutableList.of(new CommentedString("comment", "line")) },
+                { Stream.builder().add(">comment").add("line").add("").build(), ImmutableList.of(new CommentedString("comment", "line")) },
+                { Stream.builder().add(">comment").add(" line ").build(), ImmutableList.of(new CommentedString("comment", "line")) },
+                { Stream.builder().add(">comment").add("line1").add("line2").build(), ImmutableList.of(new CommentedString("comment", "line1line2")) },
+                { Stream.builder().add("").add(">comment").add("").add("line1").add("").add("line2").add("").build(), ImmutableList.of(new CommentedString("comment", "line1line2")) },
+                { Stream.builder().add(">comment1").add("line1").add(">comment2").add("line2").build(), ImmutableList.of(new CommentedString("comment1", "line1"), new CommentedString("comment2", "line2")) },
         };
     }
 
@@ -86,9 +87,9 @@ public class FastaReaderTest {
     }
 
     @Test(dataProvider = VALID_PROCESS_RESOURCE_DATA_PROVIDER_NAME)
-    public void shouldProcessResourcesReturn(Stream<String> content, List<CommentedLine> controlLineList) throws IOException {
+    public void shouldProcessResourcesReturn(Stream<String> content, List<CommentedString> controlLineList) throws IOException {
         ((MockReaderWrapperFactory) readerWrapperFactory).setLines(content);
-        List<CommentedLine> commentedLines = fastaReader.read(PATH);
-        assertThat(commentedLines, is(equalTo(controlLineList)));
+        List<CommentedString> commentedStrings = fastaReader.read(PATH);
+        assertThat(commentedStrings, is(equalTo(controlLineList)));
     }
 }

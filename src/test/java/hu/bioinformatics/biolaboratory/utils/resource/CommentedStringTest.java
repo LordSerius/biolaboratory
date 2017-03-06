@@ -10,11 +10,11 @@ import static org.hamcrest.Matchers.is;
 import static org.testng.Assert.fail;
 
 /**
- * Unit tests for {@link CommentedLine}.
+ * Unit tests for {@link CommentedString}.
  *
  * @author Attila Radi
  */
-public class CommentedLineTest {
+public class CommentedStringTest {
 
     private static final String INVALID_CONSTRUCTOR_DATA_PROVIDER_NAME = "invalidConstructorDataProvider";
 
@@ -45,32 +45,32 @@ public class CommentedLineTest {
     @DataProvider(name = EQUALS_DATA_PROVIDER_NAME)
     private Object[][] equalsDataProvider() {
         return new Object[][] {
-                { new CommentedLine("comment", "line"), new CommentedLine("comment", "line"), true },
-                { new CommentedLine("", "line"), new CommentedLine("", "line"), true },
-                { new CommentedLine(" comment ", " line "), new CommentedLine("comment", "line"), true },
-                { new CommentedLine("comment", "line1"), new CommentedLine("comment", "line2"), false },
-                { new CommentedLine("comment1", "line"), new CommentedLine("comment2", "line"), false },
-                { new CommentedLine("", "line"), new CommentedLine("comment", "line"), false },
-                { new CommentedLine("comment", "line"), new CommentedLine("", "line"), false }
+                { new CommentedString("comment", "line"), new CommentedString("comment", "line"), true },
+                { new CommentedString("", "line"), new CommentedString("", "line"), true },
+                { new CommentedString(" comment ", " line "), new CommentedString("comment", "line"), true },
+                { new CommentedString("comment", "line1"), new CommentedString("comment", "line2"), false },
+                { new CommentedString("comment1", "line"), new CommentedString("comment2", "line"), false },
+                { new CommentedString("", "line"), new CommentedString("comment", "line"), false },
+                { new CommentedString("comment", "line"), new CommentedString("", "line"), false }
         };
     }
 
     @Test(dataProvider = INVALID_CONSTRUCTOR_DATA_PROVIDER_NAME,
         expectedExceptions = IllegalArgumentException.class)
     public void shouldConstructorThrowException(String comment, String line) {
-        new CommentedLine(comment, line);
+        new CommentedString(comment, line);
         fail();
     }
 
     @Test(dataProvider = VALID_CONSTRUCTOR_DATA_PROVIDER_NAME)
     public void shouldConstructorCreate(String comment, String line) {
-        CommentedLine commentedLine = new CommentedLine(comment, line);
-        assertThat(commentedLine.getComment(), is(equalTo(comment.trim())));
-        assertThat(commentedLine.getLine(), is(equalTo(line.trim())));
+        CommentedString commentedString = new CommentedString(comment, line);
+        assertThat(commentedString.getComment(), is(equalTo(comment.trim())));
+        assertThat(commentedString.getString(), is(equalTo(line.trim())));
     }
 
     @Test(dataProvider = EQUALS_DATA_PROVIDER_NAME)
-    public void shouldEqualsReturn(CommentedLine leftHand, CommentedLine rightHand, boolean isEquals) {
+    public void shouldEqualsReturn(CommentedString leftHand, CommentedString rightHand, boolean isEquals) {
         assertThat(isEquals, allOf(
                 is(equalTo(leftHand.equals(rightHand))),
                 is(equalTo(leftHand.hashCode() == rightHand.hashCode()))

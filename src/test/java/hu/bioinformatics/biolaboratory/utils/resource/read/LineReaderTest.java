@@ -3,7 +3,7 @@ package hu.bioinformatics.biolaboratory.utils.resource.read;
 import com.google.common.collect.ImmutableList;
 import hu.bioinformatics.biolaboratory.guice.GuiceCoreModule;
 import hu.bioinformatics.biolaboratory.guice.GuiceMockModule;
-import hu.bioinformatics.biolaboratory.utils.resource.CommentedLine;
+import hu.bioinformatics.biolaboratory.utils.resource.CommentedString;
 import hu.bioinformatics.biolaboratory.utils.resource.extension.ResourceReaderProvider;
 import hu.bioinformatics.biolaboratory.utils.resource.read.wrapper.ReaderWrapperFactory;
 import org.mockito.Spy;
@@ -64,8 +64,8 @@ public class LineReaderTest {
     @DataProvider(name = VALID_PROCESS_RESOURCE_DATA_PROVIDER_NAME)
     private Object[][] validProcessResourceDataProvider() {
         return new Object[][] {
-                { Stream.builder().add("one").build(), ImmutableList.of(new CommentedLine("", "one")) },
-                { Stream.builder().add("one").add("two").build(), ImmutableList.of(new CommentedLine("", "one"), new CommentedLine("", "two")) }
+                { Stream.builder().add("one").build(), ImmutableList.of(new CommentedString("", "one")) },
+                { Stream.builder().add("one").add("two").build(), ImmutableList.of(new CommentedString("", "one"), new CommentedString("", "two")) }
         };
     }
 
@@ -78,9 +78,9 @@ public class LineReaderTest {
     }
 
     @Test(dataProvider = VALID_PROCESS_RESOURCE_DATA_PROVIDER_NAME)
-    public void shouldProcessResourcesReturn(Stream<String> content, List<CommentedLine> controlLineList) throws IOException {
+    public void shouldProcessResourcesReturn(Stream<String> content, List<CommentedString> controlLineList) throws IOException {
         ((MockReaderWrapperFactory) readerWrapperFactory).setLines(content);
-        List<CommentedLine> commentedLines = lineReader.read(PATH);
-        assertThat(commentedLines, is(equalTo(controlLineList)));
+        List<CommentedString> commentedStrings = lineReader.read(PATH);
+        assertThat(commentedStrings, is(equalTo(controlLineList)));
     }
 }

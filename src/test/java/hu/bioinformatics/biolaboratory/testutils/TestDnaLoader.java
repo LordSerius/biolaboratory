@@ -15,13 +15,13 @@ import static org.apache.commons.lang3.Validate.notNull;
  */
 public class TestDnaLoader {
 
-    private final DnaLoader dnaLoader;
+    private final DnaLoader resourceLoader;
     private final ResourceLocalizer localFileResourceLocalizer;
 
     @Inject
-    public TestDnaLoader(final DnaLoader dnaLoader,
+    public TestDnaLoader(final DnaLoader resourceLoader,
                          final ResourceLocalizer resourceLocalizer) {
-        this.dnaLoader = notNull(dnaLoader);
+        this.resourceLoader = notNull(resourceLoader);
         this.localFileResourceLocalizer = notNull(resourceLocalizer);
     }
 
@@ -32,6 +32,6 @@ public class TestDnaLoader {
      * @return The contained {@link Dna} of the file.
      */
     public Dna loadFromResource(final String resourceName) {
-        return dnaLoader.load(localFileResourceLocalizer.localizeResource(resourceName));
+        return resourceLoader.load(localFileResourceLocalizer.localizeResource(resourceName));
     }
 }

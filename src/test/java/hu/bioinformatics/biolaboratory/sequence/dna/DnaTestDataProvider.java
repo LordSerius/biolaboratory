@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 import hu.bioinformatics.biolaboratory.sequence.protein.Protein;
 import hu.bioinformatics.biolaboratory.sequence.rna.Rna;
 import hu.bioinformatics.biolaboratory.testutils.TestDnaLoader;
-import hu.bioinformatics.biolaboratory.utils.DnaCollectors;
+import hu.bioinformatics.biolaboratory.utils.collectors.DnaCollectors;
 import hu.bioinformatics.biolaboratory.utils.datastructures.CountableOccurrenceMap;
 import org.testng.annotations.DataProvider;
 
@@ -290,14 +290,14 @@ public class DnaTestDataProvider {
     @DataProvider(name = VALID_MOST_FREQUENT_SUBSEQUENCES_DATA_PROVIDER_NAME)
     Object[][] provideValidMostFrequentSubsequences() {
         return new Object[][] {
-                { Dna.build("AGTC"), 4 , DnaCollectors.toDnaSet("AGTC") },
-                { Dna.build("AGTC"), 1 , DnaCollectors.toDnaSet("A", "G", "T", "C") },
-                { Dna.build("ACGTTGCATGTCGCATGATGCATGAGAGCT"), 4, DnaCollectors.toDnaSet("CATG", "GCAT") },
-                { Dna.build("TGGTAGCGACGTTGGTCCCGCCGCTTGAGAATCTGGATGAACATAAGCTCCCACTTGGCTTATTCAGAGAACTGGTCAACACTTGTCTCTCCCAGCCAGGTCTGACCACCGGGCAACTTTTAGAGCACTATCGTGGTACAAATAATGCTGCCAC"), 3, DnaCollectors.toDnaSet("TGG") },
-                { Dna.build("CAGTGGCAGATGACATTTTGCTGGTCGACTGGTTACAACAACGCCTGGGGCTTTTGAGCAACGAGACTTTTCAATGTTGCACCGTTTGCTGCATGATATTGAAAACAATATCACCAAATAAATAACGCCTTAGTAAGTAGCTTTT"), 4, DnaCollectors.toDnaSet("TTTT") },
-                { Dna.build("ATACAATTACAGTCTGGAACCGGATGAACTGGCCGCAGGTTAACAACAGAGTTGCCAGGCACTGCCGCTGACCAGCAACAACAACAATGACTTTGACGCGAAGGGGATGGCATGAGCGAACTGATCGTCAGCCGTCAGCAACGAGTATTGTTGCTGACCCTTAACAATCCCGCCGCACGTAATGCGCTAACTAATGCCCTGCTG"), 5, DnaCollectors.toDnaSet("AACAA") },
-                { Dna.build("CCAGCGGGGGTTGATGCTCTGGGGGTCACAAGATTGCATTTTTATGGGGTTGCAAAAATGTTTTTTACGGCAGATTCATTTAAAATGCCCACTGGCTGGAGACATAGCCCGGATGCGCGTCTTTTACAACGTATTGCGGGGTAAAATCGTAGATGTTTTAAAATAGGCGTAAC"), 5, DnaCollectors.toDnaSet("AAAAT", "GGGGT", "TTTTA") },
-                { testDnaLoader.loadFromResource("most-frequent-subsequences-extra-dataset.dna"), 12, DnaCollectors.toDnaSet("CGGCGGGAGATT", "CGGGAGATTCAA", "CGTGCGGCGGGA", "CGTGGAGGCGTG", "CGTGGCGTGCGG", "GCGTGCGGCGGG", "GCGTGGAGGCGT", "GCGTGGCGTGCG", "GGAGAAGCGAGA", "GGAGATTCAAGC", "GGCGGGAGATTC", "GGGAGATTCAAG", "GTGCGGCGGGAG", "TGCGGCGGGAGA") }
+                { Dna.build("AGTC"), 4 , DnaCollectors.stringToDnaSet("AGTC") },
+                { Dna.build("AGTC"), 1 , DnaCollectors.stringToDnaSet("A", "G", "T", "C") },
+                { Dna.build("ACGTTGCATGTCGCATGATGCATGAGAGCT"), 4, DnaCollectors.stringToDnaSet("CATG", "GCAT") },
+                { Dna.build("TGGTAGCGACGTTGGTCCCGCCGCTTGAGAATCTGGATGAACATAAGCTCCCACTTGGCTTATTCAGAGAACTGGTCAACACTTGTCTCTCCCAGCCAGGTCTGACCACCGGGCAACTTTTAGAGCACTATCGTGGTACAAATAATGCTGCCAC"), 3, DnaCollectors.stringToDnaSet("TGG") },
+                { Dna.build("CAGTGGCAGATGACATTTTGCTGGTCGACTGGTTACAACAACGCCTGGGGCTTTTGAGCAACGAGACTTTTCAATGTTGCACCGTTTGCTGCATGATATTGAAAACAATATCACCAAATAAATAACGCCTTAGTAAGTAGCTTTT"), 4, DnaCollectors.stringToDnaSet("TTTT") },
+                { Dna.build("ATACAATTACAGTCTGGAACCGGATGAACTGGCCGCAGGTTAACAACAGAGTTGCCAGGCACTGCCGCTGACCAGCAACAACAACAATGACTTTGACGCGAAGGGGATGGCATGAGCGAACTGATCGTCAGCCGTCAGCAACGAGTATTGTTGCTGACCCTTAACAATCCCGCCGCACGTAATGCGCTAACTAATGCCCTGCTG"), 5, DnaCollectors.stringToDnaSet("AACAA") },
+                { Dna.build("CCAGCGGGGGTTGATGCTCTGGGGGTCACAAGATTGCATTTTTATGGGGTTGCAAAAATGTTTTTTACGGCAGATTCATTTAAAATGCCCACTGGCTGGAGACATAGCCCGGATGCGCGTCTTTTACAACGTATTGCGGGGTAAAATCGTAGATGTTTTAAAATAGGCGTAAC"), 5, DnaCollectors.stringToDnaSet("AAAAT", "GGGGT", "TTTTA") },
+                { testDnaLoader.loadFromResource("most-frequent-subsequences-extra-dataset.dna"), 12, DnaCollectors.stringToDnaSet("CGGCGGGAGATT", "CGGGAGATTCAA", "CGTGCGGCGGGA", "CGTGGAGGCGTG", "CGTGGCGTGCGG", "GCGTGCGGCGGG", "GCGTGGAGGCGT", "GCGTGGCGTGCG", "GGAGAAGCGAGA", "GGAGATTCAAGC", "GGCGGGAGATTC", "GGGAGATTCAAG", "GTGCGGCGGGAG", "TGCGGCGGGAGA") }
         };
     }
     
@@ -317,12 +317,12 @@ public class DnaTestDataProvider {
     @DataProvider(name = VALID_SUBSEQUENCES_IN_CLUMPS_DATA_PROVIDER_NAME)
     Object[][] provideValidSubSequencesInClumps() {
         return new Object[][] {
-                { Dna.build("A"), 1, 1, 1, DnaCollectors.toDnaSet("A") },
-                { Dna.build("A"), 1, 1, 2, DnaCollectors.toDnaSet() },
-                { Dna.build("CGGACTCGACAGATGTGAAGAACGACAATGTGAAGACTCGACACGACAGAGTGAAGAGAAGAGGAAACATTGTAA"), 5, 50, 4, DnaCollectors.toDnaSet("CGACA", "GAAGA") },
-                { Dna.build("AAAACGTCGAAAAA"), 2, 4, 2, DnaCollectors.toDnaSet("AA") },
-                { Dna.build("ACGTACGT"), 1, 5, 2, DnaCollectors.toDnaSet("A", "C", "G", "T") },
-                { Dna.build("CCACGCGGTGTACGCTGCAAAAAGCCTTGCTGAATCAAATAAGGTTCCAGCACATCCTCAATGGTTTCACGTTCTTCGCCAATGGCTGCCGCCAGGTTATCCAGACCTACAGGTCCACCAAAGAACTTATCGATTACCGCCAGCAACAATTTGCGGTCCATATAATCGAAACCTTCAGCATCGACATTCAACATATCCAGCG"), 3, 25, 3, DnaCollectors.toDnaSet("AAA", "CAG", "CAT", "CCA", "GCC", "TTC") }
+                { Dna.build("A"), 1, 1, 1, DnaCollectors.stringToDnaSet("A") },
+                { Dna.build("A"), 1, 1, 2, DnaCollectors.stringToDnaSet() },
+                { Dna.build("CGGACTCGACAGATGTGAAGAACGACAATGTGAAGACTCGACACGACAGAGTGAAGAGAAGAGGAAACATTGTAA"), 5, 50, 4, DnaCollectors.stringToDnaSet("CGACA", "GAAGA") },
+                { Dna.build("AAAACGTCGAAAAA"), 2, 4, 2, DnaCollectors.stringToDnaSet("AA") },
+                { Dna.build("ACGTACGT"), 1, 5, 2, DnaCollectors.stringToDnaSet("A", "C", "G", "T") },
+                { Dna.build("CCACGCGGTGTACGCTGCAAAAAGCCTTGCTGAATCAAATAAGGTTCCAGCACATCCTCAATGGTTTCACGTTCTTCGCCAATGGCTGCCGCCAGGTTATCCAGACCTACAGGTCCACCAAAGAACTTATCGATTACCGCCAGCAACAATTTGCGGTCCATATAATCGAAACCTTCAGCATCGACATTCAACATATCCAGCG"), 3, 25, 3, DnaCollectors.stringToDnaSet("AAA", "CAG", "CAT", "CCA", "GCC", "TTC") }
         };
     }
     
@@ -516,12 +516,12 @@ public class DnaTestDataProvider {
     @DataProvider(name = VALID_GENERATE_MISMATCHES_DATA_PROVIDER_NAME)
     Object[][] validGenerateMismatchesDataProvider() {
         return new Object[][] {
-                { Dna.build("ACGT"), 0, DnaCollectors.toDnaSet("ACGT") },
-                { Dna.build("ACGT"), 1, DnaCollectors.toDnaSet("ACGT", "CCGT", "GCGT", "TCGT", "AAGT", "AGGT", "ATGT", "ACAT", "ACCT", "ACTT", "ACGA", "ACGC", "ACGG") },
-                { Dna.build("A"), 1, DnaCollectors.toDnaSet("A", "C", "G", "T") },
-                { Dna.build("A"), 2, DnaCollectors.toDnaSet("A", "C", "G", "T") },
-                { Dna.build("AA"), 2, DnaCollectors.toDnaSet("AA", "AC", "AG", "AT", "CA", "CC", "CG", "CT", "GA", "GC", "GG", "GT", "TA", "TC", "TG", "TT") },
-                { Dna.build("AAA"), 2, DnaCollectors.toDnaSet("AAA", "AAC", "AAG", "AAT", "ACA", "ACC", "ACG", "ACT", "AGA", "AGC", "AGG", "AGT", "ATA", "ATC", "ATG", "ATT", "CAA", "CAC", "CAG", "CAT", "CCA", "CGA", "CTA", "GAA", "GAC", "GAG", "GAT", "GCA", "GGA", "GTA", "TAA", "TAC", "TAG", "TAT", "TCA", "TGA", "TTA") }
+                { Dna.build("ACGT"), 0, DnaCollectors.stringToDnaSet("ACGT") },
+                { Dna.build("ACGT"), 1, DnaCollectors.stringToDnaSet("ACGT", "CCGT", "GCGT", "TCGT", "AAGT", "AGGT", "ATGT", "ACAT", "ACCT", "ACTT", "ACGA", "ACGC", "ACGG") },
+                { Dna.build("A"), 1, DnaCollectors.stringToDnaSet("A", "C", "G", "T") },
+                { Dna.build("A"), 2, DnaCollectors.stringToDnaSet("A", "C", "G", "T") },
+                { Dna.build("AA"), 2, DnaCollectors.stringToDnaSet("AA", "AC", "AG", "AT", "CA", "CC", "CG", "CT", "GA", "GC", "GG", "GT", "TA", "TC", "TG", "TT") },
+                { Dna.build("AAA"), 2, DnaCollectors.stringToDnaSet("AAA", "AAC", "AAG", "AAT", "ACA", "ACC", "ACG", "ACT", "AGA", "AGC", "AGG", "AGT", "ATA", "ATC", "ATG", "ATT", "CAA", "CAC", "CAG", "CAT", "CCA", "CGA", "CTA", "GAA", "GAC", "GAG", "GAT", "GCA", "GGA", "GTA", "TAA", "TAC", "TAG", "TAT", "TCA", "TGA", "TTA") }
         };
     }
     
@@ -541,9 +541,9 @@ public class DnaTestDataProvider {
     @DataProvider(name = VALID_FIND_FREQUENT_MISMATCH_SUB_SEQUENCES_DATA_PROVIDER_NAME)
     Object[][] validFindFrequentMismatchSubSequencesDataProvider() {
         return new Object[][] {
-                { Dna.build("ACGT"), 4, 0, 1, DnaCollectors.toDnaSet("ACGT") },
+                { Dna.build("ACGT"), 4, 0, 1, DnaCollectors.stringToDnaSet("ACGT") },
                 { Dna.build("ACGT"), 4, 1, 2, new HashSet<Dna>() },
-                { Dna.build("ACGT"), 4, 1, 1, DnaCollectors.toDnaSet("ACGT", "CCGT", "GCGT", "TCGT", "AAGT", "AGGT", "ATGT", "ACAT", "ACCT", "ACTT", "ACGA", "ACGC", "ACGG") }
+                { Dna.build("ACGT"), 4, 1, 1, DnaCollectors.stringToDnaSet("ACGT", "CCGT", "GCGT", "TCGT", "AAGT", "AGGT", "ATGT", "ACAT", "ACCT", "ACTT", "ACGA", "ACGC", "ACGG") }
         };
     }
 
@@ -563,10 +563,10 @@ public class DnaTestDataProvider {
     @DataProvider(name = VALID_FIND_FREQUENT_SUB_SEQUENCES_DATA_PROVIDER_NAME)
     Object[][] validFindFrequentSubSequencesDataProvider() {
         return new Object[][] {
-                { Dna.build("ACGT"), 2, 5, DnaCollectors.toDnaSet() },
-                { Dna.build("ACGT"), 2, 1, DnaCollectors.toDnaSet("AC", "CG", "GT") },
-                { Dna.build("AAACG"), 2, 2, DnaCollectors.toDnaSet("AA") },
-                { Dna.build("AAACG"), 2, 1, DnaCollectors.toDnaSet("AA", "AC", "CG") }
+                { Dna.build("ACGT"), 2, 5, DnaCollectors.stringToDnaSet() },
+                { Dna.build("ACGT"), 2, 1, DnaCollectors.stringToDnaSet("AC", "CG", "GT") },
+                { Dna.build("AAACG"), 2, 2, DnaCollectors.stringToDnaSet("AA") },
+                { Dna.build("AAACG"), 2, 1, DnaCollectors.stringToDnaSet("AA", "AC", "CG") }
         };
     }
 
@@ -575,12 +575,12 @@ public class DnaTestDataProvider {
     @DataProvider(name = VALID_GET_MISMATCH_SUB_SEQUENCES_DATA_PROVIDER_NAME)
     Object[][] validGetMismatchSubSequencesDataProvider() {
         return new Object[][] {
-                { Dna.build("ACGT"), 2, 1, DnaCollectors.toDnaSet("AA", "AC", "AG", "AT", "CA", "CC", "CG", "CT", "GA", "GC", "GG", "GT", "TC", "TG", "TT") },
-                { Dna.build("AAAA"), 2, 1, DnaCollectors.toDnaSet("AA", "CA", "GA", "TA", "AC", "AG", "AT") },
-                { Dna.build("ACGT"), 4, 1, DnaCollectors.toDnaSet("ACGT", "CCGT", "GCGT", "TCGT", "AAGT", "AGGT", "ATGT", "ACAT", "ACCT", "ACTT", "ACGA", "ACGC", "ACGG") },
-                { Dna.build("ACGT"), 2, 0, DnaCollectors.toDnaSet("AC", "CG", "GT") },
-                { Dna.build("AAAA"), 2, 0, DnaCollectors.toDnaSet("AA") },
-                { Dna.build("ACGT"), 4, 0, DnaCollectors.toDnaSet("ACGT") },
+                { Dna.build("ACGT"), 2, 1, DnaCollectors.stringToDnaSet("AA", "AC", "AG", "AT", "CA", "CC", "CG", "CT", "GA", "GC", "GG", "GT", "TC", "TG", "TT") },
+                { Dna.build("AAAA"), 2, 1, DnaCollectors.stringToDnaSet("AA", "CA", "GA", "TA", "AC", "AG", "AT") },
+                { Dna.build("ACGT"), 4, 1, DnaCollectors.stringToDnaSet("ACGT", "CCGT", "GCGT", "TCGT", "AAGT", "AGGT", "ATGT", "ACAT", "ACCT", "ACTT", "ACGA", "ACGC", "ACGG") },
+                { Dna.build("ACGT"), 2, 0, DnaCollectors.stringToDnaSet("AC", "CG", "GT") },
+                { Dna.build("AAAA"), 2, 0, DnaCollectors.stringToDnaSet("AA") },
+                { Dna.build("ACGT"), 4, 0, DnaCollectors.stringToDnaSet("ACGT") },
         };
     }
 
@@ -589,9 +589,9 @@ public class DnaTestDataProvider {
     @DataProvider(name = VALID_GET_SUB_SEQUENCES_DATA_PROVIDER_NAME)
     public static Object[][] getSubSequencesDataProvider() {
         return new Object[][] {
-                { Dna.build("ACGT"), 2, DnaCollectors.toDnaSet("AC", "CG", "GT") },
-                { Dna.build("AAAA"), 2, DnaCollectors.toDnaSet("AA") },
-                { Dna.build("ACGT"), 4, DnaCollectors.toDnaSet("ACGT") },
+                { Dna.build("ACGT"), 2, DnaCollectors.stringToDnaSet("AC", "CG", "GT") },
+                { Dna.build("AAAA"), 2, DnaCollectors.stringToDnaSet("AA") },
+                { Dna.build("ACGT"), 4, DnaCollectors.stringToDnaSet("ACGT") },
         };
     }
 
@@ -610,14 +610,14 @@ public class DnaTestDataProvider {
     @DataProvider(name = VALID_FIND_MOST_FREQUENT_MISMATCH_SUB_SEQUENCES_DATA_PROVIDER_NAME)
     Object[][] validFindMostFrequentMismatchSubSequencesDataProvider() {
         return new Object[][] {
-                { Dna.build("ACGTTGCATGTCGCATGATGCATGAGAGCT"), 4, 1, DnaCollectors.toDnaSet("GATG", "ATGC", "ATGT") },
-                { Dna.build("AAAAAAAAAA"), 2, 1, DnaCollectors.toDnaSet("AA", "AC", "AG", "CA", "AT", "GA", "TA") },
-                { Dna.build("AGTCAGTC"), 4, 2, DnaCollectors.toDnaSet("TCTC", "CGGC", "AAGC", "TGTG", "GGCC", "AGGT", "ATCC", "ACTG", "ACAC", "AGAG", "ATTA", "TGAC", "AATT", "CGTT", "GTTC", "GGTA", "AGCA", "CATC") },
-                { Dna.build("AATTAATTGGTAGGTAGGTA"), 4, 0, DnaCollectors.toDnaSet("GGTA") },
-                { Dna.build("ATA"), 3, 1, DnaCollectors.toDnaSet("GTA", "ACA", "AAA", "ATC", "ATA", "AGA", "ATT", "CTA", "TTA", "ATG") },
-                { Dna.build("AAT"), 3, 0, DnaCollectors.toDnaSet("AAT") },
-                { Dna.build("TAGCG"), 2, 1, DnaCollectors.toDnaSet("GG", "TG") },
-                { testDnaLoader.loadFromResource("most-frequent-subsequences-with-mismatches-extra-dataset.dna"), 10, 2, DnaCollectors.toDnaSet("GCACACAGAC", "GCGCACACAC") }
+                { Dna.build("ACGTTGCATGTCGCATGATGCATGAGAGCT"), 4, 1, DnaCollectors.stringToDnaSet("GATG", "ATGC", "ATGT") },
+                { Dna.build("AAAAAAAAAA"), 2, 1, DnaCollectors.stringToDnaSet("AA", "AC", "AG", "CA", "AT", "GA", "TA") },
+                { Dna.build("AGTCAGTC"), 4, 2, DnaCollectors.stringToDnaSet("TCTC", "CGGC", "AAGC", "TGTG", "GGCC", "AGGT", "ATCC", "ACTG", "ACAC", "AGAG", "ATTA", "TGAC", "AATT", "CGTT", "GTTC", "GGTA", "AGCA", "CATC") },
+                { Dna.build("AATTAATTGGTAGGTAGGTA"), 4, 0, DnaCollectors.stringToDnaSet("GGTA") },
+                { Dna.build("ATA"), 3, 1, DnaCollectors.stringToDnaSet("GTA", "ACA", "AAA", "ATC", "ATA", "AGA", "ATT", "CTA", "TTA", "ATG") },
+                { Dna.build("AAT"), 3, 0, DnaCollectors.stringToDnaSet("AAT") },
+                { Dna.build("TAGCG"), 2, 1, DnaCollectors.stringToDnaSet("GG", "TG") },
+                { testDnaLoader.loadFromResource("most-frequent-subsequences-with-mismatches-extra-dataset.dna"), 10, 2, DnaCollectors.stringToDnaSet("GCACACAGAC", "GCGCACACAC") }
         };
     }
 
@@ -626,8 +626,8 @@ public class DnaTestDataProvider {
     @DataProvider(name = VALID_FIND_MOST_FREQUENT_SUB_SEQUENCES_DATA_PROVIDER_NAME)
     Object[][] validFindMostFrequentSubSequencesDataProvider() {
         return new Object[][] {
-                { Dna.build("ACGT"), 2, DnaCollectors.toDnaSet("AC", "CG", "GT") },
-                { Dna.build("AAAGT"), 2, DnaCollectors.toDnaSet("AA") }
+                { Dna.build("ACGT"), 2, DnaCollectors.stringToDnaSet("AC", "CG", "GT") },
+                { Dna.build("AAAGT"), 2, DnaCollectors.stringToDnaSet("AA") }
         };
     }
 
@@ -636,10 +636,10 @@ public class DnaTestDataProvider {
     @DataProvider(name = VALID_FIND_FREQUENT_PATTERNS_DATA_PROVIDER_NAME)
     Object[][] validFindFrequentPatternsDataProvider() {
         return new Object[][] {
-                { Dna.build("ACGT"), 4, 0, 1, DnaCollectors.toDnaSet("ACGT") },
-                { Dna.build("ACGT"), 4, 1, 2, DnaCollectors.toDnaSet("ACGT", "CCGT", "GCGT", "TCGT", "AAGT", "AGGT", "ATGT", "ACAT", "ACCT", "ACTT", "ACGA", "ACGC", "ACGG") },
-                { Dna.build("ACGT"), 4, 1, 1, DnaCollectors.toDnaSet("ACGT", "CCGT", "GCGT", "TCGT", "AAGT", "AGGT", "ATGT", "ACAT", "ACCT", "ACTT", "ACGA", "ACGC", "ACGG") },
-                { Dna.build("A"), 1, 0, 1, DnaCollectors.toDnaSet("A", "T") }
+                { Dna.build("ACGT"), 4, 0, 1, DnaCollectors.stringToDnaSet("ACGT") },
+                { Dna.build("ACGT"), 4, 1, 2, DnaCollectors.stringToDnaSet("ACGT", "CCGT", "GCGT", "TCGT", "AAGT", "AGGT", "ATGT", "ACAT", "ACCT", "ACTT", "ACGA", "ACGC", "ACGG") },
+                { Dna.build("ACGT"), 4, 1, 1, DnaCollectors.stringToDnaSet("ACGT", "CCGT", "GCGT", "TCGT", "AAGT", "AGGT", "ATGT", "ACAT", "ACCT", "ACTT", "ACGA", "ACGC", "ACGG") },
+                { Dna.build("A"), 1, 0, 1, DnaCollectors.stringToDnaSet("A", "T") }
         };
     }
     
@@ -648,14 +648,14 @@ public class DnaTestDataProvider {
     @DataProvider(name = VALID_FIND_MOST_FREQUENT_PATTERNS_DATA_PROVIDER_NAME)
     Object[][] validFindMostFrequentPatternsDataProvider() {
         return new Object[][] {
-                { Dna.build("ACGTTGCATGTCGCATGATGCATGAGAGCT"), 4, 1, DnaCollectors.toDnaSet("ATGT", "ACAT") },
-                { Dna.build("AAAAAAAAAA"), 2, 1, DnaCollectors.toDnaSet("AT", "TA") },
-                { Dna.build("AGTCAGTC"), 4, 2, DnaCollectors.toDnaSet("AATT", "GGCC") },
-                { Dna.build("AATTAATTGGTAGGTAGGTA"), 4, 0, DnaCollectors.toDnaSet("AATT") },
-                { Dna.build("ATA"), 3, 1, DnaCollectors.toDnaSet("AAA", "AAT", "ACA", "AGA", "ATA", "ATC", "ATG", "ATT", "CAT", "CTA", "GAT", "GTA", "TAA", "TAC", "TAG", "TAT", "TCT", "TGT", "TTA", "TTT") },
-                { Dna.build("AAT"), 3, 0, DnaCollectors.toDnaSet("AAT", "ATT") },
-                { Dna.build("TAGCG"), 2, 1, DnaCollectors.toDnaSet("CA", "CC", "GG", "TG") },
-                { testDnaLoader.loadFromResource("most-frequent-patterns-extra-dataset.dna"), 9, 3, DnaCollectors.toDnaSet("AGCGCCGCT", "AGCGGCGCT") }
+                { Dna.build("ACGTTGCATGTCGCATGATGCATGAGAGCT"), 4, 1, DnaCollectors.stringToDnaSet("ATGT", "ACAT") },
+                { Dna.build("AAAAAAAAAA"), 2, 1, DnaCollectors.stringToDnaSet("AT", "TA") },
+                { Dna.build("AGTCAGTC"), 4, 2, DnaCollectors.stringToDnaSet("AATT", "GGCC") },
+                { Dna.build("AATTAATTGGTAGGTAGGTA"), 4, 0, DnaCollectors.stringToDnaSet("AATT") },
+                { Dna.build("ATA"), 3, 1, DnaCollectors.stringToDnaSet("AAA", "AAT", "ACA", "AGA", "ATA", "ATC", "ATG", "ATT", "CAT", "CTA", "GAT", "GTA", "TAA", "TAC", "TAG", "TAT", "TCT", "TGT", "TTA", "TTT") },
+                { Dna.build("AAT"), 3, 0, DnaCollectors.stringToDnaSet("AAT", "ATT") },
+                { Dna.build("TAGCG"), 2, 1, DnaCollectors.stringToDnaSet("CA", "CC", "GG", "TG") },
+                { testDnaLoader.loadFromResource("most-frequent-patterns-extra-dataset.dna"), 9, 3, DnaCollectors.stringToDnaSet("AGCGCCGCT", "AGCGGCGCT") }
         };
     }
 
