@@ -1,6 +1,6 @@
 # IntellJ
 .idea
-biolaboratory.iml
+*.iml
 
 # Eclipse
 .classpath
