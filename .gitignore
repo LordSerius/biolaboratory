@@ -14,5 +14,8 @@ target/
 # test-ng
 test-output/
 
+# Generated classes
+classes/
+
 # Main
 Main.java
