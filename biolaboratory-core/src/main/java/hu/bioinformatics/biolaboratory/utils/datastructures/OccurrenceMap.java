@@ -125,6 +125,16 @@ public class OccurrenceMap<K> {
     }
 
     /**
+     * Converts the {@link OccurrenceMap} to a {@link CountableOccurrenceMap}. The element set will be limited with
+     * the given elements of the input {@link OccurrenceMap}.
+     *
+     * @return The converted {@link CountableOccurrenceMap}.
+     */
+    public CountableOccurrenceMap<K> toCountable() {
+        return CountableOccurrenceMap.build(occurrenceMap);
+    }
+
+    /**
      * Immutable operation for merging an other {@link OccurrenceMap} with the current
      * {@link OccurrenceMap}.
      * 
@@ -213,26 +223,73 @@ public class OccurrenceMap<K> {
      */
     public Set<K> filterMostFrequentOccurrences() {
         if (occurrenceMap.isEmpty()) return Collections.emptySet();
-        
-        int maxOccurrence = occurrenceMap.values().stream()
-            .sorted(Comparator.reverseOrder())
-            .limit(1)
-            .collect(Collectors.toList())
-            .get(0);
-        return filterGreaterOrEqualsOccurrences(maxOccurrence);
+        return filterGreaterOrEqualsOccurrences(maximumOccurrenceValue());
+    }
+
+    /**
+     * Returns the maximum occurrence value.
+     *
+     * @return The maximum occurrence value
+     */
+    public int maximumOccurrenceValue() {
+        return occurrenceMap.values().stream()
+                .mapToInt(occurrence -> occurrence)
+                .max()
+                .orElse(0);
+    }
+
+    /**
+     * Returns the minimum occurrence value.
+     *
+     * @return It is always 0.
+     */
+    public int minimumOccurrenceValue() {
+        return 0;
+    }
+
+    /**
+     * Get the occurrences which are greater than the threshold.
+     *
+     * @param value The condition threshold where from the occurrences should equals.
+     * @return All keys which occurrence are equals than the value.
+     * @throws IllegalArgumentException If value is smaller than 1.
+     */
+    public Set<K> filterEqualsOccurrences(final int value) {
+        validateThreshold(value);
+        return filterOccurrences(entry -> entry.getValue() == value).keySet();
+    }
+
+    /**
+     * Get the occurrences which are greater than the threshold.
+     *
+     * @param threshold The condition threshold where from the occurrences should greater.
+     * @return All keys which occurrence are greater than the threshold.
+     * @throws IllegalArgumentException If threshold is smaller than 1.
+     */
+    public Set<K> filterGreaterOccurrences(final int threshold) {
+        validateThreshold(threshold);
+        return filterOccurrences(entry -> entry.getValue() > threshold).keySet();
     }
     
     /**
      * Get the occurrences which are greater or equals than the threshold.
      * 
-     * @param threshold The condition threshold where from the occurrences should
-     *                  greater or equals.
+     * @param threshold The condition threshold where from the occurrences should greater or equals.
      * @return All keys which occurrence are greater or equals than the threshold.
      * @throws IllegalArgumentException If threshold is smaller than 1.
      */
     public Set<K> filterGreaterOrEqualsOccurrences(final int threshold) {
-        Preconditions.checkArgument(threshold > 0, "Threshold should not smaller than 1");
+        validateThreshold(threshold);
         return filterOccurrences(entry -> entry.getValue() >= threshold).keySet();
+    }
+
+    /**
+     * Validates the threshold to query the occurrences.
+     *
+     * @param threshold The targer threshold.
+     */
+    protected void validateThreshold(final int threshold) {
+        Preconditions.checkArgument(threshold > 0, "Threshold should not smaller than 1");
     }
 
     /**

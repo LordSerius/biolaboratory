@@ -2,8 +2,9 @@ package hu.bioinformatics.biolaboratory.sequence.dna;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import hu.bioinformatics.biolaboratory.utils.datastructures.OccurrenceMap;
+import hu.bioinformatics.biolaboratory.utils.datastructures.CountableOccurrenceMap;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -24,10 +25,11 @@ public class DnaArray {
     private final int samplesLength;
 
     private List<List<DnaNucleotide>> motifs;
-    private List<OccurrenceMap<DnaNucleotide>> motifCounts;
+    private List<CountableOccurrenceMap<DnaNucleotide>> motifCounts;
+    private int[] motifScores;
 
     /**
-     * Build a {@link DnaArray} from the given {@link Dna}s
+     * Build a {@link DnaArray} from the given {@link Dna}s.
      *
      * @param dnas The input {@link Dna}s
      * @return A new {@link DnaArray}
@@ -158,25 +160,36 @@ public class DnaArray {
         return commonMotifSet;
     }
 
-//    public List<Integer> score() {
-//        int[][] nucleobaseMatrix = count(dnaArray);
-//        int[] scoreArray = new int[nucleobaseMatrix[0].length];
-//        for (int j = 0; j < nucleobaseMatrix[0].length; j++) {
-//            int max = nucleobaseMatrix[0][j];
-//            for (int i = 1; i < nucleobaseMatrix.length; i++) {
-//                if (nucleobaseMatrix[i][j] > max) max = nucleobaseMatrix[i][j];
+//    public synchronized int[] score() {
+//        if (motifScores == null) {
+//            List<CountableOccurrenceMap<DnaNucleotide>> nucleobaseMatrix = createCountMotifs();
+//            motifScores[] scoreArray = new int[nucleobaseMatrix[0].length];
+//            for (int j = 0; j < nucleobaseMatrix[0].length; j++) {
+//                int max = nucleobaseMatrix[0][j];
+//                for (int i = 1; i < nucleobaseMatrix.length; i++) {
+//                    if (nucleobaseMatrix[i][j] > max) max = nucleobaseMatrix[i][j];
+//                }
+//                scoreArray[j] = dnaArray.size() - max;
 //            }
-//            scoreArray[j] = dnaArray.size() - max;
 //        }
-//        return scoreArray;
+//        return motifScores;
 //    }
 
-    public synchronized List<OccurrenceMap<DnaNucleotide>> countMotifs() {
+    /**
+     * Counts the total occurrences of every {@link DnaNucleotide} in every {@link Dna}.
+     *
+     * @return Immutable {@link List} of occurrences.
+     */
+    public synchronized List<CountableOccurrenceMap<DnaNucleotide>> countMotifs() {
+        return new ArrayList<>(createCountMotifs());
+    }
+
+    private List<CountableOccurrenceMap<DnaNucleotide>> createCountMotifs() {
         if (motifCounts == null) {
             motifCounts = Lists.newArrayListWithCapacity(sampleNumber);
             for (List<DnaNucleotide> nucleotideList : createMotifs()) {
-                OccurrenceMap<DnaNucleotide> nucleotideOccurrenceMap = OccurrenceMap.build();
-                nucleotideList.forEach(nucleotide -> nucleotideOccurrenceMap.increase(nucleotide));
+                CountableOccurrenceMap<DnaNucleotide> nucleotideOccurrenceMap = CountableOccurrenceMap.build(DnaNucleotide.NUCLEOTIDE_SET);
+                nucleotideList.forEach(nucleotideOccurrenceMap::increase);
                 motifCounts.add(nucleotideOccurrenceMap);
             }
         }
@@ -188,8 +201,8 @@ public class DnaArray {
             motifs = sampleList.stream()
                     .map(dna -> dna.getSequence().chars()
                             .mapToObj(nucleotide -> DnaNucleotide.findDnaNucleotide((char) nucleotide))
-                            .collect(Collectors.toList()))
-                    .collect(Collectors.toList());
+                            .collect(Collectors.toCollection(ArrayList::new)))
+                    .collect(Collectors.toCollection(ArrayList::new));
         }
         return motifs;
     }

@@ -1,5 +1,6 @@
 package hu.bioinformatics.biolaboratory.utils.datahandlers;
 
+import hu.bioinformatics.biolaboratory.resource.datahandlers.ResourceLoader;
 import hu.bioinformatics.biolaboratory.sequence.dna.DnaArray;
 import hu.bioinformatics.biolaboratory.resource.read.ResourceReader;
 

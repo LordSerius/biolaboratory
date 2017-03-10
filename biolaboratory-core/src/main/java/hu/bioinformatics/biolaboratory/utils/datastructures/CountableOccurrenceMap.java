@@ -3,9 +3,7 @@ package hu.bioinformatics.biolaboratory.utils.datastructures;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
 
-import java.util.AbstractMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -16,19 +14,6 @@ import java.util.stream.Collectors;
  * @author Attila Radi
  */
 public class CountableOccurrenceMap<K> extends OccurrenceMap<K> {
-
-    /**
-     * Converts an {@link OccurrenceMap} to a {@link CountableOccurrenceMap}. The element set will be limited with
-     * the given elements of the input {@link OccurrenceMap}.
-     *
-     * @param occurrenceMap The input {@link OccurrenceMap}.
-     * @param <K> The type of the {@link OccurrenceMap} and the return {@link CountableOccurrenceMap}.
-     * @return The converted {@link CountableOccurrenceMap}.
-     */
-    public static <K> CountableOccurrenceMap<K> toCountable(OccurrenceMap<K> occurrenceMap) {
-        Preconditions.checkArgument(occurrenceMap != null, "Input occurrence map should not be null");
-        return build(occurrenceMap.occurrenceMap);
-    }
 
     /**
      * Return with the null set.
@@ -64,7 +49,7 @@ public class CountableOccurrenceMap<K> extends OccurrenceMap<K> {
      */
     public static <K> CountableOccurrenceMap<K> build(Set<K> elementSet) {
         Preconditions.checkArgument(elementSet == null
-                        || elementSet.stream().allMatch(element -> element != null),
+                        || elementSet.stream().allMatch(Objects::nonNull),
                 "Null element is not permitted");
         return new CountableOccurrenceMap<>(elementSet);
     }
@@ -118,6 +103,29 @@ public class CountableOccurrenceMap<K> extends OccurrenceMap<K> {
     }
 
     /**
+     * Get the most frequent occurrences from the collection.
+     *
+     * @return The less frequent keys in the collection.
+     */
+    public Set<K> filterLessFrequentOccurrences() {
+        if (occurrenceMap.isEmpty()) return Collections.emptySet();
+        return filterSmallerOrEqualsOccurrences(minimumOccurrenceValue());
+    }
+
+    /**
+     * Returns the minimum occurrence value.
+     *
+     * @return The minimum occurrence value.
+     */
+    @Override
+    public int minimumOccurrenceValue() {
+        return occurrenceMap.values().stream()
+                .mapToInt(occurrence -> occurrence)
+                .min()
+                .orElse(0);
+    }
+
+    /**
      * Execute the merge with an other {@link CountableOccurrenceMap}. The method will extend the valid keys with the
      * union of the two {@link CountableOccurrenceMap}.
      *
@@ -137,7 +145,7 @@ public class CountableOccurrenceMap<K> extends OccurrenceMap<K> {
      */
     protected CountableOccurrenceMap<K> filterMerge(final CountableOccurrenceMap<K> otherOccurrenceMap, final Predicate<Map.Entry<K, Integer>> filterPredicate) {
         OccurrenceMap<K> uncountableOccurrenceMap = filterMerge((OccurrenceMap<K>) otherOccurrenceMap, filterPredicate);
-        return toCountable(uncountableOccurrenceMap);
+        return uncountableOccurrenceMap.toCountable();
     }
 
     @Override
@@ -146,9 +154,32 @@ public class CountableOccurrenceMap<K> extends OccurrenceMap<K> {
         Preconditions.checkArgument(occurrenceMap.containsKey(key), "The given key is not member of the key set");
     }
 
+    /**
+     * Get the occurrences which are smaller than the threshold.
+     *
+     * @param threshold The condition threshold where from the occurrences should smaller.
+     * @return All keys which occurrence are smaller than the threshold.
+     * @throws IllegalArgumentException If threshold is negative number.
+     */
+    public Set<K> filterSmallerOccurrences(final int threshold) {
+        validateThreshold(threshold);
+        return filterOccurrences(entry -> entry.getValue() < threshold).keySet();
+    }
+
+    /**
+     * Get the occurrences which are smaller or equals than the threshold.
+     *
+     * @param threshold The condition threshold where from the occurrences should smaller or equals.
+     * @return All keys which occurrence are smaller or equals than the threshold.
+     * @throws IllegalArgumentException If threshold is negative number.
+     */
+    public Set<K> filterSmallerOrEqualsOccurrences(final int threshold) {
+        validateThreshold(threshold);
+        return filterOccurrences(entry -> entry.getValue() <= threshold).keySet();
+    }
+
     @Override
-    public Set<K> filterGreaterOrEqualsOccurrences(final int threshold) {
-        Preconditions.checkArgument(threshold >= 0, "Threshold should bigger or equals than 0");
-        return filterOccurrences(entry -> entry.getValue() >= threshold).keySet();
+    protected void validateThreshold(int threshold) {
+        Preconditions.checkArgument(threshold >= 0, "Threshold should not be negative number");
     }
 }

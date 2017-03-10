@@ -1,5 +1,5 @@
 /**
- * Contains the implementation of the {@link hu.bioinformatics.biolaboratory.utils.datahandlers.ResourceLoader}s.
+ * Contains the implementation of the {@link hu.bioinformatics.biolaboratory.resource.datahandlers.ResourceLoader}s.
  *
  * @author Attila Radi
  */

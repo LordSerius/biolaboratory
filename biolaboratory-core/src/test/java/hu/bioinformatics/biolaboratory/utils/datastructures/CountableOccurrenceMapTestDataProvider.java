@@ -67,25 +67,6 @@ public class CountableOccurrenceMapTestDataProvider {
         };
     }
 
-    static final String INVALID_TO_COUNTABLE_DATA_PROVIDER = "invalidToCountableDataProvider";
-
-    @DataProvider(name = INVALID_TO_COUNTABLE_DATA_PROVIDER)
-    Object[][] invalidToCountableDataProvider() {
-        return new Object[][] {
-                { null }
-        };
-    }
-
-    static final String VALID_TO_COUNTABLE_DATA_PROVIDER = "validToCountableDataProvider";
-
-    @DataProvider(name = VALID_TO_COUNTABLE_DATA_PROVIDER)
-    Object[][] validToCountableDataProvider() {
-        return new Object[][] {
-                { OccurrenceMap.build(ImmutableMap.of("A", 1)) },
-                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)) }
-        };
-    }
-
     static final String IS_EQUALS_DATA_PROVIDER_NAME = "isEqualsDataProvider";
 
     @DataProvider(name = IS_EQUALS_DATA_PROVIDER_NAME)
@@ -109,6 +90,19 @@ public class CountableOccurrenceMapTestDataProvider {
     Object[][] copyDataProvider() {
         return new Object[][] {
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)) }
+        };
+    }
+
+    static final String MINIMUM_OCCURRENCE_VALUE_DATA_PROVIDER_NAME = "minimumOccurrenceValueDataProvider";
+
+    @DataProvider(name = MINIMUM_OCCURRENCE_VALUE_DATA_PROVIDER_NAME)
+    Object[][] minimumOccurrenceValueDataProvider() {
+        return new Object[][] {
+                { CountableOccurrenceMap.build(), 0 },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), 1 },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2)), 1 },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 2, "C", 2)), 2 },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0, "C", 2)), 0 }
         };
     }
 
@@ -178,12 +172,72 @@ public class CountableOccurrenceMapTestDataProvider {
         };
     }
 
-    static final String INVALID_FILTER_GREATER_OR_EQUALS_DATA_PROVIDER_NAME = "invalidFilterGreaterOrEqualsDataProvider";
+    static final String LESS_FREQUENT_OCCURRENCES_DATA_PROVIDER_NAME = "lessFrequentOccurrences";
 
-    @DataProvider(name = INVALID_FILTER_GREATER_OR_EQUALS_DATA_PROVIDER_NAME)
+    @DataProvider(name = LESS_FREQUENT_OCCURRENCES_DATA_PROVIDER_NAME)
+    Object[][] mostFrequentDataProvider() {
+        return new Object[][] {
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "C", 3)), ImmutableSet.of("A") },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0, "C", 2)), ImmutableSet.of("A") },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 2, "C", 2)), ImmutableSet.of("A", "C") },
+                { CountableOccurrenceMap.build(), ImmutableSet.of() }
+        };
+    }
+
+    static final String INVALID_FILTER_RELATIONAL_DATA_PROVIDER_NAME = "invalidFilterGreaterOrEqualsDataProvider";
+
+    @DataProvider(name = INVALID_FILTER_RELATIONAL_DATA_PROVIDER_NAME)
     Object[][] invalidFilterGreaterOrEqualsDataProvider() {
         return new Object[][] {
                 { CountableOccurrenceMap.build(), -1 }
+        };
+    }
+
+    static final String VALID_FILTER_EQUALS_DATA_PROVIDER_NAME = "validFilterEqualsDataProvider";
+
+    @DataProvider(name = VALID_FILTER_EQUALS_DATA_PROVIDER_NAME)
+    Object[][] validFilterEqualsDataProvider() {
+        return new Object[][] {
+                { CountableOccurrenceMap.build(), 0, ImmutableSet.of() },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 4, "G", 0, "C", 4, "T", 5)), 5, ImmutableSet.of("T") },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 4, "G", 2, "C", 4, "T", 5)), 4, ImmutableSet.of("A", "C") },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 4, "G", 2, "C", 4, "T", 5)), 0, ImmutableSet.of() },
+        };
+    }
+
+    static final String VALID_FILTER_SMALLER_DATA_PROVIDER_NAME = "validFilterSmallerDataProvider";
+
+    @DataProvider(name = VALID_FILTER_SMALLER_DATA_PROVIDER_NAME)
+    Object[][] validFilterSmallerDataProvider() {
+        return new Object[][] {
+                { CountableOccurrenceMap.build(), 0, ImmutableSet.of() },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 4, "G", 0, "C", 4, "T", 5)), 5, ImmutableSet.of("A", "G", "C") },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 4, "G", 2, "C", 4, "T", 5)), 4, ImmutableSet.of("G") },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 4, "G", 2, "C", 4, "T", 5)), 0, ImmutableSet.of() },
+        };
+    }
+
+    static final String VALID_FILTER_SMALLER_OR_EQUALS_DATA_PROVIDER_NAME = "validFilterSmallerOrEqualsDataProvider";
+
+    @DataProvider(name = VALID_FILTER_SMALLER_OR_EQUALS_DATA_PROVIDER_NAME)
+    Object[][] validFilterSmallerOrEqualsDataProvider() {
+        return new Object[][] {
+                { CountableOccurrenceMap.build(), 0, ImmutableSet.of() },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 4, "G", 0, "C", 4, "T", 5)), 5, ImmutableSet.of("A", "G", "C", "T") },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 4, "G", 2, "C", 4, "T", 5)), 4, ImmutableSet.of("A", "G", "C") },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 4, "G", 2, "C", 4, "T", 5)), 0, ImmutableSet.of() },
+        };
+    }
+
+    static final String VALID_FILTER_GREATER_DATA_PROVIDER_NAME = "validFilterGreaterDataProvider";
+
+    @DataProvider(name = VALID_FILTER_GREATER_DATA_PROVIDER_NAME)
+    Object[][] validFilterGreaterDataProvider() {
+        return new Object[][] {
+                { CountableOccurrenceMap.build(), 0, ImmutableSet.of() },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 4, "G", 0, "C", 4, "T", 5)), 5, ImmutableSet.of() },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 4, "G", 2, "C", 4, "T", 5)), 4, ImmutableSet.of("T") },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 4, "G", 2, "C", 4, "T", 5)), 0, ImmutableSet.of("A", "G", "C", "T") },
         };
     }
 

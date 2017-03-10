@@ -1,4 +1,4 @@
-package hu.bioinformatics.biolaboratory.utils.datahandlers;
+package hu.bioinformatics.biolaboratory.resource.datahandlers;
 
 import hu.bioinformatics.biolaboratory.resource.read.ResourceReader;
 import hu.bioinformatics.biolaboratory.utils.CommentedString;

@@ -92,6 +92,40 @@ public class OccurrenceMapTestDataProvider {
         };
     }
 
+    static final String TO_COUNTABLE_DATA_PROVIDER_NAME = "toCountableDataProvider";
+
+    @DataProvider(name = TO_COUNTABLE_DATA_PROVIDER_NAME)
+    Object[][] toCountableDataProvider() {
+        return new Object[][] {
+                { OccurrenceMap.build(ImmutableMap.of("A", 1)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)) }
+        };
+    }
+
+    static final String MAXIMUM_OCCURRENCE_VALUE_DATA_PROVIDER_NAME = "maximumOccurrenceValueDataProvider";
+
+    @DataProvider(name = MAXIMUM_OCCURRENCE_VALUE_DATA_PROVIDER_NAME)
+    Object[][] maximumOccurrenceValueDataProvider() {
+        return new Object[][] {
+                { OccurrenceMap.build(), 0 },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1)), 1 },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2)), 2 },
+                { OccurrenceMap.build(ImmutableMap.of("A", 2, "C", 2)), 2 }
+        };
+    }
+
+    static final String MINIMUM_OCCURRENCE_VALUE_DATA_PROVIDER_NAME = "minimumOccurrenceValueDataProvider";
+
+    @DataProvider(name = MINIMUM_OCCURRENCE_VALUE_DATA_PROVIDER_NAME)
+    Object[][] minimumOccurrenceValueDataProvider() {
+        return new Object[][] {
+                { OccurrenceMap.build() },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1)) },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2)) },
+                { OccurrenceMap.build(ImmutableMap.of("A", 2, "C", 2)) }
+        };
+    }
+
     static final String INVALID_DECREASE_DATA_PROVIDER_NAME = "invalidDecreaseDataProvider";
 
     @DataProvider(name = INVALID_DECREASE_DATA_PROVIDER_NAME)
@@ -141,16 +175,42 @@ public class OccurrenceMapTestDataProvider {
         };
     }
     
-    static final String INVALID_FILTER_GREATER_OR_EQUALS_DATA_PROVIDER_NAME = "invalidFilterGreaterOrEqualsDataProvider";
+    static final String INVALID_FILTER_RELATIONAL_DATA_PROVIDER_NAME = "invalidFilterRelationalDataProvider";
     
-    @DataProvider(name = INVALID_FILTER_GREATER_OR_EQUALS_DATA_PROVIDER_NAME)
+    @DataProvider(name = INVALID_FILTER_RELATIONAL_DATA_PROVIDER_NAME)
     Object[][] invalidFilterDataProvider() {
         return new Object[][] {
                 { OccurrenceMap.build(), 0 },
                 { OccurrenceMap.build(), -1 }
         };
     }
-    
+
+    static final String VALID_FILTER_EQUALS_DATA_PROVIDER_NAME = "validEqualsDataProvider";
+
+    @DataProvider(name = VALID_FILTER_EQUALS_DATA_PROVIDER_NAME)
+    Object[][] validFilterEqualsDataProvider() {
+        return new Object[][] {
+                { OccurrenceMap.build(ImmutableMap.of("A", 4, "G", 2, "C", 4, "T", 5)), 5, ImmutableSet.of("T") },
+                { OccurrenceMap.build(ImmutableMap.of("A", 4, "G", 2, "C", 4, "T", 5)), 4, ImmutableSet.of("A", "C") },
+                { OccurrenceMap.build(ImmutableMap.of("A", 4, "G", 2, "C", 4, "T", 5)), 1, ImmutableSet.of() },
+                { OccurrenceMap.build(ImmutableMap.of("A", 4, "G", 2, "C", 4, "T", 5)), 6, ImmutableSet.of() },
+                { OccurrenceMap.build(), 3, ImmutableSet.of() }
+        };
+    }
+
+    static final String VALID_FILTER_GREATER_DATA_PROVIDER_NAME = "validFilterGreaterDataProvider";
+
+    @DataProvider(name = VALID_FILTER_GREATER_DATA_PROVIDER_NAME)
+    Object[][] validFilterGreaterDataProvider() {
+        return new Object[][] {
+                { OccurrenceMap.build(ImmutableMap.of("A", 4, "G", 2, "C", 4, "T", 5)), 5, ImmutableSet.of() },
+                { OccurrenceMap.build(ImmutableMap.of("A", 4, "G", 2, "C", 4, "T", 5)), 4, ImmutableSet.of("T") },
+                { OccurrenceMap.build(ImmutableMap.of("A", 4, "G", 2, "C", 4, "T", 5)), 1, ImmutableSet.of("A", "G", "C", "T") },
+                { OccurrenceMap.build(ImmutableMap.of("A", 4, "G", 2, "C", 4, "T", 5)), 6, ImmutableSet.of() },
+                { OccurrenceMap.build(), 3, ImmutableSet.of() }
+        };
+    }
+
     static final String VALID_FILTER_GREATER_OR_EQUALS_DATA_PROVIDER_NAME = "validFilterGreaterOrEqualsDataProvider";
     
     @DataProvider(name = VALID_FILTER_GREATER_OR_EQUALS_DATA_PROVIDER_NAME)
