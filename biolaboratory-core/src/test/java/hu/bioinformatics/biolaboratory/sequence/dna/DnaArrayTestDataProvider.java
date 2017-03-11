@@ -52,26 +52,10 @@ public class DnaArrayTestDataProvider {
     Object[][] equalsDataProvider() {
         return new Object[][] {
                 { DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "G", "T")), null, false },
-                { DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "G", "T")), Lists.newArrayList(), false },
-                { DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "G", "T")), Lists.newArrayList("A", "C", null), false },
-                { DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "G", "T")), Lists.newArrayList("A", "C", ""), false },
-                { DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "G", "T")), Lists.newArrayList("A", "C", "G"), false },
-                { DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "G", "T")), Lists.newArrayList("A", "C", "G", "T", "AA"), false },
-                { DnaArray.build(DnaCollectors.stringToDnaList("AA", "AC", "AG", "AT")), Lists.newArrayList("AA", "AC", "AG", "CT"), false },
-                { DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "G", "T")), Lists.newArrayList("A", "A", "G", "T"), false },
-                { DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "G", "T")), Lists.newArrayList(Dna.build("A"), Dna.build("C"), null), false },
-                { DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "G", "T")), DnaCollectors.stringToDnaList("A", "C", "G"), false },
-                { DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "G", "T")), DnaCollectors.stringToDnaList("A", "C", "G", "T", "AA"), false },
-                { DnaArray.build(DnaCollectors.stringToDnaList("AA", "AC", "AG", "AT")), DnaCollectors.stringToDnaList("AA", "AC", "AG", "CT"), false },
-                { DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "G", "T")), DnaCollectors.stringToDnaList("A", "A", "G", "T"), false },
                 { DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "G", "T")), DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "G")), false },
                 { DnaArray.build(DnaCollectors.stringToDnaList("AA", "AC", "AG", "AT")), DnaArray.build(DnaCollectors.stringToDnaList("AA", "AC", "AG", "AT", "CA")), false },
                 { DnaArray.build(DnaCollectors.stringToDnaList("AA", "AC", "AG", "AT")), DnaArray.build(DnaCollectors.stringToDnaList("AA", "AA", "AG", "CT")), false },
                 { DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "G", "T")), DnaArray.build(DnaCollectors.stringToDnaList("A", "A", "G", "T")), false },
-                { DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "G", "T")), Lists.newArrayList("A", "C", "G", "T"), false },
-                { DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "G", "T")), Lists.newArrayList("A", "G", "C", "T"), false },
-                { DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "G", "T")), DnaCollectors.stringToDnaList(Lists.newArrayList("A", "C", "G", "T")), true },
-                { DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "G", "T")), DnaCollectors.stringToDnaList(Lists.newArrayList("A", "G", "C", "T")), true },
                 { DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "G", "T")), DnaArray.build(DnaCollectors.stringToDnaList(Lists.newArrayList("A", "C", "G", "T"))), true },
                 { DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "G", "T")), DnaArray.build(DnaCollectors.stringToDnaList(Lists.newArrayList("A", "G", "C", "T"))), true }
         };

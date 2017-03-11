@@ -2,11 +2,14 @@ package hu.bioinformatics.biolaboratory.utils.datastructures;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import static org.apache.commons.lang3.Validate.noNullElements;
 
 /**
  * A data structure which contains different not null keys and the occurrence numbers.
@@ -37,7 +40,7 @@ public class OccurrenceMap<K> {
      * @return A new {@link OccurrenceMap} map with the given occurrences.
      * @throws IllegalArgumentException If the occurrences contain 0 or negative values.
      */
-    public static <K> OccurrenceMap<K> build(Map<K, Integer> occurrences) {
+    public static <K> OccurrenceMap<K> build(final Map<K, Integer> occurrences) {
         Preconditions.checkArgument(occurrences == null
                 || occurrences.entrySet().stream().allMatch(entry -> entry.getKey() != null && entry.getValue() != null && entry.getValue() > 0),
                 "Occurrences should not contain null keys or smaller than 1 elements");
@@ -72,22 +75,11 @@ public class OccurrenceMap<K> {
     }
 
     /**
-     * Get the occurrences of the key.
-     *
-     * @param key The occurrence key.
-     * @return The occurrence number for the specific key.
-     */
-    public final int getOccurrence(final K key) {
-        Preconditions.checkArgument(key != null, "Key should not be null");
-        return occurrenceMap.getOrDefault(key, 0);
-    }
-
-    /**
      * Get the copy of inside {@link Map} which contains the keys and the occurrences.
      * 
      * @return The inside occurrence {@link Map}.
      */
-    public final Map<K, Integer> getOccurrences() {
+    public final Map<K, Integer> getOccurrencesInMap() {
         Map<K, Integer> copyOccurrenceMap = Maps.newHashMap();
         copyOccurrenceMap.putAll(occurrenceMap);
         return copyOccurrenceMap;
@@ -99,6 +91,11 @@ public class OccurrenceMap<K> {
                 || obj != null
                 && obj.getClass().equals(getClass())
                 && compareOccurrenceMapContent(((OccurrenceMap<K>) obj).occurrenceMap);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(occurrenceMap);
     }
 
     protected final boolean compareOccurrenceMapContent(Map<K, Integer> otherOccurrenceMap) {
@@ -125,6 +122,82 @@ public class OccurrenceMap<K> {
     }
 
     /**
+     * Get the occurrences of the key.
+     *
+     * @param key The occurrence key.
+     * @return The occurrence number for the specific key.
+     */
+    public final int getOccurrence(final K key) {
+        return sumOccurrences(key);
+    }
+
+    /**
+     * Get the occurrences of the target keys.
+     *
+     * @param keys The desired keys.
+     * @return The sum of the target key values in the {@link OccurrenceMap}.
+     */
+    @SafeVarargs
+    public final int sumOccurrences(final K... keys) {
+        validateVarargs(keys);
+        return sumOccurrencesAboutSet(Sets.newHashSet(keys));
+    }
+
+    /**
+     * Get the occurrences of the target keys.
+     *
+     * @param keySet The desired keys.
+     * @return The sum of the target key values in the {@link OccurrenceMap}.
+     */
+    public final int sumOccurrencesAboutSet(final Set<K> keySet) {
+        Preconditions.checkArgument(keySet != null, "Keys should not be null");
+        noNullElements(keySet, "Key element should not be null");
+        return occurrenceMap.entrySet().stream()
+                .filter(occurrence -> keySet.contains(occurrence.getKey()))
+                .mapToInt(Map.Entry::getValue)
+                .sum();
+    }
+
+    /**
+     * Get the total number of occurrences inside the {@link OccurrenceMap}.
+     *
+     * @return The sum of all occurrences.
+     */
+    public final int sumTotalOccurrence() {
+        return occurrenceMap.values().stream()
+                .mapToInt(occurrence -> occurrence)
+                .sum();
+    }
+
+    /**
+     * Choose the occurrences about the given keys and return a new {@link OccurrenceMap}.
+     *
+     * @param keys The keys for the occurrences to choose.
+     * @return The chosen occurrences.
+     */
+    public OccurrenceMap<K> subSet(final K... keys) {
+        validateVarargs(keys);
+        return subSetAboutSet(Sets.newHashSet(keys));
+    }
+
+    @SafeVarargs
+    private final void validateVarargs(final K... keys) {
+        Preconditions.checkArgument(keys != null, "Keys should not be null");
+    }
+
+    /**
+     * Choose the occurrences about the given keys and return a new {@link OccurrenceMap}.
+     *
+     * @param keySet The keys for the occurrences to choose.
+     * @return The chosen occurrences.
+     */
+    public OccurrenceMap<K> subSetAboutSet(final Set<K> keySet) {
+        Preconditions.checkArgument(keySet != null, "Keys should not be null");
+        noNullElements(keySet, "Key element should not be null");
+        return filter(entry -> keySet.contains(entry.getKey()));
+    }
+
+    /**
      * Converts the {@link OccurrenceMap} to a {@link CountableOccurrenceMap}. The element set will be limited with
      * the given elements of the input {@link OccurrenceMap}.
      *
@@ -142,22 +215,35 @@ public class OccurrenceMap<K> {
      * @return A new {@link OccurrenceMap} with the merged values.
      */
     public OccurrenceMap<K> merge(final OccurrenceMap<K> otherOccurrenceMap) {
-        return filterMerge(otherOccurrenceMap, entry -> entry.getValue() > 0);
+        return filterMerge(otherOccurrenceMap, entry -> true);
     }
 
     /**
-     * Merging and filtering the the merged result about the other {@link OccurrenceMap} and the current
+     * Merging and filtering the merged result about the other {@link OccurrenceMap} and the current
      * {@link OccurrenceMap}.
      *
      * @param otherOccurrenceMap The other {@link OccurrenceMap} to merge with.
      * @param filterPredicate The filtering predicate.
      * @return A new {@link OccurrenceMap} with the merged and filtered values.
      */
-    protected final OccurrenceMap<K> filterMerge(final OccurrenceMap<K> otherOccurrenceMap, final Predicate<Map.Entry<K, Integer>> filterPredicate) {
+    public OccurrenceMap<K> filterMerge(final OccurrenceMap<K> otherOccurrenceMap, final Predicate<Map.Entry<K, Integer>> filterPredicate) {
+        Preconditions.checkArgument(filterPredicate != null, "Filter predicate should not be null");
+        return new OccurrenceMap<>(filterMergeOccurrences(otherOccurrenceMap, filterPredicate.and(entry -> entry.getValue() > 0)));
+    }
+
+    /**
+     * Merging and filtering the merged result about the other {@link OccurrenceMap} and the current
+     * {@link OccurrenceMap}.
+     *
+     * @param otherOccurrenceMap The other {@link OccurrenceMap} to merge with.
+     * @param filterPredicate The filtering predicate.
+     * @return A new {@link Map} with the merged and filtered values.
+     */
+    protected final Map<K, Integer> filterMergeOccurrences(final OccurrenceMap<K> otherOccurrenceMap, final Predicate<Map.Entry<K, Integer>> filterPredicate) {
         Preconditions.checkArgument(otherOccurrenceMap != null, "Cannot merge with null");
         Preconditions.checkArgument(filterPredicate != null, "Filter predicate should not be null");
         Map<K, Integer> mergedOccurrences = Maps.newHashMap();
-        Map<K, Integer> otherOccurrences = otherOccurrenceMap.getOccurrences();
+        Map<K, Integer> otherOccurrences = otherOccurrenceMap.getOccurrencesInMap();
         for (Map.Entry<K, Integer> entry : occurrenceMap.entrySet()) {
             K key = entry.getKey();
             int mergeValue = entry.getValue() + Optional.ofNullable(otherOccurrences.remove(key)).orElse(0);
@@ -170,7 +256,7 @@ public class OccurrenceMap<K> {
                 mergedOccurrences.put(entry.getKey(), entry.getValue());
             }
         }
-        return new OccurrenceMap<>(mergedOccurrences);
+        return mergedOccurrences;
     }
     
     /**
@@ -286,10 +372,20 @@ public class OccurrenceMap<K> {
     /**
      * Validates the threshold to query the occurrences.
      *
-     * @param threshold The targer threshold.
+     * @param threshold The target threshold.
      */
     protected void validateThreshold(final int threshold) {
         Preconditions.checkArgument(threshold > 0, "Threshold should not smaller than 1");
+    }
+
+    /**
+     * Filter the occurrences with the given {@link Function}.
+     *
+     * @param filterPredicate The filter {@link Predicate}, which needs an {@link java.util.Map.Entry} input.
+     * @return A new filtered {@link OccurrenceMap}.
+     */
+    public OccurrenceMap<K> filter(final Predicate<Map.Entry<K, Integer>> filterPredicate) {
+        return new OccurrenceMap<>(filterOccurrences(filterPredicate));
     }
 
     /**
@@ -299,19 +395,9 @@ public class OccurrenceMap<K> {
      * @return The occurrences after filtering.
      */
     protected final Map<K, Integer> filterOccurrences(final Predicate<Map.Entry<K, Integer>> filterPredicate) {
-        return filter(filterPredicate).occurrenceMap;
-    }
-
-    /**
-     * Filter the occurrences with the given {@link Function}.
-     *
-     * @param filterPredicate The filter {@link Predicate}, which needs an {@link java.util.Map.Entry} input.
-     * @return A new filtered {@link OccurrenceMap}.
-     */
-    protected final OccurrenceMap<K> filter(final Predicate<Map.Entry<K, Integer>> filterPredicate) {
         Preconditions.checkArgument(filterPredicate != null, "Filter predicate should not be null");
-        return new OccurrenceMap<>(occurrenceMap.entrySet().stream()
-                .filter(entry -> filterPredicate.test(entry))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
+        return occurrenceMap.entrySet().stream()
+                .filter(filterPredicate)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }

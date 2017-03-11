@@ -4,10 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import hu.bioinformatics.biolaboratory.utils.datastructures.CountableOccurrenceMap;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.Validate.noNullElements;
@@ -102,13 +99,19 @@ public class DnaArray {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof List) return equalsWithList((List) obj);
-        if (obj instanceof DnaArray) return equalsWithDnaArray((DnaArray) obj);
-        return false;
+        if (obj == this) return true;
+        if (obj == null || obj.getClass() != getClass()) return false;
+        return equalsWithDnaArray((DnaArray) obj);
     }
 
     private boolean equalsWithDnaArray(DnaArray rightHand) {
-        return equalsWithList(rightHand.getSampleList());
+        if (sampleList.size() != rightHand.sampleNumber) return false;
+
+        List<Dna> rightHandCopy = rightHand.getSampleList();
+        for (Dna dna : sampleList) {
+            if (!rightHandCopy.remove(dna)) return false;
+        }
+        return true;
     }
 
     private <T> boolean equalsWithList(List<T> rightHand) {
@@ -119,6 +122,11 @@ public class DnaArray {
             if (!rightHandCopy.remove(dna)) return false;
         }
         return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(sampleList);
     }
 
     @Override

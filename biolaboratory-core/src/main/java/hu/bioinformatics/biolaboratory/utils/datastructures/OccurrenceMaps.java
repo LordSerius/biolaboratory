@@ -150,7 +150,7 @@ public class OccurrenceMaps {
         return occurrenceMapCollection.stream()
                 .map(map -> {
                     Preconditions.checkArgument(map != null, "Cannot merge with null");
-                    return map.getOccurrences();
+                    return map.getOccurrencesInMap();
                 })
                 .collect(Collectors.toList());
     }

@@ -1,10 +1,12 @@
 package hu.bioinformatics.biolaboratory.utils.datastructures;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Sets;
 import org.testng.annotations.Test;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -29,7 +31,7 @@ public class CountableOccurrenceMapTest {
     public void shouldBuildFromMapReturn(Map<String, Integer> occurrences) {
         CountableOccurrenceMap<String> occurrenceMap = CountableOccurrenceMap.build(occurrences);
         occurrences = occurrences == null ? ImmutableMap.of() : occurrences;
-        assertThat(occurrenceMap.getOccurrences(), is(equalTo(occurrences)));
+        assertThat(occurrenceMap.getOccurrencesInMap(), is(equalTo(occurrences)));
     }
 
     @Test(dataProvider = CountableOccurrenceMapTestDataProvider.INVALID_BUILD_FROM_SET_DATA_PROVIDER_NAME,
@@ -59,6 +61,18 @@ public class CountableOccurrenceMapTest {
         ));
     }
 
+    @Test(dataProvider = CountableOccurrenceMapTestDataProvider.SUB_SET_DATA_PROVIDER_NAME)
+    public void shouldSubSetReturn(CountableOccurrenceMap<String> occurrenceMap, String[] keys, CountableOccurrenceMap<String> controlSubSet) {
+        CountableOccurrenceMap<String> subSet = occurrenceMap.subSet(keys);
+        assertThat(subSet, is(equalTo(controlSubSet)));
+    }
+
+    @Test(dataProvider = CountableOccurrenceMapTestDataProvider.SUB_SET_DATA_PROVIDER_NAME)
+    public void shouldSubSetAboutSetReturn(CountableOccurrenceMap<String> occurrenceMap, String[] keys, CountableOccurrenceMap<String> controlSubSet) {
+        CountableOccurrenceMap<String> subSet = occurrenceMap.subSetAboutSet(Sets.newHashSet(keys));
+        assertThat(subSet, is(equalTo(controlSubSet)));
+    }
+
     @Test(dataProvider = CountableOccurrenceMapTestDataProvider.MINIMUM_OCCURRENCE_VALUE_DATA_PROVIDER_NAME)
     public void shouldMinimumOccurrenceValueReturn(CountableOccurrenceMap<String> occurrenceMap, int controlMinimumValue) {
         int minimumValue = occurrenceMap.minimumOccurrenceValue();
@@ -78,29 +92,16 @@ public class CountableOccurrenceMapTest {
         assertThat(occurrenceMap, is(equalTo(controlOccurrenceMap)));
     }
 
-    @Test(dataProvider = CountableOccurrenceMapTestDataProvider.INVALID_MERGE_WITH_COUNTABLE_DATA_PROVIDER_NAME,
-            expectedExceptions = IllegalArgumentException.class)
-    public void shouldMergeWithCountableThrowException(CountableOccurrenceMap<String> occurrenceMap, CountableOccurrenceMap<String> otherOccurrenceMap) {
-        occurrenceMap.merge(otherOccurrenceMap);
-        fail();
-    }
-
-    @Test(dataProvider = CountableOccurrenceMapTestDataProvider.VALID_MERGE_WITH_COUNTABLE_DATA_PROVIDER_NAME)
-    public void shouldMergeWithCountableReturn(CountableOccurrenceMap<String> occurrenceMap, CountableOccurrenceMap<String> otherOccurrenceMap, CountableOccurrenceMap<String> controlOccurrenceMap) {
-        CountableOccurrenceMap<String> mergedOccurrenceMap = occurrenceMap.merge(otherOccurrenceMap);
-        assertThat(mergedOccurrenceMap, is(equalTo(controlOccurrenceMap)));
-    }
-
-    @Test(dataProvider = CountableOccurrenceMapTestDataProvider.VALID_MERGE_WITH_UNCOUNTABLE_DATA_PROVIDER_NAME)
-    public void shouldMergeWithUncountableReturn(CountableOccurrenceMap<String> occurrenceMap, OccurrenceMap<String> otherOccurrenceMap, OccurrenceMap<String> controlOccurrenceMap) {
-        OccurrenceMap<String> mergedOccurrenceMap = occurrenceMap.merge(otherOccurrenceMap);
-        assertThat(mergedOccurrenceMap, is(equalTo(controlOccurrenceMap)));
-    }
-
     @Test(dataProvider = CountableOccurrenceMapTestDataProvider.LESS_FREQUENT_OCCURRENCES_DATA_PROVIDER_NAME)
     public void shouldFilterLessFrequentOccurrencesReturn(CountableOccurrenceMap<String> occurrenceMap, Set<String> controlSet) {
         Set<String> filteredOccurrences = occurrenceMap.filterLessFrequentOccurrences();
         assertThat(filteredOccurrences, is(equalTo(controlSet)));
+    }
+
+    @Test(dataProvider = CountableOccurrenceMapTestDataProvider.FILTER_DATA_PROVIDER_NAME)
+    public void shouldFilterReturn(CountableOccurrenceMap<String> occurrenceMap, Predicate<Map.Entry<String, Integer>> predicate, CountableOccurrenceMap<String> controlOccurrenceMap) {
+        CountableOccurrenceMap<String> filteredOccurrenceMap = occurrenceMap.filter(predicate);
+        assertThat(filteredOccurrenceMap, is(equalTo(controlOccurrenceMap)));
     }
 
     @Test(dataProvider = CountableOccurrenceMapTestDataProvider.INVALID_FILTER_RELATIONAL_DATA_PROVIDER_NAME,
@@ -166,5 +167,36 @@ public class CountableOccurrenceMapTest {
     public void shouldFilterGreaterOrEqualsOccurrencesReturn(CountableOccurrenceMap<String> occurrenceMap, int threshold, Set<String> controlSet) {
         Set<String> resultSet = occurrenceMap.filterGreaterOrEqualsOccurrences(threshold);
         assertThat(resultSet, is(equalTo(controlSet)));
+    }
+
+    @Test(dataProvider = CountableOccurrenceMapTestDataProvider.FILTER_MERGE_COUNTABLE_DATA_PROVIDER_NAME)
+    public void shouldFilterMergeCountableReturn(CountableOccurrenceMap<String> occurrenceMap, CountableOccurrenceMap<String> otherOccurrenceMap, Predicate<Map.Entry<String, Integer>> filterPredicate, CountableOccurrenceMap<String> controlOccurrenceMap) {
+        CountableOccurrenceMap<String> mergedOccurrenceMap = occurrenceMap.filterMergeCountable(otherOccurrenceMap, filterPredicate);
+        assertThat(mergedOccurrenceMap, is(equalTo(controlOccurrenceMap)));
+    }
+
+    @Test(dataProvider = CountableOccurrenceMapTestDataProvider.INVALID_FILTER_MERGE_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldFilterMergeThrowException(CountableOccurrenceMap<String> occurrenceMap, OccurrenceMap<String> otherOccurrenceMap, Predicate<Map.Entry<String, Integer>> filterPredicate) {
+        occurrenceMap.filterMerge(otherOccurrenceMap, filterPredicate);
+        fail();
+    }
+
+    @Test(dataProvider = CountableOccurrenceMapTestDataProvider.VALID_FILTER_MERGE_DATA_PROVIDER_NAME)
+    public void shouldFilterMergeReturn(CountableOccurrenceMap<String> occurrenceMap, OccurrenceMap<String> otherOccurrenceMap, Predicate<Map.Entry<String, Integer>> filterPredicate, OccurrenceMap<String> controlOccurrenceMap) {
+        OccurrenceMap<String> mergedOccurrenceMap = occurrenceMap.filterMerge(otherOccurrenceMap, filterPredicate);
+        assertThat(mergedOccurrenceMap, is(equalTo(controlOccurrenceMap)));
+    }
+
+    @Test(dataProvider = CountableOccurrenceMapTestDataProvider.MERGE_COUNTABLE_DATA_PROVIDER_NAME)
+    public void shouldMergeCountableReturn(CountableOccurrenceMap<String> occurrenceMap, CountableOccurrenceMap<String> otherOccurrenceMap, CountableOccurrenceMap<String> controlOccurrenceMap) {
+        CountableOccurrenceMap<String> mergedOccurrenceMap = occurrenceMap.mergeCountable(otherOccurrenceMap);
+        assertThat(mergedOccurrenceMap, is(equalTo(controlOccurrenceMap)));
+    }
+
+    @Test(dataProvider = CountableOccurrenceMapTestDataProvider.MERGE_DATA_PROVIDER_NAME)
+    public void shouldMergeReturn(CountableOccurrenceMap<String> occurrenceMap, OccurrenceMap<String> otherOccurrenceMap, OccurrenceMap<String> controlOccurrenceMap) {
+        OccurrenceMap<String> mergedOccurrenceMap = occurrenceMap.merge(otherOccurrenceMap);
+        assertThat(mergedOccurrenceMap, is(equalTo(controlOccurrenceMap)));
     }
 }

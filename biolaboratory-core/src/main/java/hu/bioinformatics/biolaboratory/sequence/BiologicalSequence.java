@@ -15,8 +15,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static org.apache.commons.lang3.Validate.noNullElements;
-
 /**
  * Represents an immutable abstract biological sequence, which can be a DNA, RNA or a protein. Contains all of the common
  * operations, what are interpretable for all biological sequences.
@@ -250,7 +248,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
      * @return The element number in the {@link BiologicalSequence}
      */
     public final int getElementNumber(final PART element) {
-        return getElementsNumber(Sets.newHashSet(element));
+        return collectSequenceElementOccurrences().getOccurrence(element);
     }
 
     /**
@@ -261,8 +259,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
      */
     @SafeVarargs
     public final int getElementsNumber(final PART... elements) {
-        Preconditions.checkArgument(elements != null, "Elements should not be null");
-        return getElementsNumber(Sets.newHashSet(elements));
+        return collectSequenceElementOccurrences().sumOccurrences(elements);
     }
 
     /**
@@ -272,10 +269,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
      * @return The sum of the target elements in the {@link BiologicalSequence}.
      */
     public final int getElementsNumber(final Set<PART> elementSet) {
-        Preconditions.checkArgument(elementSet != null, "Elements should not be null");
-        noNullElements(elementSet, "Elements should not contain null value");
-        CountableOccurrenceMap<PART> occurrenceMap = collectSequenceElementOccurrences();
-        return elementSet.stream().mapToInt(occurrenceMap::getOccurrence).sum();
+        return collectSequenceElementOccurrences().sumOccurrencesAboutSet(elementSet);
     }
 
     protected final synchronized CountableOccurrenceMap<PART> collectSequenceElementOccurrences() {

@@ -8,6 +8,7 @@ import org.testng.annotations.DataProvider;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 
 /**
  * Test data provider for {@link CountableOccurrenceMap} test class.
@@ -93,6 +94,21 @@ public class CountableOccurrenceMapTestDataProvider {
         };
     }
 
+    static final String SUB_SET_DATA_PROVIDER_NAME = "subSetDataProvider";
+
+    @DataProvider(name = SUB_SET_DATA_PROVIDER_NAME)
+    Object[][] subSetsDataProvider() {
+        return new Object[][] {
+                { CountableOccurrenceMap.build(), new String[] {"A"}, CountableOccurrenceMap.build() },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), new String[] {}, CountableOccurrenceMap.build() },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), new String[] {"C"}, CountableOccurrenceMap.build() },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), new String[] {"A"}, CountableOccurrenceMap.build(ImmutableMap.of("A", 1)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2)), new String[] {"A"}, CountableOccurrenceMap.build(ImmutableMap.of("A", 1)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2)), new String[] {"A", "A"}, CountableOccurrenceMap.build(ImmutableMap.of("A", 1)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2)), new String[] {"A", "C"}, CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2)) }
+        };
+    }
+
     static final String MINIMUM_OCCURRENCE_VALUE_DATA_PROVIDER_NAME = "minimumOccurrenceValueDataProvider";
 
     @DataProvider(name = MINIMUM_OCCURRENCE_VALUE_DATA_PROVIDER_NAME)
@@ -133,45 +149,6 @@ public class CountableOccurrenceMapTestDataProvider {
         };
     }
 
-    static final String INVALID_MERGE_WITH_COUNTABLE_DATA_PROVIDER_NAME = "invalidMergeWithCountableDataProvider";
-
-    @DataProvider(name = INVALID_MERGE_WITH_COUNTABLE_DATA_PROVIDER_NAME)
-    Object[][] invalidMergeWithCountableDataProvider() {
-        return new Object[][] {
-                {CountableOccurrenceMap.build(), null }
-        };
-    }
-
-    static final String VALID_MERGE_WITH_COUNTABLE_DATA_PROVIDER_NAME = "validMergeWithCountableDataProvider";
-
-    @DataProvider(name = VALID_MERGE_WITH_COUNTABLE_DATA_PROVIDER_NAME)
-    Object[][] validMergeWithCountableDataProvider() {
-        return new Object[][] {
-                { CountableOccurrenceMap.build(), CountableOccurrenceMap.build(), CountableOccurrenceMap.build() },
-                { CountableOccurrenceMap.build(), CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), CountableOccurrenceMap.build(ImmutableMap.of("A", 0)) },
-                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), CountableOccurrenceMap.build(), CountableOccurrenceMap.build(ImmutableMap.of("A", 0)) },
-                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), CountableOccurrenceMap.build(ImmutableMap.of("A", 0)) },
-                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), CountableOccurrenceMap.build(ImmutableMap.of("G", 0)), CountableOccurrenceMap.build(ImmutableMap.of("A", 0,"G", 0)) },
-                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), CountableOccurrenceMap.build(ImmutableMap.of("A", 2)) }
-        };
-    }
-
-    static final String VALID_MERGE_WITH_UNCOUNTABLE_DATA_PROVIDER_NAME = "validMergeWithUncountableDataProvider";
-
-    @DataProvider(name = VALID_MERGE_WITH_UNCOUNTABLE_DATA_PROVIDER_NAME)
-    Object[][] validMergeWithUncountableDataProvider() {
-        return new Object[][] {
-                { CountableOccurrenceMap.build(), OccurrenceMap.build(), OccurrenceMap.build() },
-                { CountableOccurrenceMap.build(), OccurrenceMap.build(ImmutableMap.of("A", 1)), OccurrenceMap.build(ImmutableMap.of("A", 1)) },
-                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), OccurrenceMap.build(), OccurrenceMap.build() },
-                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), OccurrenceMap.build(ImmutableMap.of("A", 1)), OccurrenceMap.build(ImmutableMap.of("A", 1)) },
-                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), OccurrenceMap.build(ImmutableMap.of("G", 1)), OccurrenceMap.build(ImmutableMap.of("G", 1)) },
-                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), OccurrenceMap.build(), OccurrenceMap.build(ImmutableMap.of("A", 1)) },
-                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), OccurrenceMap.build(ImmutableMap.of("A", 1)), OccurrenceMap.build(ImmutableMap.of("A", 2)) },
-                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), OccurrenceMap.build(ImmutableMap.of("G", 1)), OccurrenceMap.build(ImmutableMap.of("A", 1, "G", 1)) }
-        };
-    }
-
     static final String LESS_FREQUENT_OCCURRENCES_DATA_PROVIDER_NAME = "lessFrequentOccurrences";
 
     @DataProvider(name = LESS_FREQUENT_OCCURRENCES_DATA_PROVIDER_NAME)
@@ -181,6 +158,24 @@ public class CountableOccurrenceMapTestDataProvider {
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 0, "C", 2)), ImmutableSet.of("A") },
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 2, "C", 2)), ImmutableSet.of("A", "C") },
                 { CountableOccurrenceMap.build(), ImmutableSet.of() }
+        };
+    }
+
+    static final String FILTER_DATA_PROVIDER_NAME = "FilterDataProvider";
+
+    @DataProvider(name = FILTER_DATA_PROVIDER_NAME)
+    Object[][] filterDataProvider() {
+        Predicate<Map.Entry<String, Integer>> truePredicate = entry -> true;
+        Predicate<Map.Entry<String, Integer>> falsePredicate = entry -> false;
+        Predicate<Map.Entry<String, Integer>> filterPredicate = entry -> entry.getKey().equals("A");
+
+        return new Object[][] {
+                { CountableOccurrenceMap.build(), truePredicate, CountableOccurrenceMap.build() },
+                { CountableOccurrenceMap.build(), falsePredicate, CountableOccurrenceMap.build() },
+                { CountableOccurrenceMap.build(), filterPredicate, CountableOccurrenceMap.build() },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2)), truePredicate, CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2)), falsePredicate, CountableOccurrenceMap.build() },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2)), filterPredicate, CountableOccurrenceMap.build(ImmutableMap.of("A", 1)) }
         };
     }
 
@@ -250,6 +245,100 @@ public class CountableOccurrenceMapTestDataProvider {
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 4, "G", 0, "C", 4, "T", 5)), 5, ImmutableSet.of("T") },
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 4, "G", 2, "C", 4, "T", 5)), 4, ImmutableSet.of("A", "C", "T") },
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 4, "G", 2, "C", 4, "T", 5)), 0, ImmutableSet.of("A", "G", "C", "T") },
+        };
+    }
+
+    static final String FILTER_MERGE_COUNTABLE_DATA_PROVIDER_NAME = "filterMergeCountableDataProvider";
+
+    @DataProvider(name = FILTER_MERGE_COUNTABLE_DATA_PROVIDER_NAME)
+    Object[][] filterMergeCountableDataProvider() {
+        Predicate<Map.Entry<String, Integer>> filterPredicate = entry -> entry.getKey().equals("A");
+
+        return new Object[][] {
+                { CountableOccurrenceMap.build(), CountableOccurrenceMap.build(), filterPredicate, CountableOccurrenceMap.build() },
+                { CountableOccurrenceMap.build(), CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), filterPredicate, CountableOccurrenceMap.build(ImmutableMap.of("A", 0)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), CountableOccurrenceMap.build(), filterPredicate, CountableOccurrenceMap.build(ImmutableMap.of("A", 0)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), filterPredicate, CountableOccurrenceMap.build(ImmutableMap.of("A", 0)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), CountableOccurrenceMap.build(ImmutableMap.of("G", 0)), filterPredicate, CountableOccurrenceMap.build(ImmutableMap.of("A", 0)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("G", 0)), CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), filterPredicate, CountableOccurrenceMap.build(ImmutableMap.of("A", 0)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), filterPredicate, CountableOccurrenceMap.build(ImmutableMap.of("A", 2)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("G", 0)), CountableOccurrenceMap.build(ImmutableMap.of("T", 0)), filterPredicate, CountableOccurrenceMap.build() }
+        };
+    }
+
+    static final String INVALID_FILTER_MERGE_DATA_PROVIDER_NAME = "invalidFilterMergeDataProvider";
+
+    @DataProvider(name = INVALID_FILTER_MERGE_DATA_PROVIDER_NAME)
+    Object[][] invalidFilterMergeDataProvider() {
+        Predicate<Map.Entry<String, Integer>> truePredicate = entry -> true;
+
+        return new Object[][] {
+                { CountableOccurrenceMap.build(), null, truePredicate },
+                { CountableOccurrenceMap.build(), CountableOccurrenceMap.build(), null }
+        };
+    }
+
+    static final String VALID_FILTER_MERGE_DATA_PROVIDER_NAME = "validFilterMergeDataProvider";
+
+    @DataProvider(name = VALID_FILTER_MERGE_DATA_PROVIDER_NAME)
+    Object[][] validFilterMergeDataProvider() {
+        Predicate<Map.Entry<String, Integer>> filterPredicate = entry -> entry.getKey().equals("A");
+
+        return new Object[][] {
+                { CountableOccurrenceMap.build(), CountableOccurrenceMap.build(), filterPredicate, CountableOccurrenceMap.build() },
+                { CountableOccurrenceMap.build(), CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), filterPredicate, CountableOccurrenceMap.build(ImmutableMap.of("A", 0)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), CountableOccurrenceMap.build(), filterPredicate, CountableOccurrenceMap.build(ImmutableMap.of("A", 0)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), filterPredicate, CountableOccurrenceMap.build(ImmutableMap.of("A", 0)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), CountableOccurrenceMap.build(ImmutableMap.of("G", 0)), filterPredicate, CountableOccurrenceMap.build(ImmutableMap.of("A", 0)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("G", 0)), CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), filterPredicate, CountableOccurrenceMap.build(ImmutableMap.of("A", 0)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), filterPredicate, CountableOccurrenceMap.build(ImmutableMap.of("A", 2)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("G", 0)), CountableOccurrenceMap.build(ImmutableMap.of("T", 0)), filterPredicate, CountableOccurrenceMap.build() },
+                { CountableOccurrenceMap.build(), OccurrenceMap.build(), filterPredicate, OccurrenceMap.build() },
+                { CountableOccurrenceMap.build(), OccurrenceMap.build(ImmutableMap.of("A", 1)), filterPredicate, OccurrenceMap.build(ImmutableMap.of("A", 1)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), OccurrenceMap.build(), filterPredicate, OccurrenceMap.build() },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), OccurrenceMap.build(ImmutableMap.of("A", 1)), filterPredicate, OccurrenceMap.build(ImmutableMap.of("A", 1)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), OccurrenceMap.build(ImmutableMap.of("G", 1)), filterPredicate, OccurrenceMap.build() },
+                { CountableOccurrenceMap.build(ImmutableMap.of("G", 1)), OccurrenceMap.build(ImmutableMap.of("A", 1)), filterPredicate, OccurrenceMap.build(ImmutableMap.of("A", 1)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), OccurrenceMap.build(), filterPredicate, OccurrenceMap.build(ImmutableMap.of("A", 1)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), OccurrenceMap.build(ImmutableMap.of("A", 1)), filterPredicate, OccurrenceMap.build(ImmutableMap.of("A", 2)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), OccurrenceMap.build(ImmutableMap.of("G", 1)), filterPredicate, OccurrenceMap.build(ImmutableMap.of("A", 1)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("G", 1)), OccurrenceMap.build(ImmutableMap.of("T", 1)), filterPredicate, OccurrenceMap.build() }
+        };
+    }
+
+    static final String MERGE_COUNTABLE_DATA_PROVIDER_NAME = "mergeCountableDataProvider";
+
+    @DataProvider(name = MERGE_COUNTABLE_DATA_PROVIDER_NAME)
+    Object[][] mergeCountableDataProvider() {
+        return new Object[][] {
+                { CountableOccurrenceMap.build(), CountableOccurrenceMap.build(), CountableOccurrenceMap.build() },
+                { CountableOccurrenceMap.build(), CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), CountableOccurrenceMap.build(ImmutableMap.of("A", 0)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), CountableOccurrenceMap.build(), CountableOccurrenceMap.build(ImmutableMap.of("A", 0)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), CountableOccurrenceMap.build(ImmutableMap.of("A", 0)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), CountableOccurrenceMap.build(ImmutableMap.of("G", 0)), CountableOccurrenceMap.build(ImmutableMap.of("A", 0,"G", 0)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), CountableOccurrenceMap.build(ImmutableMap.of("A", 2)) },
+        };
+    }
+
+    static final String MERGE_DATA_PROVIDER_NAME = "mergeUncountableDataProvider";
+
+    @DataProvider(name = MERGE_DATA_PROVIDER_NAME)
+    Object[][] mergeDataProvider() {
+        return new Object[][] {
+                { CountableOccurrenceMap.build(), CountableOccurrenceMap.build(), CountableOccurrenceMap.build() },
+                { CountableOccurrenceMap.build(), CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), CountableOccurrenceMap.build(ImmutableMap.of("A", 0)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), CountableOccurrenceMap.build(), CountableOccurrenceMap.build(ImmutableMap.of("A", 0)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), CountableOccurrenceMap.build(ImmutableMap.of("A", 0)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), CountableOccurrenceMap.build(ImmutableMap.of("G", 0)), CountableOccurrenceMap.build(ImmutableMap.of("A", 0,"G", 0)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), CountableOccurrenceMap.build(ImmutableMap.of("A", 2)) },
+                { CountableOccurrenceMap.build(), OccurrenceMap.build(), OccurrenceMap.build() },
+                { CountableOccurrenceMap.build(), OccurrenceMap.build(ImmutableMap.of("A", 1)), OccurrenceMap.build(ImmutableMap.of("A", 1)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), OccurrenceMap.build(), OccurrenceMap.build() },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), OccurrenceMap.build(ImmutableMap.of("A", 1)), OccurrenceMap.build(ImmutableMap.of("A", 1)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), OccurrenceMap.build(ImmutableMap.of("G", 1)), OccurrenceMap.build(ImmutableMap.of("G", 1)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), OccurrenceMap.build(), OccurrenceMap.build(ImmutableMap.of("A", 1)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), OccurrenceMap.build(ImmutableMap.of("A", 1)), OccurrenceMap.build(ImmutableMap.of("A", 2)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), OccurrenceMap.build(ImmutableMap.of("G", 1)), OccurrenceMap.build(ImmutableMap.of("A", 1, "G", 1)) }
         };
     }
 }

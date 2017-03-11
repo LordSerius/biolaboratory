@@ -83,6 +83,16 @@ public class CountableOccurrenceMap<K> extends OccurrenceMap<K> {
         return new CountableOccurrenceMap<K>(occurrenceMap);
     }
 
+    @Override
+    public CountableOccurrenceMap<K> subSet(final K... keys) {
+        return (CountableOccurrenceMap<K>) super.subSet(keys);
+    }
+
+    @Override
+    public CountableOccurrenceMap<K> subSetAboutSet(final Set<K> keySet) {
+        return (CountableOccurrenceMap<K>) super.subSetAboutSet(keySet);
+    }
+
     /**
      * Decreases the occurrence of the target key.
      *
@@ -132,8 +142,8 @@ public class CountableOccurrenceMap<K> extends OccurrenceMap<K> {
      * @param otherOccurrenceMap The other {@link CountableOccurrenceMap} to merge.
      * @return The union of the two {@link CountableOccurrenceMap} with an extended key set.
      */
-    public CountableOccurrenceMap<K> merge(final CountableOccurrenceMap<K> otherOccurrenceMap) {
-        return filterMerge(otherOccurrenceMap, entry -> true);
+    public CountableOccurrenceMap<K> mergeCountable(final CountableOccurrenceMap<K> otherOccurrenceMap) {
+        return filterMergeCountable(otherOccurrenceMap, entry -> true);
     }
 
     /**
@@ -143,9 +153,25 @@ public class CountableOccurrenceMap<K> extends OccurrenceMap<K> {
      * @param filterPredicate The filter condition.
      * @return A merged and filtered {@link CountableOccurrenceMap}.
      */
-    protected CountableOccurrenceMap<K> filterMerge(final CountableOccurrenceMap<K> otherOccurrenceMap, final Predicate<Map.Entry<K, Integer>> filterPredicate) {
-        OccurrenceMap<K> uncountableOccurrenceMap = filterMerge((OccurrenceMap<K>) otherOccurrenceMap, filterPredicate);
-        return uncountableOccurrenceMap.toCountable();
+    public CountableOccurrenceMap<K> filterMergeCountable(final CountableOccurrenceMap<K> otherOccurrenceMap, final Predicate<Map.Entry<K, Integer>> filterPredicate) {
+        return (CountableOccurrenceMap<K>) filterMerge(otherOccurrenceMap, filterPredicate);
+    }
+
+    /**
+     * Merges with an other {@link OccurrenceMap}. If it is a {@link CountableOccurrenceMap} then the return value
+     * will be {@link CountableOccurrenceMap} with keeping all zero values. If not the return value will be a regular
+     * {@link OccurrenceMap} and throws all explicit zero values.
+     *
+     * @param otherOccurrenceMap The other {@link OccurrenceMap} to merge with.
+     * @param filterPredicate The filtering predicate.
+     * @return The merge of the two {@link OccurrenceMap}.
+     */
+    @Override
+    public OccurrenceMap<K> filterMerge(final OccurrenceMap<K> otherOccurrenceMap, final Predicate<Map.Entry<K, Integer>> filterPredicate) {
+        if (otherOccurrenceMap instanceof CountableOccurrenceMap) {
+            return new CountableOccurrenceMap<>(filterMergeOccurrences(otherOccurrenceMap, filterPredicate));
+        }
+        return super.filterMerge(otherOccurrenceMap, filterPredicate);
     }
 
     @Override
@@ -181,5 +207,10 @@ public class CountableOccurrenceMap<K> extends OccurrenceMap<K> {
     @Override
     protected void validateThreshold(int threshold) {
         Preconditions.checkArgument(threshold >= 0, "Threshold should not be negative number");
+    }
+
+    @Override
+    public CountableOccurrenceMap<K> filter(final Predicate<Map.Entry<K, Integer>> filterPredicate) {
+        return new CountableOccurrenceMap<>(filterOccurrences(filterPredicate));
     }
 }
