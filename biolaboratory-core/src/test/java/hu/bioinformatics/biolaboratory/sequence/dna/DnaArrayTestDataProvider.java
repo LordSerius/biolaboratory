@@ -96,9 +96,9 @@ public class DnaArrayTestDataProvider {
         };
     }
 
-    static final String COUNT_MOTIFS_DATA_PROVIDER_NAME = "countMotifsDataProviderName";
+    static final String COUNT_DATA_PROVIDER_NAME = "countDataProviderName";
 
-    @DataProvider(name = COUNT_MOTIFS_DATA_PROVIDER_NAME)
+    @DataProvider(name = COUNT_DATA_PROVIDER_NAME)
     Object[][] countMotifsDataProvider() {
         return new Object[][] {
                 { DnaArray.build(DnaCollectors.stringToDnaList("ACGT")), Lists.newArrayList(CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 1, DnaNucleotide.CYTOSINE, 0, DnaNucleotide.GUANINE, 0, DnaNucleotide.THYMINE, 0)), CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 0, DnaNucleotide.CYTOSINE, 1, DnaNucleotide.GUANINE, 0, DnaNucleotide.THYMINE, 0)), CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 0, DnaNucleotide.CYTOSINE, 0, DnaNucleotide.GUANINE, 1, DnaNucleotide.THYMINE, 0)), CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 0, DnaNucleotide.CYTOSINE, 0, DnaNucleotide.GUANINE, 0, DnaNucleotide.THYMINE, 1))) },
@@ -131,6 +131,20 @@ public class DnaArrayTestDataProvider {
                 { DnaArray.build(DnaCollectors.stringToDnaList("ACGT", "ACGT")), 0 },
                 { DnaArray.build(DnaCollectors.stringToDnaList("ACGT", "TGCA")), 4 },
                 { testDnaArrayLoader.load("motif-calculation.fas"), 30 }
+        };
+    }
+
+    static final String PROFILE_DATA_PROVIDER_NAME = "profileDataProvider";
+
+    @DataProvider(name = PROFILE_DATA_PROVIDER_NAME)
+    Object[][] profileDataProvider() {
+        return new Object[][] {
+                { DnaArray.build(DnaCollectors.stringToDnaList("ACGT")), Lists.newArrayList(ImmutableMap.of(DnaNucleotide.ADENINE, 1.0, DnaNucleotide.CYTOSINE, 0.0, DnaNucleotide.GUANINE, 0.0, DnaNucleotide.THYMINE, 0.0), ImmutableMap.of(DnaNucleotide.ADENINE, 0.0, DnaNucleotide.CYTOSINE, 1.0, DnaNucleotide.GUANINE, 0.0, DnaNucleotide.THYMINE, 0.0), ImmutableMap.of(DnaNucleotide.ADENINE, 0.0, DnaNucleotide.CYTOSINE, 0.0, DnaNucleotide.GUANINE, 1.0, DnaNucleotide.THYMINE, 0.0), ImmutableMap.of(DnaNucleotide.ADENINE, 0.0, DnaNucleotide.CYTOSINE, 0.0, DnaNucleotide.GUANINE, 0.0, DnaNucleotide.THYMINE, 1.0)) },
+                { DnaArray.build(DnaCollectors.stringToDnaList("ACGT", "ACGT")), Lists.newArrayList(ImmutableMap.of(DnaNucleotide.ADENINE, 1.0, DnaNucleotide.CYTOSINE, 0.0, DnaNucleotide.GUANINE, 0.0, DnaNucleotide.THYMINE, 0.0), ImmutableMap.of(DnaNucleotide.ADENINE, 0.0, DnaNucleotide.CYTOSINE, 1.0, DnaNucleotide.GUANINE, 0.0, DnaNucleotide.THYMINE, 0.0), ImmutableMap.of(DnaNucleotide.ADENINE, 0.0, DnaNucleotide.CYTOSINE, 0.0, DnaNucleotide.GUANINE, 1.0, DnaNucleotide.THYMINE, 0.0), ImmutableMap.of(DnaNucleotide.ADENINE, 0.0, DnaNucleotide.CYTOSINE, 0.0, DnaNucleotide.GUANINE, 0.0, DnaNucleotide.THYMINE, 1.0)) },
+                { DnaArray.build(DnaCollectors.stringToDnaList("ACGT", "TGCA")), Lists.newArrayList(ImmutableMap.of(DnaNucleotide.ADENINE, 0.5, DnaNucleotide.CYTOSINE, 0.0, DnaNucleotide.GUANINE, 0.0, DnaNucleotide.THYMINE, 0.5), ImmutableMap.of(DnaNucleotide.ADENINE, 0.0, DnaNucleotide.CYTOSINE, 0.5, DnaNucleotide.GUANINE, 0.5, DnaNucleotide.THYMINE, 0.0), ImmutableMap.of(DnaNucleotide.ADENINE, 0.0, DnaNucleotide.CYTOSINE, 0.5, DnaNucleotide.GUANINE, 0.5, DnaNucleotide.THYMINE, 0.0), ImmutableMap.of(DnaNucleotide.ADENINE, 0.5, DnaNucleotide.CYTOSINE, 0.0, DnaNucleotide.GUANINE, 0.0, DnaNucleotide.THYMINE, 0.5)) },
+                { testDnaArrayLoader.load("motif-calculation.fas"), Lists.newArrayList(ImmutableMap.of(DnaNucleotide.ADENINE, 0.2, DnaNucleotide.CYTOSINE, 0.1, DnaNucleotide.GUANINE, 0.0, DnaNucleotide.THYMINE, 0.7), ImmutableMap.of(DnaNucleotide.ADENINE, 0.2, DnaNucleotide.CYTOSINE, 0.6, DnaNucleotide.GUANINE, 0.0, DnaNucleotide.THYMINE, 0.2), ImmutableMap.of(DnaNucleotide.ADENINE, 0.0, DnaNucleotide.CYTOSINE, 0.0, DnaNucleotide.GUANINE, 1.0, DnaNucleotide.THYMINE, 0.0), ImmutableMap.of(DnaNucleotide.ADENINE, 0.0, DnaNucleotide.CYTOSINE, 0.0, DnaNucleotide.GUANINE, 1.0, DnaNucleotide.THYMINE, 0.0),
+                        ImmutableMap.of(DnaNucleotide.ADENINE, 0.0, DnaNucleotide.CYTOSINE, 0.0, DnaNucleotide.GUANINE, 0.9, DnaNucleotide.THYMINE, 0.1), ImmutableMap.of(DnaNucleotide.ADENINE, 0.0, DnaNucleotide.CYTOSINE, 0.0, DnaNucleotide.GUANINE, 0.9, DnaNucleotide.THYMINE, 0.1), ImmutableMap.of(DnaNucleotide.ADENINE, 0.9, DnaNucleotide.CYTOSINE, 0.0, DnaNucleotide.GUANINE, 0.1, DnaNucleotide.THYMINE, 0.0), ImmutableMap.of(DnaNucleotide.ADENINE, 0.1, DnaNucleotide.CYTOSINE, 0.4, DnaNucleotide.GUANINE, 0.0, DnaNucleotide.THYMINE, 0.5),
+                        ImmutableMap.of(DnaNucleotide.ADENINE, 0.1, DnaNucleotide.CYTOSINE, 0.1, DnaNucleotide.GUANINE, 0.0, DnaNucleotide.THYMINE, 0.8), ImmutableMap.of(DnaNucleotide.ADENINE, 0.1, DnaNucleotide.CYTOSINE, 0.2, DnaNucleotide.GUANINE, 0.0, DnaNucleotide.THYMINE, 0.7), ImmutableMap.of(DnaNucleotide.ADENINE, 0.3, DnaNucleotide.CYTOSINE, 0.4, DnaNucleotide.GUANINE, 0.0, DnaNucleotide.THYMINE, 0.3), ImmutableMap.of(DnaNucleotide.ADENINE, 0.0, DnaNucleotide.CYTOSINE, 0.6, DnaNucleotide.GUANINE, 0.0, DnaNucleotide.THYMINE, 0.4)) }
         };
     }
 }

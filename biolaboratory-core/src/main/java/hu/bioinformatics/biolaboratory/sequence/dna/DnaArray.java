@@ -23,6 +23,7 @@ public class DnaArray {
 
     private DnaNucleotide[][] motifs;
     private List<CountableOccurrenceMap<DnaNucleotide>> motifCounts;
+    private List<Map<DnaNucleotide, Double>> motifProfile;
     private int[] motifScores;
     private int totalScore = -1;
 
@@ -170,13 +171,38 @@ public class DnaArray {
     }
 
     /**
+     * Returns an immutable profile about the {@link DnaNucleotide} based on each column.
+     *
+     * @return The profile of the {@link DnaArray}.
+     */
+    public List<Map<DnaNucleotide, Double>> profile() {
+        return new ArrayList<>(createProfile());
+    }
+
+    private synchronized List<Map<DnaNucleotide, Double>> createProfile() {
+        if (motifProfile == null) {
+            motifProfile = createCountMotifs().stream()
+                    .map(occurrenceMap -> {
+                        Map<DnaNucleotide, Double> columnProfileMap = new HashMap<>();
+                        occurrenceMap.getOccurrencesInMap()
+                                .entrySet()
+                                .forEach(nucleotideOccurrence -> columnProfileMap.put(
+                                        nucleotideOccurrence.getKey(), (double) nucleotideOccurrence.getValue() / sampleNumber));
+                        return columnProfileMap;
+                    })
+                    .collect(Collectors.toCollection(ArrayList::new));
+        }
+        return motifProfile;
+    }
+
+    /**
      * Sums the column scores.
      *
      * @return The sum of column scores.
      */
     public synchronized int totalScore() {
         if (totalScore == -1) {
-            totalScore = Arrays.stream(score()).sum();
+            totalScore = Arrays.stream(createScore()).sum();
         }
         return totalScore;
     }
@@ -189,12 +215,16 @@ public class DnaArray {
      *
      * @return The score array.
      */
-    public synchronized int[] score() {
+    public int[] score() {
+        return Arrays.copyOf(createScore(), motifScores.length);
+    }
+
+    private synchronized int[] createScore() {
         if (motifScores == null) {
             motifScores = createCountMotifs().stream()
-                                            .parallel()
-                                            .mapToInt(occurrenceMap -> sampleNumber - occurrenceMap.maximumOccurrenceValue())
-                                            .toArray();
+                    .parallel()
+                    .mapToInt(occurrenceMap -> sampleNumber - occurrenceMap.maximumOccurrenceValue())
+                    .toArray();
         }
         return motifScores;
     }
@@ -204,11 +234,11 @@ public class DnaArray {
      *
      * @return Immutable {@link List} of occurrences.
      */
-    public synchronized List<CountableOccurrenceMap<DnaNucleotide>> countMotifs() {
+    public List<CountableOccurrenceMap<DnaNucleotide>> count() {
         return new ArrayList<>(createCountMotifs());
     }
 
-    private List<CountableOccurrenceMap<DnaNucleotide>> createCountMotifs() {
+    private synchronized List<CountableOccurrenceMap<DnaNucleotide>> createCountMotifs() {
         if (motifCounts == null) {
             motifCounts = Lists.newArrayListWithCapacity(samplesLength);
             DnaNucleotide[][] motifs = createMotifs();
@@ -226,6 +256,7 @@ public class DnaArray {
     private synchronized DnaNucleotide[][] createMotifs() {
         if (motifs == null) {
             motifs = sampleList.stream()
+                    .parallel()
                     .map(dna -> dna.getSequence().chars()
                             .mapToObj(nucleotide -> DnaNucleotide.findDnaNucleotide((char) nucleotide))
                             .toArray(DnaNucleotide[]::new))

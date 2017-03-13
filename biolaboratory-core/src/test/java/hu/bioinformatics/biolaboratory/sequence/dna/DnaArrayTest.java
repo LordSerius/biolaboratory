@@ -9,6 +9,7 @@ import org.testng.annotations.Guice;
 import org.testng.annotations.Test;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -80,9 +81,9 @@ public class DnaArrayTest {
         assertThat(mostFrequentMotifs, is(equalTo(controlSet)));
     }
 
-    @Test(dataProvider = DnaArrayTestDataProvider.COUNT_MOTIFS_DATA_PROVIDER_NAME)
+    @Test(dataProvider = DnaArrayTestDataProvider.COUNT_DATA_PROVIDER_NAME)
     public void shouldCreateMotifsReturn(DnaArray dnaArray, List<CountableOccurrenceMap<DnaNucleotide>> controlCountMotifs) {
-        List<CountableOccurrenceMap<DnaNucleotide>> countMotifs = dnaArray.countMotifs();
+        List<CountableOccurrenceMap<DnaNucleotide>> countMotifs = dnaArray.count();
         assertThat(countMotifs, is(equalTo(controlCountMotifs)));
     }
 
@@ -96,5 +97,11 @@ public class DnaArrayTest {
     public void shouldTotalScoreReturn(DnaArray dnaArray, int controlTotalScore) {
         int totalScore = dnaArray.totalScore();
         assertThat(totalScore, is(equalTo(controlTotalScore)));
+    }
+
+    @Test(dataProvider = DnaArrayTestDataProvider.PROFILE_DATA_PROVIDER_NAME)
+    public void shouldProfileReturn(DnaArray dnaArray, List<Map<DnaNucleotide, Double>> controlProfile) {
+        List<Map<DnaNucleotide, Double>> profile = dnaArray.profile();
+        assertThat(profile, is(equalTo(controlProfile)));
     }
 }
