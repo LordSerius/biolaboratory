@@ -2,8 +2,8 @@ package hu.bioinformatics.biolaboratory.utils.datahandlers;
 
 import hu.bioinformatics.biolaboratory.resource.datahandlers.ResourceLoader;
 import hu.bioinformatics.biolaboratory.resource.extension.ResourceLocalizer;
-import hu.bioinformatics.biolaboratory.sequence.dna.Dna;
 import hu.bioinformatics.biolaboratory.resource.read.ResourceReader;
+import hu.bioinformatics.biolaboratory.sequence.dna.Dna;
 
 /**
  * Abstract class to load {@link Dna}s.

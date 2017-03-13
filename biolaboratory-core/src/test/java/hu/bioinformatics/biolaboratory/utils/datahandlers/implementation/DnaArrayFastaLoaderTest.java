@@ -1,4 +1,4 @@
-package hu.bioinformatics.biolaboratory.utils.implementation;
+package hu.bioinformatics.biolaboratory.utils.datahandlers.implementation;
 
 import hu.bioinformatics.biolaboratory.guice.GuiceCoreMockModule;
 import hu.bioinformatics.biolaboratory.guice.GuiceResourceMockModule;
@@ -7,7 +7,6 @@ import hu.bioinformatics.biolaboratory.resource.read.MockReaderWrapperFactory;
 import hu.bioinformatics.biolaboratory.resource.read.wrapper.ReaderWrapperFactory;
 import hu.bioinformatics.biolaboratory.sequence.dna.Dna;
 import hu.bioinformatics.biolaboratory.sequence.dna.DnaArray;
-import hu.bioinformatics.biolaboratory.utils.datahandlers.implementation.DnaArrayFastaLoader;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Guice;

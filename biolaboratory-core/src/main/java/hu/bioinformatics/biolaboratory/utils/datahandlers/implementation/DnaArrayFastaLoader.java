@@ -2,11 +2,11 @@ package hu.bioinformatics.biolaboratory.utils.datahandlers.implementation;
 
 import hu.bioinformatics.biolaboratory.guice.GuiceResourceModule;
 import hu.bioinformatics.biolaboratory.resource.extension.ResourceLocalizer;
+import hu.bioinformatics.biolaboratory.resource.read.ResourceReader;
 import hu.bioinformatics.biolaboratory.sequence.dna.Dna;
 import hu.bioinformatics.biolaboratory.sequence.dna.DnaArray;
-import hu.bioinformatics.biolaboratory.utils.datahandlers.DnaArrayLoader;
 import hu.bioinformatics.biolaboratory.utils.CommentedString;
-import hu.bioinformatics.biolaboratory.resource.read.ResourceReader;
+import hu.bioinformatics.biolaboratory.utils.datahandlers.DnaArrayLoader;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -27,7 +27,7 @@ public class DnaArrayFastaLoader extends DnaArrayLoader {
     }
 
     @Override
-    protected DnaArray convert(List<CommentedString> lines) {
+    protected final DnaArray convert(List<CommentedString> lines) {
         List<Dna> dnaList = lines.stream()
                 .map(commentedLine -> Dna.build(commentedLine.getComment(), commentedLine.getString()))
                 .collect(Collectors.toList());

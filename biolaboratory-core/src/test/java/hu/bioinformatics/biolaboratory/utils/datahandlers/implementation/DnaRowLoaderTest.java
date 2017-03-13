@@ -1,4 +1,4 @@
-package hu.bioinformatics.biolaboratory.utils.implementation;
+package hu.bioinformatics.biolaboratory.utils.datahandlers.implementation;
 
 import hu.bioinformatics.biolaboratory.guice.GuiceCoreMockModule;
 import hu.bioinformatics.biolaboratory.guice.GuiceResourceMockModule;
@@ -6,16 +6,12 @@ import hu.bioinformatics.biolaboratory.guice.GuiceResourceModule;
 import hu.bioinformatics.biolaboratory.resource.read.MockReaderWrapperFactory;
 import hu.bioinformatics.biolaboratory.resource.read.wrapper.ReaderWrapperFactory;
 import hu.bioinformatics.biolaboratory.sequence.dna.Dna;
-import hu.bioinformatics.biolaboratory.utils.CommentedString;
-import hu.bioinformatics.biolaboratory.utils.collectors.DnaCollectors;
-import hu.bioinformatics.biolaboratory.utils.datahandlers.implementation.DnaListFastaLoader;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Guice;
 import org.testng.annotations.Test;
 
 import javax.inject.Inject;
-import java.util.List;
 import java.util.stream.Stream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -25,17 +21,17 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import static org.testng.Assert.fail;
 
 /**
- * Unit tests for {@link DnaListFastaLoader}.
+ * Unit tests for {@link DnaRowLoader}.
  *
  * @author Attila Radi
  */
 @Guice(modules = {GuiceResourceModule.class, GuiceResourceMockModule.class, GuiceCoreMockModule.class})
-public class DnaListFastaLoaderTest {
+public class DnaRowLoaderTest {
 
-    private static final String PATH = "sample.fas";
+    private static final String PATH = "sample.dna";
 
     @Inject
-    private DnaListFastaLoader dnaListFastaLoader;
+    private DnaRowLoader dnaRowLoader;
 
     @Inject
     private ReaderWrapperFactory readerWrapperFactory;
@@ -50,11 +46,10 @@ public class DnaListFastaLoaderTest {
     @DataProvider(name = INVALID_LOAD_DATA_PROVIDER_NAME)
     private Object[][] invalidLoadDataProvider() {
         return new Object[][] {
-                { ".fas", Stream.builder().add("> comment").add("AGCT").build() },
-                { "sample.rna", Stream.builder().add("> comment").add("AGCT").build() },
-                { PATH, Stream.builder().add("AGCT").build() },
-                { PATH, Stream.builder().add("> comment").add("> dulicated comment").add("AGCT").build() },
-                { PATH, Stream.builder().add("> comment").add("AGCU").build() },
+                { ".dna", Stream.builder().add("AGCT").build() },
+                { "sample.rna", Stream.builder().add("AGCT").build() },
+                { PATH, Stream.builder().add("AGCT").add("AGCT").build() },
+                { PATH, Stream.builder().add("AGCU").build() },
                 { PATH, Stream.builder().add("").build() }
         };
     }
@@ -64,9 +59,7 @@ public class DnaListFastaLoaderTest {
     @DataProvider(name = VALID_LOAD_DATA_PROVIDER_NAME)
     private Object[][] validLoadDataProvider() {
         return new Object[][] {
-                { PATH, Stream.builder().add("> comment").add("ACGT").build(), DnaCollectors.commentedStringToDnaList(new CommentedString("comment", "ACGT")) },
-                { PATH, Stream.builder().add("> comment").add("ACGT").add("ACGT").build(), DnaCollectors.commentedStringToDnaList(new CommentedString("comment", "ACGTACGT")) },
-                { PATH, Stream.builder().add("> comment1").add("ACGT").add("> comment2").add("TGCA").build(), DnaCollectors.commentedStringToDnaList(new CommentedString("comment1", "ACGT"), new CommentedString("comment2", "TGCA")) }
+                { PATH, Stream.builder().add("ACGT").build(), Dna.build("ACGT") }
         };
     }
 
@@ -74,14 +67,14 @@ public class DnaListFastaLoaderTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldLoadThrowException(String filePath, Stream<String> lines) {
         ((MockReaderWrapperFactory) readerWrapperFactory).setLines(lines);
-        dnaListFastaLoader.load(filePath);
+        dnaRowLoader.load(filePath);
         fail();
     }
 
     @Test(dataProvider = VALID_LOAD_DATA_PROVIDER_NAME)
-    public void shouldLoadReturn(String filePath, Stream<String> lines, List<Dna> controlDnaList) {
+    public void shouldLoadReturn(String filePath, Stream<String> lines, Dna controlDna) {
         ((MockReaderWrapperFactory) readerWrapperFactory).setLines(lines);
-        List<Dna> loadedDnaList = dnaListFastaLoader.load(filePath);
-        assertThat(loadedDnaList, is(equalTo(controlDnaList)));
+        Dna loadedDna = dnaRowLoader.load(filePath);
+        assertThat(loadedDna, is(equalTo(controlDna)));
     }
 }
