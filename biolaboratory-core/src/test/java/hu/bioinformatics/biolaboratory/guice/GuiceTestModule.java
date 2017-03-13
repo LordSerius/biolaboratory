@@ -1,5 +1,6 @@
 package hu.bioinformatics.biolaboratory.guice;
 
+import hu.bioinformatics.biolaboratory.testutils.TestDnaArrayLoader;
 import hu.bioinformatics.biolaboratory.testutils.TestDnaLoader;
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
@@ -26,5 +27,6 @@ public class GuiceTestModule extends AbstractModule {
 
         bind(TestDnaCollectionLoader.class).in(Scopes.SINGLETON);
         bind(TestDnaLoader.class).in(Scopes.SINGLETON);
+        bind(TestDnaArrayLoader.class).in(Scopes.SINGLETON);
     }
 }

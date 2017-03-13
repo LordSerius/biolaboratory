@@ -1,5 +1,6 @@
 package hu.bioinformatics.biolaboratory.resource.datahandlers;
 
+import hu.bioinformatics.biolaboratory.resource.extension.ResourceLocalizer;
 import hu.bioinformatics.biolaboratory.resource.read.ResourceReader;
 import hu.bioinformatics.biolaboratory.utils.CommentedString;
 import org.apache.commons.lang3.Validate;
@@ -14,9 +15,12 @@ import java.util.List;
  * @author Attila Radi
  */
 public abstract class ResourceLoader<RES> {
+    private final ResourceLocalizer resourceLocalizer;
     private final ResourceReader reader;
 
-    public ResourceLoader(final ResourceReader resourceReader) {
+    public ResourceLoader(final ResourceLocalizer resourceLocalizer,
+                          final ResourceReader resourceReader) {
+        this.resourceLocalizer = resourceLocalizer;
         this.reader = Validate.notNull(resourceReader);
     }
     /**
@@ -27,7 +31,7 @@ public abstract class ResourceLoader<RES> {
      * @throws UncheckedIOException If {@link IOException} occurs.
      */
     public final RES load(final String resourcePath) {
-        return convert(reader.read(resourcePath));
+        return convert(reader.read(resourceLocalizer.localizeResource(resourcePath)));
     }
 
     /**

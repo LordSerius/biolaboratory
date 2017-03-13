@@ -4,6 +4,7 @@ import hu.bioinformatics.biolaboratory.guice.GuiceCoreModule;
 import hu.bioinformatics.biolaboratory.guice.GuiceResourceModule;
 import hu.bioinformatics.biolaboratory.guice.GuiceTestModule;
 import hu.bioinformatics.biolaboratory.sequence.BiologicalSequence;
+import hu.bioinformatics.biolaboratory.utils.datastructures.CountableOccurrenceMap;
 import org.testng.annotations.Guice;
 import org.testng.annotations.Test;
 
@@ -77,5 +78,23 @@ public class DnaArrayTest {
     public void shouldFindMostFrequentMotifsReturn(DnaArray dnaArray, int k, int d, Set<Dna> controlSet) {
         Set<Dna> mostFrequentMotifs = dnaArray.findMostFrequentMotifs(k, d);
         assertThat(mostFrequentMotifs, is(equalTo(controlSet)));
+    }
+
+    @Test(dataProvider = DnaArrayTestDataProvider.COUNT_MOTIFS_DATA_PROVIDER_NAME)
+    public void shouldCreateMotifsReturn(DnaArray dnaArray, List<CountableOccurrenceMap<DnaNucleotide>> controlCountMotifs) {
+        List<CountableOccurrenceMap<DnaNucleotide>> countMotifs = dnaArray.countMotifs();
+        assertThat(countMotifs, is(equalTo(controlCountMotifs)));
+    }
+
+    @Test(dataProvider = DnaArrayTestDataProvider.SCORE_DATA_PROVIDER_NAME)
+    public void shouldScoreReturn(DnaArray dnaArray, int[] controlMotifScores) {
+        int[] motifScores = dnaArray.score();
+        assertThat(motifScores, is(equalTo(controlMotifScores)));
+    }
+
+    @Test(dataProvider = DnaArrayTestDataProvider.TOTAL_SCORE_DATA_PROVIDER_NAME)
+    public void shouldTotalScoreReturn(DnaArray dnaArray, int controlTotalScore) {
+        int totalScore = dnaArray.totalScore();
+        assertThat(totalScore, is(equalTo(controlTotalScore)));
     }
 }

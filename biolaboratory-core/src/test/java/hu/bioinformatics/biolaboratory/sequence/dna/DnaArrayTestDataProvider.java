@@ -1,8 +1,11 @@
 package hu.bioinformatics.biolaboratory.sequence.dna;
 
 import com.beust.jcommander.internal.Lists;
+import com.google.common.collect.ImmutableMap;
+import hu.bioinformatics.biolaboratory.testutils.TestDnaArrayLoader;
 import hu.bioinformatics.biolaboratory.testutils.TestDnaCollectionLoader;
 import hu.bioinformatics.biolaboratory.utils.collectors.DnaCollectors;
+import hu.bioinformatics.biolaboratory.utils.datastructures.CountableOccurrenceMap;
 import org.testng.annotations.DataProvider;
 
 import javax.inject.Inject;
@@ -16,6 +19,8 @@ public class DnaArrayTestDataProvider {
 
     @Inject
     private TestDnaCollectionLoader testDnaCollectionLoader;
+    @Inject
+    private TestDnaArrayLoader testDnaArrayLoader;
 
     static final String INVALID_DNA_ARRAY_LIST_DATA_PROVIDER_NAME = "invalidDnaArrayListDataProvider";
 
@@ -88,6 +93,44 @@ public class DnaArrayTestDataProvider {
                 { DnaArray.build(DnaCollectors.stringToDnaList("AAAAA", "AAAAA", "AACAA")), 3, 0, DnaCollectors.stringToDnaSet() },
                 { DnaArray.build(DnaCollectors.stringToDnaList("AACAA", "AAAAA", "AAAAA")), 3, 0, DnaCollectors.stringToDnaSet() },
                 { DnaArray.build(DnaCollectors.stringToDnaList("TCTGAGCTTGCGTTATTTTTAGACC", "GTTTGACGGGAACCCGACGCCTATA", "TTTTAGATTTCCTCAGTCCACTATA", "CTTACAATTTCGTTATTTATCTAAT", "CAGTAGGAATAGCCACTTTGTTGTA", "AAATCCATTAAGGAAAGACGACCGT")), 5, 2, testDnaCollectionLoader.loadDnaSetFromFile("find-most-frequent-motifs-extra-dataset-solution.txt") }
+        };
+    }
+
+    static final String COUNT_MOTIFS_DATA_PROVIDER_NAME = "countMotifsDataProviderName";
+
+    @DataProvider(name = COUNT_MOTIFS_DATA_PROVIDER_NAME)
+    Object[][] countMotifsDataProvider() {
+        return new Object[][] {
+                { DnaArray.build(DnaCollectors.stringToDnaList("ACGT")), Lists.newArrayList(CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 1, DnaNucleotide.CYTOSINE, 0, DnaNucleotide.GUANINE, 0, DnaNucleotide.THYMINE, 0)), CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 0, DnaNucleotide.CYTOSINE, 1, DnaNucleotide.GUANINE, 0, DnaNucleotide.THYMINE, 0)), CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 0, DnaNucleotide.CYTOSINE, 0, DnaNucleotide.GUANINE, 1, DnaNucleotide.THYMINE, 0)), CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 0, DnaNucleotide.CYTOSINE, 0, DnaNucleotide.GUANINE, 0, DnaNucleotide.THYMINE, 1))) },
+                { DnaArray.build(DnaCollectors.stringToDnaList("ACGT", "ACGT")), Lists.newArrayList(CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 2, DnaNucleotide.CYTOSINE, 0, DnaNucleotide.GUANINE, 0, DnaNucleotide.THYMINE, 0)), CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 0, DnaNucleotide.CYTOSINE, 2, DnaNucleotide.GUANINE, 0, DnaNucleotide.THYMINE, 0)), CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 0, DnaNucleotide.CYTOSINE, 0, DnaNucleotide.GUANINE, 2, DnaNucleotide.THYMINE, 0)), CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 0, DnaNucleotide.CYTOSINE, 0, DnaNucleotide.GUANINE, 0, DnaNucleotide.THYMINE, 2))) },
+                { DnaArray.build(DnaCollectors.stringToDnaList("ACGT", "TGCA")), Lists.newArrayList(CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 1, DnaNucleotide.CYTOSINE, 0, DnaNucleotide.GUANINE, 0, DnaNucleotide.THYMINE, 1)), CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 0, DnaNucleotide.CYTOSINE, 1, DnaNucleotide.GUANINE, 1, DnaNucleotide.THYMINE, 0)), CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 0, DnaNucleotide.CYTOSINE, 1, DnaNucleotide.GUANINE, 1, DnaNucleotide.THYMINE, 0)), CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 1, DnaNucleotide.CYTOSINE, 0, DnaNucleotide.GUANINE, 0, DnaNucleotide.THYMINE, 1))) },
+                { testDnaArrayLoader.loadFromResource("motif-calculation.fas"), Lists.newArrayList(CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 2, DnaNucleotide.CYTOSINE, 1, DnaNucleotide.GUANINE, 0, DnaNucleotide.THYMINE, 7)), CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 2, DnaNucleotide.CYTOSINE, 6, DnaNucleotide.GUANINE, 0, DnaNucleotide.THYMINE, 2)), CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 0, DnaNucleotide.CYTOSINE, 0, DnaNucleotide.GUANINE, 10, DnaNucleotide.THYMINE, 0)), CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 0, DnaNucleotide.CYTOSINE, 0, DnaNucleotide.GUANINE, 10, DnaNucleotide.THYMINE, 0)),
+                        CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 0, DnaNucleotide.CYTOSINE, 0, DnaNucleotide.GUANINE, 9, DnaNucleotide.THYMINE, 1)), CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 0, DnaNucleotide.CYTOSINE, 0, DnaNucleotide.GUANINE, 9, DnaNucleotide.THYMINE, 1)), CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 9, DnaNucleotide.CYTOSINE, 0, DnaNucleotide.GUANINE, 1, DnaNucleotide.THYMINE, 0)), CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 1, DnaNucleotide.CYTOSINE, 4, DnaNucleotide.GUANINE, 0, DnaNucleotide.THYMINE, 5)),
+                        CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 1, DnaNucleotide.CYTOSINE, 1, DnaNucleotide.GUANINE, 0, DnaNucleotide.THYMINE, 8)), CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 1, DnaNucleotide.CYTOSINE, 2, DnaNucleotide.GUANINE, 0, DnaNucleotide.THYMINE, 7)), CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 3, DnaNucleotide.CYTOSINE, 4, DnaNucleotide.GUANINE, 0, DnaNucleotide.THYMINE, 3)), CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 0, DnaNucleotide.CYTOSINE, 6, DnaNucleotide.GUANINE, 0, DnaNucleotide.THYMINE, 4))) }
+        };
+    }
+
+    static final String SCORE_DATA_PROVIDER_NAME = "scoreDataProviderName";
+
+    @DataProvider(name = SCORE_DATA_PROVIDER_NAME)
+    Object[][] scoreDataProvider() {
+        return new Object[][] {
+                { DnaArray.build(DnaCollectors.stringToDnaList("ACGT")), new int[] {0, 0, 0, 0} },
+                { DnaArray.build(DnaCollectors.stringToDnaList("ACGT", "ACGT")), new int[] {0, 0, 0, 0} },
+                { DnaArray.build(DnaCollectors.stringToDnaList("ACGT", "TGCA")), new int[] {1, 1, 1, 1} },
+                { testDnaArrayLoader.loadFromResource("motif-calculation.fas"), new int[] {3, 4, 0, 0, 1, 1, 1, 5, 2, 3, 6, 4} }
+        };
+    }
+
+    static final String TOTAL_SCORE_DATA_PROVIDER_NAME = "totalScoreDataProviderName";
+
+    @DataProvider(name = TOTAL_SCORE_DATA_PROVIDER_NAME)
+    Object[][] totalScoreDataProvider() {
+        return new Object[][] {
+                { DnaArray.build(DnaCollectors.stringToDnaList("ACGT")), 0 },
+                { DnaArray.build(DnaCollectors.stringToDnaList("ACGT", "ACGT")), 0 },
+                { DnaArray.build(DnaCollectors.stringToDnaList("ACGT", "TGCA")), 4 },
+                { testDnaArrayLoader.loadFromResource("motif-calculation.fas"), 30 }
         };
     }
 }

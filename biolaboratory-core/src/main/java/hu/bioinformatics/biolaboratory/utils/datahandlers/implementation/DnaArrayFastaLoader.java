@@ -1,6 +1,7 @@
 package hu.bioinformatics.biolaboratory.utils.datahandlers.implementation;
 
 import hu.bioinformatics.biolaboratory.guice.GuiceResourceModule;
+import hu.bioinformatics.biolaboratory.resource.extension.ResourceLocalizer;
 import hu.bioinformatics.biolaboratory.sequence.dna.Dna;
 import hu.bioinformatics.biolaboratory.sequence.dna.DnaArray;
 import hu.bioinformatics.biolaboratory.utils.datahandlers.DnaArrayLoader;
@@ -20,8 +21,9 @@ import java.util.stream.Collectors;
 public class DnaArrayFastaLoader extends DnaArrayLoader {
 
     @Inject
-    public DnaArrayFastaLoader(@Named(GuiceResourceModule.FASTA_READER_NAME) ResourceReader resourceReader) {
-        super(resourceReader);
+    public DnaArrayFastaLoader(final ResourceLocalizer resourceLocalizer,
+                               @Named(GuiceResourceModule.FASTA_READER_NAME) final ResourceReader resourceReader) {
+        super(resourceLocalizer, resourceReader);
     }
 
     @Override

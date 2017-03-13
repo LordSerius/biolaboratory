@@ -21,9 +21,10 @@ public class DnaArray {
     private final int sampleNumber;
     private final int samplesLength;
 
-    private List<List<DnaNucleotide>> motifs;
+    private DnaNucleotide[][] motifs;
     private List<CountableOccurrenceMap<DnaNucleotide>> motifCounts;
     private int[] motifScores;
+    private int totalScore = -1;
 
     /**
      * Build a {@link DnaArray} from the given {@link Dna}s.
@@ -168,20 +169,35 @@ public class DnaArray {
         return commonMotifSet;
     }
 
-//    public synchronized int[] score() {
-//        if (motifScores == null) {
-//            List<CountableOccurrenceMap<DnaNucleotide>> nucleobaseMatrix = createCountMotifs();
-//            motifScores[] scoreArray = new int[nucleobaseMatrix[0].length];
-//            for (int j = 0; j < nucleobaseMatrix[0].length; j++) {
-//                int max = nucleobaseMatrix[0][j];
-//                for (int i = 1; i < nucleobaseMatrix.length; i++) {
-//                    if (nucleobaseMatrix[i][j] > max) max = nucleobaseMatrix[i][j];
-//                }
-//                scoreArray[j] = dnaArray.size() - max;
-//            }
-//        }
-//        return motifScores;
-//    }
+    /**
+     * Sums the column scores.
+     *
+     * @return The sum of column scores.
+     */
+    public synchronized int totalScore() {
+        if (totalScore == -1) {
+            totalScore = Arrays.stream(score()).sum();
+        }
+        return totalScore;
+    }
+
+    /**
+     * Creates the score vector from the {@link DnaArray}.
+     * <p>
+     * A score element shows how many different amino acids than the most dominant are presented.
+     * E.g. If the column contains 2 adenine, 1 cytosine, and 7 thymine, the element value will be 3.
+     *
+     * @return The score array.
+     */
+    public synchronized int[] score() {
+        if (motifScores == null) {
+            motifScores = createCountMotifs().stream()
+                                            .parallel()
+                                            .mapToInt(occurrenceMap -> sampleNumber - occurrenceMap.maximumOccurrenceValue())
+                                            .toArray();
+        }
+        return motifScores;
+    }
 
     /**
      * Counts the total occurrences of every {@link DnaNucleotide} in every {@link Dna}.
@@ -194,23 +210,26 @@ public class DnaArray {
 
     private List<CountableOccurrenceMap<DnaNucleotide>> createCountMotifs() {
         if (motifCounts == null) {
-            motifCounts = Lists.newArrayListWithCapacity(sampleNumber);
-            for (List<DnaNucleotide> nucleotideList : createMotifs()) {
+            motifCounts = Lists.newArrayListWithCapacity(samplesLength);
+            DnaNucleotide[][] motifs = createMotifs();
+            for (int j = 0; j < samplesLength; j++) {
                 CountableOccurrenceMap<DnaNucleotide> nucleotideOccurrenceMap = CountableOccurrenceMap.build(DnaNucleotide.NUCLEOTIDE_SET);
-                nucleotideList.forEach(nucleotideOccurrenceMap::increase);
+                for (int i = 0; i < sampleNumber; i++) {
+                    nucleotideOccurrenceMap.increase(motifs[i][j]);
+                }
                 motifCounts.add(nucleotideOccurrenceMap);
             }
         }
         return motifCounts;
     }
 
-    private synchronized List<List<DnaNucleotide>> createMotifs() {
+    private synchronized DnaNucleotide[][] createMotifs() {
         if (motifs == null) {
             motifs = sampleList.stream()
                     .map(dna -> dna.getSequence().chars()
                             .mapToObj(nucleotide -> DnaNucleotide.findDnaNucleotide((char) nucleotide))
-                            .collect(Collectors.toCollection(ArrayList::new)))
-                    .collect(Collectors.toCollection(ArrayList::new));
+                            .toArray(DnaNucleotide[]::new))
+                    .toArray(DnaNucleotide[][]::new);
         }
         return motifs;
     }
