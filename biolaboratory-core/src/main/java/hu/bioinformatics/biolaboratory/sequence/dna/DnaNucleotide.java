@@ -68,8 +68,9 @@ public enum DnaNucleotide implements SequenceElement {
      */
     public static DnaNucleotide findDnaNucleotide(final String dnaNucleotideLetter) {
         Preconditions.checkArgument(StringUtils.isNotBlank(dnaNucleotideLetter), "DNA nucleotide letter should not be empty");
-        Preconditions.checkArgument(dnaNucleotideLetter.length() == 1, "This is not a letter");
-        return findDnaNucleotide(dnaNucleotideLetter.charAt(0));
+        String normalizedDnaNucleotideLetter = dnaNucleotideLetter.trim();
+        Preconditions.checkArgument(normalizedDnaNucleotideLetter.length() == 1, "This is not a letter");
+        return findDnaNucleotide(normalizedDnaNucleotideLetter.charAt(0));
     }
 
     /**

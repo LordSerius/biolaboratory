@@ -15,9 +15,9 @@ import static org.testng.Assert.fail;
  */
 public class RnaNucleotideTest {
 
-    private static final String INVALID_FIND_DNA_NUCLEOTIDE_DATA_PROVIDER_NAME = "invalidFindDnaNucleotideDataProvider";
+    private static final String INVALID_FIND_RNA_NUCLEOTIDE_DATA_PROVIDER_NAME = "invalidFindRnaNucleotideDataProvider";
 
-    @DataProvider(name = INVALID_FIND_DNA_NUCLEOTIDE_DATA_PROVIDER_NAME)
+    @DataProvider(name = INVALID_FIND_RNA_NUCLEOTIDE_DATA_PROVIDER_NAME)
     private Object[][] invalidFindDnaNucleotideDataProvider() {
         return new Object[][] {
                 { 'x' },
@@ -54,9 +54,25 @@ public class RnaNucleotideTest {
         };
     }
 
-    @Test(dataProvider = INVALID_FIND_DNA_NUCLEOTIDE_DATA_PROVIDER_NAME,
+    private static final String VALID_FIND_RNA_NUCLEOTIDE_ABOUT_STRING_DATA_PROVIDER_NAME = "validFindRnaNucleotideAboutStringDataProvider";
+
+    @DataProvider(name = VALID_FIND_RNA_NUCLEOTIDE_ABOUT_STRING_DATA_PROVIDER_NAME)
+    private Object[][] validFindRnaNucleotideAboutStringReturn() {
+        return new Object[][] {
+                { "A", RnaNucleotide.ADENINE },
+                { " a", RnaNucleotide.ADENINE },
+                { "C ", RnaNucleotide.CYTOSINE },
+                { " c ", RnaNucleotide.CYTOSINE },
+                { "G", RnaNucleotide.GUANINE },
+                { " g", RnaNucleotide.GUANINE },
+                { "U ", RnaNucleotide.URACIL },
+                { " u ", RnaNucleotide.URACIL }
+        };
+    }
+
+    @Test(dataProvider = INVALID_FIND_RNA_NUCLEOTIDE_DATA_PROVIDER_NAME,
             expectedExceptions = IllegalArgumentException.class)
-    public void shouldFindDnaNucleotideThrowException(char dnaLetter) {
+    public void shouldFindRnaNucleotideThrowException(char dnaLetter) {
         RnaNucleotide.findRnaNucleotide(dnaLetter);
         fail();
     }
@@ -74,9 +90,9 @@ public class RnaNucleotideTest {
         fail();
     }
 
-    @Test(dataProvider = VALID_FIND_RNA_NUCLEOTIDE_DATA_PROVIDER_NAME)
-    public void shouldFindDnaNucleotideAboutStringReturn(char rnaLetter, RnaNucleotide controlRnaNucleotide) {
-        RnaNucleotide dnaNucleotide = RnaNucleotide.findRnaNucleotide(Character.toString(rnaLetter));
+    @Test(dataProvider = VALID_FIND_RNA_NUCLEOTIDE_ABOUT_STRING_DATA_PROVIDER_NAME)
+    public void shouldFindDnaNucleotideAboutStringReturn(String rnaLetter, RnaNucleotide controlRnaNucleotide) {
+        RnaNucleotide dnaNucleotide = RnaNucleotide.findRnaNucleotide(rnaLetter);
         assertThat(dnaNucleotide, is(equalTo(controlRnaNucleotide)));
     }
 }

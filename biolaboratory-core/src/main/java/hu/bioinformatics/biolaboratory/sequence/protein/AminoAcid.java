@@ -78,8 +78,9 @@ public enum AminoAcid implements SequenceElement {
      */
     public static AminoAcid findAminoAcid(final String aminoAcidLetter) {
         Preconditions.checkArgument(StringUtils.isNotBlank(aminoAcidLetter), "Amino acid letter should not be empty");
-        Preconditions.checkArgument(aminoAcidLetter.length() == 1, "This is not a letter");
-        return findAminoAcid(aminoAcidLetter.charAt(0));
+        String normalizedAminoAcidLetter = aminoAcidLetter.trim();
+        Preconditions.checkArgument(normalizedAminoAcidLetter.length() == 1, "This is not a letter");
+        return findAminoAcid(normalizedAminoAcidLetter.charAt(0));
     }
 
     /**
