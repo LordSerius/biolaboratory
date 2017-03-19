@@ -1,16 +1,15 @@
 package hu.bioinformatics.biolaboratory.sequence.rna;
 
+import com.google.common.base.Preconditions;
 import hu.bioinformatics.biolaboratory.sequence.BiologicalSequence;
 import hu.bioinformatics.biolaboratory.sequence.protein.AminoAcid;
 import hu.bioinformatics.biolaboratory.sequence.protein.Protein;
-import com.google.common.base.Preconditions;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import static org.apache.commons.lang3.Validate.noNullElements;
+import static hu.bioinformatics.biolaboratory.utils.Validation.*;
 
 /**
  * Represents a single RNA about the genome sequence.
@@ -61,7 +60,7 @@ public class Rna extends BiologicalSequence<Rna, RnaNucleotide> {
      * @return A new {@link Rna} object which stands from the nucleotides.
      */
     public static Rna build(final RnaNucleotide... nucleotides) {
-        return new Rna(validateElements(nucleotides));
+        return new Rna(validateNotEmptyVarargs(nucleotides));
     }
 
     /**
@@ -72,7 +71,7 @@ public class Rna extends BiologicalSequence<Rna, RnaNucleotide> {
      * @return A new {@link Rna} object which stands from the nucleotides.
      */
     public static Rna build(final String name, final RnaNucleotide... nucleotides) {
-        return new Rna(validateName(name), validateElements(nucleotides));
+        return new Rna(validateName(name), validateVarargs(nucleotides));
     }
 
     /**
@@ -82,7 +81,7 @@ public class Rna extends BiologicalSequence<Rna, RnaNucleotide> {
      * @return A new {@link Rna} object which stand from the nucleotides
      */
     public static Rna build(final List<RnaNucleotide> nucleotideList) {
-        return new Rna(validateElementList(nucleotideList));
+        return new Rna(validateNotEmptyCollection(nucleotideList));
     }
 
     /**
@@ -93,29 +92,13 @@ public class Rna extends BiologicalSequence<Rna, RnaNucleotide> {
      * @return A new {@link Rna} object which stand from the nucleotides
      */
     public static Rna build(final String name, final List<RnaNucleotide> nucleotideList) {
-        return new Rna(validateName(name), validateElementList(nucleotideList));
-    }
-
-    private static String validateName(final String name) {
-        Preconditions.checkArgument(name != null, "Name should not be null");
-        return name.trim();
+        return new Rna(validateName(name), validateCollection(nucleotideList));
     }
 
     private static String validateSequence(final String sequence) {
-        Preconditions.checkArgument(StringUtils.isNotBlank(sequence), "RNA sequence cannot be blank");
-        String uppercaseSequence = sequence.trim().toUpperCase();
+        String uppercaseSequence = formatSequence(sequence);
         Preconditions.checkArgument(sequenceValidator.matcher(uppercaseSequence).matches(), "RNA should contains only the letters of nucleotides");
         return uppercaseSequence;
-    }
-
-    private static RnaNucleotide[] validateElements(final RnaNucleotide[] elements) {
-        Preconditions.checkArgument(elements != null && elements.length > 0, "RNA elements should not be empty");
-        return noNullElements(elements, "RNA elements should not contain null element");
-    }
-
-    private static List<RnaNucleotide> validateElementList(final List<RnaNucleotide> elementList) {
-        Preconditions.checkArgument(elementList != null && !elementList.isEmpty(), "RNA element list should not be empty");
-        return noNullElements(elementList, "RNA element list should not contain null element");
     }
 
     private Rna(final String sequence) {

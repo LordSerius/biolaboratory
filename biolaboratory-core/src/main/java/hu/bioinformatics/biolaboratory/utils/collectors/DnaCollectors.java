@@ -1,12 +1,14 @@
 package hu.bioinformatics.biolaboratory.utils.collectors;
 
-import com.google.common.base.Preconditions;
 import hu.bioinformatics.biolaboratory.sequence.dna.Dna;
 import hu.bioinformatics.biolaboratory.utils.CommentedString;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static hu.bioinformatics.biolaboratory.utils.Validation.validateCollection;
+import static hu.bioinformatics.biolaboratory.utils.Validation.validateVarargs;
 
 /**
  * Transforms different {@link String} {@link Collection}s to target {@link Dna} {@link Collection}.
@@ -23,8 +25,7 @@ public class DnaCollectors {
      * @return A {@link Set} of {@link Dna} about the sequences.
      */
     public static Set<Dna> stringToDnaSet(final String... sequences) {
-        validateArgument(sequences);
-        return Arrays.stream(sequences)
+        return Arrays.stream(validateVarargs(sequences))
                 .map(mapStringToDna())
                 .collect(Collectors.toCollection(HashSet::new));
     }
@@ -36,8 +37,7 @@ public class DnaCollectors {
      * @return A {@link Set} of {@link Dna} about the sequences.
      */
     public static Set<Dna> commentedStringToDnaSet(final CommentedString... sequences) {
-        validateArgument(sequences);
-        return Arrays.stream(sequences)
+        return Arrays.stream(validateVarargs(sequences))
                 .map(mapCommentedStringToDna())
                 .collect(Collectors.toCollection(HashSet::new));
     }
@@ -49,8 +49,7 @@ public class DnaCollectors {
      * @return A {@link Set} of {@link Dna} about the sequences.
      */
     public static Set<Dna> stringToDnaSet(final Collection<String> sequenceCollection) {
-        validateArgument(sequenceCollection);
-        return sequenceCollection.stream()
+        return validateCollection(sequenceCollection).stream()
                 .map(mapStringToDna())
                 .collect(Collectors.toCollection(HashSet::new));
     }
@@ -62,8 +61,7 @@ public class DnaCollectors {
      * @return A {@link Set} of {@link Dna} about the sequences.
      */
     public static Set<Dna> commentedStringToDnaSet(final Collection<CommentedString> sequenceCollection) {
-        validateArgument(sequenceCollection);
-        return sequenceCollection.stream()
+        return validateCollection(sequenceCollection).stream()
                 .map(mapCommentedStringToDna())
                 .collect(Collectors.toCollection(HashSet::new));
     }
@@ -75,8 +73,7 @@ public class DnaCollectors {
      * @return A {@link List} of {@link Dna} about the sequences.
      */
     public static List<Dna> stringToDnaList(final String... sequences) {
-        validateArgument(sequences);
-        return Arrays.stream(sequences)
+        return Arrays.stream(validateVarargs(sequences))
                 .map(mapStringToDna())
                 .collect(Collectors.toCollection(ArrayList::new));
     }
@@ -88,7 +85,7 @@ public class DnaCollectors {
      * @return A {@link Set} of {@link Dna} about the sequences.
      */
     public static List<Dna> commentedStringToDnaList(final CommentedString... sequences) {
-        validateArgument(sequences);
+        validateVarargs(sequences);
         return Arrays.stream(sequences)
                 .map(mapCommentedStringToDna())
                 .collect(Collectors.toCollection(ArrayList::new));
@@ -101,8 +98,7 @@ public class DnaCollectors {
      * @return A {@link List} of {@link Dna} about the sequences.
      */
     public static List<Dna> stringToDnaList(final Collection<String> sequenceCollection) {
-        validateArgument(sequenceCollection);
-        return sequenceCollection.stream()
+        return validateCollection(sequenceCollection).stream()
                 .map(mapStringToDna())
                 .collect(Collectors.toCollection(ArrayList::new));
     }
@@ -114,14 +110,9 @@ public class DnaCollectors {
      * @return A {@link Set} of {@link Dna} about the sequences.
      */
     public static List<Dna> commentedStringToDnaList(final Collection<CommentedString> sequenceCollection) {
-        validateArgument(sequenceCollection);
-        return sequenceCollection.stream()
+        return validateCollection(sequenceCollection).stream()
                 .map(mapCommentedStringToDna())
                 .collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    private static <COL> void validateArgument(final COL sequences) {
-        Preconditions.checkArgument(sequences != null, "Sequences should not be null");
     }
 
     private static Function<String, Dna> mapStringToDna() {
@@ -129,8 +120,6 @@ public class DnaCollectors {
     }
 
     private static Function<CommentedString, Dna> mapCommentedStringToDna() {
-        return (commentedString) -> Optional.ofNullable(commentedString).isPresent()
-                ? Dna.build(commentedString.getComment(), commentedString.getString())
-                : Dna.build();
+        return (commentedString) -> Dna.build(commentedString.getComment(), commentedString.getString());
     }
 }

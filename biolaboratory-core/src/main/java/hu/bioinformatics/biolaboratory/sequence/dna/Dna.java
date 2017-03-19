@@ -9,7 +9,6 @@ import hu.bioinformatics.biolaboratory.sequence.rna.Rna;
 import hu.bioinformatics.biolaboratory.sequence.rna.RnaNucleotide;
 import hu.bioinformatics.biolaboratory.utils.datastructures.OccurrenceMap;
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Set;
@@ -19,7 +18,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.regex.Pattern;
 
-import static org.apache.commons.lang3.Validate.noNullElements;
+import static hu.bioinformatics.biolaboratory.utils.Validation.*;
 
 /**
  * Represents a single DNA about the genome sequence in 5' -> 3' order.
@@ -75,7 +74,7 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
      * @return A new {@link Dna} object which stands from the nucleotides.
      */
     public static Dna build(final DnaNucleotide... nucleotides) {
-        return new Dna(validateElements(nucleotides));
+        return new Dna(validateNotEmptyVarargs(nucleotides));
     }
 
     /**
@@ -86,7 +85,7 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
      * @return A new {@link Dna} object which stands from the nucleotides.
      */
     public static Dna build(final String name, final DnaNucleotide... nucleotides) {
-        return new Dna(validateName(name), validateElements(nucleotides));
+        return new Dna(validateName(name), validateVarargs(nucleotides));
     }
 
     /**
@@ -96,7 +95,7 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
      * @return A new {@link Dna} object which stand from the nucleotides
      */
     public static Dna build(final List<DnaNucleotide> nucleotideList) {
-        return new Dna(validateElementList(nucleotideList));
+        return new Dna(validateNotEmptyCollection(nucleotideList));
     }
 
     /**
@@ -107,29 +106,13 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
      * @return A new {@link Dna} object which stand from the nucleotides
      */
     public static Dna build(final String name, final List<DnaNucleotide> nucleotideList) {
-        return new Dna(validateName(name), validateElementList(nucleotideList));
-    }
-
-    private static String validateName(final String name) {
-        Preconditions.checkArgument(name != null, "Name should not be null");
-        return name.trim();
+        return new Dna(validateName(name), validateCollection(nucleotideList));
     }
 
     private static String validateSequence(final String sequence) {
-        Preconditions.checkArgument(StringUtils.isNotBlank(sequence), "DNA sequence cannot be blank");
-        String uppercaseSequence = sequence.trim().toUpperCase();
+        String uppercaseSequence = formatSequence(sequence);
         Preconditions.checkArgument(sequenceValidator.matcher(uppercaseSequence).matches(), "DNA should contains only the letters of nucleotides");
         return uppercaseSequence;
-    }
-
-    private static DnaNucleotide[] validateElements(final DnaNucleotide[] elements) {
-        Preconditions.checkArgument(elements != null && elements.length > 0, "DNA elements should not be empty");
-        return noNullElements(elements, "DNA elements should not contain null element");
-    }
-
-    private static List<DnaNucleotide> validateElementList(final List<DnaNucleotide> elementList) {
-        Preconditions.checkArgument(elementList != null && !elementList.isEmpty(), "DNA element list should not be empty");
-        return noNullElements(elementList, "DNA element list should not contain null element");
     }
 
     private Dna(final String sequence) {

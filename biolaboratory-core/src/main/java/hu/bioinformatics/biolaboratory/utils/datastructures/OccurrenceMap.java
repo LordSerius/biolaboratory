@@ -9,7 +9,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static org.apache.commons.lang3.Validate.noNullElements;
+import static hu.bioinformatics.biolaboratory.utils.Validation.validateCollection;
+import static hu.bioinformatics.biolaboratory.utils.Validation.validateVarargs;
 
 /**
  * A data structure which contains different not null keys and the occurrence numbers.
@@ -56,13 +57,12 @@ public class OccurrenceMap<K> {
 
     /**
      * Constructor which pass through an {@link Map} with K type key and {@link Integer} type value. If the {@link Map}
-     * if zero, the constructor provides an empty {@link Map}.
+     * is null, the constructor provides an empty {@link Map}.
      *
-     * @param occurrenceMap
+     * @param occurrenceMap A key - integer pair map.
      */
-    protected OccurrenceMap(Map<K, Integer> occurrenceMap) {
-        if (occurrenceMap == null) occurrenceMap = Maps.newHashMap();
-        this.occurrenceMap = occurrenceMap;
+    protected OccurrenceMap(final Map<K, Integer> occurrenceMap) {
+        this.occurrenceMap = occurrenceMap == null ? Maps.newHashMap() : Maps.newHashMap(occurrenceMap);
     }
 
     /**
@@ -77,7 +77,7 @@ public class OccurrenceMap<K> {
     /**
      * Get the copy of inside {@link Map} which contains the keys and the occurrences.
      * 
-     * @return The inside occurrence {@link Map}.
+     * @return The inner occurrence {@link Map}.
      */
     public final Map<K, Integer> getOccurrencesInMap() {
         Map<K, Integer> copyOccurrenceMap = Maps.newHashMap();
@@ -139,8 +139,7 @@ public class OccurrenceMap<K> {
      */
     @SafeVarargs
     public final int sumOccurrences(final K... keys) {
-        validateVarargs(keys);
-        return sumOccurrencesAboutSet(Sets.newHashSet(keys));
+        return innerSumOccurrencesAboutSet(Sets.newHashSet(validateVarargs(keys)));
     }
 
     /**
@@ -150,8 +149,10 @@ public class OccurrenceMap<K> {
      * @return The sum of the target key values in the {@link OccurrenceMap}.
      */
     public final int sumOccurrencesAboutSet(final Set<K> keySet) {
-        Preconditions.checkArgument(keySet != null, "Keys should not be null");
-        noNullElements(keySet, "Key element should not be null");
+        return innerSumOccurrencesAboutSet(validateCollection(keySet));
+    }
+
+    private int innerSumOccurrencesAboutSet(final Set<K> keySet) {
         return occurrenceMap.entrySet().stream()
                 .filter(occurrence -> keySet.contains(occurrence.getKey()))
                 .mapToInt(Map.Entry::getValue)
@@ -176,13 +177,7 @@ public class OccurrenceMap<K> {
      * @return The chosen occurrences.
      */
     public OccurrenceMap<K> subSet(final K... keys) {
-        validateVarargs(keys);
-        return subSetAboutSet(Sets.newHashSet(keys));
-    }
-
-    @SafeVarargs
-    private final void validateVarargs(final K... keys) {
-        Preconditions.checkArgument(keys != null, "Keys should not be null");
+        return innerSubSetAboutSet(Sets.newHashSet(validateVarargs(keys)));
     }
 
     /**
@@ -192,8 +187,10 @@ public class OccurrenceMap<K> {
      * @return The chosen occurrences.
      */
     public OccurrenceMap<K> subSetAboutSet(final Set<K> keySet) {
-        Preconditions.checkArgument(keySet != null, "Keys should not be null");
-        noNullElements(keySet, "Key element should not be null");
+        return innerSubSetAboutSet(validateCollection(keySet));
+    }
+
+    private OccurrenceMap<K> innerSubSetAboutSet(final Set<K> keySet) {
         return filter(entry -> keySet.contains(entry.getKey()));
     }
 
@@ -204,7 +201,36 @@ public class OccurrenceMap<K> {
      * @return The converted {@link CountableOccurrenceMap}.
      */
     public CountableOccurrenceMap<K> toCountable() {
-        return CountableOccurrenceMap.build(occurrenceMap);
+        return toCountableWith();
+    }
+
+    /**
+     * Converts the {@link OccurrenceMap} to a {@link CountableOccurrenceMap}, and adds all given element to the set
+     * with 0 initial occurrence.
+     *
+     * @param zeroElements The keys with zero occurrences.
+     * @returnThe converted {@link CountableOccurrenceMap}.
+     */
+    @SafeVarargs
+    public final CountableOccurrenceMap<K> toCountableWith(final K... zeroElements) {
+        return innerToCountableWithSet(Sets.newHashSet(validateVarargs(zeroElements)));
+    }
+
+    /**
+     * Converts the {@link OccurrenceMap} to a {@link CountableOccurrenceMap}, and adds all given set element to the set
+     * with 0 initial occurrence.
+     *
+     * @param zeroElementSet The keys with zero occurrences.
+     * @return The converted {@link CountableOccurrenceMap}.
+     */
+    public CountableOccurrenceMap<K> toCountableWithSet(final Set<K> zeroElementSet) {
+        return innerToCountableWithSet(validateCollection(zeroElementSet));
+    }
+
+    private CountableOccurrenceMap<K> innerToCountableWithSet(final Set<K> zeroElementSet) {
+        HashMap<K, Integer> extendedOccurrenceMap = Maps.newHashMap(occurrenceMap);
+        zeroElementSet.forEach(key -> extendedOccurrenceMap.put(key, 0));
+        return CountableOccurrenceMap.build(extendedOccurrenceMap);
     }
 
     /**
@@ -297,9 +323,16 @@ public class OccurrenceMap<K> {
         occurrenceMap.put(key, occurrence);
         return occurrence;
     }
-    
-    protected void validateKey(final K key) {
+
+    /**
+     * Validates the given key. Return with the same if it is valid.
+     *
+     * @param key The key to validate.
+     * @return The same value if it is valid.
+     */
+    protected K validateKey(final K key) {
         Preconditions.checkArgument(key != null, "Key should not be null");
+        return key;
     }
     
     /**
@@ -373,9 +406,11 @@ public class OccurrenceMap<K> {
      * Validates the threshold to query the occurrences.
      *
      * @param threshold The target threshold.
+     * @return The same instance if valid.
      */
-    protected void validateThreshold(final int threshold) {
+    protected int validateThreshold(final int threshold) {
         Preconditions.checkArgument(threshold > 0, "Threshold should not smaller than 1");
+        return threshold;
     }
 
     /**

@@ -1,14 +1,13 @@
 package hu.bioinformatics.biolaboratory.sequence.protein;
 
-import hu.bioinformatics.biolaboratory.sequence.BiologicalSequence;
 import com.google.common.base.Preconditions;
-import org.apache.commons.lang3.StringUtils;
+import hu.bioinformatics.biolaboratory.sequence.BiologicalSequence;
 
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import static org.apache.commons.lang3.Validate.noNullElements;
+import static hu.bioinformatics.biolaboratory.utils.Validation.*;
 
 /**
  * Represents a single protein about the amino acid sequence.
@@ -36,7 +35,7 @@ public class Protein extends BiologicalSequence<Protein, AminoAcid> {
      * @return A new {@link Protein} object which contains the amino acid sequence in uppercase.
      */
     public static Protein build(final String sequence) {
-        return new Protein(Protein.validateSequence(sequence));
+        return new Protein(validateSequence(sequence));
     }
 
     /**
@@ -59,7 +58,7 @@ public class Protein extends BiologicalSequence<Protein, AminoAcid> {
      * @return A new {@link Protein} object which stands from the amino acids.
      */
     public static Protein build(final AminoAcid... aminoAcids) {
-        return new Protein(validateElements(aminoAcids));
+        return new Protein(validateNotEmptyVarargs(aminoAcids));
     }
 
     /**
@@ -70,7 +69,7 @@ public class Protein extends BiologicalSequence<Protein, AminoAcid> {
      * @return A new {@link Protein} object which stands from the amino acids.
      */
     public static Protein build(final String name, final AminoAcid... aminoAcids) {
-        return new Protein(validateName(name), validateElements(aminoAcids));
+        return new Protein(validateName(name), validateVarargs(aminoAcids));
     }
 
     /**
@@ -80,7 +79,7 @@ public class Protein extends BiologicalSequence<Protein, AminoAcid> {
      * @return A new {@link Protein} object which stand from the amino acids.
      */
     public static Protein build(final List<AminoAcid> aminoAcidList) {
-        return new Protein(validateElementList(aminoAcidList));
+        return new Protein(validateNotEmptyCollection(aminoAcidList));
     }
 
     /**
@@ -91,29 +90,13 @@ public class Protein extends BiologicalSequence<Protein, AminoAcid> {
      * @return A new {@link Protein} object which stand from the amino acids.
      */
     public static Protein build(final String name, final List<AminoAcid> aminoAcidList) {
-        return new Protein(validateName(name), validateElementList(aminoAcidList));
-    }
-
-    private static String validateName(final String name) {
-        Preconditions.checkArgument(name != null, "Name should not be null");
-        return name.trim();
+        return new Protein(validateName(name), validateCollection(aminoAcidList));
     }
 
     private static String validateSequence(final String sequence) {
-        Preconditions.checkArgument(StringUtils.isNotBlank(sequence), "Protein sequence cannot be blank");
-        String uppercaseSequence = sequence.trim().toUpperCase();
+        String uppercaseSequence = formatSequence(sequence);
         Preconditions.checkArgument(sequenceValidator.matcher(uppercaseSequence).matches(), "Protein should contains only the letters of nucleotides");
         return uppercaseSequence;
-    }
-
-    private static AminoAcid[] validateElements(final AminoAcid[] elements) {
-        Preconditions.checkArgument(elements != null && elements.length > 0, "Protein elements should not be empty");
-        return noNullElements(elements, "Protein elements should not contain null element");
-    }
-
-    private static List<AminoAcid> validateElementList(final List<AminoAcid> elementList) {
-        Preconditions.checkArgument(elementList != null && !elementList.isEmpty(), "Protein element list should not be empty");
-        return noNullElements(elementList, "Protein element list should not contain null element");
     }
 
     private Protein(final String sequence) {

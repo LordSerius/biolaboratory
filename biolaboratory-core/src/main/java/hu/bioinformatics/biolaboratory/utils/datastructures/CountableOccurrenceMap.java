@@ -175,9 +175,10 @@ public class CountableOccurrenceMap<K> extends OccurrenceMap<K> {
     }
 
     @Override
-    protected void validateKey(final K key) {
+    protected K validateKey(final K key) {
         super.validateKey(key);
         Preconditions.checkArgument(occurrenceMap.containsKey(key), "The given key is not member of the key set");
+        return key;
     }
 
     /**
@@ -205,8 +206,9 @@ public class CountableOccurrenceMap<K> extends OccurrenceMap<K> {
     }
 
     @Override
-    protected void validateThreshold(int threshold) {
+    protected int validateThreshold(int threshold) {
         Preconditions.checkArgument(threshold >= 0, "Threshold should not be negative number");
+        return threshold;
     }
 
     @Override

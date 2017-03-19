@@ -4,12 +4,10 @@ import hu.bioinformatics.biolaboratory.guice.GuiceCoreModule;
 import hu.bioinformatics.biolaboratory.guice.GuiceResourceModule;
 import hu.bioinformatics.biolaboratory.guice.GuiceTestModule;
 import hu.bioinformatics.biolaboratory.sequence.BiologicalSequence;
-import hu.bioinformatics.biolaboratory.utils.datastructures.CountableOccurrenceMap;
 import org.testng.annotations.Guice;
 import org.testng.annotations.Test;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -62,7 +60,7 @@ public class DnaArrayTest {
         ));
     }
 
-    @Test(dataProvider = DnaArrayTestDataProvider.DNA_ARRAY_EQUALS_DATA_PROVDER_NAME)
+    @Test(dataProvider = DnaArrayTestDataProvider.DNA_ARRAY_EQUALS_DATA_PROVIDER_NAME)
     public void shouldEqualsReturn(DnaArray dnaArray, Object rightHand, boolean isEquals) {
         boolean equalsResult = dnaArray.equals(rightHand);
         assertThat(equalsResult, is(equalTo(isEquals)));
@@ -79,29 +77,5 @@ public class DnaArrayTest {
     public void shouldFindMostFrequentMotifsReturn(DnaArray dnaArray, int k, int d, Set<Dna> controlSet) {
         Set<Dna> mostFrequentMotifs = dnaArray.findMostFrequentMotifs(k, d);
         assertThat(mostFrequentMotifs, is(equalTo(controlSet)));
-    }
-
-    @Test(dataProvider = DnaArrayTestDataProvider.COUNT_DATA_PROVIDER_NAME)
-    public void shouldCreateMotifsReturn(DnaArray dnaArray, List<CountableOccurrenceMap<DnaNucleotide>> controlCountMotifs) {
-        List<CountableOccurrenceMap<DnaNucleotide>> countMotifs = dnaArray.count();
-        assertThat(countMotifs, is(equalTo(controlCountMotifs)));
-    }
-
-    @Test(dataProvider = DnaArrayTestDataProvider.SCORE_DATA_PROVIDER_NAME)
-    public void shouldScoreReturn(DnaArray dnaArray, int[] controlMotifScores) {
-        int[] motifScores = dnaArray.score();
-        assertThat(motifScores, is(equalTo(controlMotifScores)));
-    }
-
-    @Test(dataProvider = DnaArrayTestDataProvider.TOTAL_SCORE_DATA_PROVIDER_NAME)
-    public void shouldTotalScoreReturn(DnaArray dnaArray, int controlTotalScore) {
-        int totalScore = dnaArray.totalScore();
-        assertThat(totalScore, is(equalTo(controlTotalScore)));
-    }
-
-    @Test(dataProvider = DnaArrayTestDataProvider.PROFILE_DATA_PROVIDER_NAME)
-    public void shouldProfileReturn(DnaArray dnaArray, List<Map<DnaNucleotide, Double>> controlProfile) {
-        List<Map<DnaNucleotide, Double>> profile = dnaArray.profile();
-        assertThat(profile, is(equalTo(controlProfile)));
     }
 }

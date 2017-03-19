@@ -7,6 +7,9 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static hu.bioinformatics.biolaboratory.utils.Validation.validateCollection;
+import static hu.bioinformatics.biolaboratory.utils.Validation.validateVarargs;
+
 /**
  * Utility class which provides multiple operations on multiple {@link OccurrenceMap}.
  *
@@ -54,8 +57,7 @@ public class OccurrenceMaps {
     @SafeVarargs
     private static <K> OccurrenceMap<K> filterMergeOccurrenceMaps(
             final Predicate<Map.Entry<K, Integer>> filterPredicate, final OccurrenceMap<K>... occurrenceMaps) {
-        validateVarargs(occurrenceMaps);
-        return filterMergeOccurrenceMaps(filterPredicate, Arrays.asList(occurrenceMaps));
+        return filterMergeOccurrenceMaps(filterPredicate, Arrays.asList(validateVarargs(occurrenceMaps)));
     }
 
     /**
@@ -70,10 +72,9 @@ public class OccurrenceMaps {
      */
     private static <K> OccurrenceMap<K> filterMergeOccurrenceMaps(
             final Predicate<Map.Entry<K, Integer>> filterPredicate, final Collection<OccurrenceMap<K>> occurrenceMapCollection) {
-        validateCollection(occurrenceMapCollection);
         Preconditions.checkArgument(filterPredicate != null, "Filter predicate should no be null");
 
-        List<Map<K, Integer>> occurrenceMapList = getOccurrences(occurrenceMapCollection);
+        List<Map<K, Integer>> occurrenceMapList = getOccurrences(validateCollection(occurrenceMapCollection));
 
         Map<K, Integer> mergedOccurrences = Maps.newHashMap();
         for (Map<K, Integer> occurrence : occurrenceMapList) {
@@ -100,8 +101,7 @@ public class OccurrenceMaps {
      */
     @SafeVarargs
     public static <K> OccurrenceMap<K> getMostFrequentOccurrences(final OccurrenceMap<K>... occurrenceMaps) {
-        validateVarargs(occurrenceMaps);
-        return getMostFrequentOccurrences(Arrays.asList(occurrenceMaps));
+        return getMostFrequentOccurrences(Arrays.asList(validateVarargs(occurrenceMaps)));
     }
 
     /**
@@ -113,9 +113,7 @@ public class OccurrenceMaps {
      * @see OccurrenceMap#filterMostFrequentOccurrences()
      */
     public static <K> OccurrenceMap<K> getMostFrequentOccurrences(final Collection<OccurrenceMap<K>> occurrenceMapCollection) {
-        validateCollection(occurrenceMapCollection);
-
-        List<Map<K, Integer>> occurrenceMapList = getOccurrences(occurrenceMapCollection);
+        List<Map<K, Integer>> occurrenceMapList = getOccurrences(validateCollection(occurrenceMapCollection));
 
         int mostFrequentOccurrenceNumber = 0;
         Map<K, Integer> mostFrequentOccurrences = Maps.newHashMap();
@@ -135,15 +133,6 @@ public class OccurrenceMaps {
             }
         }
         return OccurrenceMap.build(mostFrequentOccurrences);
-    }
-
-    private static <K> void validateCollection(final Collection<K> occurrenceMapCollection) {
-        Preconditions.checkArgument(occurrenceMapCollection != null, "Occurrence map collection should not be null");
-    }
-
-    @SafeVarargs
-    private static <K> void validateVarargs(final OccurrenceMap<K>... occurrenceMaps) {
-        Preconditions.checkArgument(occurrenceMaps != null, "Given arguments should not be null");
     }
 
     private static <K> List<Map<K, Integer>> getOccurrences(final Collection<OccurrenceMap<K>> occurrenceMapCollection) {

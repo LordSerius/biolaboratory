@@ -2,12 +2,13 @@ package hu.bioinformatics.biolaboratory.sequence.dna;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import hu.bioinformatics.biolaboratory.utils.datastructures.CountableOccurrenceMap;
+import hu.bioinformatics.biolaboratory.utils.Validation;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
-
-import static org.apache.commons.lang3.Validate.noNullElements;
 
 /**
  * A collection of {@link Dna}s which provide motif finding methods on them. Every included {@link Dna} should be the
@@ -20,12 +21,7 @@ public class DnaArray {
     private final List<Dna> sampleList;
     private final int sampleNumber;
     private final int samplesLength;
-
-    private DnaNucleotide[][] motifs;
-    private List<CountableOccurrenceMap<DnaNucleotide>> motifCounts;
-    private List<Map<DnaNucleotide, Double>> motifProfile;
-    private int[] motifScores;
-    private int totalScore = -1;
+    private final Motifs motifs;
 
     /**
      * Build a {@link DnaArray} from the given {@link Dna}s.
@@ -34,8 +30,8 @@ public class DnaArray {
      * @return A new {@link DnaArray}
      */
     public static DnaArray build(final Dna... dnas) {
-        Preconditions.checkArgument(dnas != null, "Input DNAs should not be null");
-        return build(Arrays.asList(dnas));
+        Validation.validateNotEmptyVarargs(dnas);
+        return innerBuild(Arrays.asList(dnas));
     }
 
     /**
@@ -45,13 +41,16 @@ public class DnaArray {
      * @return A new {@link DnaArray}.
      */
     public static DnaArray build(final List<Dna> dnaList) {
+        Validation.validateNotEmptyCollection(dnaList);
+        return innerBuild(dnaList);
+    }
+
+    private static DnaArray innerBuild(final List<Dna> dnaList) {
         validateDnaArray(dnaList);
         return new DnaArray(dnaList);
     }
 
     private static void validateDnaArray(final List<Dna> dnaList) {
-        Preconditions.checkArgument(dnaList != null && !dnaList.isEmpty(), "DNA list should not be empty");
-        noNullElements(dnaList, "DNA list should not contain null element");
         int length = dnaList.get(0).getSequenceLength();
         Preconditions.checkArgument(dnaList.stream()
                 .allMatch(dna -> dna.getSequenceLength() == length), "DNA lengths inside DNA array should be the same");
@@ -61,6 +60,7 @@ public class DnaArray {
         this.sampleList = Lists.newArrayList(sampleList);
         this.sampleNumber = sampleList.size();
         this.samplesLength = sampleList.get(0).getSequenceLength();
+        this.motifs = Motifs.build(this);
     }
 
     /**
@@ -88,6 +88,15 @@ public class DnaArray {
      */
     public int getSampleNumber() {
         return sampleNumber;
+    }
+
+    /**
+     * Getter of the motifs
+     *
+     * @return The motifs.
+     */
+    public Motifs getMotifs() {
+        return motifs;
     }
 
     /**
@@ -168,100 +177,5 @@ public class DnaArray {
             else commonMotifSet.retainAll(samples);
         }
         return commonMotifSet;
-    }
-
-    /**
-     * Returns an immutable profile about the {@link DnaNucleotide} based on each column.
-     *
-     * @return The profile of the {@link DnaArray}.
-     */
-    public List<Map<DnaNucleotide, Double>> profile() {
-        return new ArrayList<>(createProfile());
-    }
-
-    private synchronized List<Map<DnaNucleotide, Double>> createProfile() {
-        if (motifProfile == null) {
-            motifProfile = createCountMotifs().stream()
-                    .map(occurrenceMap -> {
-                        Map<DnaNucleotide, Double> columnProfileMap = new HashMap<>();
-                        occurrenceMap.getOccurrencesInMap()
-                                .entrySet()
-                                .forEach(nucleotideOccurrence -> columnProfileMap.put(
-                                        nucleotideOccurrence.getKey(), (double) nucleotideOccurrence.getValue() / sampleNumber));
-                        return columnProfileMap;
-                    })
-                    .collect(Collectors.toCollection(ArrayList::new));
-        }
-        return motifProfile;
-    }
-
-    /**
-     * Sums the column scores.
-     *
-     * @return The sum of column scores.
-     */
-    public synchronized int totalScore() {
-        if (totalScore == -1) {
-            totalScore = Arrays.stream(createScore()).sum();
-        }
-        return totalScore;
-    }
-
-    /**
-     * Creates the score vector from the {@link DnaArray}.
-     * <p>
-     * A score element shows how many different amino acids than the most dominant are presented.
-     * E.g. If the column contains 2 adenine, 1 cytosine, and 7 thymine, the element value will be 3.
-     *
-     * @return The score array.
-     */
-    public int[] score() {
-        return Arrays.copyOf(createScore(), motifScores.length);
-    }
-
-    private synchronized int[] createScore() {
-        if (motifScores == null) {
-            motifScores = createCountMotifs().stream()
-                    .parallel()
-                    .mapToInt(occurrenceMap -> sampleNumber - occurrenceMap.maximumOccurrenceValue())
-                    .toArray();
-        }
-        return motifScores;
-    }
-
-    /**
-     * Counts the total occurrences of every {@link DnaNucleotide} in every {@link Dna}.
-     *
-     * @return Immutable {@link List} of occurrences.
-     */
-    public List<CountableOccurrenceMap<DnaNucleotide>> count() {
-        return new ArrayList<>(createCountMotifs());
-    }
-
-    private synchronized List<CountableOccurrenceMap<DnaNucleotide>> createCountMotifs() {
-        if (motifCounts == null) {
-            motifCounts = Lists.newArrayListWithCapacity(samplesLength);
-            DnaNucleotide[][] motifs = createMotifs();
-            for (int j = 0; j < samplesLength; j++) {
-                CountableOccurrenceMap<DnaNucleotide> nucleotideOccurrenceMap = CountableOccurrenceMap.build(DnaNucleotide.NUCLEOTIDE_SET);
-                for (int i = 0; i < sampleNumber; i++) {
-                    nucleotideOccurrenceMap.increase(motifs[i][j]);
-                }
-                motifCounts.add(nucleotideOccurrenceMap);
-            }
-        }
-        return motifCounts;
-    }
-
-    private synchronized DnaNucleotide[][] createMotifs() {
-        if (motifs == null) {
-            motifs = sampleList.stream()
-                    .parallel()
-                    .map(dna -> dna.getSequence().chars()
-                            .mapToObj(nucleotide -> DnaNucleotide.findDnaNucleotide((char) nucleotide))
-                            .toArray(DnaNucleotide[]::new))
-                    .toArray(DnaNucleotide[][]::new);
-        }
-        return motifs;
     }
 }

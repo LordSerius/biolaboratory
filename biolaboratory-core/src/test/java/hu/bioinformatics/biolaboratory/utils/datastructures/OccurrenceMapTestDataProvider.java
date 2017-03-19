@@ -149,8 +149,22 @@ public class OccurrenceMapTestDataProvider {
     @DataProvider(name = TO_COUNTABLE_DATA_PROVIDER_NAME)
     Object[][] toCountableDataProvider() {
         return new Object[][] {
-                { OccurrenceMap.build(ImmutableMap.of("A", 1)) },
-                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)) }
+                { OccurrenceMap.build(), CountableOccurrenceMap.build() },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1)), CountableOccurrenceMap.build(ImmutableMap.of("A", 1)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), CountableOccurrenceMap.build(ImmutableMap.of("A", 0)) }
+        };
+    }
+
+    static final String TO_COUNTABLE_WITH_DATA_PROVIDER_NAME = "toCountableWithDataProvider";
+
+    @DataProvider(name = TO_COUNTABLE_WITH_DATA_PROVIDER_NAME)
+    Object[][] toCountableWithDataProvider() {
+        return new Object[][] {
+                { OccurrenceMap.build(), new String[] {}, CountableOccurrenceMap.build() },
+                { OccurrenceMap.build(), new String[] { "A" }, CountableOccurrenceMap.build(ImmutableMap.of("A", 0)) },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1)), new String[] {}, CountableOccurrenceMap.build(ImmutableMap.of("A", 1)) },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1)), new String[] { "C" }, CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "C", 0)) },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1)), new String[] { "C", "C" }, CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "C", 0)) }
         };
     }
 

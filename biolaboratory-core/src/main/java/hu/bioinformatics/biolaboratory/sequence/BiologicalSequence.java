@@ -7,6 +7,7 @@ import com.google.common.collect.Sets;
 import com.sun.javafx.binding.StringFormatter;
 import hu.bioinformatics.biolaboratory.utils.datastructures.CountableOccurrenceMap;
 import hu.bioinformatics.biolaboratory.utils.datastructures.OccurrenceMap;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,14 +22,36 @@ import java.util.stream.IntStream;
  *
  * @author Attila Radi
  */
-public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART extends SequenceElement> {
+public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMENT extends SequenceElement> {
 
     protected final String sequence;
     protected final int sequenceLength;
     private final String name;
 
-    private PART[] sequenceAsElements;
-    private CountableOccurrenceMap<PART> elementOccurrences = null;
+    private ELEMENT[] sequenceAsElements;
+    private CountableOccurrenceMap<ELEMENT> elementOccurrences = null;
+
+    /**
+     * Validates the name is not null.
+     *
+     * @param name The name to validate.
+     * @return The name, if it is valid.
+     */
+    protected static String validateName(final String name) {
+        Preconditions.checkArgument(name != null, "Name should not be null");
+        return name.trim();
+    }
+
+    /**
+     * Executes initial validation and format on the input sequence.
+     *
+     * @param sequence The sequence to validate and format.
+     * @return The formatted sequence.
+     */
+    protected static String formatSequence(final String sequence) {
+        Preconditions.checkArgument(StringUtils.isNotBlank(sequence), "Biological sequence cannot be blank");
+        return sequence.trim().toUpperCase();
+    }
 
     /**
      * Creates a biological sequence from its elements. The name will be empty.
@@ -36,7 +59,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
      * @param sequenceElements The elements of the biological sequence in array.
      */
     @SafeVarargs
-    protected BiologicalSequence(final PART... sequenceElements) {
+    protected BiologicalSequence(final ELEMENT... sequenceElements) {
         this("", sequenceElements);
     }
 
@@ -47,7 +70,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
      * @param sequenceElements The elements of the biological sequence in array.
      */
     @SafeVarargs
-    protected BiologicalSequence(final String name, final PART... sequenceElements) {
+    protected BiologicalSequence(final String name, final ELEMENT... sequenceElements) {
         this(name, Arrays.asList(sequenceElements));
         this.sequenceAsElements = sequenceElements;
     }
@@ -57,7 +80,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
      *
      * @param sequenceElementList The elements of the biological sequence in {@link List} collection.
      */
-    protected BiologicalSequence(final List<PART> sequenceElementList) {
+    protected BiologicalSequence(final List<ELEMENT> sequenceElementList) {
         this("", sequenceElementList);
     }
 
@@ -67,7 +90,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
      * @param name The name of the biological sequence.
      * @param sequenceElementList The elements of the biological sequence in {@link List} collection.
      */
-    protected BiologicalSequence(final String name, final List<PART> sequenceElementList) {
+    protected BiologicalSequence(final String name, final List<ELEMENT> sequenceElementList) {
         this.sequence = new String(createLetterList(sequenceElementList));
         this.sequenceLength = sequence.length();
         this.name = name;
@@ -95,29 +118,29 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
     }
 
     @SafeVarargs
-    protected final TYPE construct(final PART... sequenceElements) {
+    protected final TYPE construct(final ELEMENT... sequenceElements) {
         return construct("", sequenceElements);
     }
 
     @SafeVarargs
-    protected final TYPE construct(final String name, final PART... sequenceElements) {
+    protected final TYPE construct(final String name, final ELEMENT... sequenceElements) {
         return construct(name, Arrays.asList(sequenceElements));
     }
 
-    protected final TYPE construct(final List<PART> sequenceElementList) {
+    protected final TYPE construct(final List<ELEMENT> sequenceElementList) {
         return construct("", sequenceElementList);
     }
 
-    protected final TYPE construct(final String name, final List<PART> sequenceElementList) {
+    protected final TYPE construct(final String name, final List<ELEMENT> sequenceElementList) {
         return construct(name, new String(createLetterList(sequenceElementList)));
     }
 
-    private char[] createLetterList(final List<PART> sequenceElementList) {
+    private char[] createLetterList(final List<ELEMENT> sequenceElementList) {
         int length = sequenceElementList.size();
         char[] letters = new char[length];
 
         int i = 0;
-        for (PART element : sequenceElementList) {
+        for (ELEMENT element : sequenceElementList) {
             letters[i++] = element.getLetter();
         }
         return letters;
@@ -177,11 +200,11 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
      *
      * @return An immutable map of typed elements.
      */
-    public final PART[] getSequenceAsElements() {
+    public final ELEMENT[] getSequenceAsElements() {
         return Arrays.copyOf(loadSequenceAsElements(), sequenceLength);
     }
 
-    private synchronized PART[] loadSequenceAsElements() {
+    private synchronized ELEMENT[] loadSequenceAsElements() {
         if (sequenceAsElements == null) {
             sequenceAsElements = createEmptyElementArray();
             IntStream.range(0, sequenceLength)
@@ -190,7 +213,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
         return sequenceAsElements;
     }
 
-    protected abstract PART[] createEmptyElementArray();
+    protected abstract ELEMENT[] createEmptyElementArray();
 
     /**
      * Getter of the biological sequence length.
@@ -206,7 +229,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
      *
      * @return The nucleotide occurrences.
      */
-    public final CountableOccurrenceMap<PART> getElementOccurrences() {
+    public final CountableOccurrenceMap<ELEMENT> getElementOccurrences() {
         return collectSequenceElementOccurrences().copy();
     }
 
@@ -216,7 +239,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
      * @param element The desirable element.
      * @return The ratio of the target element.
      */
-    public final double getElementRatio(final PART element) {
+    public final double getElementRatio(final ELEMENT element) {
         return (double) getElementsNumber(element) / sequenceLength;
     }
 
@@ -227,7 +250,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
      * @return The ratio of the target elements.
      */
     @SafeVarargs
-    public final double getElementsRatio(final PART... elements) {
+    public final double getElementsRatio(final ELEMENT... elements) {
         return (double) getElementsNumber(elements) / sequenceLength;
     }
 
@@ -237,7 +260,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
      * @param elementSet The desirable elements.
      * @return The ratio of the target elements.
      */
-    public final double getElementsRatio(final Set<PART> elementSet) {
+    public final double getElementsRatio(final Set<ELEMENT> elementSet) {
         return (double) getElementsNumber(elementSet) / sequenceLength;
     }
 
@@ -247,7 +270,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
      * @param element The desired element.
      * @return The element number in the {@link BiologicalSequence}
      */
-    public final int getElementNumber(final PART element) {
+    public final int getElementNumber(final ELEMENT element) {
         return collectSequenceElementOccurrences().getOccurrence(element);
     }
 
@@ -258,7 +281,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
      * @return The sum of the target elements in the {@link BiologicalSequence}.
      */
     @SafeVarargs
-    public final int getElementsNumber(final PART... elements) {
+    public final int getElementsNumber(final ELEMENT... elements) {
         return collectSequenceElementOccurrences().sumOccurrences(elements);
     }
 
@@ -268,25 +291,25 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
      * @param elementSet The desired elements.
      * @return The sum of the target elements in the {@link BiologicalSequence}.
      */
-    public final int getElementsNumber(final Set<PART> elementSet) {
+    public final int getElementsNumber(final Set<ELEMENT> elementSet) {
         return collectSequenceElementOccurrences().sumOccurrencesAboutSet(elementSet);
     }
 
-    protected final synchronized CountableOccurrenceMap<PART> collectSequenceElementOccurrences() {
+    protected final synchronized CountableOccurrenceMap<ELEMENT> collectSequenceElementOccurrences() {
         if (elementOccurrences == null) {
             elementOccurrences = CountableOccurrenceMap.build(getElementSet());
-            PART[] sequenceAsElements = loadSequenceAsElements();
+            ELEMENT[] sequenceAsElements = loadSequenceAsElements();
             IntStream.range(0, sequenceLength)
                     .forEach(index -> elementOccurrences.increase(sequenceAsElements[index]));
         }
         return elementOccurrences;
     }
 
-    protected abstract PART[] getElementArray();
+    protected abstract ELEMENT[] getElementArray();
 
-    protected abstract Set<PART> getElementSet();
+    protected abstract Set<ELEMENT> getElementSet();
 
-    protected abstract PART findSequenceElement(final char sequenceElementLetter);
+    protected abstract ELEMENT findSequenceElement(final char sequenceElementLetter);
 
     @Override
     public boolean equals(Object obj) {
@@ -332,7 +355,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
      * @return A new {@link BiologicalSequence} which stands from the sequence of the original {@link BiologicalSequence}
      *          and the appended element.
      */
-    public final TYPE append(final PART element) {
+    public final TYPE append(final ELEMENT element) {
         Preconditions.checkArgument(element != null, "Element should not be null");
         return construct(sequence + element.getLetter());
     }
@@ -410,7 +433,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
      * @return The position of found patterns.
      */
     public List<Integer> patternMatchingWithMismatches(final TYPE pattern, final int d) {
-        Preconditions.checkArgument(d >= 0, "The maximum differenc value (d) should greater or equals than 0");
+        Preconditions.checkArgument(d >= 0, "The maximum different value (d) should greater or equals than 0");
         validatePattern(pattern);
         return findPatternsWithMismatch(pattern, d);
     }
@@ -656,8 +679,8 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
 
             for (TYPE generatedMismatchPattern : generatedMismatchesSet) {
                 char[] charArray = generatedMismatchPattern.sequence.toCharArray();
-                PART[] nucleotideArray = getElementArray();
-                for (PART nucleotide : nucleotideArray) {
+                ELEMENT[] nucleotideArray = getElementArray();
+                for (ELEMENT nucleotide : nucleotideArray) {
                     charArray[k - 1] = nucleotide.getLetter();
                     nextMismatchesSet.add(construct(new String(charArray)));
                 }
@@ -680,8 +703,8 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
 
         Map<String, Integer> mismatchMap = Maps.newHashMap();
 
-        PART[] nucleotideArray = getElementArray();
-        for (PART aNucleotideArray : nucleotideArray) {
+        ELEMENT[] nucleotideArray = getElementArray();
+        for (ELEMENT aNucleotideArray : nucleotideArray) {
             char nucleotideLetter = aNucleotideArray.getLetter();
             if (sequence.charAt(0) == nucleotideLetter) {
                 mismatchMap.put(Character.toString(nucleotideLetter), 0);
@@ -694,7 +717,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, PART e
             Map<String, Integer> newMismatchMap = Maps.newHashMap();
             for (String prefix : mismatchMap.keySet()){
                 int mismatchCount = mismatchMap.get(prefix);
-                for (PART aNucleotideArray : nucleotideArray) {
+                for (ELEMENT aNucleotideArray : nucleotideArray) {
                     char nucleotideLetter = aNucleotideArray.getLetter();
                     if (sequence.charAt(i) == nucleotideLetter) {
                         newMismatchMap.put(prefix + nucleotideLetter, mismatchCount);

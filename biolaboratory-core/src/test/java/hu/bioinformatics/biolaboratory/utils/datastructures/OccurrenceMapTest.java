@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import org.testng.annotations.Test;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -122,9 +123,36 @@ public class OccurrenceMapTest {
     }
 
     @Test(dataProvider = OccurrenceMapTestDataProvider.TO_COUNTABLE_DATA_PROVIDER_NAME)
-    public void shouldToCountableReturn(OccurrenceMap<String> occurrenceMap) {
+    public void shouldToCountableReturn(OccurrenceMap<String> occurrenceMap, CountableOccurrenceMap<String> controlOccurrenceMap) {
         CountableOccurrenceMap<String> countableOccurrenceMap = occurrenceMap.toCountable();
-        CountableOccurrenceMap<String> controlOccurrenceMap = CountableOccurrenceMap.build(occurrenceMap.getOccurrencesInMap());
+        assertThat(countableOccurrenceMap, is(equalTo(controlOccurrenceMap)));
+    }
+
+    @Test(dataProvider = OccurrenceMapTestDataProvider.INVALID_OPERATION_COLLECTION_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldToCountableWithThrowException(OccurrenceMap<String> occurrenceMap, String keys[]) {
+        occurrenceMap.toCountableWith(keys);
+        fail();
+    }
+
+    @Test(dataProvider = OccurrenceMapTestDataProvider.TO_COUNTABLE_WITH_DATA_PROVIDER_NAME)
+    public void shouldToCountableWithReturn(OccurrenceMap<String> occurrenceMap, String keys[], CountableOccurrenceMap<String> controlOccurrenceMap) {
+        CountableOccurrenceMap<String> countableOccurrenceMap = occurrenceMap.toCountableWith(keys);
+        assertThat(countableOccurrenceMap, is(equalTo(controlOccurrenceMap)));
+    }
+
+    @Test(dataProvider = OccurrenceMapTestDataProvider.INVALID_OPERATION_COLLECTION_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldToCountableWithSetThrowException(OccurrenceMap<String> occurrenceMap, String[] keys) {
+        Set<String> keySet = keys == null ? null : Sets.newHashSet(keys);
+        occurrenceMap.toCountableWithSet(keySet);
+        fail();
+    }
+
+    @Test(dataProvider = OccurrenceMapTestDataProvider.TO_COUNTABLE_WITH_DATA_PROVIDER_NAME)
+    public void shouldToCountableWithSetReturn(OccurrenceMap<String> occurrenceMap, String keys[], CountableOccurrenceMap<String> controlOccurrenceMap) {
+        HashSet<String> keySet = Sets.newHashSet(keys);
+        CountableOccurrenceMap<String> countableOccurrenceMap = occurrenceMap.toCountableWithSet(keySet);
         assertThat(countableOccurrenceMap, is(equalTo(controlOccurrenceMap)));
     }
     
