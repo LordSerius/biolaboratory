@@ -65,17 +65,4 @@ public class ProteinTestDataProvider {
                 { new AminoAcid[] { AminoAcid.ALANINE, AminoAcid.CYSTEINE, AminoAcid.ALANINE.GLYCINE, AminoAcid.GLUTAMIC_ACID }, "ACGE" }
         };
     }
-
-    static final String EQUALS_DATA_PROVIDER_NAME = "equalsDataProvider";
-
-    @DataProvider(name = EQUALS_DATA_PROVIDER_NAME)
-    static Object[][] equalsDataProvider() {
-        return new Object[][] {
-                { Protein.build("RHDESTNQCGPAILMFWYV"), null, false },
-                { Protein.build("RHDESTNQCGPAILMFWYV"), "RHDESTNQCGPAILMFWYV", false },
-                { Protein.build("RHDESTNQCGPAILMFWYV"), Protein.build("RHDESTNQCGPAILMFWYV"), true },
-                { Protein.build("RHDESTNQCGPAILMFWYV"), Protein.build("R"), false },
-                { Protein.build("RHDESTNQCGPAILMFWYV"), Protein.build("VYWFMLIAPGCQNTSEDHR"), false }
-        };
-    }
 }

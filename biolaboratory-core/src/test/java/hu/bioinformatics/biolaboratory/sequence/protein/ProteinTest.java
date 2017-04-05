@@ -44,18 +44,14 @@ public class ProteinTest {
         Protein protein = Protein.build(name, sequence);
         assertThat(protein.getName(), is(equalTo(controlName)));
         assertThat(protein.getSequence(), is(equalTo(controlSequence)));
-    }
-
-    @Test(dataProvider = ProteinTestDataProvider.EQUALS_DATA_PROVIDER_NAME)
-    public void shouldEqualsReturn(Protein protein, Object rightHand, boolean isEquals) {
-        boolean equalsResult = protein.equals(rightHand);
-        assertThat(equalsResult, is(equalTo(isEquals)));
+        assertThat(protein.getSequenceLength(), is(equalTo(controlSequence.length())));
     }
 
     @Test(dataProvider = ProteinTestDataProvider.VALID_BUILD_FROM_ELEMENTS_DATA_PROVIDER_NAME)
     public void shouldBuildFromNucleotidesReturn(AminoAcid[] aminoAcids, String controlSequence) {
         Protein protein = Protein.build(aminoAcids);
         assertThat(protein.getSequence(), is(equalTo(controlSequence)));
+        assertThat(protein.getSequenceLength(), is(equalTo(controlSequence.length())));
     }
 
     @Test(dataProvider = ProteinTestDataProvider.VALID_BUILD_FROM_ELEMENTS_DATA_PROVIDER_NAME)
@@ -63,5 +59,6 @@ public class ProteinTest {
         List<AminoAcid> aminoAcidList = Arrays.asList(aminoAcids);
         Protein protein = Protein.build(aminoAcidList);
         assertThat(protein.getSequence(), is(equalTo(controlSequence)));
+        assertThat(protein.getSequenceLength(), is(equalTo(controlSequence.length())));
     }
 }

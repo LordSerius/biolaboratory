@@ -139,7 +139,7 @@ public class OccurrenceMap<K> {
      */
     @SafeVarargs
     public final int sumOccurrences(final K... keys) {
-        return innerSumOccurrencesAboutSet(Sets.newHashSet(validateVarargs(keys)));
+        return innerSumOccurrences(Sets.newHashSet(validateKeys(keys)));
     }
 
     /**
@@ -148,11 +148,11 @@ public class OccurrenceMap<K> {
      * @param keySet The desired keys.
      * @return The sum of the target key values in the {@link OccurrenceMap}.
      */
-    public final int sumOccurrencesAboutSet(final Set<K> keySet) {
-        return innerSumOccurrencesAboutSet(validateCollection(keySet));
+    public final int sumOccurrences(final Set<K> keySet) {
+        return innerSumOccurrences(validateKeySet(keySet));
     }
 
-    private int innerSumOccurrencesAboutSet(final Set<K> keySet) {
+    private int innerSumOccurrences(final Set<K> keySet) {
         return occurrenceMap.entrySet().stream()
                 .filter(occurrence -> keySet.contains(occurrence.getKey()))
                 .mapToInt(Map.Entry::getValue)
@@ -177,7 +177,7 @@ public class OccurrenceMap<K> {
      * @return The chosen occurrences.
      */
     public OccurrenceMap<K> subSet(final K... keys) {
-        return innerSubSetAboutSet(Sets.newHashSet(validateVarargs(keys)));
+        return innerSubSet(Sets.newHashSet(validateKeys(keys)));
     }
 
     /**
@@ -186,11 +186,11 @@ public class OccurrenceMap<K> {
      * @param keySet The keys for the occurrences to choose.
      * @return The chosen occurrences.
      */
-    public OccurrenceMap<K> subSetAboutSet(final Set<K> keySet) {
-        return innerSubSetAboutSet(validateCollection(keySet));
+    public OccurrenceMap<K> subSet(final Set<K> keySet) {
+        return innerSubSet(validateKeySet(keySet));
     }
 
-    private OccurrenceMap<K> innerSubSetAboutSet(final Set<K> keySet) {
+    private OccurrenceMap<K> innerSubSet(final Set<K> keySet) {
         return filter(entry -> keySet.contains(entry.getKey()));
     }
 
@@ -213,7 +213,7 @@ public class OccurrenceMap<K> {
      */
     @SafeVarargs
     public final CountableOccurrenceMap<K> toCountableWith(final K... zeroElements) {
-        return innerToCountableWithSet(Sets.newHashSet(validateVarargs(zeroElements)));
+        return innerToCountableWithSet(Sets.newHashSet(validateKeys(zeroElements)));
     }
 
     /**
@@ -224,7 +224,7 @@ public class OccurrenceMap<K> {
      * @return The converted {@link CountableOccurrenceMap}.
      */
     public CountableOccurrenceMap<K> toCountableWithSet(final Set<K> zeroElementSet) {
-        return innerToCountableWithSet(validateCollection(zeroElementSet));
+        return innerToCountableWithSet(validateKeySet(zeroElementSet));
     }
 
     private CountableOccurrenceMap<K> innerToCountableWithSet(final Set<K> zeroElementSet) {
@@ -325,10 +325,37 @@ public class OccurrenceMap<K> {
     }
 
     /**
+     * Validate the inout keys.
+     *
+     * @param keys The keys to validate.
+     * @return The same keys if they are valid.
+     * @throws IllegalArgumentException If the keys contain null element.
+     */
+    protected K[] validateKeys(final K... keys) {
+        validateVarargs(keys);
+        Arrays.stream(keys).forEach(this::validateKey);
+        return keys;
+    }
+
+    /**
+     * Validate the input key set.
+     *
+     * @param keySet The key set to validate.
+     * @return The same key set if it is valid.
+     * @throws IllegalArgumentException If the key set contains null elements.
+     */
+    protected Set<K> validateKeySet(final Set<K> keySet) {
+        validateCollection(keySet);
+        keySet.forEach(this::validateKey);
+        return keySet;
+    }
+
+    /**
      * Validates the given key. Return with the same if it is valid.
      *
      * @param key The key to validate.
      * @return The same value if it is valid.
+     * @throws IllegalArgumentException If the key is null.
      */
     protected K validateKey(final K key) {
         Preconditions.checkArgument(key != null, "Key should not be null");

@@ -1,7 +1,6 @@
 package hu.bioinformatics.biolaboratory.utils.datastructures;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Sets;
 import org.testng.annotations.Test;
 
 import java.util.Map;
@@ -61,15 +60,50 @@ public class CountableOccurrenceMapTest {
         ));
     }
 
+    @Test(dataProvider = CountableOccurrenceMapTestDataProvider.INVALID_GET_OCCURRENCE_DATA_PROVIDER,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldGetOccurrenceThrowException(CountableOccurrenceMap<String> occurrenceMap, String key) {
+        occurrenceMap.getOccurrence(key);
+        fail();
+    }
+
+    @Test(dataProvider = CountableOccurrenceMapTestDataProvider.INVALID_OPERATION_COLLECTION_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldSumOccurrencesFromArrayThrowException(CountableOccurrenceMap<String> occurrenceMap, String[] keys) {
+        occurrenceMap.sumOccurrences(keys);
+        fail();
+    }
+
+    @Test(dataProvider = CountableOccurrenceMapTestDataProvider.INVALID_OPERATION_SET_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldSumOccurrencesAboutSetThrowException(CountableOccurrenceMap<String> occurrenceMap, Set<String> keySet) {
+        occurrenceMap.sumOccurrences(keySet);
+        fail();
+    }
+
+    @Test(dataProvider = CountableOccurrenceMapTestDataProvider.INVALID_OPERATION_COLLECTION_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldSubSetThrowsException(CountableOccurrenceMap<String> occurrenceMap, String[] keys) {
+        occurrenceMap.subSet(keys);
+        fail();
+    }
+
     @Test(dataProvider = CountableOccurrenceMapTestDataProvider.SUB_SET_DATA_PROVIDER_NAME)
     public void shouldSubSetReturn(CountableOccurrenceMap<String> occurrenceMap, String[] keys, CountableOccurrenceMap<String> controlSubSet) {
         CountableOccurrenceMap<String> subSet = occurrenceMap.subSet(keys);
         assertThat(subSet, is(equalTo(controlSubSet)));
     }
 
-    @Test(dataProvider = CountableOccurrenceMapTestDataProvider.SUB_SET_DATA_PROVIDER_NAME)
-    public void shouldSubSetAboutSetReturn(CountableOccurrenceMap<String> occurrenceMap, String[] keys, CountableOccurrenceMap<String> controlSubSet) {
-        CountableOccurrenceMap<String> subSet = occurrenceMap.subSetAboutSet(Sets.newHashSet(keys));
+    @Test(dataProvider = CountableOccurrenceMapTestDataProvider.INVALID_OPERATION_SET_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldSubSetAboutSetThrowsException(CountableOccurrenceMap<String> occurrenceMap, Set<String> subSet) {
+        occurrenceMap.subSet(subSet);
+        fail();
+    }
+
+    @Test(dataProvider = CountableOccurrenceMapTestDataProvider.SUB_SET_ABOUT_SET_DATA_PROVIDER_NAME)
+    public void shouldSubSetAboutSetReturn(CountableOccurrenceMap<String> occurrenceMap, Set<String> keySet, CountableOccurrenceMap<String> controlSubSet) {
+        CountableOccurrenceMap<String> subSet = occurrenceMap.subSet(keySet);
         assertThat(subSet, is(equalTo(controlSubSet)));
     }
 

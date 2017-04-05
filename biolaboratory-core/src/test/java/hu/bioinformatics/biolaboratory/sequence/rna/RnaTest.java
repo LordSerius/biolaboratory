@@ -45,12 +45,14 @@ public class RnaTest {
         Rna rna = Rna.build(name, sequence);
         assertThat(rna.getName(), is(equalTo(controlName)));
         assertThat(rna.getSequence(), is(equalTo(controlSequence)));
+        assertThat(rna.getSequenceLength(), is(equalTo(controlSequence.length())));
     }
 
     @Test(dataProvider = RnaTestDataProvider.VALID_BUILD_FROM_ELEMENTS_DATA_PROVIDER_NAME)
     public void shouldBuildFromNucleotidesReturn(RnaNucleotide[] rnaNucleotides, String controlSequence) {
         Rna rna = Rna.build(rnaNucleotides);
         assertThat(rna.getSequence(), is(equalTo(controlSequence)));
+        assertThat(rna.getSequenceLength(), is(equalTo(controlSequence.length())));
     }
 
     @Test(dataProvider = RnaTestDataProvider.VALID_BUILD_FROM_ELEMENTS_DATA_PROVIDER_NAME)
@@ -58,43 +60,7 @@ public class RnaTest {
         List<RnaNucleotide> rnaNucleotideList = Arrays.asList(rnaNucleotides);
         Rna rna = Rna.build(rnaNucleotideList);
         assertThat(rna.getSequence(), is(equalTo(controlSequence)));
-    }
-
-    @Test(dataProvider = RnaTestDataProvider.EQUALS_DATA_PROVIDER_NAME)
-    public void shouldEqualsReturn(Rna rna, Object rightHand, boolean isEquals) {
-        assertThat(rna.equals(rightHand), is(equalTo(isEquals)));
-    }
-
-    @Test(dataProvider = RnaTestDataProvider.GET_SEQUENCE_AS_ELEMENTS_DATA_PROVIDER_NAME)
-    public void shouldGetSequenceAsElementsReturn(Rna rna, RnaNucleotide[] controlNucleotides) {
-        RnaNucleotide[] nucleotides = rna.getSequenceAsElements();
-        assertThat(nucleotides, is(equalTo(controlNucleotides)));
-    }
-
-    @Test(dataProvider = RnaTestDataProvider.INVALID_APPEND_DATA_PROVIDER_NAME,
-            expectedExceptions = IllegalArgumentException.class)
-    public void shouldAppendThrowException(Rna rna, Rna otherRna) {
-        rna.append(otherRna);
-        fail();
-    }
-
-    @Test(dataProvider = RnaTestDataProvider.INVALID_APPEND_ELEMENT_DATA_PROVIDER_NAME,
-            expectedExceptions = IllegalArgumentException.class)
-    public void shouldAppendElementThrowElement(Rna rna, RnaNucleotide nucleotide) {
-        rna.append(nucleotide);
-        fail();
-    }
-
-    @Test(dataProvider = RnaTestDataProvider.VALID_APPEND_DATA_PROVIDER_NAME)
-    public void shouldAppendReturn(Rna rna, Rna otherRna, Rna controlRna) {
-        Rna appendedRna = rna.append(otherRna);
-        assertThat(appendedRna, is(equalTo(controlRna)));
-    }
-
-    @Test(dataProvider = RnaTestDataProvider.VALID_APPEND_ELEMENT_DATA_PROVIDER_NAME)
-    public void shouldAppendElementReturn(Rna rna, RnaNucleotide nucleotide, Rna controlRna) {
-        Rna appendedRna = rna.append(nucleotide);
-        assertThat(appendedRna, is(equalTo(controlRna)));
+        assertThat(rna.getSequenceLength(), is(equalTo(controlSequence.length())));
     }
 
     @Test(dataProvider = RnaTestDataProvider.INVALID_TRANSLATE_DATA_PROVIDER_NAME,

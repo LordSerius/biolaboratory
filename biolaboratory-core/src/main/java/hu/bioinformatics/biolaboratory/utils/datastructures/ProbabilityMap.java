@@ -162,7 +162,7 @@ public class ProbabilityMap<K> {
      */
     @SafeVarargs
     public final double sumProbabilities(final K... keys) {
-        return sumProbabilitiesAboutSet(Sets.newHashSet(validateVarargs(keys)));
+        return sumProbabilities(Sets.newHashSet(validateVarargs(keys)));
     }
 
     /**
@@ -171,7 +171,7 @@ public class ProbabilityMap<K> {
      * @param keySet The desired keys.
      * @return The sum of the target key probabilities in the {@link ProbabilityMap}.
      */
-    public final double sumProbabilitiesAboutSet(final Set<K> keySet) {
+    public final double sumProbabilities(final Set<K> keySet) {
         return innerSumProbabilities(validateCollection(keySet));
     }
 

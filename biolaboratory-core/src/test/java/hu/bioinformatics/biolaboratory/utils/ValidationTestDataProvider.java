@@ -1,6 +1,6 @@
 package hu.bioinformatics.biolaboratory.utils;
 
-import com.beust.jcommander.internal.Lists;
+import com.google.common.collect.Lists;
 import org.testng.annotations.DataProvider;
 
 /**

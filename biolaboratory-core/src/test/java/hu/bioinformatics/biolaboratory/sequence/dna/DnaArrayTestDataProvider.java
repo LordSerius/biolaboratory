@@ -1,6 +1,6 @@
 package hu.bioinformatics.biolaboratory.sequence.dna;
 
-import com.beust.jcommander.internal.Lists;
+import com.google.common.collect.Lists;
 import hu.bioinformatics.biolaboratory.utils.collectors.DnaCollectors;
 import hu.bioinformatics.biolaboratory.utils.datahandlers.DnaArrayLoader;
 import hu.bioinformatics.biolaboratory.utils.datahandlers.DnaSetLoader;

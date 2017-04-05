@@ -72,66 +72,6 @@ public class RnaTestDataProvider {
         };
     }
 
-    static final String EQUALS_DATA_PROVIDER_NAME = "equalsDataProvider";
-
-    @DataProvider(name = EQUALS_DATA_PROVIDER_NAME)
-    static Object[][] equalsDataProvider() {
-        return new Object[][] {
-                { Rna.build("AGUC"), null, false },
-                { Rna.build("AGUC"), "AGUC", false },
-                { Rna.build("AGUC"), Rna.build("AGUC"), true },
-                { Rna.build("AGUC"), Rna.build("U"), false },
-                { Rna.build("AGUC"), Rna.build("CUGA"), false }
-        };
-    }
-
-    static final String GET_SEQUENCE_AS_ELEMENTS_DATA_PROVIDER_NAME = "getSequenceAsElementsDataProvider";
-
-    @DataProvider(name = GET_SEQUENCE_AS_ELEMENTS_DATA_PROVIDER_NAME)
-    static Object[][] getSequenceAsElementsDataProvider() {
-        return new Object[][] {
-                { Rna.build("A"), new RnaNucleotide[] { RnaNucleotide.ADENINE } },
-                { Rna.build("ACGU"), new RnaNucleotide[] { RnaNucleotide.ADENINE, RnaNucleotide.CYTOSINE, RnaNucleotide.GUANINE, RnaNucleotide.URACIL } }
-        };
-    }
-
-    static final String INVALID_APPEND_DATA_PROVIDER_NAME = "invalidAppendDataProvider";
-
-    @DataProvider(name = INVALID_APPEND_DATA_PROVIDER_NAME)
-    static Object[][] invalidAppendDataProvider() {
-        return new Object[][] {
-                { Rna.build("A"), null }
-        };
-    }
-
-    static final String INVALID_APPEND_ELEMENT_DATA_PROVIDER_NAME = "invalidAppendElementDataProvider";
-
-    @DataProvider(name = INVALID_APPEND_ELEMENT_DATA_PROVIDER_NAME)
-    static Object[][] invalidAppendElementDataProvider() {
-        return new Object[][] {
-                { Rna.build("A"), null }
-        };
-    }
-
-    static final String VALID_APPEND_DATA_PROVIDER_NAME = "validAppendDataProvider";
-
-    @DataProvider(name = VALID_APPEND_DATA_PROVIDER_NAME)
-    static Object[][] validAppendDataProvider() {
-        return new Object[][] {
-                { Rna.build("ACGU"), Rna.build("A"), Rna.build("ACGUA") },
-                { Rna.build("ACGU"), Rna.build("ACGU"), Rna.build("ACGUACGU") }
-        };
-    }
-
-    static final String VALID_APPEND_ELEMENT_DATA_PROVIDER_NAME = "validAppendElementDataProvider";
-
-    @DataProvider(name = VALID_APPEND_ELEMENT_DATA_PROVIDER_NAME)
-    static Object[][] validAppendElementDataProvider() {
-        return new Object[][] {
-                { Rna.build("ACGU"), RnaNucleotide.ADENINE, Rna.build("ACGUA") }
-        };
-    }
-
     static final String INVALID_TRANSLATE_DATA_PROVIDER_NAME = "invalidTranslateDataProvider";
 
     @DataProvider(name = INVALID_TRANSLATE_DATA_PROVIDER_NAME)

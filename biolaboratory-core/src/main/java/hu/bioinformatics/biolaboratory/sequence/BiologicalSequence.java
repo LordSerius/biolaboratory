@@ -9,10 +9,7 @@ import hu.bioinformatics.biolaboratory.utils.datastructures.CountableOccurrenceM
 import hu.bioinformatics.biolaboratory.utils.datastructures.OccurrenceMap;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -292,7 +289,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      * @return The sum of the target elements in the {@link BiologicalSequence}.
      */
     public final int getElementsNumber(final Set<ELEMENT> elementSet) {
-        return collectSequenceElementOccurrences().sumOccurrencesAboutSet(elementSet);
+        return collectSequenceElementOccurrences().sumOccurrences(elementSet);
     }
 
     protected final synchronized CountableOccurrenceMap<ELEMENT> collectSequenceElementOccurrences() {
@@ -344,8 +341,16 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      *          and the sequence of the other {@link BiologicalSequence}.
      */
     public final TYPE append(final TYPE otherBiologicalSequence) {
-        Preconditions.checkArgument(otherBiologicalSequence != null, "Other biological sequence should not be null");
-        return construct(sequence + otherBiologicalSequence.getSequence());
+        return construct(sequence + validateType(otherBiologicalSequence).getSequence());
+    }
+
+    private TYPE validateType(final TYPE otherBiologicalSequence) {
+        Preconditions.checkArgument(compareTypes(otherBiologicalSequence), "Other biological sequence is null or has a different type");
+        return otherBiologicalSequence;
+    }
+
+    private boolean compareTypes(final TYPE otherBiologicalSequence) {
+        return otherBiologicalSequence != null && getClass() == otherBiologicalSequence.getClass();
     }
 
     /**
@@ -356,14 +361,19 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      *          and the appended element.
      */
     public final TYPE append(final ELEMENT element) {
+        return construct(sequence + validateElement(element).getLetter());
+    }
+
+    private ELEMENT validateElement(final ELEMENT element) {
         Preconditions.checkArgument(element != null, "Element should not be null");
-        return construct(sequence + element.getLetter());
+        Preconditions.checkArgument(getElementSet().contains(element), "Element has invalid type");
+        return element;
     }
 
     /**
      * Cuts a {@link BiologicalSequence} part from the start position to the end of the {@link BiologicalSequence}'s length.
      *
-     * @param startPosition The beginning nucletide position in the {@link BiologicalSequence} inclusive.
+     * @param startPosition The beginning nucleotide position in the {@link BiologicalSequence} inclusive.
      * @return The {@link BiologicalSequence} part from start position (inclusive) to the end.
      */
     public final TYPE cut(final int startPosition) {
@@ -434,13 +444,14 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      */
     public List<Integer> patternMatchingWithMismatches(final TYPE pattern, final int d) {
         Preconditions.checkArgument(d >= 0, "The maximum different value (d) should greater or equals than 0");
-        validatePattern(pattern);
-        return findPatternsWithMismatch(pattern, d);
+        return findPatternsWithMismatch(validatePattern(pattern), d);
     }
 
-    private void validatePattern(final TYPE pattern) {
+    private TYPE validatePattern(final TYPE pattern) {
         Preconditions.checkArgument(pattern != null, StringFormatter.format("%s should not be null", getBiologicalSequenceTypeName()));
+        Preconditions.checkArgument(compareTypes(pattern), StringFormatter.format("Pattern type (%s) is different than sequence type (%s)", pattern.getBiologicalSequenceTypeName(), getBiologicalSequenceTypeName()));
         Preconditions.checkArgument(pattern.sequenceLength <= sequenceLength, StringFormatter.format("Pattern length should smaller or equals than %s sequence length", getBiologicalSequenceTypeName()));
+        return pattern;
     }
 
     /**

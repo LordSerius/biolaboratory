@@ -94,18 +94,63 @@ public class CountableOccurrenceMapTestDataProvider {
         };
     }
 
+    static final String INVALID_GET_OCCURRENCE_DATA_PROVIDER = "invalidGetOccurrenceDataProvider";
+
+    @DataProvider(name = INVALID_GET_OCCURRENCE_DATA_PROVIDER)
+    Object[][] invalidGetOccurrenceDataProvider() {
+        return new Object[][] {
+                { CountableOccurrenceMap.build(), null },
+                { CountableOccurrenceMap.build(), "A" },
+                { CountableOccurrenceMap.build(Sets.newHashSet("A")), "C" }
+        };
+    }
+
+    static final String INVALID_OPERATION_COLLECTION_DATA_PROVIDER_NAME = "invalidOperationCollectionDataProvider";
+
+    @DataProvider(name = INVALID_OPERATION_COLLECTION_DATA_PROVIDER_NAME)
+    Object[][] invalidOperationCollectionDataProvider() {
+        return new Object[][] {
+                { CountableOccurrenceMap.build(), null },
+                { CountableOccurrenceMap.build(), new String[] {"A"} },
+                { CountableOccurrenceMap.build(Sets.newHashSet("A")), new String[] { "A", null } },
+                { CountableOccurrenceMap.build(Sets.newHashSet("A")), new String[] { "A", "C" } }
+        };
+    }
+
+    static final String INVALID_OPERATION_SET_DATA_PROVIDER_NAME = "invalidOperationSetDataProvider";
+
+    @DataProvider(name = INVALID_OPERATION_SET_DATA_PROVIDER_NAME)
+    Object[][] invalidOperationSetDataProvider() {
+        return new Object[][] {
+                { CountableOccurrenceMap.build(), null },
+                { CountableOccurrenceMap.build(), Sets.newHashSet("A") },
+                { CountableOccurrenceMap.build(), Sets.newHashSet("A", null) },
+                { CountableOccurrenceMap.build(Sets.newHashSet("A")), Sets.newHashSet("A", "C") }
+        };
+    }
+
     static final String SUB_SET_DATA_PROVIDER_NAME = "subSetDataProvider";
 
     @DataProvider(name = SUB_SET_DATA_PROVIDER_NAME)
     Object[][] subSetsDataProvider() {
         return new Object[][] {
-                { CountableOccurrenceMap.build(), new String[] {"A"}, CountableOccurrenceMap.build() },
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), new String[] {}, CountableOccurrenceMap.build() },
-                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), new String[] {"C"}, CountableOccurrenceMap.build() },
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), new String[] {"A"}, CountableOccurrenceMap.build(ImmutableMap.of("A", 1)) },
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2)), new String[] {"A"}, CountableOccurrenceMap.build(ImmutableMap.of("A", 1)) },
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2)), new String[] {"A", "A"}, CountableOccurrenceMap.build(ImmutableMap.of("A", 1)) },
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2)), new String[] {"A", "C"}, CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2)) }
+        };
+    }
+
+    static final String SUB_SET_ABOUT_SET_DATA_PROVIDER_NAME = "subSetAboutSetDataProvider";
+
+    @DataProvider(name = SUB_SET_ABOUT_SET_DATA_PROVIDER_NAME)
+    Object[][] subSetAboutSetDataProvider() {
+        return new Object[][] {
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), ImmutableSet.of(), CountableOccurrenceMap.build() },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), ImmutableSet.of("A"), CountableOccurrenceMap.build(ImmutableMap.of("A", 1)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2)), ImmutableSet.of("A"), CountableOccurrenceMap.build(ImmutableMap.of("A", 1)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2)), ImmutableSet.of("A", "C"), CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2)) }
         };
     }
 

@@ -1,10 +1,8 @@
 package hu.bioinformatics.biolaboratory.utils.datastructures;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Sets;
 import org.testng.annotations.Test;
 
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -61,17 +59,16 @@ public class OccurrenceMapTest {
         assertThat(sum, is(equalTo(controlSum)));
     }
 
-    @Test(dataProvider = OccurrenceMapTestDataProvider.INVALID_OPERATION_COLLECTION_DATA_PROVIDER_NAME,
+    @Test(dataProvider = OccurrenceMapTestDataProvider.INVALID_OPERATION_SET_DATA_PROVIDER_NAME,
             expectedExceptions = IllegalArgumentException.class)
-    public void shouldSumOccurrencesAboutSetThrowException(OccurrenceMap<String> occurrenceMap, String[] keys) {
-        Set<String> keySet = keys == null ? null : Sets.newHashSet(keys);
-        occurrenceMap.sumOccurrencesAboutSet(keySet);
+    public void shouldSumOccurrencesAboutSetThrowException(OccurrenceMap<String> occurrenceMap, Set<String> keySet) {
+        occurrenceMap.sumOccurrences(keySet);
         fail();
     }
 
-    @Test(dataProvider = OccurrenceMapTestDataProvider.SUM_OCCURRENCES_DATA_PROVIDER_NAME)
-    public void shouldSumOccurrencesAboutSetReturn(OccurrenceMap<String> occurrenceMap, String[] keys, int controlSum) {
-        int sum = occurrenceMap.sumOccurrencesAboutSet(Sets.newHashSet(keys));
+    @Test(dataProvider = OccurrenceMapTestDataProvider.SUM_OCCURRENCES_ABOUT_SET_DATA_PROVIDER_NAME)
+    public void shouldSumOccurrencesAboutSetReturn(OccurrenceMap<String> occurrenceMap, Set<String> keySet, int controlSum) {
+        int sum = occurrenceMap.sumOccurrences(keySet);
         assertThat(sum, is(equalTo(controlSum)));
     }
 
@@ -94,17 +91,16 @@ public class OccurrenceMapTest {
         assertThat(subSet, is(equalTo(controlSubSet)));
     }
 
-    @Test(dataProvider = OccurrenceMapTestDataProvider.INVALID_OPERATION_COLLECTION_DATA_PROVIDER_NAME,
+    @Test(dataProvider = OccurrenceMapTestDataProvider.INVALID_OPERATION_SET_DATA_PROVIDER_NAME,
             expectedExceptions = IllegalArgumentException.class)
-    public void shouldSubSetAboutSetThrowsException(OccurrenceMap<String> occurrenceMap, String[] keys) {
-        Set<String> subSet = keys == null ? null : Sets.newHashSet(keys);
-        occurrenceMap.subSetAboutSet(subSet);
+    public void shouldSubSetAboutSetThrowsException(OccurrenceMap<String> occurrenceMap, Set<String> subSet) {
+        occurrenceMap.subSet(subSet);
         fail();
     }
 
-    @Test(dataProvider = OccurrenceMapTestDataProvider.SUB_SET_DATA_PROVIDER_NAME)
-    public void shouldSubSetAboutSetReturn(OccurrenceMap<String> occurrenceMap, String[] keys, OccurrenceMap<String> controlSubSet) {
-        OccurrenceMap<String> subSet = occurrenceMap.subSetAboutSet(Sets.newHashSet(keys));
+    @Test(dataProvider = OccurrenceMapTestDataProvider.SUB_SET_ABOUT_SET_DATA_PROVIDER_NAME)
+    public void shouldSubSetAboutSetReturn(OccurrenceMap<String> occurrenceMap, Set<String> keySet, OccurrenceMap<String> controlSubSet) {
+        OccurrenceMap<String> subSet = occurrenceMap.subSet(keySet);
         assertThat(subSet, is(equalTo(controlSubSet)));
     }
 
@@ -141,17 +137,15 @@ public class OccurrenceMapTest {
         assertThat(countableOccurrenceMap, is(equalTo(controlOccurrenceMap)));
     }
 
-    @Test(dataProvider = OccurrenceMapTestDataProvider.INVALID_OPERATION_COLLECTION_DATA_PROVIDER_NAME,
+    @Test(dataProvider = OccurrenceMapTestDataProvider.INVALID_OPERATION_SET_DATA_PROVIDER_NAME,
             expectedExceptions = IllegalArgumentException.class)
-    public void shouldToCountableWithSetThrowException(OccurrenceMap<String> occurrenceMap, String[] keys) {
-        Set<String> keySet = keys == null ? null : Sets.newHashSet(keys);
+    public void shouldToCountableWithSetThrowException(OccurrenceMap<String> occurrenceMap, Set<String> keySet) {
         occurrenceMap.toCountableWithSet(keySet);
         fail();
     }
 
-    @Test(dataProvider = OccurrenceMapTestDataProvider.TO_COUNTABLE_WITH_DATA_PROVIDER_NAME)
-    public void shouldToCountableWithSetReturn(OccurrenceMap<String> occurrenceMap, String keys[], CountableOccurrenceMap<String> controlOccurrenceMap) {
-        HashSet<String> keySet = Sets.newHashSet(keys);
+    @Test(dataProvider = OccurrenceMapTestDataProvider.TO_COUNTABLE_WITH_SET_DATA_PROVIDER_NAME)
+    public void shouldToCountableWithSetReturn(OccurrenceMap<String> occurrenceMap, Set<String> keySet, CountableOccurrenceMap<String> controlOccurrenceMap) {
         CountableOccurrenceMap<String> countableOccurrenceMap = occurrenceMap.toCountableWithSet(keySet);
         assertThat(countableOccurrenceMap, is(equalTo(controlOccurrenceMap)));
     }

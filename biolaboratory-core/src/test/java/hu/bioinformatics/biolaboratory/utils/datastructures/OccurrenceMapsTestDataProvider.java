@@ -1,7 +1,7 @@
 package hu.bioinformatics.biolaboratory.utils.datastructures;
 
-import com.beust.jcommander.internal.Lists;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import org.testng.annotations.DataProvider;
 
 /**

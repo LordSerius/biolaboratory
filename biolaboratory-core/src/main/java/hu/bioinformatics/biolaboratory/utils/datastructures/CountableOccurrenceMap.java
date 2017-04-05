@@ -89,8 +89,8 @@ public class CountableOccurrenceMap<K> extends OccurrenceMap<K> {
     }
 
     @Override
-    public CountableOccurrenceMap<K> subSetAboutSet(final Set<K> keySet) {
-        return (CountableOccurrenceMap<K>) super.subSetAboutSet(keySet);
+    public CountableOccurrenceMap<K> subSet(final Set<K> keySet) {
+        return (CountableOccurrenceMap<K>) super.subSet(keySet);
     }
 
     /**

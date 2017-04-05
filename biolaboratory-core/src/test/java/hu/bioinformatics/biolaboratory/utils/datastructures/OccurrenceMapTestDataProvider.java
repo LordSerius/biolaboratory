@@ -3,6 +3,7 @@ package hu.bioinformatics.biolaboratory.utils.datastructures;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import org.testng.annotations.DataProvider;
 
 import java.util.HashMap;
@@ -66,6 +67,16 @@ public class OccurrenceMapTestDataProvider {
         };
     }
 
+    static final String INVALID_OPERATION_SET_DATA_PROVIDER_NAME = "invalidOperationSetDataProvider";
+
+    @DataProvider(name = INVALID_OPERATION_SET_DATA_PROVIDER_NAME)
+    Object[][] invalidOperationSetDataProvider() {
+        return new Object[][] {
+                { OccurrenceMap.build(), null },
+                { OccurrenceMap.build(), Sets.newHashSet("A", null) }
+        };
+    }
+
     static final String COPY_DATA_PROVIDER_NAME = "copyDataProvider";
 
     @DataProvider(name = COPY_DATA_PROVIDER_NAME)
@@ -101,6 +112,20 @@ public class OccurrenceMapTestDataProvider {
         };
     }
 
+    static final String SUM_OCCURRENCES_ABOUT_SET_DATA_PROVIDER_NAME = "sumOccurrencesAboutSetDataProvider";
+
+    @DataProvider(name= SUM_OCCURRENCES_ABOUT_SET_DATA_PROVIDER_NAME)
+    Object[][] sumOccurrencesAboutSetDataProvider() {
+        return new Object[][] {
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3, "T", 4)), ImmutableSet.of(), 0 },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3, "T", 4)), ImmutableSet.of("U"), 0 },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3, "T", 4)), ImmutableSet.of("A"), 1 },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3, "T", 4)), ImmutableSet.of("A", "C"), 3 },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3, "T", 4)), ImmutableSet.of("A", "C", "G", "T"), 10 },
+                { OccurrenceMap.build(), ImmutableSet.of("A"), 0 }
+        };
+    }
+
     static final String SUM_TOTAL_OCCURRENCES_DATA_PROVIDER_NAME = "sumTotalOccurrencesDataProvider";
 
     @DataProvider(name = SUM_TOTAL_OCCURRENCES_DATA_PROVIDER_NAME)
@@ -124,6 +149,20 @@ public class OccurrenceMapTestDataProvider {
                 { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2)), new String[] {"A"}, OccurrenceMap.build(ImmutableMap.of("A", 1)) },
                 { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2)), new String[] {"A", "A"}, OccurrenceMap.build(ImmutableMap.of("A", 1)) },
                 { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2)), new String[] {"A", "C"}, OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2)) }
+        };
+    }
+
+    static final String SUB_SET_ABOUT_SET_DATA_PROVIDER_NAME = "subSetAboutSetDataProvider";
+
+    @DataProvider(name = SUB_SET_ABOUT_SET_DATA_PROVIDER_NAME)
+    Object[][] subSetAboutSetDataProvider() {
+        return new Object[][] {
+                { OccurrenceMap.build(), ImmutableSet.of("A"), OccurrenceMap.build() },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1)), ImmutableSet.of(), OccurrenceMap.build() },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1)), ImmutableSet.of("C"), OccurrenceMap.build() },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1)), ImmutableSet.of("A"), OccurrenceMap.build(ImmutableMap.of("A", 1)) },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2)), ImmutableSet.of("A"), OccurrenceMap.build(ImmutableMap.of("A", 1)) },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2)), ImmutableSet.of("A", "C"), OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2)) }
         };
     }
 
@@ -165,6 +204,18 @@ public class OccurrenceMapTestDataProvider {
                 { OccurrenceMap.build(ImmutableMap.of("A", 1)), new String[] {}, CountableOccurrenceMap.build(ImmutableMap.of("A", 1)) },
                 { OccurrenceMap.build(ImmutableMap.of("A", 1)), new String[] { "C" }, CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "C", 0)) },
                 { OccurrenceMap.build(ImmutableMap.of("A", 1)), new String[] { "C", "C" }, CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "C", 0)) }
+        };
+    }
+
+    static final String TO_COUNTABLE_WITH_SET_DATA_PROVIDER_NAME = "toCountableWithSetDataProvider";
+
+    @DataProvider(name = TO_COUNTABLE_WITH_SET_DATA_PROVIDER_NAME)
+    Object[][] toCountableWithSetDataProvider() {
+        return new Object[][] {
+                { OccurrenceMap.build(), ImmutableSet.of(), CountableOccurrenceMap.build() },
+                { OccurrenceMap.build(), ImmutableSet.of("A"), CountableOccurrenceMap.build(ImmutableMap.of("A", 0)) },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1)), ImmutableSet.of(), CountableOccurrenceMap.build(ImmutableMap.of("A", 1)) },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1)), ImmutableSet.of("C"), CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "C", 0)) },
         };
     }
 
