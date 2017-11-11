@@ -32,7 +32,8 @@ public class BiologicalSequenceTestDataProvider {
     @DataProvider(name = COPY_DATA_PROVIDER_NAME)
     Object[][] copyDataProvider() {
         return new Object[][] {
-                { Dna.build("AGTC") }
+                { Dna.build("AGTC") },
+                { Dna.build("name", "AGTC") }
         };
     }
 

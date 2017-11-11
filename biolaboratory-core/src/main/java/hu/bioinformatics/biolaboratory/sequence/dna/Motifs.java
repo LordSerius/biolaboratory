@@ -21,7 +21,7 @@ public class Motifs {
     private List<Map<DnaNucleotide, Double>> motifProfile;
     private int[] motifScores;
     private int totalScore = -1;
-    private List<List<DnaNucleotide>> extractedConsensus;
+    private Dna extractedConsensus;
 
     public static Motifs build(final DnaArray dnaArray) {
         Preconditions.checkArgument(dnaArray != null, "DNA array should not be null");
@@ -61,20 +61,31 @@ public class Motifs {
         return Arrays.copyOf(createMotifs(), motifs.length);
     }
 
-    //    private synchronized List<List<DnaNucleotide>> createExtractedConsensus() {
-//        extractedConsensus = Lists.newArrayListWithCapacity(dnaArray.getSamplesLength());
-//        createProfile().forEach(entry -> en);
+    /**
+     * Returns immutable with the consensus {@link Dna}.
+     *
+     * @return The consensus string in {@link Dna} form.
+     */
+//    public Dna consensus() {
+//        return createExtractedConsensus().copy();
+//    }
 //
-//        for (int j = 0; j < profileArray[0].length; j++) {
-//            double maxValue = 0;
-//            for (int i = 0; i < profileArray.length; i++) {
-//                if (maxValue < profileArray[i][j]) {
-//                    maxValue = profileArray[i][j];
-//                    consensusArray[j] = indexToNucleobase.get(i);
+//    private synchronized Dna createExtractedConsensus() {
+//        if (extractedConsensus == null) {
+//            extractedConsensus = Lists.newArrayListWithCapacity(dnaArray.getSamplesLength());
+//            createProfile().forEach(entry -> en);
+//
+//            for (int j = 0; j < profileArray[0].length; j++) {
+//                double maxValue = 0;
+//                for (int i = 0; i < profileArray.length; i++) {
+//                    if (maxValue < profileArray[i][j]) {
+//                        maxValue = profileArray[i][j];
+//                        consensusArray[j] = indexToNucleobase.get(i);
+//                    }
 //                }
 //            }
 //        }
-//        return consensusArray;
+//        return extractedConsensus;
 //    }
 
     /**

@@ -26,12 +26,12 @@ public class BiologicalSequenceTest {
 
     @Test(dataProvider = BiologicalSequenceTestDataProvider.COPY_DATA_PROVIDER_NAME)
     public void shouldCreateCopy(BiologicalSequence biologicalSequence) {
-        BiologicalSequence dnaCopy = biologicalSequence.copy();
-        assertThat(dnaCopy, allOf(
+        BiologicalSequence biologicalSequenceCopy = biologicalSequence.copy();
+        assertThat(biologicalSequenceCopy, allOf(
                 is(not(sameInstance(biologicalSequence))),
                 is(equalTo(biologicalSequence))
         ));
-        assertThat(dnaCopy.hashCode(), is(equalTo(biologicalSequence.hashCode())));
+        assertThat(biologicalSequenceCopy.hashCode(), is(equalTo(biologicalSequence.hashCode())));
     }
 
     @Test(dataProvider = BiologicalSequenceTestDataProvider.INVALID_CHANGE_NAME_DATA_PROVIDER_NAME,

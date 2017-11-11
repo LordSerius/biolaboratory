@@ -108,7 +108,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      * @param name The name of the biological sequence.
      * @param sequence The biological sequence as {@link String}.
      */
-    protected BiologicalSequence( final String name, final String sequence) {
+    protected BiologicalSequence(final String name, final String sequence) {
         this.sequence = sequence;
         this.sequenceLength = sequence.length();
         this.name = name;
@@ -161,7 +161,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      *
      * @return The copy of the {@link BiologicalSequence}.
      */
-    public TYPE copy() { return construct(sequence); }
+    public TYPE copy() { return construct(name, sequence); }
 
     /**
      * Getter of the biological sequence.
