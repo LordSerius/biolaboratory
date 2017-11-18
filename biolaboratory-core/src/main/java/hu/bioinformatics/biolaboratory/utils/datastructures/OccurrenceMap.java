@@ -75,7 +75,8 @@ public class OccurrenceMap<K> {
     }
 
     /**
-     * Get the copy of inside {@link Map} which contains the keys and the occurrences.
+     * Get the copy of inside {@link Map} which contains the keys and the occurrences. By definition, elements which
+     * are not inside the map returns with 0.
      * 
      * @return The inner occurrence {@link Map}.
      */
@@ -143,6 +144,15 @@ public class OccurrenceMap<K> {
     }
 
     /**
+     * Get the total number of occurrences inside the {@link OccurrenceMap}.
+     *
+     * @return The sum of all occurrences.
+     */
+    public final int sumTotalOccurrence() {
+        return innerSumOccurrences(occurrenceMap.keySet());
+    }
+
+    /**
      * Get the occurrences of the target keys.
      *
      * @param keySet The desired keys.
@@ -160,14 +170,85 @@ public class OccurrenceMap<K> {
     }
 
     /**
-     * Get the total number of occurrences inside the {@link OccurrenceMap}.
+     * Get the occurrence ratio for the target key.
      *
-     * @return The sum of all occurrences.
+     * @param key The occurrence key.
+     * @return The occurrence of the target key.
      */
-    public final int sumTotalOccurrence() {
-        return occurrenceMap.values().stream()
-                .mapToInt(occurrence -> occurrence)
+    public double occurrenceRatio(final K key) {
+        return accumulatedOccurrenceRatio(key);
+    }
+
+    /**
+     * Get the accumulated occurrence ratio for the given keys.
+     *
+     * @param keys The desired keys.
+     * @return The accumulated ratio of the target key values in the {@link OccurrenceMap}.
+     */
+    @SafeVarargs
+    public final double accumulatedOccurrenceRatio(final K... keys) {
+        return innerAccumulatedOccurrenceRatio(Sets.newHashSet(validateKeys(keys)));
+    }
+
+    /**
+     * Get the accumulated occurrence ratio for the given key set.
+     *
+     * @param keySet The desired keys.
+     * @return The accumulated ratio of the target key values in the {@link OccurrenceMap}.
+     */
+    public final double accumulatedOccurrenceRatio(final Set<K> keySet) {
+        return innerAccumulatedOccurrenceRatio(validateKeySet(keySet));
+    }
+
+    private double innerAccumulatedOccurrenceRatio(final Set<K> keySet) {
+        return innerOccurrenceRatio(keySet).entrySet().stream()
+                .mapToDouble(Map.Entry::getValue)
                 .sum();
+    }
+
+    /**
+     * Get the occurrence ratio for all keys individual in a {@link Map}.
+     *
+     * @return A {@link Map} about all key and ratio.
+     */
+    public final Map<K, Double> allOccurrenceRatios() {
+        return innerOccurrenceRatio(occurrenceMap.keySet());
+    }
+
+    /**
+     * Get the occurrence ratio each key individual in a {@link Map}.
+     *
+     * @param keys The desired keys.
+     * @return A {@link Map} about each key and ratio.
+     */
+    @SafeVarargs
+    public final Map<K, Double> occurrenceRatios(final K... keys) {
+        return innerOccurrenceRatio(Sets.newHashSet(validateKeys(keys)));
+    }
+
+    /**
+     * Get the occurrence ratio each key individual in a {@link Map}.
+     *
+     * @param keySet The desired key set.
+     * @return A {@link Map} about each key and ratio.
+     */
+    public Map<K, Double> occurrenceRatios(final Set<K> keySet) {
+        return innerOccurrenceRatio(validateKeySet(keySet));
+    }
+
+    private Map<K, Double> innerOccurrenceRatio(final Set<K> keySet) {
+        if (occurrenceMap.isEmpty()) {
+            HashMap<K, Double> nullMap = Maps.newHashMap();
+            nullMap.put(null, 1.0);
+            return nullMap;
+        }
+
+        int totalOccurrence = sumTotalOccurrence();
+        Map<K, Double> zeroRatio = keySet.stream()
+                .collect(Collectors.toMap(key -> key, key -> 0.0));
+        return Maps.newHashMap(totalOccurrence == 0 ? zeroRatio :
+                zeroRatio.entrySet().stream()
+                        .collect(Collectors.toMap(Map.Entry::getKey, entry -> (double) getOccurrence(entry.getKey()) / totalOccurrence)));
     }
 
     /**
@@ -293,7 +374,7 @@ public class OccurrenceMap<K> {
      * @return The number of occurrence of the target key after the decreasing.
      * @throws IllegalArgumentException If key is null or does not exist.
      */
-    public int decrease(final K key) {
+    public synchronized int decrease(final K key) {
         validateKey(key);
         Integer occurrence = occurrenceMap.getOrDefault(key, 0);
         Preconditions.checkArgument(occurrence > 0, "Cannot decrease occurrence from 0");
@@ -317,7 +398,7 @@ public class OccurrenceMap<K> {
      * @return The number of occurrence of the target key after the increasing.
      * @throws IllegalArgumentException If key is null.
      */
-    public int increase(final K key) {
+    public synchronized int increase(final K key) {
         validateKey(key);
         int occurrence = occurrenceMap.getOrDefault(key, 0) + 1;
         occurrenceMap.put(key, occurrence);

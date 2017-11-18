@@ -33,7 +33,21 @@ public class MotifsTestDataProvider {
         };
     }
 
-    static final String COUNT_DATA_PROVIDER_NAME = "countDataProviderName";
+    static final String CONSENSUS_DATA_PROVIDER = "consensusDataProvider";
+
+    @DataProvider(name = CONSENSUS_DATA_PROVIDER)
+    Object[][] getConsensusDataProvider() {
+        return new Object[][] {
+                { Motifs.build(DnaArray.build(DnaCollectors.stringToDnaList("ACGT"))), DnaCollectors.stringToDnaSet("ACGT") },
+                { Motifs.build(DnaArray.build(DnaCollectors.stringToDnaList("ACGT", "ACGT"))), DnaCollectors.stringToDnaSet("ACGT") },
+                { Motifs.build(DnaArray.build(DnaCollectors.stringToDnaList("ACGT", "ACGG"))), DnaCollectors.stringToDnaSet("ACGT", "ACGG") },
+                { Motifs.build(DnaArray.build(DnaCollectors.stringToDnaList("ACGT", "ACGT", "TGCA"))), DnaCollectors.stringToDnaSet("ACGT") },
+                { Motifs.build(DnaArray.build(DnaCollectors.stringToDnaList("ACGT", "AAAA", "CCCC"))), DnaCollectors.stringToDnaSet("ACGT", "ACGA", "ACGC", "ACAT", "ACAA", "ACAC", "ACCT", "ACCA", "ACCC") },
+                { Motifs.build(testDnaArrayLoader.load("motif-calculation.fas")), DnaCollectors.stringToDnaSet("TCGGGGATTTCC") }
+        };
+    }
+
+    static final String COUNT_DATA_PROVIDER_NAME = "countDataProvider";
 
     @DataProvider(name = COUNT_DATA_PROVIDER_NAME)
     Object[][] countMotifsDataProvider() {
@@ -47,7 +61,7 @@ public class MotifsTestDataProvider {
         };
     }
 
-    static final String SCORE_DATA_PROVIDER_NAME = "scoreDataProviderName";
+    static final String SCORE_DATA_PROVIDER_NAME = "scoreDataProvider";
 
     @DataProvider(name = SCORE_DATA_PROVIDER_NAME)
     Object[][] scoreDataProvider() {
@@ -59,7 +73,7 @@ public class MotifsTestDataProvider {
         };
     }
 
-    static final String TOTAL_SCORE_DATA_PROVIDER_NAME = "totalScoreDataProviderName";
+    static final String TOTAL_SCORE_DATA_PROVIDER_NAME = "totalScoreDataProvider";
 
     @DataProvider(name = TOTAL_SCORE_DATA_PROVIDER_NAME)
     Object[][] totalScoreDataProvider() {

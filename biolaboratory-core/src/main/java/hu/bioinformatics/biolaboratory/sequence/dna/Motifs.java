@@ -1,9 +1,11 @@
 package hu.bioinformatics.biolaboratory.sequence.dna;
 
-import com.google.common.base.*;
 import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import hu.bioinformatics.biolaboratory.utils.datastructures.CountableOccurrenceMap;
+import hu.bioinformatics.biolaboratory.utils.datastructures.OccurrenceMap;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -21,7 +23,7 @@ public class Motifs {
     private List<Map<DnaNucleotide, Double>> motifProfile;
     private int[] motifScores;
     private int totalScore = -1;
-    private Dna extractedConsensus;
+    private Set<Dna> consensusDnaSet;
 
     public static Motifs build(final DnaArray dnaArray) {
         Preconditions.checkArgument(dnaArray != null, "DNA array should not be null");
@@ -62,31 +64,58 @@ public class Motifs {
     }
 
     /**
-     * Returns immutable with the consensus {@link Dna}.
+     * Returns immutable with the consensus set.
      *
-     * @return The consensus string in {@link Dna} form.
+     * @return The consensus {@link Dna}s in {@link Set}.
      */
-//    public Dna consensus() {
-//        return createExtractedConsensus().copy();
-//    }
-//
-//    private synchronized Dna createExtractedConsensus() {
-//        if (extractedConsensus == null) {
-//            extractedConsensus = Lists.newArrayListWithCapacity(dnaArray.getSamplesLength());
-//            createProfile().forEach(entry -> en);
-//
-//            for (int j = 0; j < profileArray[0].length; j++) {
-//                double maxValue = 0;
-//                for (int i = 0; i < profileArray.length; i++) {
-//                    if (maxValue < profileArray[i][j]) {
-//                        maxValue = profileArray[i][j];
-//                        consensusArray[j] = indexToNucleobase.get(i);
-//                    }
-//                }
-//            }
-//        }
-//        return extractedConsensus;
-//    }
+    public Set<Dna> consensus() {
+        return Sets.newHashSet(createConsensusDnaSet());
+    }
+
+    /**
+     * Queries the consensus (most possible) {@link Dna}s for the {@link Motifs}.
+     * <p>
+     * The work of the algorithm:
+     * <ol>
+     *     <li>Get the maximum occurrences from each column. Each column will have a {@link Set} of
+     *     {@link DnaNucleotide} for it.</li>
+     *     <li>Initialize a prefix {@link Set} with the 0. index of {@link DnaNucleotide}s of maximumColumnOccurrences.</li>
+     *     <li>Iterates maximumColumnOccurrences from 1. index and append this to the prefix.</li>
+     *     <li>Continue the extension with this new prefix {@link Set} until the end.</li>
+     *     <li>The last prefix {@link Set} will be the consensus {@link Set}</li>
+     * </ol>
+     *
+     * @return The new consensus {@link Dna}s in a {@link Set}.
+     */
+    private synchronized Set<Dna> createConsensusDnaSet() {
+        if (consensusDnaSet == null) {
+            List<Set<DnaNucleotide>> maximumColumnOccurrences = createCountMotifs().stream()
+                    .map(OccurrenceMap::filterMostFrequentOccurrences)
+                    .collect(Collectors.toCollection(ArrayList::new));
+
+            Set<List<DnaNucleotide>> consensusPrefixes = Sets.newHashSet();
+            for (DnaNucleotide dnaNucleotide : maximumColumnOccurrences.get(0)) {
+                consensusPrefixes.add(Lists.newArrayList(dnaNucleotide));
+            }
+            int length = maximumColumnOccurrences.size();
+
+            for (int i = 1; i < length; i++) {
+                Set<List<DnaNucleotide>> newConsensusPrefixes = Sets.newHashSet();
+                for (List<DnaNucleotide> prefix : consensusPrefixes) {
+                    for (DnaNucleotide dnaNucleotide : maximumColumnOccurrences.get(i)) {
+                        List<DnaNucleotide> extendedPrefix = Lists.newArrayList(prefix);
+                        extendedPrefix.add(dnaNucleotide);
+                        newConsensusPrefixes.add(extendedPrefix);
+                    }
+                }
+                consensusPrefixes = newConsensusPrefixes;
+            }
+            consensusDnaSet = consensusPrefixes.stream()
+                    .map(Dna::build)
+                    .collect(Collectors.toCollection(HashSet::new));
+        }
+        return consensusDnaSet;
+    }
 
     /**
      * Returns an immutable profile about the {@link DnaNucleotide} based on each column.
@@ -100,14 +129,7 @@ public class Motifs {
     private synchronized List<Map<DnaNucleotide, Double>> createProfile() {
         if (motifProfile == null) {
             motifProfile = createCountMotifs().stream()
-                    .map(occurrenceMap -> {
-                        Map<DnaNucleotide, Double> columnProfileMap = new HashMap<>();
-                        occurrenceMap.getOccurrencesInMap()
-                                .entrySet()
-                                .forEach(nucleotideOccurrence -> columnProfileMap.put(
-                                        nucleotideOccurrence.getKey(), (double) nucleotideOccurrence.getValue() / dnaArray.getSampleNumber()));
-                        return columnProfileMap;
-                    })
+                    .map(OccurrenceMap::allOccurrenceRatios)
                     .collect(Collectors.toCollection(ArrayList::new));
         }
         return motifProfile;

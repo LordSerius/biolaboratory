@@ -233,4 +233,39 @@ public class CountableOccurrenceMapTest {
         OccurrenceMap<String> mergedOccurrenceMap = occurrenceMap.merge(otherOccurrenceMap);
         assertThat(mergedOccurrenceMap, is(equalTo(controlOccurrenceMap)));
     }
+
+    @Test(dataProvider = CountableOccurrenceMapTestDataProvider.INVALID_GET_OCCURRENCE_DATA_PROVIDER,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldOccurrenceRatioThrowException(CountableOccurrenceMap<String> occurrenceMap, String key) {
+        occurrenceMap.getOccurrence(key);
+        fail();
+    }
+
+    @Test(dataProvider = CountableOccurrenceMapTestDataProvider.INVALID_OPERATION_COLLECTION_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldAccumulatedOccurrenceRatioThrowException(CountableOccurrenceMap<String> occurrenceMap, String[] keys) {
+        occurrenceMap.accumulatedOccurrenceRatio(keys);
+        fail();
+    }
+
+    @Test(dataProvider = CountableOccurrenceMapTestDataProvider.INVALID_OPERATION_SET_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldAccumulatedOccurrenceRatioSetThrowException(CountableOccurrenceMap<String> occurrenceMap, Set<String> keySet) {
+        occurrenceMap.accumulatedOccurrenceRatio(keySet);
+        fail();
+    }
+
+    @Test(dataProvider = CountableOccurrenceMapTestDataProvider.INVALID_OPERATION_COLLECTION_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldOccurrenceRatiosThrowException(CountableOccurrenceMap<String> occurrenceMap, String[] keys) {
+        occurrenceMap.occurrenceRatios(keys);
+        fail();
+    }
+
+    @Test(dataProvider = CountableOccurrenceMapTestDataProvider.INVALID_OPERATION_SET_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldOccurrenceRatiosSetThrowException(CountableOccurrenceMap<String> occurrenceMap, Set<String> keySet) {
+        occurrenceMap.occurrenceRatios(keySet);
+        fail();
+    }
 }

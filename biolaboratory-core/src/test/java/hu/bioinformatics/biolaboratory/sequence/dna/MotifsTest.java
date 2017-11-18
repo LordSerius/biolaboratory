@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -27,6 +28,12 @@ public class MotifsTest {
         DnaNucleotide[][] innerMotifs = motifs.getMotifs();
         assertThat(innerMotifs, allOf(is(equalTo(controlMotifs)),
                                         is(not(sameInstance(motifs.getMotifs())))));
+    }
+
+    @Test(dataProvider = MotifsTestDataProvider.CONSENSUS_DATA_PROVIDER)
+    public void shouldConsensusReturn(Motifs motifs, Set<Dna> controlConsensusSet) {
+        Set<Dna> consensusSet = motifs.consensus();
+        assertThat(consensusSet, is(equalTo(controlConsensusSet)));
     }
 
     @Test(dataProvider = MotifsTestDataProvider.COUNT_DATA_PROVIDER_NAME)

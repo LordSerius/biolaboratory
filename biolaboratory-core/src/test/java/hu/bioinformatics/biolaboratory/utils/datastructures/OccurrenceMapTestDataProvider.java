@@ -137,6 +137,96 @@ public class OccurrenceMapTestDataProvider {
         };
     }
 
+    static final String OCCURRENCE_RATIO_DATA_PROVIDER = "occurrenceRatioDataProvider";
+
+    @DataProvider(name = OCCURRENCE_RATIO_DATA_PROVIDER)
+    Object[][] occurrenceRatioDataProvider() {
+        return new Object[][] {
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3, "T", 4)), "A", 0.1 },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3)), "T", 0.0 }
+        };
+    }
+
+    static final String ACCUMULATED_OCCURRENCE_RATIO_DATA_PROVIDER = "accumulatedOccurrenceRatioDataProvider";
+
+    @DataProvider(name = ACCUMULATED_OCCURRENCE_RATIO_DATA_PROVIDER)
+    Object[][] accumulatedOccurrenceRatioDataProvider() {
+        return new Object[][] {
+                { OccurrenceMap.build(), new String[] {}, 1.0 },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3, "T", 4)), new String[] {}, 0.0 },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3, "T", 4)), new String[] { "A" }, 0.1 },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3, "T", 4)), new String[] { "A", "C" }, 0.3 },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3, "T", 4)), new String[] { "A", "C", "G" }, 0.6 },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3, "T", 4)), new String[] { "A", "C", "G", "T" }, 1.0 },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3)), new String[] { "T" }, 0.0 },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3)), new String[] { "A", "T" }, 1.0/6 }
+        };
+    }
+
+    static final String ACCUMULATED_OCCURRENCE_RATIO_SET_DATA_PROVIDER = "accumulatedOccurrenceRatioSetDataProvider";
+
+    @DataProvider(name = ACCUMULATED_OCCURRENCE_RATIO_SET_DATA_PROVIDER)
+    Object[][] accumulatedOccurrenceRatioSetDataProvider() {
+        return new Object[][] {
+                { OccurrenceMap.build(), ImmutableSet.of(), 1.0 },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3, "T", 4)), ImmutableSet.of(), 0.0 },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3, "T", 4)), ImmutableSet.of("A"), 0.1 },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3, "T", 4)), ImmutableSet.of("A", "C"), 0.3 },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3, "T", 4)), ImmutableSet.of("A", "C", "G"), 0.6 },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3, "T", 4)), ImmutableSet.of("A", "C", "G", "T"), 1.0 },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3)), ImmutableSet.of("T"), 0.0 },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3)), ImmutableSet.of("A", "T"), 1.0/6 }
+        };
+    }
+
+    static final String ALL_OCCURRENCE_RATIOS_DATA_PROVIDER = "allOccurrenceRatiosDataProvider";
+
+    @DataProvider(name = ALL_OCCURRENCE_RATIOS_DATA_PROVIDER)
+    Object[][] allOccurrenceRatiosDataProvider() {
+        HashMap<String, Double> nullMap = Maps.newHashMap();
+        nullMap.put(null, 1.0);
+        return new Object[][] {
+                { OccurrenceMap.build(), nullMap },
+                { OccurrenceMap.build(ImmutableMap.of("A", 2, "C", 2, "G", 2, "T", 2)), ImmutableMap.of("A", 0.25, "C", 0.25, "G", 0.25, "T", 0.25) }
+        };
+    }
+
+    static final String OCCURRENCE_RATIOS_DATA_PROVIDER = "occurrenceRatiosDataProvider";
+
+    @DataProvider(name = OCCURRENCE_RATIOS_DATA_PROVIDER)
+    Object[][] occurrenceRatiosDataProvider() {
+        HashMap<String, Double> nullMap = Maps.newHashMap();
+        nullMap.put(null, 1.0);
+        return new Object[][] {
+                { OccurrenceMap.build(), new String[] {}, nullMap },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3, "T", 4)), new String[] {}, ImmutableMap.of() },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3, "T", 4)), new String[] { "A" }, ImmutableMap.of("A", 0.1) },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3, "T", 4)), new String[] { "A", "C" }, ImmutableMap.of("A", 0.1, "C", 0.2) },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3, "T", 4)), new String[] { "A", "C", "G" }, ImmutableMap.of("A", 0.1, "C", 0.2, "G", 0.3) },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3, "T", 4)), new String[] { "A", "C", "G", "T" }, ImmutableMap.of("A", 0.1, "C", 0.2, "G", 0.3, "T", 0.4) },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3)), new String[] { "T" }, ImmutableMap.of("T", 0.0) },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3)), new String[] { "A", "T" }, ImmutableMap.of("A", 1.0/6, "T", 0.0) }
+        };
+    }
+
+    static final String OCCURRENCE_RATIOS_SET_DATA_PROVIDER = "occurrenceRatiosSetDataProvider";
+
+    @DataProvider(name = OCCURRENCE_RATIOS_SET_DATA_PROVIDER)
+    Object[][] occurrenceRatiosSetDataProvider() {
+        HashMap<String, Double> nullMap = Maps.newHashMap();
+        nullMap.put(null, 1.0);
+        return new Object[][] {
+                { OccurrenceMap.build(), ImmutableSet.of(), nullMap },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3, "T", 4)), ImmutableSet.of(), ImmutableMap.of() },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3, "T", 4)), ImmutableSet.of("A"), ImmutableMap.of("A", 0.1) },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3, "T", 4)), ImmutableSet.of("A", "C"), ImmutableMap.of("A", 0.1, "C", 0.2) },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3, "T", 4)), ImmutableSet.of("A", "C", "G"), ImmutableMap.of("A", 0.1, "C", 0.2, "G", 0.3) },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3, "T", 4)), ImmutableSet.of("A", "C", "G", "T"), ImmutableMap.of("A", 0.1, "C", 0.2, "G", 0.3, "T", 0.4) },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3)), ImmutableSet.of("T"), ImmutableMap.of("T", 0.0) },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2, "G", 3)), ImmutableSet.of("A", "T"), ImmutableMap.of("A", 1.0/6, "T", 0.0) }
+        };
+    }
+
     static final String SUB_SET_DATA_PROVIDER_NAME = "subSetDataProvider";
 
     @DataProvider(name = SUB_SET_DATA_PROVIDER_NAME)

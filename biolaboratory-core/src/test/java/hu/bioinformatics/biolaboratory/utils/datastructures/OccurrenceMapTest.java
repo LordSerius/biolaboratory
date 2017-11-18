@@ -78,6 +78,77 @@ public class OccurrenceMapTest {
         assertThat(sum, is(equalTo(controlSum)));
     }
 
+    @Test(dataProvider = OccurrenceMapTestDataProvider.EMPTY_OCCURRENCE_MAP_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldOccurrenceRatioThrowException(OccurrenceMap<String> occurrenceMap) {
+        occurrenceMap.getOccurrence(null);
+        fail();
+    }
+
+    @Test(dataProvider = OccurrenceMapTestDataProvider.OCCURRENCE_RATIO_DATA_PROVIDER)
+    public void shouldOccurrenceRatioReturn(OccurrenceMap<String> occurrenceMap, String key, double controlRatio) {
+        double ratio = occurrenceMap.occurrenceRatio(key);
+        assertThat(ratio, is(closeTo(controlRatio, 0.001)));
+    }
+
+    @Test(dataProvider = OccurrenceMapTestDataProvider.INVALID_OPERATION_COLLECTION_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldAccumulatedOccurrenceRatioThrowException(OccurrenceMap<String> occurrenceMap, String[] keys) {
+        occurrenceMap.accumulatedOccurrenceRatio(keys);
+        fail();
+    }
+
+    @Test(dataProvider = OccurrenceMapTestDataProvider.ACCUMULATED_OCCURRENCE_RATIO_DATA_PROVIDER)
+    public void shouldAccumulatedOccurrenceRatioReturn(OccurrenceMap<String> occurrenceMap, String[] keys, double controlRatio) {
+        double ratio = occurrenceMap.accumulatedOccurrenceRatio(keys);
+        assertThat(ratio, is(closeTo(controlRatio, 0.001)));
+    }
+
+    @Test(dataProvider = OccurrenceMapTestDataProvider.INVALID_OPERATION_SET_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldAccumulatedOccurrenceRatioSetThrowException(OccurrenceMap<String> occurrenceMap, Set<String> keySet) {
+        occurrenceMap.accumulatedOccurrenceRatio(keySet);
+        fail();
+    }
+
+    @Test(dataProvider = OccurrenceMapTestDataProvider.ACCUMULATED_OCCURRENCE_RATIO_SET_DATA_PROVIDER)
+    public void shouldAccumulatedOccurrenceRatioSetReturn(OccurrenceMap<String> occurrenceMap, Set<String> keySet, double controlRatio) {
+        double ratio = occurrenceMap.accumulatedOccurrenceRatio(keySet);
+        assertThat(ratio, is(closeTo(controlRatio, 0.001)));
+    }
+
+    @Test(dataProvider = OccurrenceMapTestDataProvider.INVALID_OPERATION_COLLECTION_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldOccurrenceRatiosThrowException(OccurrenceMap<String> occurrenceMap, String[] keys) {
+        occurrenceMap.occurrenceRatios(keys);
+        fail();
+    }
+
+    @Test(dataProvider = OccurrenceMapTestDataProvider.ALL_OCCURRENCE_RATIOS_DATA_PROVIDER)
+    public void shouldAllOccurrenceRatiosReturn(OccurrenceMap<String> occurrenceMap, Map<String, Double> controlRatioMap) {
+        Map<String, Double> allOccurrenceRatiosMap = occurrenceMap.allOccurrenceRatios();
+        allOccurrenceRatiosMap.entrySet().forEach(entry -> assertThat(entry.getValue(), is(closeTo(controlRatioMap.get(entry.getKey()), 0.001))));
+    }
+
+    @Test(dataProvider = OccurrenceMapTestDataProvider.OCCURRENCE_RATIOS_DATA_PROVIDER)
+    public void shouldOccurrenceRatiosReturn(OccurrenceMap<String> occurrenceMap, String[] keys, Map<String, Double> controlRatioMap) {
+        Map<String, Double> ratioMap = occurrenceMap.occurrenceRatios(keys);
+        ratioMap.entrySet().forEach(entry -> assertThat(entry.getValue(), is(closeTo(controlRatioMap.get(entry.getKey()), 0.001))));
+    }
+
+    @Test(dataProvider = OccurrenceMapTestDataProvider.INVALID_OPERATION_SET_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldOccurrenceRatiosSetThrowException(OccurrenceMap<String> occurrenceMap, Set<String> keySet) {
+        occurrenceMap.occurrenceRatios(keySet);
+        fail();
+    }
+
+    @Test(dataProvider = OccurrenceMapTestDataProvider.OCCURRENCE_RATIOS_SET_DATA_PROVIDER)
+    public void shouldOccurrenceRatiosSetReturn(OccurrenceMap<String> occurrenceMap, Set<String> keySet, Map<String, Double> controlRatioMap) {
+        Map<String, Double> ratioMap = occurrenceMap.occurrenceRatios(keySet);
+        ratioMap.entrySet().forEach(entry -> assertThat(entry.getValue(), is(closeTo(controlRatioMap.get(entry.getKey()), 0.001))));
+    }
+
     @Test(dataProvider = OccurrenceMapTestDataProvider.INVALID_OPERATION_COLLECTION_DATA_PROVIDER_NAME,
             expectedExceptions = IllegalArgumentException.class)
     public void shouldSubSetThrowsException(OccurrenceMap<String> occurrenceMap, String[] keys) {
