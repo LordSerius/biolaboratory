@@ -237,7 +237,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      * @return The ratio of the target element.
      */
     public final double getElementRatio(final ELEMENT element) {
-        return (double) getElementsNumber(element) / sequenceLength;
+        return collectSequenceElementOccurrences().occurrenceRatio(element);
     }
 
     /**
@@ -248,7 +248,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      */
     @SafeVarargs
     public final double getElementsRatio(final ELEMENT... elements) {
-        return (double) getElementsNumber(elements) / sequenceLength;
+        return collectSequenceElementOccurrences().accumulatedOccurrenceRatio(elements);
     }
 
     /**
@@ -258,7 +258,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      * @return The ratio of the target elements.
      */
     public final double getElementsRatio(final Set<ELEMENT> elementSet) {
-        return (double) getElementsNumber(elementSet) / sequenceLength;
+        return collectSequenceElementOccurrences().accumulatedOccurrenceRatio(elementSet);
     }
 
     /**
