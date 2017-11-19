@@ -22,9 +22,9 @@ public class MotifsTestDataProvider {
     @Inject
     private DnaArrayLoader testDnaArrayLoader;
 
-    static final String GET_MOTIFS_DATA_PROVIDER = "getMotifsDataProvider";
+    static final String GET_MOTIFS_DATA_PROVIDER_NAME = "getMotifsDataProvider";
 
-    @DataProvider(name = GET_MOTIFS_DATA_PROVIDER)
+    @DataProvider(name = GET_MOTIFS_DATA_PROVIDER_NAME)
     Object[][] getMotifsDataProvider() {
         return new Object[][] {
                 { Motifs.build(DnaArray.build(DnaCollectors.stringToDnaList("ACGT"))), new DnaNucleotide[][] { {DnaNucleotide.ADENINE, DnaNucleotide.CYTOSINE, DnaNucleotide.GUANINE, DnaNucleotide.THYMINE} } },
@@ -33,9 +33,9 @@ public class MotifsTestDataProvider {
         };
     }
 
-    static final String CONSENSUS_DATA_PROVIDER = "consensusDataProvider";
+    static final String CONSENSUS_DATA_PROVIDER_NAME = "consensusDataProvider";
 
-    @DataProvider(name = CONSENSUS_DATA_PROVIDER)
+    @DataProvider(name = CONSENSUS_DATA_PROVIDER_NAME)
     Object[][] getConsensusDataProvider() {
         return new Object[][] {
                 { Motifs.build(DnaArray.build(DnaCollectors.stringToDnaList("ACGT"))), DnaCollectors.stringToDnaSet("ACGT") },
@@ -44,6 +44,24 @@ public class MotifsTestDataProvider {
                 { Motifs.build(DnaArray.build(DnaCollectors.stringToDnaList("ACGT", "ACGT", "TGCA"))), DnaCollectors.stringToDnaSet("ACGT") },
                 { Motifs.build(DnaArray.build(DnaCollectors.stringToDnaList("ACGT", "AAAA", "CCCC"))), DnaCollectors.stringToDnaSet("ACGT", "ACGA", "ACGC", "ACAT", "ACAA", "ACAC", "ACCT", "ACCA", "ACCC") },
                 { Motifs.build(testDnaArrayLoader.load("motif-calculation.fas")), DnaCollectors.stringToDnaSet("TCGGGGATTTCC") }
+        };
+    }
+
+    static final String ENTROPY_DATA_PROVIDER_NAME = "entropyDataProvider";
+
+    @DataProvider(name = ENTROPY_DATA_PROVIDER_NAME)
+    Object[][] entropyDataProvider() {
+        return new Object[][] {
+                { Motifs.build(testDnaArrayLoader.load("motif-calculation.fas")), new double[] {1.157d, 1.371d, 0.0, 0.0, 0.469d, 0.469d, 0.469d, 1.361d, 0.922d, 1.157d, 1.571d, 0.971d } }
+        };
+    }
+
+    static final String TOTAL_ENTROPY_DATA_PROVIDER_NAME = "totalEntropyDataProvider";
+
+    @DataProvider(name = TOTAL_ENTROPY_DATA_PROVIDER_NAME)
+    Object[][] totalEntropyDataProvider() {
+        return new Object[][] {
+                { Motifs.build(testDnaArrayLoader.load("motif-calculation.fas")), 9.916d }
         };
     }
 

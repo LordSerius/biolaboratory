@@ -8,6 +8,8 @@ import com.google.common.base.Preconditions;
  * @author Attila Radi
  */
 public class DoubleUtils {
+    public static final double LOG_2 = Math.log(2);
+
     private static final double DEFAULT_PRECISION = 0.000001d;
     private static final double MAXIMUM_ERROR = 0.001d;
 
