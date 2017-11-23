@@ -1,15 +1,18 @@
 package hu.bioinformatics.biolaboratory.sequence;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.sun.javafx.binding.StringFormatter;
+import hu.bioinformatics.biolaboratory.utils.SequenceUtils;
 import hu.bioinformatics.biolaboratory.utils.datastructures.CountableOccurrenceMap;
 import hu.bioinformatics.biolaboratory.utils.datastructures.OccurrenceMap;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -161,7 +164,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      *
      * @return The copy of the {@link BiologicalSequence}.
      */
-    public TYPE copy() { return construct(name, sequence); }
+    public final TYPE copy() { return construct(name, sequence); }
 
     /**
      * Getter of the biological sequence.
@@ -190,6 +193,18 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
     public TYPE changeName(final String name) {
         Preconditions.checkArgument(name != null, "Sequence name should not be null");
         return construct(name.trim(), sequence);
+    }
+
+    /**
+     * Get the ELEMENT from the target index.
+     *
+     * @param index The index which should smaller than length.
+     * @return The ELEMENT at the target index.
+     */
+    public final ELEMENT getElement(final int index) {
+        Preconditions.checkArgument(index >= 0, "Index should be greater or equal than 0");
+        Preconditions.checkArgument(index < sequenceLength, "Index should smaller than sequence length (%d)", sequenceLength);
+        return loadSequenceAsElements()[index];
     }
 
     /**
@@ -222,9 +237,9 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
     }
 
     /**
-     * Immutable getter of the nucleotide occurrences. It calculates the occurrences at the first call.
+     * Immutable getter of the element occurrences. It calculates the occurrences at the first call.
      *
-     * @return The nucleotide occurrences.
+     * @return The element occurrences.
      */
     public final CountableOccurrenceMap<ELEMENT> getElementOccurrences() {
         return collectSequenceElementOccurrences().copy();
@@ -373,7 +388,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
     /**
      * Cuts a {@link BiologicalSequence} part from the start position to the end of the {@link BiologicalSequence}'s length.
      *
-     * @param startPosition The beginning nucleotide position in the {@link BiologicalSequence} inclusive.
+     * @param startPosition The beginning element position in the {@link BiologicalSequence} inclusive.
      * @return The {@link BiologicalSequence} part from start position (inclusive) to the end.
      */
     public final TYPE cut(final int startPosition) {
@@ -455,12 +470,29 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
     }
 
     /**
+     * Returns with the smallest mismatch number of pattern and subsequences.
+     *
+     * @param pattern A pattern for compare against the subsequences.
+     * @return The minimum mismatches between pattern and the subsequences.
+     */
+    public int findMinimumMismatchSubSequenceNumber(final TYPE pattern) {
+        validatePattern(pattern);
+        final int patternLength = pattern.sequenceLength;
+        return IntStream.rangeClosed(0, sequenceLength - patternLength)
+                .parallel()
+                .map(index -> SequenceUtils.hammingDistance(
+                        sequence.substring(index, index + patternLength), pattern.sequence))
+                .min()
+                .orElse(Integer.MAX_VALUE);
+    }
+
+    /**
      * The work of the algorithm:
      * <ol>
      *     <li>Cut a template sequence from the beginning of the biological sequence which length equals to
      *     the pattern's length.</li>
      *     <li>Compares the template with the pattern.</li>
-     *     <li>If the pattern agains the template has at most d mismatches then add the
+     *     <li>If the pattern against the template has at most <i>d</i> mismatches then add the
      *     first index of the template inside the biological sequence to the return values.</li>
      *     <li>The next template will be constructed from the second element to the end of
      *     the template concatenated with the next character of the biological sequence after this template.</li>
@@ -473,21 +505,13 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      */
     private List<Integer> findPatternsWithMismatch(final TYPE pattern, final int d) {
         int lengthDiff = sequenceLength - pattern.sequenceLength;
-        List<Integer> startPositionList = Lists.newLinkedList();
-
-        for (int i = 0; i <= lengthDiff; i++) {
-            String template = sequence.substring(i, i + pattern.sequenceLength);
-            int j = 0;
-            int mismatch = 0;
-            while (j < pattern.sequenceLength && mismatch <= d) {
-                if (template.charAt(j) != pattern.sequence.charAt(j)) mismatch++;
-                j++;
-            }
-            if (mismatch <= d) {
-                startPositionList.add(i);
-            }
-        }
-        return  startPositionList;
+        return IntStream.rangeClosed(0, lengthDiff)
+                .parallel()
+                .filter(index -> SequenceUtils.hammingDistanceMismatchComparator(
+                        sequence.substring(index, index + pattern.sequenceLength), pattern.sequence, d) != SequenceUtils.GREATER)
+                .sorted()
+                .boxed()
+                .collect(Collectors.toList());
     }
 
     /**
@@ -502,10 +526,10 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
 
     /**
      * Get the most frequent <i>k</i> occurrences which has at most <i>d</i> different
-     * nucleotides in the biological sequence.
+     * elements in the biological sequence.
      *
      * @param k The findable <i>k</i> long sequences.
-     * @param d The maximum permitted different nucleotides.
+     * @param d The maximum permitted different elements.
      * @return The most frequent <i>k</i> long occurrences with at most <i>d</i> mismatches.
      */
     public Set<TYPE> findMostFrequentMismatchSubSequences(final int k, final int d) {
@@ -526,7 +550,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      * Get all <i>k</i> long subsequences with at most <i>d</i> mismatches of the DNA.
      *
      * @param k The size of the subsequnces.
-     * @param d The maximum permitted different nucleotides.
+     * @param d The maximum permitted different elements.
      * @return All <i>k</i> long subsequences with <i>d</i> mismatch in a {@link Set}.
      */
     public Set<TYPE> getMismatchSubSequences(final int k, final int d) {
@@ -547,10 +571,10 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
 
     /**
      * Get all <i>k</i> long sequences which has at most <i>d</i> different
-     * nucleotides and are greater or equals than <i>t</i> in the DNA sequence.
+     * elements and are greater or equals than <i>t</i> in the DNA sequence.
      *
      * @param k The findable <i>k</i> long sequences.
-     * @param d The maximum permitted different nucleotides.
+     * @param d The maximum permitted different elements.
      * @param t The threshold of the occurrences of the <i>k</i> long sequences in the DNA.
      * @return All <i>k</i> long sequences at most <i>d</i> mismatches which occurrences
      *             are greater or equals than <i>t</i>.
@@ -643,13 +667,13 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      *             the sequence, the Hamming-distance decreases, so the algorithm will have to
      *             generate mismatch instances from the new pattern (generator set).</li>
      *         </ul>
-     *     The new element will be the pattern from the 1. position o the end, concatenated
+     *     The new element will be the pattern from the 1. position of the end, concatenated
      *     with the <i>i</i>. element of the sequence.
      *     </li>
-     *     <li>If <i>d</i> greater than 0 add the subsequence from i + 1. to k + i. to the
+     *     <li>If <i>d</i> greater than 0 add the subsequence from i + 1. to i + k. to the
      *     generator set.</li>
      *     <li>Generates the next mismatch pattern from the generator set. The algorithm
-     *     iterates over every generator element and substitute every nucleobas at the last
+     *     iterates over every generator element and substitute every element at the last
      *     position in the pattern.</li>
      *     <li>Add these 4 element to the new mismatch set.</li>
      *     <li>Continue at 4. point until the last generator element.</li>
@@ -658,7 +682,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      * </ol>
      *
      * @param k The <i>k</i> long subsequences.
-     * @param d The maximum permitted different nucleotides.
+     * @param d The maximum permitted different elements.
      * @return The occurrence map of the sequence elements and their mismatches.
      */
     @SuppressWarnings("unchecked")
@@ -669,7 +693,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
         OccurrenceMap<TYPE> occurrenceMap = OccurrenceMap.build();
         int lengthDiff = sequenceLength - k;
         Set<TYPE> mismatchSet = construct(sequence.substring(0, k))
-                .generateMismatches(d);
+                                    .generateMismatches(d);
 
         for (int i = 0; i < lengthDiff; i++) {
             Set<TYPE> nextMismatchesSet = Sets.newHashSet();
@@ -690,9 +714,9 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
 
             for (TYPE generatedMismatchPattern : generatedMismatchesSet) {
                 char[] charArray = generatedMismatchPattern.sequence.toCharArray();
-                ELEMENT[] nucleotideArray = getElementArray();
-                for (ELEMENT nucleotide : nucleotideArray) {
-                    charArray[k - 1] = nucleotide.getLetter();
+                ELEMENT[] elementArray = getElementArray();
+                for (ELEMENT element : elementArray) {
+                    charArray[k - 1] = element.getLetter();
                     nextMismatchesSet.add(construct(new String(charArray)));
                 }
             }
@@ -704,23 +728,23 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
 
     /**
      * Generate {@link BiologicalSequence}s from this sequence which have at most <i>d</i> different
-     * nucleotides.
+     * elements.
      *
-     * @param d The maximum permitted different nucleotides.
-     * @return All nucleotides which are different at most <i>d</i> nucleotides.
+     * @param d The maximum permitted different elements.
+     * @return All elements which are different at most <i>d</i> elements.
      */
     public Set<TYPE> generateMismatches(final int d) {
         Preconditions.checkArgument(d >= 0, "Maximum mismatch number (d) should be greater or equals than 0");
 
         Map<String, Integer> mismatchMap = Maps.newHashMap();
 
-        ELEMENT[] nucleotideArray = getElementArray();
-        for (ELEMENT aNucleotideArray : nucleotideArray) {
-            char nucleotideLetter = aNucleotideArray.getLetter();
-            if (sequence.charAt(0) == nucleotideLetter) {
-                mismatchMap.put(Character.toString(nucleotideLetter), 0);
+        ELEMENT[] elementArray = getElementArray();
+        for (ELEMENT element : elementArray) {
+            char elementLetter = element.getLetter();
+            if (sequence.charAt(0) == elementLetter) {
+                mismatchMap.put(Character.toString(elementLetter), 0);
             } else if (d > 0) {
-                mismatchMap.put(Character.toString(nucleotideLetter), 1);
+                mismatchMap.put(Character.toString(elementLetter), 1);
             }
         }
 
@@ -728,12 +752,12 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
             Map<String, Integer> newMismatchMap = Maps.newHashMap();
             for (String prefix : mismatchMap.keySet()){
                 int mismatchCount = mismatchMap.get(prefix);
-                for (ELEMENT aNucleotideArray : nucleotideArray) {
-                    char nucleotideLetter = aNucleotideArray.getLetter();
-                    if (sequence.charAt(i) == nucleotideLetter) {
-                        newMismatchMap.put(prefix + nucleotideLetter, mismatchCount);
+                for (ELEMENT element : elementArray) {
+                    char elementLetter = element.getLetter();
+                    if (sequence.charAt(i) == elementLetter) {
+                        newMismatchMap.put(prefix + elementLetter, mismatchCount);
                     } else if (mismatchCount < d) {
-                        newMismatchMap.put(prefix + nucleotideLetter, mismatchCount + 1);
+                        newMismatchMap.put(prefix + elementLetter, mismatchCount + 1);
                     }
                 }
             }
@@ -744,24 +768,14 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
 
     /**
      * Compares the {@link BiologicalSequence}'s sequence with the other {@link BiologicalSequence}'s sequence and calculates
-     * the number of the different nucleotides at the same sequence position.
+     * the number of the different elements at the same sequence position.
      *
      * @param otherBiologicalSequence The other {@link BiologicalSequence} compare with.
-     * @return The number of the different nucleotides at the same positions.
+     * @return The number of the different elements at the same positions.
      * @throws IllegalArgumentException If otherBiologicalSequence has different length.
      */
     public int getMismatchNumber(final TYPE otherBiologicalSequence) {
-        this.validateSameLengthBiologicalSequence(otherBiologicalSequence);
-
-        int hamming = 0;
-        for (int i = 0; i < sequenceLength; i++) {
-            if (sequence.charAt(i) != otherBiologicalSequence.sequence.charAt(i)) hamming++;
-        }
-        return hamming;
-    }
-
-    private void validateSameLengthBiologicalSequence(BiologicalSequence otherBiologicalSequence) {
-        Preconditions.checkArgument(otherBiologicalSequence != null, StringFormatter.format("Other %s should not be null", getBiologicalSequenceTypeName()));
-        Preconditions.checkArgument(sequenceLength == otherBiologicalSequence.sequenceLength, StringFormatter.format("The sequence length of the other %s should be the same as the sequence length", getBiologicalSequenceTypeName()));
+        validateType(otherBiologicalSequence);
+        return SequenceUtils.hammingDistance(sequence, otherBiologicalSequence.sequence);
     }
 }

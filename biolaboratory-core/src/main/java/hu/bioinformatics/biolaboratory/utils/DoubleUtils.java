@@ -13,6 +13,8 @@ public class DoubleUtils {
     private static final double DEFAULT_PRECISION = 0.000001d;
     private static final double MAXIMUM_ERROR = 0.001d;
 
+    private DoubleUtils() {}
+
     /**
      * Compares two double values with maximum 1e-6 error.
      *

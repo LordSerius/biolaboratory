@@ -52,10 +52,23 @@ public class BiologicalSequenceTest {
                 is(not(sameInstance(biologicalSequence)))));
     }
 
+    @Test(dataProvider = BiologicalSequenceTestDataProvider.INVALID_GET_ELEMENT_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldGetElementThrowException(BiologicalSequence biologicalSequence, int index) {
+        biologicalSequence.getElement(index);
+        fail();
+    }
+
+    @Test(dataProvider = BiologicalSequenceTestDataProvider.VALID_GET_ELEMENT_DATA_PROVIDER_NAME)
+    public void shouldGetElementReturn(BiologicalSequence biologicalSequence, int index, SequenceElement controlElement) {
+        SequenceElement element = biologicalSequence.getElement(index);
+        assertThat(element, is(equalTo(controlElement)));
+    }
+
     @Test(dataProvider = BiologicalSequenceTestDataProvider.GET_SEQUENCE_AS_ELEMENTS_DATA_PROVIDER_NAME)
-    public void shouldGetSequenceAsElementsReturn(BiologicalSequence biologicalSequence, SequenceElement[] controlNucleotides) {
-        SequenceElement[] nucleotides = biologicalSequence.getSequenceAsElements();
-        assertThat(nucleotides, is(equalTo(controlNucleotides)));
+    public void shouldGetSequenceAsElementsReturn(BiologicalSequence biologicalSequence, SequenceElement[] controlElements) {
+        SequenceElement[] elements = biologicalSequence.getSequenceAsElements();
+        assertThat(elements, is(equalTo(controlElements)));
     }
 
     @Test(dataProvider = BiologicalSequenceTestDataProvider.EQUALS_DATA_PROVIDER_NAME)
@@ -76,7 +89,7 @@ public class BiologicalSequenceTest {
         assertThat(elementOccurrences, is(equalTo(controlOccurrenceMap)));
     }
 
-    @Test(dataProvider = BiologicalSequenceTestDataProvider.INVALID_GET_ELEMENT_DATA_PROVIDER_NAME,
+    @Test(dataProvider = BiologicalSequenceTestDataProvider.INVALID_GET_ELEMENT_NUMBER_DATA_PROVIDER_NAME,
             expectedExceptions = IllegalArgumentException.class)
     public void shouldGetElementNumberThrowException(BiologicalSequence biologicalSequence, SequenceElement sequenceElement) {
         biologicalSequence.getElementNumber(sequenceElement);
@@ -115,7 +128,7 @@ public class BiologicalSequenceTest {
         assertThat(elementsNumber, is(equalTo(controlNumber)));
     }
 
-    @Test(dataProvider = BiologicalSequenceTestDataProvider.INVALID_GET_ELEMENT_DATA_PROVIDER_NAME,
+    @Test(dataProvider = BiologicalSequenceTestDataProvider.INVALID_GET_ELEMENT_NUMBER_DATA_PROVIDER_NAME,
             expectedExceptions = IllegalArgumentException.class)
     public void shouldGetElementRatioThrowException(BiologicalSequence biologicalSequence, SequenceElement sequenceElement) {
         biologicalSequence.getElementRatio(sequenceElement);
@@ -149,7 +162,7 @@ public class BiologicalSequenceTest {
     }
 
     @Test(dataProvider = BiologicalSequenceTestDataProvider.VALID_GET_RATIOS_ABOUT_SET_DATA_PROVIDER_NAME)
-    public void shouldGetElementsRatioAboutSetReturn(BiologicalSequence biologicalSequence, Set<SequenceElement >sequenceElementSet, double controlRatio) {
+    public void shouldGetElementsRatioAboutSetReturn(BiologicalSequence biologicalSequence, Set<SequenceElement> sequenceElementSet, double controlRatio) {
         double elementRatio = biologicalSequence.getElementsRatio(sequenceElementSet);
         assertThat(elementRatio, is(closeTo(controlRatio, 0.001)));
     }
@@ -221,6 +234,19 @@ public class BiologicalSequenceTest {
 
     @Test(dataProvider = BiologicalSequenceTestDataProvider.INVALID_PATTERN_ARGUMENTS_DATA_PROVIDER_NAME,
             expectedExceptions = IllegalArgumentException.class)
+    public void shouldFindMinimumMismatchSubSequencesNumberThrowException(BiologicalSequence biologicalSequence, BiologicalSequence pattern) {
+        biologicalSequence.findMinimumMismatchSubSequenceNumber(pattern);
+        fail();
+    }
+
+    @Test(dataProvider = BiologicalSequenceTestDataProvider.VALID_FIND_MINIMUM_MISMATCH_SUB_SEQUENCES_NUMBER_DATA_PROVIDER_NAME)
+    public void shouldFindMinimumMismatchSubSequencesNumberReturn(BiologicalSequence biologicalSequence, BiologicalSequence pattern, int controlMinimumNumber) {
+        int minimumNumber = biologicalSequence.findMinimumMismatchSubSequenceNumber(pattern);
+        assertThat(minimumNumber, is(equalTo(controlMinimumNumber)));
+    }
+
+    @Test(dataProvider = BiologicalSequenceTestDataProvider.INVALID_PATTERN_ARGUMENTS_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
     public void shouldPatternCountThrowExceptionForBlankPattern(BiologicalSequence biologicalSequence, BiologicalSequence pattern) {
         biologicalSequence.patternCount(pattern);
         fail();
@@ -237,12 +263,6 @@ public class BiologicalSequenceTest {
     public void shouldThrowExceptionForPatternMatchingWithMismatches(BiologicalSequence biologicalSequence, BiologicalSequence pattern, int d) {
         biologicalSequence.patternMatchingWithMismatches(pattern, d);
         fail();
-    }
-
-    @Test(dataProvider = BiologicalSequenceTestDataProvider.VALID_PATTERN_ARGUMENTS_WITH_MISMATCHES_DATA_PROVIDER_NAME)
-    public void shouldForPatternMatchingWithMismatchesReturn(BiologicalSequence biologicalSequence, BiologicalSequence pattern, int d, List<Integer> controlList) {
-        List<Integer> patternPositions = biologicalSequence.patternMatchingWithMismatches(pattern, d);
-        assertThat(patternPositions, is(equalTo(controlList)));
     }
 
     @Test(dataProvider = BiologicalSequenceTestDataProvider.INVALID_PATTERN_ARGUMENTS_WITH_MISMATCHES_DATA_PROVIDER_NAME,

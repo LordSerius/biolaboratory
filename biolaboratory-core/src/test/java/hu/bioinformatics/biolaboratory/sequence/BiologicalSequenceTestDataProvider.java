@@ -18,7 +18,7 @@ import javax.inject.Inject;
 import java.util.HashSet;
 
 /**
- * Test cases for the {@link BiologicalSequence} class.
+ * Test data provider for {@link BiologicalSequenceTest} test class.
  *
  * @author Attila Radi
  */
@@ -57,6 +57,27 @@ public class BiologicalSequenceTestDataProvider {
                 { Dna.build("ACGT"), " name ", "name" },
                 { Dna.build("name", "ACGT"), "", "" },
                 { Dna.build("name", "ACGT"), " ", "" }
+        };
+    }
+
+    static final String INVALID_GET_ELEMENT_DATA_PROVIDER_NAME = "invalidGetElementDataProvider";
+
+    @DataProvider(name = INVALID_GET_ELEMENT_DATA_PROVIDER_NAME)
+    Object[][] invalidGetElementDataProvider() {
+        return new Object[][] {
+                { Dna.build("ACGT"), -1 },
+                { Dna.build("ACGT"), 5 }
+        };
+    }
+
+    static final String VALID_GET_ELEMENT_DATA_PROVIDER_NAME = "validGetElementDataProvider";
+
+    @DataProvider(name = VALID_GET_ELEMENT_DATA_PROVIDER_NAME)
+    Object[][] validGetElementDataProvider() {
+        return new Object[][] {
+                { Dna.build("ACGT"), 0, DnaNucleotide.ADENINE },
+                { Dna.build("ACGT"), 1, DnaNucleotide.CYTOSINE},
+                { Dna.build("ACGT"), 3, DnaNucleotide.THYMINE }
         };
     }
 
@@ -123,10 +144,10 @@ public class BiologicalSequenceTestDataProvider {
         };
     }
 
-    static final String INVALID_GET_ELEMENT_DATA_PROVIDER_NAME = "invalidGetElementDataProvider";
+    static final String INVALID_GET_ELEMENT_NUMBER_DATA_PROVIDER_NAME = "invalidGetElementNumberDataProvider";
 
-    @DataProvider(name = INVALID_GET_ELEMENT_DATA_PROVIDER_NAME)
-    Object[][] invalidGetElementDataProvider() {
+    @DataProvider(name = INVALID_GET_ELEMENT_NUMBER_DATA_PROVIDER_NAME)
+    Object[][] invalidGetElementNumberDataProvider() {
         return new Object[][] {
                 { Dna.build("ACGT"), null },
                 { Dna.build("ACGT"), RnaNucleotide.URACIL },
@@ -344,7 +365,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String INVALID_PATTERN_ARGUMENTS_DATA_PROVIDER_NAME = "invalidPatternArgumentsDataProvider";
 
     @DataProvider(name = INVALID_PATTERN_ARGUMENTS_DATA_PROVIDER_NAME)
-    Object[][] provideInvalidPatternArguments() {
+    Object[][] invalidPatternArgumentsDataProvider() {
         return new Object[][] {
                 { Dna.build("AGTC"), null },
                 { Dna.build("AGTC"), Dna.build("AGTCA") },
@@ -355,7 +376,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String VALID_PATTERN_ARGUMENTS_DATA_PROVIDER_NAME = "validPatternArgumentsDataProvider";
 
     @DataProvider(name = VALID_PATTERN_ARGUMENTS_DATA_PROVIDER_NAME)
-    Object[][] provideValidPatternArguments() {
+    Object[][] validPatternArgumentsDataProvider() {
         return new Object[][] {
                 { Dna.build("ACAACTATGCATACTATCGGGAACTATCCT"), Dna.build("ACTAT"), Lists.newArrayList(3, 12, 22) },
                 { Dna.build("GCGCG"), Dna.build("GCG"), Lists.newArrayList(0, 2) },
@@ -367,6 +388,20 @@ public class BiologicalSequenceTestDataProvider {
                 { Dna.build("AAA"), Dna.build("G"), Lists.newArrayList() },
                 { Dna.build("AAA"), Dna.build("A"), Lists.newArrayList(0, 1, 2) },
                 { Dna.build("AAA"), Dna.build("AAA"), Lists.newArrayList(0)}
+        };
+    }
+
+    static final String VALID_FIND_MINIMUM_MISMATCH_SUB_SEQUENCES_NUMBER_DATA_PROVIDER_NAME = "findMinimumMismatchSubSequencesNumberDataProvider";
+
+    @DataProvider(name = VALID_FIND_MINIMUM_MISMATCH_SUB_SEQUENCES_NUMBER_DATA_PROVIDER_NAME)
+    Object[][] validFindMinimumMismatchSubSequencesNumberDataProvider() {
+        return new Object[][] {
+                { Dna.build("ACGT"), Dna.build("A"), 0},
+                { Dna.build("ACGT"), Dna.build("AA"), 1 },
+                { Dna.build("ACGT"), Dna.build("AAA"), 2 },
+                { Dna.build("ACGT"), Dna.build("AAAA"), 3 },
+                { Dna.build("AAAA"), Dna.build("CC"), 2 },
+                { Dna.build("AAAA"), Dna.build("CCCC"), 4 }
         };
     }
 

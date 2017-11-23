@@ -75,10 +75,10 @@ public class DnaArrayTestDataProvider {
         };
     }
 
-    static final String VALID_FIND_MOST_FREQUENT_MOTIFS_DATA_PROVIDER_NAME = "validFindMostFrequentMotifsDataProvider";
+    static final String VALID_FIND_MOST_FREQUENT_MOTIFS_EXHAUSTING_DATA_PROVIDER_NAME = "validFindMostFrequentMotifsExhaustingDataProvider";
 
-    @DataProvider(name = VALID_FIND_MOST_FREQUENT_MOTIFS_DATA_PROVIDER_NAME)
-    Object[][] validFindMostFrequentMotifsDataProvider() {
+    @DataProvider(name = VALID_FIND_MOST_FREQUENT_MOTIFS_EXHAUSTING_DATA_PROVIDER_NAME)
+    Object[][] validFindMostFrequentMotifsExhaustingDataProvider() {
         return new Object[][] {
                 { DnaArray.build(DnaCollectors.stringToDnaList("AAAAAA", "AAAAAA", "AAAAAA", "AAAAAA")), 2, 0, DnaCollectors.stringToDnaSet("AA") },
                 { DnaArray.build(DnaCollectors.stringToDnaList("AAAAAA")), 2, 1, DnaCollectors.stringToDnaSet("AA", "AC", "AG", "AT", "CA", "GA", "TA") },
@@ -91,6 +91,15 @@ public class DnaArrayTestDataProvider {
                 { DnaArray.build(DnaCollectors.stringToDnaList("AAAAA", "AAAAA", "AACAA")), 3, 0, DnaCollectors.stringToDnaSet() },
                 { DnaArray.build(DnaCollectors.stringToDnaList("AACAA", "AAAAA", "AAAAA")), 3, 0, DnaCollectors.stringToDnaSet() },
                 { DnaArray.build(DnaCollectors.stringToDnaList("TCTGAGCTTGCGTTATTTTTAGACC", "GTTTGACGGGAACCCGACGCCTATA", "TTTTAGATTTCCTCAGTCCACTATA", "CTTACAATTTCGTTATTTATCTAAT", "CAGTAGGAATAGCCACTTTGTTGTA", "AAATCCATTAAGGAAAGACGACCGT")), 5, 2, testDnaSetLoader.load("find-most-frequent-motifs-extra-dataset-solution.txt") }
+        };
+    }
+
+    static final String VALID_FIND_MOST_FREQUENT_MOTIFS_MEDIAN_STRING_DATA_PROVIDER_NAME = "validFindMostFrequentMotifsMedianStringDataProvider";
+
+    @DataProvider(name = VALID_FIND_MOST_FREQUENT_MOTIFS_MEDIAN_STRING_DATA_PROVIDER_NAME)
+    Object[][] validFindMostFrequentMotifsMedianStringDataProvider() {
+        return new Object[][] {
+                {}
         };
     }
 }

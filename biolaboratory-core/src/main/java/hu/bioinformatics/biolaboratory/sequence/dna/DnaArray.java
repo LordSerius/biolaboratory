@@ -4,11 +4,9 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import hu.bioinformatics.biolaboratory.utils.Validation;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * A collection of {@link Dna}s which provide motif finding methods on them. Every included {@link Dna} should be the
@@ -161,15 +159,14 @@ public class DnaArray {
      * @param d Gives the maximum mismatch number.
      * @return The most frequent patterns in the samples.
      */
-    public Set<Dna> findMostFrequentMotifs(final int k, final int d) {
-        Preconditions.checkArgument(k > 0, "Findable subsequence length (k) should be greater than 0");
-        Preconditions.checkArgument(k <= samplesLength, "Findable subsequence length (k) should be smaller or equals to the samples length");
+    public Set<Dna> findMostFrequentMotifsExhausting(final int k, final int d) {
+        validateFindablePatternNumber(k);
         Preconditions.checkArgument(d >= 0, "Maximum mismatch number (d) should be greater or equals than 0");
 
         Set<Set<Dna>> mostFrequentSampleSet = sampleList.stream()
-                .parallel()
-                .map(dna -> dna.getMismatchSubSequences(k, d))
-                .collect(Collectors.toSet());
+                                                        .parallel()
+                                                        .map(dna -> dna.getMismatchSubSequences(k, d))
+                                                        .collect(Collectors.toSet());
 
         Set<Dna> commonMotifSet = null;
         for (Set<Dna> samples : mostFrequentSampleSet) {
@@ -177,5 +174,46 @@ public class DnaArray {
             else commonMotifSet.retainAll(samples);
         }
         return commonMotifSet;
+    }
+
+    /**
+     * TODO
+     *
+     * @param k
+     * @return
+     */
+    public Set<Dna> findMostFrequentMotifsMedianString(final int k) {
+        validateFindablePatternNumber(k);
+
+        Set<Dna> mismatchSet = generatePatternDnas(k);
+
+        int minimumArrayHammingDistance = Integer.MAX_VALUE;
+        Set<Dna> minimumPatternSet = new HashSet<>();
+        for (Dna mismatch : mismatchSet) {
+            int arrayHammingDistance = sampleList.stream()
+                    .parallel()
+                    .mapToInt(dna -> dna.findMinimumMismatchSubSequenceNumber(mismatch))
+                    .sum();
+            if (arrayHammingDistance < minimumArrayHammingDistance) {
+                minimumArrayHammingDistance = arrayHammingDistance;
+                minimumPatternSet.clear();
+                minimumPatternSet.add(mismatch);
+            }
+            else if (arrayHammingDistance == minimumArrayHammingDistance) {
+                minimumPatternSet.add(mismatch);
+            }
+        }
+        return minimumPatternSet;
+    }
+
+    private void validateFindablePatternNumber(final int k) {
+        Preconditions.checkArgument(k > 0, "Findable subsequence length (k) should be greater than 0");
+        Preconditions.checkArgument(k <= samplesLength, "Findable subsequence length (k) should be smaller or equals to the samples length");
+    }
+
+    private Set<Dna> generatePatternDnas(final int length) {
+        return Dna.build(IntStream.range(0, length)
+                .mapToObj(index -> DnaNucleotide.ADENINE)
+                .toArray(DnaNucleotide[]::new)).generateMismatches(Integer.MAX_VALUE);
     }
 }
