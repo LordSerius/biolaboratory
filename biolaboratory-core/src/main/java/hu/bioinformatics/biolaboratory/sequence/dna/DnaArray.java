@@ -177,10 +177,11 @@ public class DnaArray {
     }
 
     /**
-     * TODO
+     * Find the most frequent <i>k</i> long patterns in the samples. The found patterns are the closest in the samples
+     * subsequence.
      *
-     * @param k
-     * @return
+     * @param k Gives the size of the findable pattern.
+     * @return The most frequent patterns in the samples.
      */
     public Set<Dna> findMostFrequentMotifsMedianString(final int k) {
         validateFindablePatternNumber(k);
@@ -198,8 +199,7 @@ public class DnaArray {
                 minimumArrayHammingDistance = arrayHammingDistance;
                 minimumPatternSet.clear();
                 minimumPatternSet.add(mismatch);
-            }
-            else if (arrayHammingDistance == minimumArrayHammingDistance) {
+            } else if (arrayHammingDistance == minimumArrayHammingDistance) {
                 minimumPatternSet.add(mismatch);
             }
         }

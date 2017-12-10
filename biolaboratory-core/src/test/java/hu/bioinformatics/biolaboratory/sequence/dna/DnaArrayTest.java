@@ -79,16 +79,16 @@ public class DnaArrayTest {
         assertThat(mostFrequentMotifs, is(equalTo(controlSet)));
     }
 
-//    @Test(dataProvider = DnaArrayTestDataProvider.INVALID_FIND_MOST_FREQUENT_MOTIFS_DATA_PROVIDER_NAME,
-//            expectedExceptions = IllegalArgumentException.class)
-//    public void shouldFindMostFrequentMotifsMedianStringThrowException(DnaArray dnaArray, int k, int d) {
-//        dnaArray.findMostFrequentMotifsExhausting(k, d);
-//        fail();
-//    }
+    @Test(dataProvider = DnaArrayTestDataProvider.INVALID_FIND_MOST_FREQUENT_MOTIFS_MEDIAN_STRING_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldFindMostFrequentMotifsMedianStringThrowException(DnaArray dnaArray, int k) {
+        dnaArray.findMostFrequentMotifsMedianString(k);
+        fail();
+    }
 
-//    @Test(dataProvider = DnaArrayTestDataProvider.VALID_FIND_MOST_FREQUENT_MOTIFS_EXHAUSTING_DATA_PROVIDER_NAME)
-//    public void shouldFindMostFrequentMotifsMedianStringReturn(DnaArray dnaArray, int k, int d, Set<Dna> controlSet) {
-//        Set<Dna> mostFrequentMotifs = dnaArray.findMostFrequentMotifsMedianString(k, d);
-//        assertThat(mostFrequentMotifs, is(equalTo(controlSet)));
-//    }
+    @Test(dataProvider = DnaArrayTestDataProvider.VALID_FIND_MOST_FREQUENT_MOTIFS_MEDIAN_STRING_DATA_PROVIDER_NAME)
+    public void shouldFindMostFrequentMotifsMedianStringReturn(DnaArray dnaArray, int k, Set<Dna> controlSet) {
+        Set<Dna> mostFrequentMotifs = dnaArray.findMostFrequentMotifsMedianString(k);
+        assertThat(mostFrequentMotifs, is(equalTo(controlSet)));
+    }
 }
