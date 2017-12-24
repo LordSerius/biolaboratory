@@ -2,10 +2,10 @@ package hu.bioinformatics.biolaboratory.resource.read;
 
 import com.google.common.base.Preconditions;
 import hu.bioinformatics.biolaboratory.guice.GuiceResourceModule;
-import hu.bioinformatics.biolaboratory.utils.CommentedString;
 import hu.bioinformatics.biolaboratory.resource.extension.ResourceReaderProvider;
 import hu.bioinformatics.biolaboratory.resource.extension.ResourceValidator;
 import hu.bioinformatics.biolaboratory.resource.read.wrapper.ReaderWrapperFactory;
+import hu.bioinformatics.biolaboratory.utils.CommentedString;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Reads fasta format files, and returns wit its row. The reader ignores the beginning prompt of the each sequences.
+ * Reads fasta format files, and returns with its row. The reader ignores the beginning prompt of the each sequences.
  * Each odd row contains the comment section of the sequence, and each even row contains the sequence.
  *
  * @author Attila Radi

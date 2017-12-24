@@ -115,7 +115,57 @@ public class DnaArrayTestDataProvider {
                 { DnaArray.build(DnaCollectors.stringToDnaList("ACGT", "ACGT", "ACGT")), 3, DnaCollectors.stringToDnaSet("ACG", "CGT") },
                 { DnaArray.build(DnaCollectors.stringToDnaList("ATA", "ACA", "AGA", "AAT", "AAC")), 3, DnaCollectors.stringToDnaSet("AAA") },
                 { DnaArray.build(DnaCollectors.stringToDnaList("AAG", "AAT")), 3, DnaCollectors.stringToDnaSet("AAG", "AAT") },
-                { testDnaArrayLoader.load("median-string-extra-dataset.fas"), 6, DnaCollectors.stringToDnaSet("CGGCGA") }
+                { testDnaArrayLoader.load("median-string-extra-dataset.dnacol"), 6, DnaCollectors.stringToDnaSet("CGGCGA") }
+        };
+    }
+
+    static final String INVALID_PROFILE_MOST_PROBABLE_SUB_SEQUENCE_DATA_PROVIDER_NAME = "invalidProfileMostProbableSubSequenceDataProvider";
+
+    @DataProvider(name = INVALID_PROFILE_MOST_PROBABLE_SUB_SEQUENCE_DATA_PROVIDER_NAME)
+    Object[][] invalidProfileMostProbableSubSequenceDataProvider() {
+        return new Object[][] {
+                { DnaArray.build(DnaCollectors.stringToDnaList("ACGT")), null},
+                { DnaArray.build(DnaCollectors.stringToDnaList("ACGT")), Dna.build("ACG")}
+        };
+    }
+
+    static final String VALID_PROFILE_MOST_PROBABLE_SUB_SEQUENCE_DATA_PROVIDER_NAME = "validProfileMostProbableSubSequenceDataProvider";
+
+    @DataProvider(name = VALID_PROFILE_MOST_PROBABLE_SUB_SEQUENCE_DATA_PROVIDER_NAME)
+    Object[][] validProfileMostProbableSubSequenceDataProvider() {
+        return new Object[][] {
+                { DnaArray.build(DnaCollectors.stringToDnaList("ACGT")), Dna.build("AAAA"), DnaCollectors.stringToDnaSet("AAAA") },
+                { DnaArray.build(DnaCollectors.stringToDnaList("ACGT")), Dna.build("AAAAA"), DnaCollectors.stringToDnaSet("AAAA") },
+                { testDnaArrayLoader.load("profile-most-probable-sub-sequence-sample-dataset.dnacol"), Dna.build("ACCTGTTTATTGCCTAAGTTCCGAACAAACCCAATATAGCCCGAGGGCCT"), DnaCollectors.stringToDnaSet("CCGAG") },
+                { testDnaArrayLoader.load("profile-most-probable-sub-sequence-debug-dataset-1.dnacol"), Dna.build("AGCAGCTTTGACTGCAACGGGCAATATGTCTCTGTGTGGATTAAAAAAAGAGTGTCTGATCTGAACTGGTTACCTGCCGTGAGTAAAT"), DnaCollectors.stringToDnaSet("AGCAGCTT") },
+                { testDnaArrayLoader.load("profile-most-probable-sub-sequence-debug-dataset-2.dnacol"), Dna.build("TTACCATGGGACCGCTGACTGATTTCTGGCGTCAGCGTGATGCTGGTGTGGATGACATTCCGGTGCGCTTTGTAAGCAGAGTTTA"), DnaCollectors.stringToDnaSet("AAGCAGAGTTTA") }
+        };
+    }
+
+    static final String INVALID_PATTERN_PROBABILITY_DATA_PROVIDER_NAME = "invalidPatternProbabilityDataProvider";
+
+    @DataProvider(name = INVALID_PATTERN_PROBABILITY_DATA_PROVIDER_NAME)
+    Object[][] invalidPatternProbabilityDataProvider() {
+        return new Object[][] {
+                { DnaArray.build(DnaCollectors.stringToDnaList("ACGT")), null },
+                { DnaArray.build(DnaCollectors.stringToDnaList("ACGT")), Dna.build("ACG") },
+                { DnaArray.build(DnaCollectors.stringToDnaList("ACGT")), Dna.build("ACGTA") }
+        };
+    }
+
+    static final String VALID_PATTERN_PROBABILITY_DATA_PROVIDER_NAME = "validPatternProbabilityDataProvider";
+
+    @DataProvider(name = VALID_PATTERN_PROBABILITY_DATA_PROVIDER_NAME)
+    Object[][] validPatternProbabilityDataProvider() {
+        return new Object[][] {
+                { DnaArray.build(DnaCollectors.stringToDnaList("AAAA")), Dna.build("AAAA"), 1.0d },
+                { DnaArray.build(DnaCollectors.stringToDnaList("AAAA")), Dna.build("TTTT"), 0.0d },
+                { DnaArray.build(DnaCollectors.stringToDnaList("AAAA", "AAAA")), Dna.build("AAAA"), 1.0d },
+                { DnaArray.build(DnaCollectors.stringToDnaList("ACGT", "TGCA")), Dna.build("AAAA"), 0.0d },
+                { DnaArray.build(DnaCollectors.stringToDnaList("ACGT", "TGCA")), Dna.build("ACGT"), 0.0625d },
+                { testDnaArrayLoader.load("pattern-probability-dataset.dnacol"), Dna.build("ACGGGGATTACC"), 0.000839808d },
+                { testDnaArrayLoader.load("pattern-probability-dataset.dnacol"), Dna.build("TCGGGGATTTCC"), 0.0205753d },
+                { testDnaArrayLoader.load("pattern-probability-dataset.dnacol"), Dna.build("TCGTGGATTTCC"), 0.0d }
         };
     }
 }

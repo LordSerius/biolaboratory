@@ -12,7 +12,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.closeTo;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.sameInstance;
 import static org.testng.Assert.fail;
 
 /**
@@ -90,5 +95,31 @@ public class DnaArrayTest {
     public void shouldFindMostFrequentMotifsMedianStringReturn(DnaArray dnaArray, int k, Set<Dna> controlSet) {
         Set<Dna> mostFrequentMotifs = dnaArray.findMostFrequentMotifsMedianString(k);
         assertThat(mostFrequentMotifs, is(equalTo(controlSet)));
+    }
+
+    @Test(dataProvider = DnaArrayTestDataProvider.INVALID_PROFILE_MOST_PROBABLE_SUB_SEQUENCE_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldProfileMostProbableSubSequenceThrowException(DnaArray dnaArray, Dna dna) {
+        dnaArray.profileMostProbableSubSequence(dna);
+        fail();
+    }
+
+    @Test(dataProvider = DnaArrayTestDataProvider.VALID_PROFILE_MOST_PROBABLE_SUB_SEQUENCE_DATA_PROVIDER_NAME)
+    public void shouldProfileMostProbableSubSequenceReturn(DnaArray dnaArray, Dna dna, Set<Dna> controlSubSet) {
+        Set<Dna> probablePatternSet = dnaArray.profileMostProbableSubSequence(dna);
+        assertThat(probablePatternSet, is(equalTo(controlSubSet)));
+    }
+
+    @Test(dataProvider = DnaArrayTestDataProvider.INVALID_PATTERN_PROBABILITY_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldPatternProbabilityThrowException(DnaArray dnaArray, Dna pattern) {
+        dnaArray.patternProbability(pattern);
+        fail();
+    }
+
+    @Test(dataProvider = DnaArrayTestDataProvider.VALID_PATTERN_PROBABILITY_DATA_PROVIDER_NAME)
+    public void shouldPatternProbabilityReturn(DnaArray dnaArray, Dna pattern, double controlProbability) {
+        double probability = dnaArray.patternProbability(pattern);
+        assertThat(probability, is(closeTo(controlProbability, 0.0000001)));
     }
 }

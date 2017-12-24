@@ -9,24 +9,24 @@ import java.io.File;
 import static org.testng.Assert.fail;
 
 /**
- * Test cases for {@link DnaFileValidator} class.
+ * Test classes for {@link DnaCollectionResourceValidator}
  *
  * @author Attila Radi
  */
-public class DnaFileValidatorTest {
+public class DnaCollectionResourceValidatorTest {
 
-    private DnaFileValidator dnaFileValidator;
+    private DnaCollectionResourceValidator dnaCollectionResourceValidator;
 
     private static final String INVALID_FILE_PATH_DATA_PROVIDER_NAME = "invalidFilePathDataProvider";
-    
+
     @DataProvider(name = INVALID_FILE_PATH_DATA_PROVIDER_NAME)
     private Object[][] invalidFilePathDataProvider() {
         return new Object[][] {
-            { null },
-            { "" },
-            { " " },
-            { ".dna" },
-            { "biolaboratory" + File.separator + "ecoli.dn" }
+                { null },
+                { "" },
+                { " " },
+                { ".dnacol" },
+                { "biolaboratory" + File.separator + "ecoli.dn" }
         };
     }
 
@@ -35,27 +35,27 @@ public class DnaFileValidatorTest {
     @DataProvider(name = VALID_FILE_PATH_DATA_PROVIDER_NAME)
     private Object[][] validFilePathDataProvider() {
         return new Object[][] {
-                { "c:" + File.separator + "biolaboratory" + File.separator + "ecoli.dna" },
-                { File.separator + "biolaboratory" + File.separator + "ecoli.dna" },
-                { "biolaboratory" + File.separator + "ecoli.dna" },
-                { "ecoli.dna" }
+                { "c:" + File.separator + "biolaboratory" + File.separator + "ecoli-variation.dnacol" },
+                { File.separator + "biolaboratory" + File.separator + "ecoli-variation.dnacol" },
+                { "biolaboratory" + File.separator + "ecoli-variation.dnacol" },
+                { "ecoli-variation.dnacol" }
         };
     }
 
     @BeforeMethod
     public void setUp() {
-        dnaFileValidator = new DnaFileValidator();
+        dnaCollectionResourceValidator = new DnaCollectionResourceValidator();
     }
 
     @Test(dataProvider = INVALID_FILE_PATH_DATA_PROVIDER_NAME,
             expectedExceptions = IllegalArgumentException.class)
     public void shouldFailValidation(String filePath) {
-        dnaFileValidator.validate(filePath);
+        dnaCollectionResourceValidator.validate(filePath);
         fail();
     }
-    
+
     @Test(dataProvider = VALID_FILE_PATH_DATA_PROVIDER_NAME)
     public void shouldPassValidation(String filePath) {
-        dnaFileValidator.validate(filePath);
+        dnaCollectionResourceValidator.validate(filePath);
     }
 }

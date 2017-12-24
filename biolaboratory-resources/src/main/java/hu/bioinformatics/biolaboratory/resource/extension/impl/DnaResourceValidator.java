@@ -6,16 +6,16 @@ import hu.bioinformatics.biolaboratory.resource.extension.ResourceExtensionValid
 import java.util.regex.Pattern;
 
 /**
- * Validates FASTA resource extensions.
- *
+ * Validate DNA resource extensions.
+ * 
  * @author Attila Radi
+ *
  */
-public class FastaResourceValidator extends ResourceExtensionValidator {
-    private static final Pattern FASTA_EXTENSION = Pattern.compile(".+\\.fas(ta)?");
+public class DnaResourceValidator extends ResourceExtensionValidator {
+    private static final Pattern DNA_EXTENSION = Pattern.compile(".+\\.dna");
 
     @Override
     protected void validateExtension(String resourcePath) {
-        Preconditions.checkArgument(FASTA_EXTENSION.matcher(resourcePath).matches(), "Resource should have .fas or .fasta extension");
-
+        Preconditions.checkArgument(DNA_EXTENSION.matcher(resourcePath).matches(), "Resource should have .dna extension");
     }
 }

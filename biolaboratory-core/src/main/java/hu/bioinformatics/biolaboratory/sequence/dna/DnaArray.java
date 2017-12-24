@@ -2,9 +2,16 @@ package hu.bioinformatics.biolaboratory.sequence.dna;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import hu.bioinformatics.biolaboratory.utils.Validation;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -215,5 +222,55 @@ public class DnaArray {
         return Dna.build(IntStream.range(0, length)
                 .mapToObj(index -> DnaNucleotide.ADENINE)
                 .toArray(DnaNucleotide[]::new)).generateMismatches(Integer.MAX_VALUE);
+    }
+
+    /**
+     * Given a {@link Dna}, which subsequences are examined against the {@link DnaArray} motifs. Return with the {@link Set}
+     * of subsequences which are most likely (most probable) occur in the {@link DnaArray}.
+     *
+     * @param dna The {@link Dna} which subsequences are examined against the {@link DnaArray}'s probability.
+     * @return The most probable subsequences.
+     */
+    public Set<Dna> profileMostProbableSubSequence(final Dna dna) {
+        Preconditions.checkArgument(dna != null, "DNA should not be null");
+
+        Map<Dna, Double> patternProbabilityMap = dna.getSubSequences(samplesLength).stream()
+                .collect(Collectors.toMap(Function.identity(), this::patternProbability));
+
+        double highestProbability = 0.0;
+        Set<Dna> mostProbableSamples = Sets.newHashSet();
+
+        for (Map.Entry<Dna, Double> patternProbabilityPair : patternProbabilityMap.entrySet()) {
+            double patternProbability = patternProbabilityPair.getValue();
+            if (patternProbability > highestProbability) {
+                highestProbability = patternProbability;
+                mostProbableSamples.clear();
+            }
+            if (patternProbability == highestProbability) {
+                mostProbableSamples.add(patternProbabilityPair.getKey());
+            }
+        }
+
+        return mostProbableSamples;
+    }
+
+    /**
+     * Returns the probability of the given sequence in this motif.
+     *
+     * @param sample The given sample.
+     * @return The probability of the sample.
+     */
+    public double patternProbability(final Dna sample) {
+        Preconditions.checkArgument(sample != null, "Sample should not be null");
+        Preconditions.checkArgument(sample.getSequenceLength() ==  samplesLength,
+                "Sample length differs than array length");
+
+        List<Map<DnaNucleotide, Double>> profile = motifs.profile();
+        DnaNucleotide[] sequenceElements = sample.getSequenceAsElements();
+
+        return IntStream.range(0, samplesLength)
+                .parallel()
+                .mapToDouble(i -> profile.get(i).get(sequenceElements[i]))
+                .reduce(1.0, (a, b) -> a * b);
     }
 }
