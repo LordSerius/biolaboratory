@@ -167,7 +167,8 @@ public class DnaArray {
      * @return The most frequent patterns in the samples.
      */
     public Set<Dna> findMostFrequentMotifsExhausting(final int k, final int d) {
-        validateFindablePatternNumber(k);
+        Preconditions.checkArgument(k > 0, "Findable subsequence length (k) should be greater than 0");
+        Preconditions.checkArgument(k <= samplesLength, "Findable subsequence length (k) should be smaller or equals to the samples length");
         Preconditions.checkArgument(d >= 0, "Maximum mismatch number (d) should be greater or equals than 0");
 
         Set<Set<Dna>> mostFrequentSampleSet = sampleList.stream()
@@ -191,9 +192,9 @@ public class DnaArray {
      * @return The most frequent patterns in the samples.
      */
     public Set<Dna> findMostFrequentMotifsMedianString(final int k) {
-        validateFindablePatternNumber(k);
+        Preconditions.checkArgument(k <= samplesLength, "Findable subsequence length (k) should be smaller or equals to the samples length");
 
-        Set<Dna> mismatchSet = generatePatternDnas(k);
+        Set<Dna> mismatchSet = Dna.generatePatternDnas(k);
 
         int minimumArrayHammingDistance = Integer.MAX_VALUE;
         Set<Dna> minimumPatternSet = new HashSet<>();
@@ -213,17 +214,6 @@ public class DnaArray {
         return minimumPatternSet;
     }
 
-    private void validateFindablePatternNumber(final int k) {
-        Preconditions.checkArgument(k > 0, "Findable subsequence length (k) should be greater than 0");
-        Preconditions.checkArgument(k <= samplesLength, "Findable subsequence length (k) should be smaller or equals to the samples length");
-    }
-
-    private Set<Dna> generatePatternDnas(final int length) {
-        return Dna.build(IntStream.range(0, length)
-                .mapToObj(index -> DnaNucleotide.ADENINE)
-                .toArray(DnaNucleotide[]::new)).generateMismatches(Integer.MAX_VALUE);
-    }
-
     /**
      * Given a {@link Dna}, which subsequences are examined against the {@link DnaArray} motifs. Return with the {@link Set}
      * of subsequences which are most likely (most probable) occur in the {@link DnaArray}.
@@ -232,10 +222,12 @@ public class DnaArray {
      * @return The most probable subsequences.
      */
     public Set<Dna> profileMostProbableSubSequence(final Dna dna) {
-        Preconditions.checkArgument(dna != null, "DNA should not be null");
+        Preconditions.checkArgument(dna != null, "Dna should not be null");
+        Preconditions.checkArgument(dna.getSequenceLength() >=  samplesLength,
+                "Dna length should greater or equal than sample length");
 
         Map<Dna, Double> patternProbabilityMap = dna.getSubSequences(samplesLength).stream()
-                .collect(Collectors.toMap(Function.identity(), this::patternProbability));
+                .collect(Collectors.toMap(Function.identity(), this::innerPatternProbability));
 
         double highestProbability = 0.0;
         Set<Dna> mostProbableSamples = Sets.newHashSet();
@@ -264,7 +256,10 @@ public class DnaArray {
         Preconditions.checkArgument(sample != null, "Sample should not be null");
         Preconditions.checkArgument(sample.getSequenceLength() ==  samplesLength,
                 "Sample length differs than array length");
+        return innerPatternProbability(sample);
+    }
 
+    private double innerPatternProbability(final Dna sample) {
         List<Map<DnaNucleotide, Double>> profile = motifs.profile();
         DnaNucleotide[] sequenceElements = sample.getSequenceAsElements();
 

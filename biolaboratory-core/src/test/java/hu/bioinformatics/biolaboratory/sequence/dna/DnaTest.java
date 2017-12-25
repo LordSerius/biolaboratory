@@ -68,6 +68,19 @@ public class DnaTest {
         assertThat(dna.getSequence(), is(equalTo(controlSequence)));
         assertThat(dna.getSequenceLength(), is(equalTo(controlSequence.length())));
     }
+
+    @Test(dataProvider = DnaTestDataProvider.INVALID_GENERATE_PATTERN_DNAS_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldGeneratePatternDnasThrowException(int length) {
+        Dna.generatePatternDnas(length);
+        fail();
+    }
+
+    @Test(dataProvider = DnaTestDataProvider.VALID_GENERATE_PATTERN_DNAS_DATA_PROVIDER_NAME)
+    public void shouldGeneratePatternDnasReturn(int length, Set<Dna> controlDnaSet) {
+        Set<Dna> generatedDnaSet = Dna.generatePatternDnas(length);
+        assertThat(generatedDnaSet, is(equalTo(controlDnaSet)));
+    }
     
     @Test(dataProvider = DnaTestDataProvider.VALID_MOST_FREQUENT_SUBSEQUENCES_DATA_PROVIDER_NAME)
     public void shouldMostFrequentSubSequencesReturn(Dna dna, int k, Set<Dna> controlMostFrequentSubSequences) {

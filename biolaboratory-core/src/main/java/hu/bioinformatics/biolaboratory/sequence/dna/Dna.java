@@ -17,8 +17,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.regex.Pattern;
+import java.util.stream.IntStream;
 
-import static hu.bioinformatics.biolaboratory.utils.Validation.*;
+import static hu.bioinformatics.biolaboratory.utils.Validation.validateCollection;
+import static hu.bioinformatics.biolaboratory.utils.Validation.validateNotEmptyCollection;
+import static hu.bioinformatics.biolaboratory.utils.Validation.validateNotEmptyVarargs;
+import static hu.bioinformatics.biolaboratory.utils.Validation.validateVarargs;
 
 /**
  * Represents a single DNA about the genome sequence in 5' -> 3' order.
@@ -113,6 +117,20 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
         String uppercaseSequence = formatSequence(sequence);
         Preconditions.checkArgument(sequenceValidator.matcher(uppercaseSequence).matches(), "DNA should contains only the letters of nucleotides");
         return uppercaseSequence;
+    }
+
+    /**
+     * Generates all <i>length</i> length {@link Dna}-s.
+     *
+     * @param length The length of the return {@link Dna}-s.
+     * @return All <i>length</i> length {@link Dna}.
+     */
+    public static Set<Dna> generatePatternDnas(final int length) {
+        Preconditions.checkArgument(length > 0, "Findable subsequence length (k) should be greater than 0");
+
+        return Dna.build(IntStream.range(0, length)
+                .mapToObj(index -> DnaNucleotide.ADENINE)
+                .toArray(DnaNucleotide[]::new)).generateMismatches(Integer.MAX_VALUE);
     }
 
     private Dna(final String sequence) {

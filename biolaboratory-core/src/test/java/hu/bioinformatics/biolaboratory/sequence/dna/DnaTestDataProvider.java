@@ -78,7 +78,28 @@ public class DnaTestDataProvider {
                 { new DnaNucleotide[] { DnaNucleotide.ADENINE, DnaNucleotide.CYTOSINE, DnaNucleotide.GUANINE, DnaNucleotide.THYMINE }, "ACGT" }
         };
     }
-    
+
+    static final String INVALID_GENERATE_PATTERN_DNAS_DATA_PROVIDER_NAME = "invalidGeneratePatternDnasDataProvider";
+
+    @DataProvider(name = INVALID_GENERATE_PATTERN_DNAS_DATA_PROVIDER_NAME)
+    static Object[][] invalidGeneratePatternDnasDataProvider() {
+        return new Object[][] {
+                { -1 },
+                { 0 }
+        };
+    }
+
+    static final String VALID_GENERATE_PATTERN_DNAS_DATA_PROVIDER_NAME = "validGeneratePatternDnasDataProvider";
+
+    @DataProvider(name = VALID_GENERATE_PATTERN_DNAS_DATA_PROVIDER_NAME)
+    static Object[][] validGeneratePatternDnasDataProvider() {
+        return new Object[][] {
+                { 1, DnaCollectors.stringToDnaSet("A", "C", "G", "T") },
+                { 2, DnaCollectors.stringToDnaSet("AA", "AC", "AG", "AT", "CA", "CC", "CG", "CT", "GA", "GC", "GG", "GT", "TA", "TC", "TG", "TT") },
+                { 3, DnaCollectors.stringToDnaSet("AAA", "AAC", "AAG", "AAT", "ACA", "ACC", "ACG", "ACT", "AGA", "AGC", "AGG", "AGT", "ATA", "ATC", "ATG", "ATT", "CAA", "CAC", "CAG", "CAT", "CCA", "CCC", "CCG", "CCT", "CGA", "CGC", "CGG", "CGT", "CTA", "CTC", "CTG", "CTT", "GAA", "GAC", "GAG", "GAT", "GCA", "GCC", "GCG", "GCT", "GGA", "GGC", "GGG", "GGT", "GTA", "GTC", "GTG", "GTT", "TAA", "TAC", "TAG", "TAT", "TCA", "TCC", "TCG", "TCT", "TGA", "TGC", "TGG", "TGT", "TTA", "TTC", "TTG", "TTT") }
+        };
+    }
+
     static final String VALID_MOST_FREQUENT_SUBSEQUENCES_DATA_PROVIDER_NAME = "validMostFrequentSubsequencesDataProvider";
     
     /**
