@@ -1,6 +1,5 @@
 package hu.bioinformatics.biolaboratory.utils.datastructures;
 
-import com.google.common.collect.ImmutableMap;
 import org.testng.annotations.Test;
 
 import java.util.Map;
@@ -8,7 +7,12 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.closeTo;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.sameInstance;
 import static org.testng.Assert.fail;
 
 /**
@@ -27,10 +31,9 @@ public class OccurrenceMapTest {
     }
 
     @Test(dataProvider = OccurrenceMapTestDataProvider.VALID_BUILD_DATA_PROVIDER_NAME)
-    public void shouldBuildReturn(Map<String, Integer> occurrences) {
+    public void shouldBuildReturn(Map<String, Integer> occurrences, Map<String, Integer> controlOccurrences) {
         OccurrenceMap<String> occurrenceMap = OccurrenceMap.build(occurrences);
-        occurrences = occurrences == null ? ImmutableMap.of() : occurrences;
-        assertThat(occurrenceMap.getOccurrencesInMap(), is(equalTo(occurrences)));
+        assertThat(occurrenceMap.getOccurrencesInMap(), is(equalTo(controlOccurrences)));
     }
 
     @Test(dataProvider = OccurrenceMapTestDataProvider.EMPTY_OCCURRENCE_MAP_DATA_PROVIDER_NAME,
@@ -233,6 +236,19 @@ public class OccurrenceMapTest {
         occurrenceMap.decrease(key);
         assertThat(occurrenceMap, is(equalTo(controlOccurrenceMap)));
     }
+
+    @Test(dataProvider = OccurrenceMapTestDataProvider.INVALID_SUBTRACT_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldSubtractThrowException(OccurrenceMap<String> occurrenceMap, String key, int number) {
+        occurrenceMap.subtract(key, number);
+        fail();
+    }
+
+    @Test(dataProvider = OccurrenceMapTestDataProvider.VALID_SUBTRACT_DATA_PROVIDER_NAME)
+    public void shouldSubtractReturn(OccurrenceMap<String> occurrenceMap, String key, int number, OccurrenceMap<String> controlOccurrenceMap) {
+        occurrenceMap.subtract(key, number);
+        assertThat(occurrenceMap, is(equalTo(controlOccurrenceMap)));
+    }
     
     @Test(dataProvider = OccurrenceMapTestDataProvider.INVALID_INCREASE_DATA_PROVIDER_NAME,
             expectedExceptions = IllegalArgumentException.class)
@@ -244,6 +260,19 @@ public class OccurrenceMapTest {
     @Test(dataProvider = OccurrenceMapTestDataProvider.VALID_INCREASE_DATA_PROVIDER_NAME)
     public void shouldIncreaseOccurrenceReturn(OccurrenceMap<String> occurrenceMap, String key, OccurrenceMap<String> controlOccurrenceMap) {
         occurrenceMap.increase(key);
+        assertThat(occurrenceMap, is(equalTo(controlOccurrenceMap)));
+    }
+
+    @Test(dataProvider = OccurrenceMapTestDataProvider.INVALID_ADD_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldAddThrowException(OccurrenceMap<String> occurrenceMap, String key, int number) {
+        occurrenceMap.add(key, number);
+        fail();
+    }
+
+    @Test(dataProvider = OccurrenceMapTestDataProvider.VALID_ADD_DATA_PROVIDER_NAME)
+    public void shouldAddReturn(OccurrenceMap<String> occurrenceMap, String key, int number, OccurrenceMap<String> controlOccurrenceMap) {
+        occurrenceMap.add(key, number);
         assertThat(occurrenceMap, is(equalTo(controlOccurrenceMap)));
     }
 

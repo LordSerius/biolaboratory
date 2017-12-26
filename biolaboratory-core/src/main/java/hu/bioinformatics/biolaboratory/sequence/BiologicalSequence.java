@@ -36,6 +36,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      *
      * @param name The name to validate.
      * @return The name, if it is valid.
+     * @throws IllegalArgumentException If name is null.
      */
     protected static String validateName(final String name) {
         Preconditions.checkArgument(name != null, "Name should not be null");
@@ -47,6 +48,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      *
      * @param sequence The sequence to validate and format.
      * @return The formatted sequence.
+     * @throws IllegalArgumentException If sequence is blank.
      */
     protected static String formatSequence(final String sequence) {
         Preconditions.checkArgument(StringUtils.isNotBlank(sequence), "Biological sequence cannot be blank");
@@ -189,6 +191,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      *
      * @param name The new name.
      * @return Tha new {@link BiologicalSequence} with the given name.
+     * @throws IllegalArgumentException If name is null.
      */
     public TYPE changeName(final String name) {
         Preconditions.checkArgument(name != null, "Sequence name should not be null");
@@ -200,6 +203,8 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      *
      * @param index The index which should smaller than length.
      * @return The ELEMENT at the target index.
+     * @throws IllegalArgumentException If index is smaller than 0.
+     * @throws IllegalArgumentException If index is greater than sequence length.
      */
     public final ELEMENT getElement(final int index) {
         Preconditions.checkArgument(index >= 0, "Index should be greater or equal than 0");
@@ -250,6 +255,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      *
      * @param element The desirable element.
      * @return The ratio of the target element.
+     * @throws IllegalArgumentException If element is null.
      */
     public final double getElementRatio(final ELEMENT element) {
         return collectSequenceElementOccurrences().occurrenceRatio(element);
@@ -260,6 +266,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      *
      * @param elements The desirable elements.
      * @return The ratio of the target elements.
+     * @throws IllegalArgumentException If elements are null.
      */
     @SafeVarargs
     public final double getElementsRatio(final ELEMENT... elements) {
@@ -271,6 +278,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      *
      * @param elementSet The desirable elements.
      * @return The ratio of the target elements.
+     * @throws IllegalArgumentException If elementSet is null.
      */
     public final double getElementsRatio(final Set<ELEMENT> elementSet) {
         return collectSequenceElementOccurrences().accumulatedOccurrenceRatio(elementSet);
@@ -281,6 +289,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      *
      * @param element The desired element.
      * @return The element number in the {@link BiologicalSequence}
+     * @throws IllegalArgumentException If element is null.
      */
     public final int getElementNumber(final ELEMENT element) {
         return collectSequenceElementOccurrences().getOccurrence(element);
@@ -291,6 +300,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      *
      * @param elements The desired elements.
      * @return The sum of the target elements in the {@link BiologicalSequence}.
+     * @throws IllegalArgumentException If elements are null.
      */
     @SafeVarargs
     public final int getElementsNumber(final ELEMENT... elements) {
@@ -302,11 +312,17 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      *
      * @param elementSet The desired elements.
      * @return The sum of the target elements in the {@link BiologicalSequence}.
+     * @throws IllegalArgumentException If elementSet is null.
      */
     public final int getElementsNumber(final Set<ELEMENT> elementSet) {
         return collectSequenceElementOccurrences().sumOccurrences(elementSet);
     }
 
+    /**
+     * Create a {@link CountableOccurrenceMap} about the sequence elements.
+     *
+     * @return A {@link CountableOccurrenceMap} about the occurrences.
+     */
     protected final synchronized CountableOccurrenceMap<ELEMENT> collectSequenceElementOccurrences() {
         if (elementOccurrences == null) {
             elementOccurrences = CountableOccurrenceMap.build(getElementSet());
@@ -317,10 +333,26 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
         return elementOccurrences;
     }
 
+    /**
+     * Return the possible {@link SequenceElement}s for this {@link BiologicalSequence} type.
+     *
+     * @return All possible {@link SequenceElement} for this {@link BiologicalSequence}.
+     */
     protected abstract ELEMENT[] getElementArray();
 
+    /**
+     * Return the possible {@link SequenceElement}s for this {@link BiologicalSequence} type in a {@link Set}.
+     *
+     * @return All possible {@link SequenceElement} for this {@link BiologicalSequence} in a {@link Set}.
+     */
     protected abstract Set<ELEMENT> getElementSet();
 
+    /**
+     * Return with the {@link SequenceElement} representation of the given letter.
+     *
+     * @param sequenceElementLetter A sequence element letter.
+     * @return The {@link SequenceElement} representation of the given letter.
+     */
     protected abstract ELEMENT findSequenceElement(final char sequenceElementLetter);
 
     @Override
@@ -354,6 +386,8 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      * @param otherBiologicalSequence The biological sequence to append.
      * @return A new {@link BiologicalSequence} which stands from the sequence of the original {@link BiologicalSequence}
      *          and the sequence of the other {@link BiologicalSequence}.
+     * @throws IllegalArgumentException If otherBiologicalSequence is null.
+     * @throws IllegalArgumentException If otherBiological sequence type differs than the objects type.
      */
     public final TYPE append(final TYPE otherBiologicalSequence) {
         return construct(sequence + validateType(otherBiologicalSequence).getSequence());

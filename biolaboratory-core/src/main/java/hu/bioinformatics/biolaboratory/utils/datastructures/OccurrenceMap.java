@@ -34,18 +34,22 @@ public class OccurrenceMap<K> {
 
     /**
      * Builds a new {@link OccurrenceMap} with the given initial occurrences. The occurrences should contain
-     * values which are bigger than 0 only.
+     * values null or non negative numbers. The build method thows all occurrence which value is null or 0.
      *
      * @param occurrences The initial occurrence map.
      * @param <K> The key type of the occurrences.
      * @return A new {@link OccurrenceMap} map with the given occurrences.
-     * @throws IllegalArgumentException If the occurrences contain 0 or negative values.
+     * @throws IllegalArgumentException If the occurrences contain negative values.
      */
     public static <K> OccurrenceMap<K> build(final Map<K, Integer> occurrences) {
-        Preconditions.checkArgument(occurrences == null
-                || occurrences.entrySet().stream().allMatch(entry -> entry.getKey() != null && entry.getValue() != null && entry.getValue() > 0),
-                "Occurrences should not contain null keys or smaller than 1 elements");
-        return new OccurrenceMap<>(occurrences);
+        if (occurrences == null) return new OccurrenceMap<>(null);
+        Preconditions.checkArgument(occurrences.entrySet().stream()
+                        .allMatch(entry -> entry.getKey() != null && (entry.getValue() == null || entry.getValue() >= 0)),
+                "Occurrences should not contain null keys or negative elements");
+        return new OccurrenceMap<>(
+                occurrences.entrySet().stream()
+                                        .filter(entry -> entry.getValue() != null && entry.getValue() > 0)
+                                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
     }
 
     /**
@@ -367,46 +371,75 @@ public class OccurrenceMap<K> {
     }
     
     /**
-     * Decreases the occurrence of the target key by one. Remove if the occurrence reaches
+     * Decreases the occurrence of the target key by 1. Remove if the occurrence reaches
      * zero. If the key is not inside the map, do nothing and returns with 0.
      * 
      * @param key The target key.
      * @return The number of occurrence of the target key after the decreasing.
      * @throws IllegalArgumentException If key is null or does not exist.
      */
-    public synchronized int decrease(final K key) {
-        validateKey(key);
-        Integer occurrence = occurrenceMap.getOrDefault(key, 0);
-        Preconditions.checkArgument(occurrence > 0, "Cannot decrease occurrence from 0");
+    public int decrease(final K key) {
+        return subtract(key, 1);
+    }
 
-        if (occurrence == 1) {
-            occurrence = occurrence - 1;
+    /**
+     * Decreases the occurrence of the target key by <i>number</i>. Remove if the occurrence reaches zero.
+     *
+     * @param key The target key.
+     * @param number The number of decreased by.
+     * @return The number of occurrence of the target key after the subtracting.
+     * @throws IllegalArgumentException If key is null.
+     * @throws IllegalArgumentException If number is negative.
+     * @throws IllegalArgumentException If decreasing result smaller than 0.
+     */
+    public synchronized int subtract(final K key, final int number) {
+        validateKey(key);
+        validateInputNumber(number);
+        int occurrence = occurrenceMap.getOrDefault(key, 0);
+        if (number == 0) return occurrence;
+
+        int difference = occurrence - number;
+        Preconditions.checkArgument(difference >= 0, "Cannot subtract more occurrence than existing");
+        if (difference == 0) {
             occurrenceMap.remove(key);
+        } else {
+            occurrenceMap.put(key, difference);
         }
-        else if (occurrence > 1) {
-            occurrence = occurrence - 1;
-            occurrenceMap.put(key, occurrence);
-        }
-        return occurrence;
+        return difference;
     }
     
     /**
-     * Increase the occurrence of the target key. Adds the key if it is not inside the
-     * collection.
+     * Increase the occurrence of the target key by 1. Adds the key if it is not inside the collection.
      * 
      * @param key The target key.
      * @return The number of occurrence of the target key after the increasing.
      * @throws IllegalArgumentException If key is null.
      */
-    public synchronized int increase(final K key) {
-        validateKey(key);
-        int occurrence = occurrenceMap.getOrDefault(key, 0) + 1;
-        occurrenceMap.put(key, occurrence);
-        return occurrence;
+    public int increase(final K key) {
+        return add(key, 1);
     }
 
     /**
-     * Validate the inout keys.
+     * Increase the occurrence of the target key by <i>number</i>. Adds the key if it is not inside the collection.
+     *
+     * @param key The target key.
+     * @param number The number of increased by.
+     * @return The number of occurrence of the target key after the adding.
+     * @throws IllegalArgumentException Iy key is null.
+     * @throws IllegalArgumentException If number is negative.
+     */
+    public synchronized int add(final K key, final int number) {
+        validateKey(key);
+        validateInputNumber(number);
+        int occurrence = occurrenceMap.getOrDefault(key, 0);
+        if (number == 0) return occurrence;
+        int sum = occurrence + number;
+        occurrenceMap.put(key, sum);
+        return sum;
+    }
+
+    /**
+     * Validate the input keys.
      *
      * @param keys The keys to validate.
      * @return The same keys if they are valid.
@@ -441,6 +474,16 @@ public class OccurrenceMap<K> {
     protected K validateKey(final K key) {
         Preconditions.checkArgument(key != null, "Key should not be null");
         return key;
+    }
+
+    /**
+     * Validates the given number. Throws an exception if it is lesser than 0.
+     *
+     * @param number The number to validate.
+     * @throws IllegalArgumentException If number is lesser than 0.
+     */
+    protected void validateInputNumber(final int number) {
+        Preconditions.checkArgument(number >= 0, "Number should greater or equals than 0");
     }
     
     /**

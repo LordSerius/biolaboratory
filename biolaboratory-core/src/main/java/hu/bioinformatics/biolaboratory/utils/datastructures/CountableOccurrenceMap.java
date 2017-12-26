@@ -32,6 +32,7 @@ public class CountableOccurrenceMap<K> extends OccurrenceMap<K> {
      * @param occurrences The key-occurrence {@link Map}.
      * @param <K> The type of the key.
      * @return A new {@link CountableOccurrenceMap} about the input {@link Map}.
+     * @throws IllegalArgumentException If the occurrences contain null key, null value, or negative values.
      */
     public static <K> CountableOccurrenceMap<K> build(Map<K, Integer> occurrences) {
         Preconditions.checkArgument(occurrences == null
@@ -102,14 +103,32 @@ public class CountableOccurrenceMap<K> extends OccurrenceMap<K> {
      */
     @Override
     public int decrease(K key) {
+        return subtract(key, 1);
+    }
+
+    /**
+     * Decreases the occurrence of the target key by <i>number</i>.
+     *
+     * @param key The target key.
+     * @param number The number of decreased by.
+     * @return The number of occurrence of the target key after the subtracting.
+     * @throws IllegalArgumentException If key is null.
+     * @throws IllegalArgumentException If number is negative.
+     * @throws IllegalArgumentException If decreasing result smaller than 0.
+     */
+    @Override
+    public synchronized int subtract(K key, int number) {
         validateKey(key);
-        Integer occurrence = occurrenceMap.getOrDefault(key, 0);
+        validateInputNumber(number);
+        int occurrence = occurrenceMap.getOrDefault(key, 0);
+        if (number == 0) return occurrence;
         Preconditions.checkArgument(occurrence > 0, "Cannot decrease occurrence from 0");
 
-        occurrence = occurrence - 1;
-        occurrenceMap.put(key, occurrence);
+        int difference = occurrence - number;
+        Preconditions.checkArgument(difference >= 0, "Cannot subtract more occurrence than existing");
+        occurrenceMap.put(key, difference);
 
-        return occurrence;
+        return difference;
     }
 
     /**

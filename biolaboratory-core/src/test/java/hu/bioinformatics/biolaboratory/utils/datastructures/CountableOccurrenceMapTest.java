@@ -8,7 +8,11 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.sameInstance;
 import static org.testng.Assert.fail;
 
 /**
@@ -123,6 +127,45 @@ public class CountableOccurrenceMapTest {
     @Test(dataProvider = CountableOccurrenceMapTestDataProvider.VALID_DECREASE_DATA_PROVIDER_NAME)
     public void shouldDecreaseReturn(CountableOccurrenceMap<String> occurrenceMap, String key, CountableOccurrenceMap<String> controlOccurrenceMap) {
         occurrenceMap.decrease(key);
+        assertThat(occurrenceMap, is(equalTo(controlOccurrenceMap)));
+    }
+
+    @Test(dataProvider = CountableOccurrenceMapTestDataProvider.INVALID_SUBTRACT_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldSubtractThrowException(CountableOccurrenceMap<String> occurrenceMap, String key, int number) {
+        occurrenceMap.subtract(key, number);
+        fail();
+    }
+
+    @Test(dataProvider = CountableOccurrenceMapTestDataProvider.VALID_SUBTRACT_DATA_PROVIDER_NAME)
+    public void shouldSubtractReturn(CountableOccurrenceMap<String> occurrenceMap, String key, int number, CountableOccurrenceMap<String> controlOccurrenceMap) {
+        occurrenceMap.subtract(key, number);
+        assertThat(occurrenceMap, is(equalTo(controlOccurrenceMap)));
+    }
+
+    @Test(dataProvider = CountableOccurrenceMapTestDataProvider.INVALID_INCREASE_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldIncreaseThrowException(CountableOccurrenceMap<String> occurrenceMap, String key) {
+        occurrenceMap.increase(key);
+        fail();
+    }
+
+    @Test(dataProvider = CountableOccurrenceMapTestDataProvider.VALID_INCREASE_DATA_PROVIDER_NAME)
+    public void shouldIncreaseReturn(CountableOccurrenceMap<String> occurrenceMap, String key, CountableOccurrenceMap<String> controlOccurrenceMap) {
+        occurrenceMap.increase(key);
+        assertThat(occurrenceMap, is(equalTo(controlOccurrenceMap)));
+    }
+
+    @Test(dataProvider = CountableOccurrenceMapTestDataProvider.INVALID_ADD_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldAddThrowException(CountableOccurrenceMap<String> occurrenceMap, String key, int number) {
+        occurrenceMap.add(key, number);
+        fail();
+    }
+
+    @Test(dataProvider = CountableOccurrenceMapTestDataProvider.VALID_ADD_DATA_PROVIDER_NAME)
+    public void shouldAddReturn(CountableOccurrenceMap<String> occurrenceMap, String key, int number, CountableOccurrenceMap<String> controlOccurrenceMap) {
+        occurrenceMap.add(key, number);
         assertThat(occurrenceMap, is(equalTo(controlOccurrenceMap)));
     }
 

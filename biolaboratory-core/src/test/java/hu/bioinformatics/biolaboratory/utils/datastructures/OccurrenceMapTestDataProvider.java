@@ -25,15 +25,9 @@ public class OccurrenceMapTestDataProvider {
         nullKeyMap.put("A", 1);
         nullKeyMap.put(null, 1);
 
-        Map<String, Integer> nullValueMap = new HashMap<>();
-        nullValueMap.put("A", 1);
-        nullValueMap.put("G", null);
-
         return new Object[][] {
                 { ImmutableMap.of("A", -1) },
-                { ImmutableMap.of("A", 0) },
-                { nullKeyMap },
-                { nullValueMap }
+                { nullKeyMap }
         };
     }
 
@@ -41,10 +35,18 @@ public class OccurrenceMapTestDataProvider {
 
     @DataProvider(name = VALID_BUILD_DATA_PROVIDER_NAME)
     Object[][] validBuildDataProvider() {
+        Map<String, Integer> nullValueMap = new HashMap<>();
+        nullValueMap.put("A", 1);
+        nullValueMap.put("G", null);
+
         return new Object[][] {
-                { ImmutableMap.of() },
-                { null },
-                { ImmutableMap.of("A", 2) }
+                { ImmutableMap.of(), ImmutableMap.of() },
+                { null, ImmutableMap.of() },
+                { ImmutableMap.of("A", 0), ImmutableMap.of() },
+                { ImmutableMap.of("A", 1), ImmutableMap.of("A", 1) },
+                { ImmutableMap.of("A", 1, "G", 0), ImmutableMap.of("A", 1) },
+                { nullValueMap, ImmutableMap.of("A", 1) },
+                { ImmutableMap.of("A", 1, "G", 2), ImmutableMap.of("A", 1, "G", 2) }
         };
     }
 
@@ -336,7 +338,7 @@ public class OccurrenceMapTestDataProvider {
     static final String INVALID_DECREASE_DATA_PROVIDER_NAME = "invalidDecreaseDataProvider";
 
     @DataProvider(name = INVALID_DECREASE_DATA_PROVIDER_NAME)
-    Object[][] invalidDecreaseOrRemoveDataProvider() {
+    Object[][] invalidDecreaseDataProvider() {
         return new Object[][] {
                 { OccurrenceMap.build(ImmutableMap.of("A", 1)), null },
                 { OccurrenceMap.build(ImmutableMap.of("A", 1)), "G" }
@@ -346,23 +348,42 @@ public class OccurrenceMapTestDataProvider {
     static final String VALID_DECREASE_DATA_PROVIDER_NAME = "validDecreaseDataProvider";
 
     @DataProvider(name = VALID_DECREASE_DATA_PROVIDER_NAME)
-    Object[][] validDecreaseOrRemoveDataProvider() {
-        Map<String, Integer> oneElementHashMap = Maps.newHashMap();
-        oneElementHashMap.put("A", 1);
-        Map<String, Integer> twoElementHashMap = Maps.newHashMap();
-        twoElementHashMap.put("A", 2);
-        twoElementHashMap.put("G", 1);
+    Object[][] validDecreaseDataProvider() {
         return new Object[][] {
-                { OccurrenceMap.build(new HashMap<>(twoElementHashMap)), "A", OccurrenceMap.build(ImmutableMap.of("A", 1, "G", 1)) },
-                { OccurrenceMap.build(new HashMap<>(twoElementHashMap)), "G", OccurrenceMap.build(ImmutableMap.of("A", 2)) },
-                { OccurrenceMap.build(new HashMap<>(oneElementHashMap)), "A", OccurrenceMap.build() }
+                { OccurrenceMap.build(new HashMap<>(ImmutableMap.of("A", 2, "G", 1))), "A", OccurrenceMap.build(ImmutableMap.of("A", 1, "G", 1)) },
+                { OccurrenceMap.build(new HashMap<>(ImmutableMap.of("A", 2, "G", 1))), "G", OccurrenceMap.build(ImmutableMap.of("A", 2)) },
+                { OccurrenceMap.build(new HashMap<>(ImmutableMap.of("A", 1))), "A", OccurrenceMap.build() }
+        };
+    }
+
+    static final String INVALID_SUBTRACT_DATA_PROVIDER_NAME = "invalidSubtractDataProvider";
+
+    @DataProvider(name = INVALID_SUBTRACT_DATA_PROVIDER_NAME)
+    Object[][] invalidSubtractDataProvider() {
+        return new Object[][] {
+                { OccurrenceMap.build(ImmutableMap.of("A", 1)), null, 1 },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1)), "G", -1 },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1)), "A", 2 }
+        };
+    }
+
+    static final String VALID_SUBTRACT_DATA_PROVIDER_NAME = "validSubtractDataProvider";
+
+    @DataProvider(name = VALID_SUBTRACT_DATA_PROVIDER_NAME)
+    Object[][] validSubtractDataProvider() {
+        return new Object[][] {
+                { OccurrenceMap.build(), "A", 0, OccurrenceMap.build() },
+                { OccurrenceMap.build(ImmutableMap.of("A", 2, "G", 1)), "A", 0, OccurrenceMap.build(ImmutableMap.of("A", 2, "G", 1)) },
+                { OccurrenceMap.build(ImmutableMap.of("A", 2, "G", 1)), "C", 0, OccurrenceMap.build(ImmutableMap.of("A", 2, "G", 1)) },
+                { OccurrenceMap.build(ImmutableMap.of("A", 2, "G", 1)), "A", 1, OccurrenceMap.build(ImmutableMap.of("A", 1, "G", 1)) },
+                { OccurrenceMap.build(ImmutableMap.of("A", 2, "G", 1)), "A", 2, OccurrenceMap.build(ImmutableMap.of("G", 1)) }
         };
     }
 
     static final String INVALID_INCREASE_DATA_PROVIDER_NAME = "invalidIncreaseDataProvider";
 
     @DataProvider(name = INVALID_INCREASE_DATA_PROVIDER_NAME)
-    Object[][] invalidIncreaseOrPutDataProvider() {
+    Object[][] invalidIncreaseDataProvider() {
         return new Object[][] {
                 { OccurrenceMap.build(ImmutableMap.of("A", 1)), null }
         };
@@ -371,14 +392,36 @@ public class OccurrenceMapTestDataProvider {
     static final String VALID_INCREASE_DATA_PROVIDER_NAME = "validIncreaseDataProvider";
 
     @DataProvider(name = VALID_INCREASE_DATA_PROVIDER_NAME)
-    Object[][] validIncreaseOrPutDataProvider() {
-        Map<String, Integer> oneElementHashMap = Maps.newHashMap();
-        oneElementHashMap.put("A", 1);
+    Object[][] validIncreaseDataProvider() {
         return new Object[][] {
                 { OccurrenceMap.build(), "A", OccurrenceMap.build(ImmutableMap.of("A", 1)) },
-                { OccurrenceMap.build(new HashMap<>(oneElementHashMap)), "A", OccurrenceMap.build(ImmutableMap.of("A", 2)) },
-                { OccurrenceMap.build(new HashMap<>(oneElementHashMap)), "G", OccurrenceMap.build(ImmutableMap.of("A", 1, "G", 1)) }
+                { OccurrenceMap.build(new HashMap<>(ImmutableMap.of("A", 1))), "A", OccurrenceMap.build(ImmutableMap.of("A", 2)) },
+                { OccurrenceMap.build(new HashMap<>(ImmutableMap.of("A", 1))), "G", OccurrenceMap.build(ImmutableMap.of("A", 1, "G", 1)) }
 
+        };
+    }
+
+    static final String INVALID_ADD_DATA_PROVIDER_NAME = "invalidAddDataProvider";
+
+    @DataProvider(name = INVALID_ADD_DATA_PROVIDER_NAME)
+    Object[][] invalidAddDataProvider() {
+        return new Object[][] {
+                { OccurrenceMap.build(ImmutableMap.of("A", 1)), null, 1 },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1)), "C", -1 }
+        };
+    }
+
+    static final String VALID_ADD_DATA_PROVIDER_NAME = "validAddDataProvider";
+
+    @DataProvider(name = VALID_ADD_DATA_PROVIDER_NAME)
+    Object[][] validAddDataProvider() {
+        return new Object[][] {
+                { OccurrenceMap.build(), "A", 0, OccurrenceMap.build() },
+                { OccurrenceMap.build(), "A", 2, OccurrenceMap.build(ImmutableMap.of("A", 2)) },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1)), "A", 1, OccurrenceMap.build(ImmutableMap.of("A", 2)) },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1)), "A", 2, OccurrenceMap.build(ImmutableMap.of("A", 3)) },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1)), "G", 0, OccurrenceMap.build(ImmutableMap.of("A", 1)) },
+                { OccurrenceMap.build(ImmutableMap.of("A", 1)), "G", 2, OccurrenceMap.build(ImmutableMap.of("A", 1, "G", 2)) }
         };
     }
 

@@ -2,7 +2,6 @@ package hu.bioinformatics.biolaboratory.utils.datastructures;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.testng.annotations.DataProvider;
 
@@ -182,15 +181,86 @@ public class CountableOccurrenceMapTestDataProvider {
 
     @DataProvider(name = VALID_DECREASE_DATA_PROVIDER_NAME)
     Object[][] validDecreaseDataProvider() {
-        Map<String, Integer> oneElementHashMap = Maps.newHashMap();
-        oneElementHashMap.put("A", 1);
-        Map<String, Integer> twoElementHashMap = Maps.newHashMap();
-        twoElementHashMap.put("A", 2);
-        twoElementHashMap.put("G", 1);
         return new Object[][] {
-                { CountableOccurrenceMap.build(new HashMap<>(twoElementHashMap)), "A", CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "G", 1)) },
-                { CountableOccurrenceMap.build(new HashMap<>(twoElementHashMap)), "G", CountableOccurrenceMap.build(ImmutableMap.of("A", 2, "G", 0)) },
-                { CountableOccurrenceMap.build(new HashMap<>(oneElementHashMap)), "A", CountableOccurrenceMap.build(ImmutableMap.of("A", 0)) }
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 2, "G", 1)), "A", CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "G", 1)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 2, "G", 1)), "G", CountableOccurrenceMap.build(ImmutableMap.of("A", 2, "G", 0)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), "A", CountableOccurrenceMap.build(ImmutableMap.of("A", 0)) }
+        };
+    }
+
+    static final String INVALID_SUBTRACT_DATA_PROVIDER_NAME = "invalidSubtractDataProvider";
+
+    @DataProvider(name = INVALID_SUBTRACT_DATA_PROVIDER_NAME)
+    Object[][] invalidSubtractDataProvider() {
+        return new Object[][] {
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "T", 0)), null, 2 },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "T", 0)), "G", 2 },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "T", 0)), "T", -1 },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "T", 0)), "T", 2 },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "T", 0)), "A", 2 }
+        };
+    }
+
+    static final String VALID_SUBTRACT_DATA_PROVIDER_NAME = "validSubtractDataProvider";
+
+    @DataProvider(name = VALID_SUBTRACT_DATA_PROVIDER_NAME)
+    Object[][] validSubtractDataProvider() {
+        return new Object[][] {
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 2, "G", 1)), "A", 0, CountableOccurrenceMap.build(ImmutableMap.of("A", 2, "G", 1)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0, "G", 1)), "A", 0, CountableOccurrenceMap.build(ImmutableMap.of("A", 0, "G", 1)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 2, "G", 1)), "A", 1, CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "G", 1)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 2, "G", 1)), "A", 2, CountableOccurrenceMap.build(ImmutableMap.of("A", 0, "G", 1)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 2)), "A", 2, CountableOccurrenceMap.build(ImmutableMap.of("A", 0)) }
+        };
+    }
+
+    static final String INVALID_INCREASE_DATA_PROVIDER_NAME = "invalidIncreaseDataProvider";
+
+    @DataProvider(name = INVALID_INCREASE_DATA_PROVIDER_NAME)
+    Object[][] invalidIncreaseDataProvider() {
+        return new Object[][] {
+                { CountableOccurrenceMap.build(), "A" },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), null },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), "C" }
+        };
+    }
+
+    static final String VALID_INCREASE_DATA_PROVIDER_NAME = "validIncreaseDataProvider";
+
+    @DataProvider(name = VALID_INCREASE_DATA_PROVIDER_NAME)
+    Object[][] validIncreaseDataProvider() {
+        return new Object[][] {
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), "A", CountableOccurrenceMap.build(ImmutableMap.of("A", 1)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), "A", CountableOccurrenceMap.build(ImmutableMap.of("A", 2)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "C", 0)), "C", CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "C", 1)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "C", 1)), "C", CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2)) }
+        };
+    }
+
+    static final String INVALID_ADD_DATA_PROVIDER_NAME = "invalidAddDataProvider";
+
+    @DataProvider(name = INVALID_ADD_DATA_PROVIDER_NAME)
+    Object[][] invalidAddDataProvider() {
+        return new Object[][] {
+                { CountableOccurrenceMap.build(), "A", 2 },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), null, 2 },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), "A", -1 },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), "C", 2 }
+        };
+    }
+
+    static final String VALID_ADD_DATA_PROVIDER_NAME = "validAddDataProvider";
+
+    @DataProvider(name = VALID_ADD_DATA_PROVIDER_NAME)
+    Object[][] validAddDataProvider() {
+        return new Object[][] {
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), "A", 0, CountableOccurrenceMap.build(ImmutableMap.of("A", 0)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), "A", 2, CountableOccurrenceMap.build(ImmutableMap.of("A", 2)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), "A", 2, CountableOccurrenceMap.build(ImmutableMap.of("A", 3)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "C", 1)), "C", 0, CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "C", 1)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "C", 0)), "C", 2, CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2)) },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "C", 1)), "C", 2, CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "C", 3)) }
+
         };
     }
 
