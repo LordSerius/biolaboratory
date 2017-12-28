@@ -26,7 +26,7 @@ public class DnaListFastaLoader extends DnaListLoader {
     }
 
     @Override
-    protected final List<Dna> convert(List<CommentedString> lines) {
+    protected final List<Dna> convert(final List<CommentedString> lines) {
         return lines.stream()
                 .map(commentedLine -> Dna.build(commentedLine.getComment(), commentedLine.getString()))
                 .collect(Collectors.toCollection(ArrayList::new));

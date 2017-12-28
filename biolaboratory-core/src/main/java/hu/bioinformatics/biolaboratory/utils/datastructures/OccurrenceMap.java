@@ -4,7 +4,14 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -103,6 +110,12 @@ public class OccurrenceMap<K> {
         return Objects.hash(occurrenceMap);
     }
 
+    /**
+     * Compares the occurrence map entries with the given map.
+     *
+     * @param otherOccurrenceMap A key - number pair {@link Map}.
+     * @return True if the two occurrence {@link Map} elements are identical in key and value.
+     */
     protected final boolean compareOccurrenceMapContent(Map<K, Integer> otherOccurrenceMap) {
         return otherOccurrenceMap.size() == occurrenceMap.size() && occurrenceMap.entrySet().stream().allMatch(entry -> {
             Integer otherValue = otherOccurrenceMap.get(entry.getKey());
@@ -131,6 +144,7 @@ public class OccurrenceMap<K> {
      *
      * @param key The occurrence key.
      * @return The occurrence number for the specific key.
+     * @throws IllegalArgumentException If key is not valid.
      */
     public final int getOccurrence(final K key) {
         return sumOccurrences(key);
@@ -141,6 +155,7 @@ public class OccurrenceMap<K> {
      *
      * @param keys The desired keys.
      * @return The sum of the target key values in the {@link OccurrenceMap}.
+     * @throws IllegalArgumentException If keys are not valid.
      */
     @SafeVarargs
     public final int sumOccurrences(final K... keys) {
@@ -161,6 +176,7 @@ public class OccurrenceMap<K> {
      *
      * @param keySet The desired keys.
      * @return The sum of the target key values in the {@link OccurrenceMap}.
+     * @throws IllegalArgumentException If keys inside keySet is not valid.
      */
     public final int sumOccurrences(final Set<K> keySet) {
         return innerSumOccurrences(validateKeySet(keySet));
@@ -178,6 +194,7 @@ public class OccurrenceMap<K> {
      *
      * @param key The occurrence key.
      * @return The occurrence of the target key.
+     * @throws IllegalArgumentException If key is not valid.
      */
     public double occurrenceRatio(final K key) {
         return accumulatedOccurrenceRatio(key);
@@ -188,6 +205,7 @@ public class OccurrenceMap<K> {
      *
      * @param keys The desired keys.
      * @return The accumulated ratio of the target key values in the {@link OccurrenceMap}.
+     * @throws IllegalArgumentException If keys are not valid.
      */
     @SafeVarargs
     public final double accumulatedOccurrenceRatio(final K... keys) {
@@ -199,6 +217,7 @@ public class OccurrenceMap<K> {
      *
      * @param keySet The desired keys.
      * @return The accumulated ratio of the target key values in the {@link OccurrenceMap}.
+     * @throws IllegalArgumentException If keySet elements are not valid.
      */
     public final double accumulatedOccurrenceRatio(final Set<K> keySet) {
         return innerAccumulatedOccurrenceRatio(validateKeySet(keySet));
@@ -224,6 +243,7 @@ public class OccurrenceMap<K> {
      *
      * @param keys The desired keys.
      * @return A {@link Map} about each key and ratio.
+     * @throws IllegalArgumentException If keys are invalid.
      */
     @SafeVarargs
     public final Map<K, Double> occurrenceRatios(final K... keys) {
@@ -235,6 +255,7 @@ public class OccurrenceMap<K> {
      *
      * @param keySet The desired key set.
      * @return A {@link Map} about each key and ratio.
+     * @throws IllegalArgumentException If keySet elements are not valid.
      */
     public Map<K, Double> occurrenceRatios(final Set<K> keySet) {
         return innerOccurrenceRatio(validateKeySet(keySet));
@@ -260,6 +281,7 @@ public class OccurrenceMap<K> {
      *
      * @param keys The keys for the occurrences to choose.
      * @return The chosen occurrences.
+     * @throws IllegalArgumentException If keys are not valid.
      */
     public OccurrenceMap<K> subSet(final K... keys) {
         return innerSubSet(Sets.newHashSet(validateKeys(keys)));
@@ -270,6 +292,7 @@ public class OccurrenceMap<K> {
      *
      * @param keySet The keys for the occurrences to choose.
      * @return The chosen occurrences.
+     * @throws IllegalArgumentException If elements in keySet are not valid.
      */
     public OccurrenceMap<K> subSet(final Set<K> keySet) {
         return innerSubSet(validateKeySet(keySet));
@@ -294,7 +317,8 @@ public class OccurrenceMap<K> {
      * with 0 initial occurrence.
      *
      * @param zeroElements The keys with zero occurrences.
-     * @returnThe converted {@link CountableOccurrenceMap}.
+     * @return The converted {@link CountableOccurrenceMap}.
+     * @throws IllegalArgumentException If zeroElements contains null element.
      */
     @SafeVarargs
     public final CountableOccurrenceMap<K> toCountableWith(final K... zeroElements) {
@@ -307,6 +331,7 @@ public class OccurrenceMap<K> {
      *
      * @param zeroElementSet The keys with zero occurrences.
      * @return The converted {@link CountableOccurrenceMap}.
+     * @throws IllegalArgumentException If zeroElementSet contains null element.
      */
     public CountableOccurrenceMap<K> toCountableWithSet(final Set<K> zeroElementSet) {
         return innerToCountableWithSet(validateKeySet(zeroElementSet));
@@ -324,6 +349,7 @@ public class OccurrenceMap<K> {
      * 
      * @param otherOccurrenceMap The other {@link OccurrenceMap} to merge with.
      * @return A new {@link OccurrenceMap} with the merged values.
+     * @throws IllegalArgumentException If otherOccurrenceMap is null.
      */
     public OccurrenceMap<K> merge(final OccurrenceMap<K> otherOccurrenceMap) {
         return filterMerge(otherOccurrenceMap, entry -> true);
@@ -336,6 +362,8 @@ public class OccurrenceMap<K> {
      * @param otherOccurrenceMap The other {@link OccurrenceMap} to merge with.
      * @param filterPredicate The filtering predicate.
      * @return A new {@link OccurrenceMap} with the merged and filtered values.
+     * @throws IllegalArgumentException If otherOccurrenceMap is null.
+     * @throws IllegalArgumentException If filterPredicate is null.
      */
     public OccurrenceMap<K> filterMerge(final OccurrenceMap<K> otherOccurrenceMap, final Predicate<Map.Entry<K, Integer>> filterPredicate) {
         Preconditions.checkArgument(filterPredicate != null, "Filter predicate should not be null");
@@ -349,6 +377,8 @@ public class OccurrenceMap<K> {
      * @param otherOccurrenceMap The other {@link OccurrenceMap} to merge with.
      * @param filterPredicate The filtering predicate.
      * @return A new {@link Map} with the merged and filtered values.
+     * @throws IllegalArgumentException If otherOccurrenceMap is null.
+     * @throws IllegalArgumentException If filterPredicate is null.
      */
     protected final Map<K, Integer> filterMergeOccurrences(final OccurrenceMap<K> otherOccurrenceMap, final Predicate<Map.Entry<K, Integer>> filterPredicate) {
         Preconditions.checkArgument(otherOccurrenceMap != null, "Cannot merge with null");
@@ -445,7 +475,8 @@ public class OccurrenceMap<K> {
      * @return The same keys if they are valid.
      * @throws IllegalArgumentException If the keys contain null element.
      */
-    protected K[] validateKeys(final K... keys) {
+    @SafeVarargs
+    protected final K[] validateKeys(final K... keys) {
         validateVarargs(keys);
         Arrays.stream(keys).forEach(this::validateKey);
         return keys;
@@ -558,6 +589,7 @@ public class OccurrenceMap<K> {
      *
      * @param threshold The target threshold.
      * @return The same instance if valid.
+     * @throws IllegalArgumentException If threshold is smaller than 1.
      */
     protected int validateThreshold(final int threshold) {
         Preconditions.checkArgument(threshold > 0, "Threshold should not smaller than 1");
@@ -569,6 +601,7 @@ public class OccurrenceMap<K> {
      *
      * @param filterPredicate The filter {@link Predicate}, which needs an {@link java.util.Map.Entry} input.
      * @return A new filtered {@link OccurrenceMap}.
+     * @throws IllegalArgumentException If filterPredicate is null.
      */
     public OccurrenceMap<K> filter(final Predicate<Map.Entry<K, Integer>> filterPredicate) {
         return new OccurrenceMap<>(filterOccurrences(filterPredicate));
@@ -579,6 +612,7 @@ public class OccurrenceMap<K> {
      *
      * @param filterPredicate The filter {@link Predicate}, which needs an {@link java.util.Map.Entry} input.
      * @return The occurrences after filtering.
+     * @throws IllegalArgumentException If filterPredicate is null.
      */
     protected final Map<K, Integer> filterOccurrences(final Predicate<Map.Entry<K, Integer>> filterPredicate) {
         Preconditions.checkArgument(filterPredicate != null, "Filter predicate should not be null");

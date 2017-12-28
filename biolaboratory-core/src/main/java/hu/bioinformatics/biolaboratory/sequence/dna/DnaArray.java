@@ -33,6 +33,7 @@ public class DnaArray {
      *
      * @param dnas The input {@link Dna}s
      * @return A new {@link DnaArray}
+     * @throws IllegalArgumentException If dna elements have different lengths.
      */
     public static DnaArray build(final Dna... dnas) {
         Validation.validateNotEmptyVarargs(dnas);
@@ -44,6 +45,7 @@ public class DnaArray {
      *
      * @param dnaList The assignable elements of the {@link DnaArray}.
      * @return A new {@link DnaArray}.
+     * @throws IllegalArgumentException If dna elements have different lengths.
      */
     public static DnaArray build(final List<Dna> dnaList) {
         Validation.validateNotEmptyCollection(dnaList);
@@ -96,7 +98,7 @@ public class DnaArray {
     }
 
     /**
-     * Getter of the motifs
+     * Getter of the motifs.
      *
      * @return The motifs.
      */
@@ -165,6 +167,9 @@ public class DnaArray {
      * @param k Gives the size of the findable pattern.
      * @param d Gives the maximum mismatch number.
      * @return The most frequent patterns in the samples.
+     * @throws IllegalArgumentException If <i>k</i> is smaller than 1.
+     * @throws IllegalArgumentException If <i>k</i> is bigger than samples length.
+     * @throws IllegalArgumentException If <i>d</i> is negative number.
      */
     public Set<Dna> findMostFrequentMotifsExhausting(final int k, final int d) {
         Preconditions.checkArgument(k > 0, "Findable subsequence length (k) should be greater than 0");
@@ -190,8 +195,11 @@ public class DnaArray {
      *
      * @param k Gives the size of the findable pattern.
      * @return The most frequent patterns in the samples.
+     * @throws IllegalArgumentException If <i>k</i> is smaller than 1.
+     * @throws IllegalArgumentException If <i>k</i> is bigger than samples length.
      */
     public Set<Dna> findMostFrequentMotifsMedianString(final int k) {
+        Preconditions.checkArgument(k <= samplesLength, "Findable subsequence length (k) should be smaller or equals to the samples length");
         Preconditions.checkArgument(k <= samplesLength, "Findable subsequence length (k) should be smaller or equals to the samples length");
 
         Set<Dna> mismatchSet = Dna.generatePatternDnas(k);
@@ -220,6 +228,7 @@ public class DnaArray {
      *
      * @param dna The {@link Dna} which subsequences are examined against the {@link DnaArray}'s probability.
      * @return The most probable subsequences.
+     * @throws IllegalArgumentException If dna sequence length is smaller than samples length.
      */
     public Set<Dna> profileMostProbableSubSequence(final Dna dna) {
         Preconditions.checkArgument(dna != null, "Dna should not be null");
@@ -251,6 +260,7 @@ public class DnaArray {
      *
      * @param sample The given sample.
      * @return The probability of the sample.
+     * @throws IllegalArgumentException If dna sequence length is not equal than samples length.
      */
     public double patternProbability(final Dna sample) {
         Preconditions.checkArgument(sample != null, "Sample should not be null");

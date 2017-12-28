@@ -14,7 +14,7 @@ public class FastaResourceValidator extends ResourceExtensionValidator {
     private static final Pattern FASTA_EXTENSION = Pattern.compile(".+\\.fas(ta)?");
 
     @Override
-    protected void validateExtension(String resourcePath) {
+    protected void validateExtension(final String resourcePath) {
         Preconditions.checkArgument(FASTA_EXTENSION.matcher(resourcePath).matches(), "Resource should have .fas or .fasta extension");
 
     }

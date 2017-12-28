@@ -13,7 +13,7 @@ import java.io.Reader;
  */
 public class FileResourceReaderProvider implements ResourceReaderProvider {
     @Override
-    public Reader provideReader(String resourcePath) throws IOException {
+    public Reader provideReader(final String resourcePath) throws IOException {
         return new FileReader(resourcePath);
     }
 }

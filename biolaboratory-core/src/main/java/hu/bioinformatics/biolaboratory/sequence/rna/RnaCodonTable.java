@@ -62,8 +62,9 @@ public class RnaCodonTable {
      * long {@link Rna} sequence.
      *
      * @param rna A 3 length long {@link Rna} sequence
-     * @return The decoded amino acid wraped in an {@link Optional} object. If it is a STOP codon the return value is
+     * @return The decoded amino acid wrapped in an {@link Optional} object. If it is a STOP codon the return value is
      *          an empty {@link Optional}.
+     * @throws IllegalArgumentException If {@link Rna} is null or its sequence is not 3.
      */
     public static Optional<AminoAcid> lookup(final Rna rna) {
         Preconditions.checkArgument(rna != null, "RNA should not be null");

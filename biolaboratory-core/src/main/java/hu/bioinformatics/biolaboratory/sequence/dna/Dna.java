@@ -22,7 +22,6 @@ import java.util.stream.IntStream;
 import static hu.bioinformatics.biolaboratory.utils.Validation.validateCollection;
 import static hu.bioinformatics.biolaboratory.utils.Validation.validateNotEmptyCollection;
 import static hu.bioinformatics.biolaboratory.utils.Validation.validateNotEmptyVarargs;
-import static hu.bioinformatics.biolaboratory.utils.Validation.validateVarargs;
 
 /**
  * Represents a single DNA about the genome sequence in 5' -> 3' order.
@@ -32,7 +31,7 @@ import static hu.bioinformatics.biolaboratory.utils.Validation.validateVarargs;
  */
 public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
 
-    private static final Pattern sequenceValidator = Pattern.compile(
+    private static final Pattern SEQUENCE_VALIDATOR_PATTERN = Pattern.compile(
                                                                 "["
                                                                 + DnaNucleotide.ADENINE.getLetter()
                                                                 + DnaNucleotide.CYTOSINE.getLetter()
@@ -53,6 +52,7 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
      *
      * @param sequence The input nucleotide sequence.
      * @return A new {@link Dna} object which contains the nucleotide sequence in uppercase.
+     * @throws IllegalArgumentException If sequence null, blank, or contains else than {@link DnaNucleotide} letters.
      */
     public static Dna build(final String sequence) {
         return new Dna(Dna.validateSequence(sequence));
@@ -66,6 +66,8 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
      * @param name The name of the sequence.
      * @param sequence The input nucleotide sequence.
      * @return A new {@link Dna} object which contains the nucleotide sequence in uppercase.
+     * @throws IllegalArgumentException If name is null.
+     * @throws IllegalArgumentException If sequence null, blank, or contains else than {@link DnaNucleotide} letters.
      */
     public static Dna build(final String name, final String sequence) {
         return new Dna(validateName(name), validateSequence(sequence));
@@ -76,6 +78,7 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
      *
      * @param nucleotides The input nucleotides.
      * @return A new {@link Dna} object which stands from the nucleotides.
+     * @throws IllegalArgumentException If nucleotides contains null element.
      */
     public static Dna build(final DnaNucleotide... nucleotides) {
         return new Dna(validateNotEmptyVarargs(nucleotides));
@@ -87,16 +90,21 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
      * @param name The name of the sequence.
      * @param nucleotides The input nucleotides.
      * @return A new {@link Dna} object which stands from the nucleotides.
+     * @throws IllegalArgumentException If name is null.
+     * @throws IllegalArgumentException If nucleotides contains null element.
      */
     public static Dna build(final String name, final DnaNucleotide... nucleotides) {
-        return new Dna(validateName(name), validateVarargs(nucleotides));
+        return new Dna(validateName(name), validateNotEmptyVarargs(nucleotides));
     }
 
     /**
      * Build an {@link Dna} from the given {@link DnaNucleotide} {@link List}. The list should not contain null element.
      *
      * @param nucleotideList The input nucleotides in a {@link List}.
-     * @return A new {@link Dna} object which stand from the nucleotides
+     * @return A new {@link Dna} object which stand from the nucleotides.
+     * @throws IllegalArgumentException If nucleotideList contains null element.
+     * @throws IllegalArgumentException If name is null.
+     * @throws IllegalArgumentException If nucleotideList contains null element.
      */
     public static Dna build(final List<DnaNucleotide> nucleotideList) {
         return new Dna(validateNotEmptyCollection(nucleotideList));
@@ -115,7 +123,7 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
 
     private static String validateSequence(final String sequence) {
         String uppercaseSequence = formatSequence(sequence);
-        Preconditions.checkArgument(sequenceValidator.matcher(uppercaseSequence).matches(), "DNA should contains only the letters of nucleotides");
+        Preconditions.checkArgument(SEQUENCE_VALIDATOR_PATTERN.matcher(uppercaseSequence).matches(), "DNA should contains only the letters of nucleotides");
         return uppercaseSequence;
     }
 
@@ -124,12 +132,13 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
      *
      * @param length The length of the return {@link Dna}-s.
      * @return All <i>length</i> length {@link Dna}.
+     * @throws IllegalArgumentException If length is smaller than 1.
      */
     public static Set<Dna> generatePatternDnas(final int length) {
         Preconditions.checkArgument(length > 0, "Findable subsequence length (k) should be greater than 0");
 
         return Dna.build(IntStream.range(0, length)
-                .mapToObj(index -> DnaNucleotide.ADENINE)
+                .mapToObj(index -> DnaNucleotide.values()[0])
                 .toArray(DnaNucleotide[]::new)).generateMismatches(Integer.MAX_VALUE);
     }
 
@@ -197,9 +206,29 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
      * @param t The threshold of the occurrences of the <i>k</i> long sequences in the DNA.
      * @return All <i>k</i> long straight or reverse complement sequences at most <i>d</i>
      *             mismatches which occurrences are greater or equals than <i>t</i>.
+     * @throws IllegalArgumentException If <i>k</i> is smaller than 1.
+     * @throws IllegalArgumentException If <i>k</i> is bigger than sequence length.
+     * @throws IllegalArgumentException If <i>d</i> is smaller than 1.
+     * @throws IllegalArgumentException If <i>t</i> is smaller than 1.
      */
     public Set<Dna> findFrequentMismatchPatterns(final int k, final int d, final int t) {
         return getPatternOccurrenceMap(k, d).filterGreaterOrEqualsOccurrences(t);
+    }
+
+    /**
+     * Get the most frequent <i>k</i> straight or reverse complement occurrences which has
+     * at most <i>d</i> different nucleotides in the DNA sequence.
+     *
+     * @param k The findable <i>k</i> long sequences.
+     * @param d The maximum permitted different nucleotides.
+     * @return The most frequent <i>k</i> long straight or reverse complement occurrences
+     *          with at most <i>d</i> mismatches.
+     * @throws IllegalArgumentException If <i>k</i> is smaller than 1.
+     * @throws IllegalArgumentException If <i>k</i> is bigger than sequence length.
+     * @throws IllegalArgumentException If <i>d</i> is smaller than 1.
+     */
+    public Set<Dna> findMostFrequentMismatchPatterns(final int k, final int d) {
+        return getPatternOccurrenceMap(k, d).filterMostFrequentOccurrences();
     }
 
     private OccurrenceMap<Dna> getPatternOccurrenceMap(final int k, final int d) {
@@ -255,6 +284,9 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
      * @param k The <i>k</i> long subsequences.
      * @param d The maximum permitted different nucleotides.
      * @return The occurrence map of the reverse complement mismatches.
+     * @throws IllegalArgumentException If <i>k</i> is smaller than 1.
+     * @throws IllegalArgumentException If <i>k</i> is bigger than sequence length.
+     * @throws IllegalArgumentException If <i>d</i> is negative number.
      */
     private OccurrenceMap<Dna> getReverseComplementMismatchOccurrenceMap(final int k, final int d) {
         Preconditions.checkArgument(k > 0, "Findable subsequence length (k) should be greater than 0");
@@ -358,21 +390,8 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
      * @param otherDna The given {@link Dna} against the reverse complement {@link Dna}.
      * @return True if the otherDna equals with the reverse complement {@link Dna}.
      */
-    public boolean isReverseComplement(Dna otherDna) {
+    public boolean isReverseComplement(final Dna otherDna) {
         return otherDna.sequenceLength == sequenceLength && getOrConstructReverseComplementThread().equals(otherDna);
-    }
-
-    /**
-     * Get the most frequent <i>k</i> straight or reverse complement occurrences which has
-     * at most <i>d</i> different nucleotides in the DNA sequence.
-     *
-     * @param k The findable <i>k</i> long sequences.
-     * @param d The maximum permitted different nucleotides.
-     * @return The most frequent <i>k</i> long straight or reverse complement occurrences
-     * with at most <i>d</i> mismatches.
-     */
-    public Set<Dna> findMostFrequentMismatchPatterns(final int k, final int d) {
-        return getPatternOccurrenceMap(k, d).filterMostFrequentOccurrences();
     }
 
     /**

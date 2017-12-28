@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import static hu.bioinformatics.biolaboratory.utils.Validation.*;
+import static hu.bioinformatics.biolaboratory.utils.Validation.validateCollection;
+import static hu.bioinformatics.biolaboratory.utils.Validation.validateNotEmptyCollection;
+import static hu.bioinformatics.biolaboratory.utils.Validation.validateNotEmptyVarargs;
 
 /**
  * Represents a single RNA about the genome sequence.
@@ -18,7 +20,7 @@ import static hu.bioinformatics.biolaboratory.utils.Validation.*;
  *
  */
 public class Rna extends BiologicalSequence<Rna, RnaNucleotide> {
-    private static final Pattern sequenceValidator = Pattern.compile(
+    private static final Pattern SEQUENCE_VALIDATOR_PATTERN = Pattern.compile(
                                                                 "["
                                                                 + RnaNucleotide.ADENINE.getLetter()
                                                                 + RnaNucleotide.CYTOSINE.getLetter()
@@ -35,6 +37,7 @@ public class Rna extends BiologicalSequence<Rna, RnaNucleotide> {
      *
      * @param sequence The input nucleotide sequence.
      * @return A new {@link Rna} object which contains the nucleotide sequence in uppercase.
+     * @throws IllegalArgumentException If sequence null, blank, or contains else than {@link RnaNucleotide} letters.
      */
     public static Rna build(final String sequence) {
         return new Rna(validateSequence(sequence));
@@ -48,6 +51,8 @@ public class Rna extends BiologicalSequence<Rna, RnaNucleotide> {
      * @param name The name of the sequence.
      * @param sequence The input nucleotide sequence.
      * @return A new {@link Rna} object which contains the nucleotide sequence in uppercase.
+     * @throws IllegalArgumentException If name is null.
+     * @throws IllegalArgumentException If sequence null, blank, or contains else than {@link RnaNucleotide} letters.
      */
     public static Rna build(final String name, final String sequence) {
         return new Rna(validateName(name), validateSequence(sequence));
@@ -58,6 +63,7 @@ public class Rna extends BiologicalSequence<Rna, RnaNucleotide> {
      *
      * @param nucleotides The input nucleotides.
      * @return A new {@link Rna} object which stands from the nucleotides.
+     * @throws IllegalArgumentException If nucleotides contains null element.
      */
     public static Rna build(final RnaNucleotide... nucleotides) {
         return new Rna(validateNotEmptyVarargs(nucleotides));
@@ -69,16 +75,19 @@ public class Rna extends BiologicalSequence<Rna, RnaNucleotide> {
      * @param name The name of the sequence.
      * @param nucleotides The input nucleotides.
      * @return A new {@link Rna} object which stands from the nucleotides.
+     * @throws IllegalArgumentException If name is null.
+     * @throws IllegalArgumentException If nucleotides contains null element.
      */
     public static Rna build(final String name, final RnaNucleotide... nucleotides) {
-        return new Rna(validateName(name), validateVarargs(nucleotides));
+        return new Rna(validateName(name), validateNotEmptyVarargs(nucleotides));
     }
 
     /**
      * Build an {@link Rna} from the given {@link RnaNucleotide} {@link List}. The list should not contain null element.
      *
      * @param nucleotideList The input nucleotides in a {@link List}.
-     * @return A new {@link Rna} object which stand from the nucleotides
+     * @return A new {@link Rna} object which stand from the nucleotides.
+     * @throws IllegalArgumentException If nucleotideList contains null element.
      */
     public static Rna build(final List<RnaNucleotide> nucleotideList) {
         return new Rna(validateNotEmptyCollection(nucleotideList));
@@ -90,6 +99,8 @@ public class Rna extends BiologicalSequence<Rna, RnaNucleotide> {
      * @param name The name of the sequence.
      * @param nucleotideList The input nucleotides in a {@link List}.
      * @return A new {@link Rna} object which stand from the nucleotides
+     * @throws IllegalArgumentException If name is null.
+     * @throws IllegalArgumentException If nucleotideList contains null element.
      */
     public static Rna build(final String name, final List<RnaNucleotide> nucleotideList) {
         return new Rna(validateName(name), validateCollection(nucleotideList));
@@ -97,7 +108,7 @@ public class Rna extends BiologicalSequence<Rna, RnaNucleotide> {
 
     private static String validateSequence(final String sequence) {
         String uppercaseSequence = formatSequence(sequence);
-        Preconditions.checkArgument(sequenceValidator.matcher(uppercaseSequence).matches(), "RNA should contains only the letters of nucleotides");
+        Preconditions.checkArgument(SEQUENCE_VALIDATOR_PATTERN.matcher(uppercaseSequence).matches(), "RNA should contains only the letters of nucleotides");
         return uppercaseSequence;
     }
 

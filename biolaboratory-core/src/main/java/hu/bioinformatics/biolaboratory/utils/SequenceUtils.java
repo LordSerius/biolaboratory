@@ -24,6 +24,7 @@ public class SequenceUtils {
      * @param sequence A sequence.
      * @param otherSequence An other sequence.
      * @return The hamming distance of the two sequences.
+     * @throws IllegalArgumentException If the two sequence have different length.
      */
     public static int hammingDistance(final String sequence, final String otherSequence) {
         validateSequences(sequence, otherSequence);
@@ -44,9 +45,11 @@ public class SequenceUtils {
      * @return -1 if the hamming distance is smaller than the mismatch
      *          0 if the hamming distance is equal than the mismatch
      *          1 if the hamming distance if greater than the mismatch
+     * @throws IllegalArgumentException If the two sequence have different length.
      */
     public static int hammingDistanceMismatchComparator(final String sequence, final String otherSequence, final int mismatch) {
         validateSequences(sequence, otherSequence);
+        Preconditions.checkArgument(mismatch >= 0, "Mismatch should be greater or equal than 0");
 
         int length = sequence.length();
         int currentMismatch = 0;

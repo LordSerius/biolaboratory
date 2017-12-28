@@ -27,7 +27,7 @@ public class DnaArrayLineLoader extends DnaArrayLoader {
     }
 
     @Override
-    protected DnaArray convert(List<CommentedString> lines) {
+    protected final DnaArray convert(final List<CommentedString> lines) {
         return DnaArray.build(lines.stream()
                                     .map(line -> Dna.build(line.getString()))
                                     .collect(Collectors.toCollection(ArrayList::new)));

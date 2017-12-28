@@ -22,6 +22,9 @@ public enum RnaNucleotide implements SequenceElement {
     GUANINE("guanine", 'G'),
     URACIL("uracil", 'U');
 
+    /**
+     * Set of all {@link RnaNucleotide}s.
+     */
     public static final Set<RnaNucleotide> NUCLEOTIDE_SET = Sets.newHashSet(values());
 
     private static final Map<Character, RnaNucleotide> CHARACTER_NUCLEOTIDE_LOOKUP =
@@ -37,6 +40,7 @@ public enum RnaNucleotide implements SequenceElement {
      *
      * @param rnaNucleotideLetter The RNA nucleotide letter.
      * @return The corresponding RNA nucleotide.
+     * @throws IllegalArgumentException If rnaNucleotideLetter is not 1 character after trim.
      */
     public static RnaNucleotide findRnaNucleotide(final String rnaNucleotideLetter) {
         Preconditions.checkArgument(StringUtils.isNotBlank(rnaNucleotideLetter), "RNA nucleotide letter should not be empty");
@@ -50,6 +54,7 @@ public enum RnaNucleotide implements SequenceElement {
      *
      * @param nucleotideLetter The nucleotide letter.
      * @return The corresponding nucleotide.
+     * @throws IllegalArgumentException If nucleotideLetter is not part of {@link RnaNucleotide}s.
      */
     public static RnaNucleotide findRnaNucleotide(final char nucleotideLetter) {
         RnaNucleotide rnaNucleotide = CHARACTER_NUCLEOTIDE_LOOKUP.get(Character.toUpperCase(nucleotideLetter));

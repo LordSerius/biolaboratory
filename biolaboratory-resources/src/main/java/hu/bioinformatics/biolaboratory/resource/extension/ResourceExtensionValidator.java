@@ -15,5 +15,11 @@ public abstract class ResourceExtensionValidator implements ResourceValidator {
         validateExtension(resourcePath);
     }
 
+    /**
+     * Validates the extension for the target resourcePath.
+     *
+     * @param resourcePath The target resourcePath.
+     * @throws IllegalArgumentException If extension is not well formed.
+     */
     protected abstract void validateExtension(final String resourcePath);
 }

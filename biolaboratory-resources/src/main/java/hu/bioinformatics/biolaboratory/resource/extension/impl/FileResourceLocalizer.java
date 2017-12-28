@@ -23,7 +23,7 @@ public class FileResourceLocalizer implements ResourceLocalizer {
      * @throws UncheckedIOException If file not found.
      */
     @Override
-    public String localizeResource(String resourceName) {
+    public String localizeResource(final String resourceName) {
         Preconditions.checkArgument(StringUtils.isNotBlank(resourceName), "File path should not be empty");
         File file = new File(resourceName);
         if (!file.exists()) {

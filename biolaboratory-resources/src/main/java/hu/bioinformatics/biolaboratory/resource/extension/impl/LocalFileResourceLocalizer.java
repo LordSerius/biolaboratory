@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions;
 import hu.bioinformatics.biolaboratory.resource.extension.ResourceLocalizer;
 import org.apache.commons.lang3.StringUtils;
 
-import java.net.URL;
 import java.util.Optional;
 
 /**
@@ -22,10 +21,10 @@ public class LocalFileResourceLocalizer implements ResourceLocalizer {
      * @throws IllegalArgumentException If resource does not exist.
      */
     @Override
-    public String localizeResource(String resourceName) {
+    public String localizeResource(final String resourceName) {
         Preconditions.checkArgument(StringUtils.isNotBlank(resourceName), "Resource name should not be blank");
-        Optional<URL> resourceUrl = Optional.ofNullable(getClass().getClassLoader().getResource(resourceName));
-        Preconditions.checkArgument(resourceUrl.isPresent(), "Resource does not exist");
-        return resourceUrl.get().getFile();
+        return Optional.ofNullable(getClass().getClassLoader().getResource(resourceName))
+                .orElseThrow(() -> new IllegalArgumentException("Resource does not exist"))
+                .getFile();
     }
 }

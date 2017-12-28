@@ -13,5 +13,5 @@ public interface ResourceLocalizer {
      * @param resourceName The name of the resource.
      * @return The path of the resource.
      */
-    String localizeResource(String resourceName);
+    String localizeResource(final String resourceName);
 }

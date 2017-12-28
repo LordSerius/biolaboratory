@@ -14,7 +14,7 @@ public class DnaCollectionResourceValidator extends ResourceExtensionValidator {
     private static final Pattern DNA_COLLECTION_EXTENSION = Pattern.compile(".+\\.dnacol");
 
     @Override
-    protected void validateExtension(String resourcePath) {
+    protected void validateExtension(final String resourcePath) {
         Preconditions.checkArgument(DNA_COLLECTION_EXTENSION.matcher(resourcePath).matches(), "Resource should have .dnacol extension");
     }
 }

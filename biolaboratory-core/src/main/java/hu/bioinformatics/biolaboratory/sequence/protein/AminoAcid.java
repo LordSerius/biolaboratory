@@ -37,6 +37,10 @@ public enum AminoAcid implements SequenceElement {
     VALINE("valine", "Val", 'V', 99);
 
     private static final Map<Character, AminoAcid> CHARACTER_AMINO_ACD_LOOKUP = initializeLookupTable();
+
+    /**
+     * Set of all {@link AminoAcid}s.
+     */
     public static final Set<AminoAcid> AMINO_ACID_SET = Sets.newHashSet(values());
 
     private static Map<Character, AminoAcid> initializeLookupTable() {
@@ -75,6 +79,7 @@ public enum AminoAcid implements SequenceElement {
      *
      * @param aminoAcidLetter The amino acid letter.
      * @return The corresponding amino acid.
+     * @throws IllegalArgumentException If aminoAcidLetter is not 1 character after trim.
      */
     public static AminoAcid findAminoAcid(final String aminoAcidLetter) {
         Preconditions.checkArgument(StringUtils.isNotBlank(aminoAcidLetter), "Amino acid letter should not be empty");
@@ -88,6 +93,7 @@ public enum AminoAcid implements SequenceElement {
      *
      * @param aminoAcidLetter The amino acid letter.
      * @return The corresponding amino acid.
+     * @throws IllegalArgumentException If aminoAcidLetter is not part of {@link AminoAcid}s.
      */
     public static AminoAcid findAminoAcid(final char aminoAcidLetter) {
         AminoAcid aminoAcid = CHARACTER_AMINO_ACD_LOOKUP.get(Character.toUpperCase(aminoAcidLetter));

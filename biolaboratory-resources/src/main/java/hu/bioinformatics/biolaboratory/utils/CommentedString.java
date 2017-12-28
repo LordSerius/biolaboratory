@@ -1,7 +1,6 @@
 package hu.bioinformatics.biolaboratory.utils;
 
 import com.google.common.base.Preconditions;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
@@ -13,23 +12,47 @@ public class CommentedString {
     private final String comment;
     private final String string;
 
-    public CommentedString(String comment, String string) {
+    /**
+     * Construct a {@link CommentedString} from comment and string parameters. Trim these parameters for this container.
+     *
+     * @param comment The comment.
+     * @param string The string value.
+     * @throws IllegalArgumentException If comment is null.
+     * @throws IllegalArgumentException If string is null.
+     */
+    public CommentedString(final String comment, final String string) {
         Preconditions.checkArgument(comment != null, "Comment should not be null");
-        Preconditions.checkArgument(StringUtils.isNotBlank(string), "String should not be blank");
+        Preconditions.checkArgument(string != null, "String should not be null");
         this.comment = comment.trim();
         this.string = string.trim();
     }
 
+    /**
+     * Getter of the comment.
+     *
+     * @return comment
+     */
     public String getComment() {
         return comment;
     }
 
+    /**
+     * Getter of the string.
+     *
+     * @return string
+     */
     public String getString() {
         return string;
     }
 
+    /**
+     * Compare with an other {@link CommentedString}.
+     *
+     * @param obj Other {@link CommentedString}.
+     * @return If comment and string are equal.
+     */
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (obj == this) return true;
         if (obj == null || !obj.getClass().equals(getClass())) return false;
         CommentedString rightHand = (CommentedString) obj;

@@ -20,9 +20,7 @@ public class CommentedStringTest {
     private Object[][] invalidConstructorDataProvider() {
         return new Object[][] {
                 { null, "line" },
-                { "comment", null },
-                { "comment", "" },
-                { "comment", "   " }
+                { "comment", null }
         };
     }
 
@@ -34,7 +32,9 @@ public class CommentedStringTest {
                 { "comment", "line" },
                 { "", "line" },
                 { " comment ", " line " },
-                { "   ", "line" }
+                { "   ", "line" },
+                { "comment", "" },
+                { "comment", "   " }
         };
     }
 

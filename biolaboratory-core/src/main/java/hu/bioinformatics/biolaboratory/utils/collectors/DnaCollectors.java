@@ -28,6 +28,7 @@ public class DnaCollectors {
      *
      * @param sequences Strings of DNA sequences.
      * @return A {@link Set} of {@link Dna} about the sequences.
+     * @throws IllegalArgumentException If varargs is null or contains null element.
      */
     public static Set<Dna> stringToDnaSet(final String... sequences) {
         return Arrays.stream(validateVarargs(sequences))
@@ -40,6 +41,7 @@ public class DnaCollectors {
      *
      * @param sequences {@link CommentedString}s of DNA sequences.
      * @return A {@link Set} of {@link Dna} about the sequences.
+     * @throws IllegalArgumentException If varargs is null or contains null element.
      */
     public static Set<Dna> commentedStringToDnaSet(final CommentedString... sequences) {
         return Arrays.stream(validateVarargs(sequences))
@@ -52,6 +54,7 @@ public class DnaCollectors {
      * 
      * @param sequenceCollection A {@link Collection} of DNA sequences.
      * @return A {@link Set} of {@link Dna} about the sequences.
+     * @throws IllegalArgumentException If collection is null or contains null element.
      */
     public static Set<Dna> stringToDnaSet(final Collection<String> sequenceCollection) {
         return validateCollection(sequenceCollection).stream()
@@ -64,6 +67,7 @@ public class DnaCollectors {
      *
      * @param sequenceCollection A {@link Collection} of DNA sequences.
      * @return A {@link Set} of {@link Dna} about the sequences.
+     * @throws IllegalArgumentException If collection is null or contains null element.
      */
     public static Set<Dna> commentedStringToDnaSet(final Collection<CommentedString> sequenceCollection) {
         return validateCollection(sequenceCollection).stream()
@@ -76,6 +80,7 @@ public class DnaCollectors {
      *
      * @param sequences Strings of DNA sequences.
      * @return A {@link List} of {@link Dna} about the sequences.
+     * @throws IllegalArgumentException If varargs is null or contains null element.
      */
     public static List<Dna> stringToDnaList(final String... sequences) {
         return Arrays.stream(validateVarargs(sequences))
@@ -88,6 +93,7 @@ public class DnaCollectors {
      *
      * @param sequences {@link CommentedString}s of DNA sequences.
      * @return A {@link Set} of {@link Dna} about the sequences.
+     * @throws IllegalArgumentException If varargs is null or contains null element.
      */
     public static List<Dna> commentedStringToDnaList(final CommentedString... sequences) {
         validateVarargs(sequences);
@@ -101,6 +107,7 @@ public class DnaCollectors {
      * 
      * @param sequenceCollection A {@link Collection} of DNA sequences.
      * @return A {@link List} of {@link Dna} about the sequences.
+     * @throws IllegalArgumentException If collection is null or contains null element.
      */
     public static List<Dna> stringToDnaList(final Collection<String> sequenceCollection) {
         return validateCollection(sequenceCollection).stream()
@@ -113,6 +120,7 @@ public class DnaCollectors {
      *
      * @param sequenceCollection A {@link Collection} of DNA sequences.
      * @return A {@link Set} of {@link Dna} about the sequences.
+     * @throws IllegalArgumentException If collection is null or contains null element.
      */
     public static List<Dna> commentedStringToDnaList(final Collection<CommentedString> sequenceCollection) {
         return validateCollection(sequenceCollection).stream()

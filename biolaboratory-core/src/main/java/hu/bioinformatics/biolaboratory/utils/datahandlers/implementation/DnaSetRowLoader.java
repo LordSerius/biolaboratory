@@ -31,7 +31,7 @@ public class DnaSetRowLoader extends DnaSetLoader {
     }
 
     @Override
-    protected Set<Dna> convert(List<CommentedString> lines) {
+    protected Set<Dna> convert(final List<CommentedString> lines) {
         CommentedString row = lines.get(0);
         return Arrays.stream(WHITESPACE_SEPARATOR.split(row.getString()))
                 .map(Dna::build)

@@ -19,6 +19,7 @@ public class Validation {
      * @param varargs The input varargs to validate.
      * @param <T> The type of the elements.
      * @return The same varargs if they valid.
+     * @throws IllegalArgumentException If varargs is null, empty, or contains null element.
      */
     @SafeVarargs
     public static <T> T[] validateNotEmptyVarargs(final T... varargs) {
@@ -33,6 +34,7 @@ public class Validation {
      * @param varargs The input varargs to validate.
      * @param <T> The type of the elements.
      * @return The same varargs if they valid.
+     * @throws IllegalArgumentException If varargs is null or contains null element.
      */
     @SafeVarargs
     public static <T> T[] validateVarargs(final T... varargs) {
@@ -47,6 +49,7 @@ public class Validation {
      * @param <COL> {@link Collection} or its inherited types.
      * @param <T> The type of the collection.
      * @return The same collection if it is valid.
+     * @throws IllegalArgumentException If collection is null, empty, or contains null element.
      */
     public static <COL extends Collection<T>, T> COL validateNotEmptyCollection(final COL collection) {
         validateCollection(collection);
@@ -61,6 +64,7 @@ public class Validation {
      * @param <COL> {@link Collection} or its inherited types.
      * @param <T> The type of the collection.
      * @return The same collection if it is valid.
+     * @throws IllegalArgumentException If collection is null or contains null element.
      */
     public static <COL extends Collection<T>, T> COL validateCollection(final COL collection) {
         Preconditions.checkArgument(collection != null, "Collection should not be null");

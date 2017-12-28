@@ -119,20 +119,46 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
         this.name = name;
     }
 
+    /**
+     * Construct a TYPE {@link BiologicalSequence} from name and sequence element array.
+     *
+     * @param sequenceElements The sequence element array (varargs).
+     * @return The TYPE {@link BiologicalSequence} from the sequence.
+     */
     @SafeVarargs
     protected final TYPE construct(final ELEMENT... sequenceElements) {
         return construct("", sequenceElements);
     }
 
+    /**
+     * Construct a TYPE {@link BiologicalSequence} from name and sequence element array.
+     *
+     * @param name The name of the biological sequence.
+     * @param sequenceElements The sequence element array (varargs).
+     * @return The TYPE {@link BiologicalSequence} from the sequence.
+     */
     @SafeVarargs
     protected final TYPE construct(final String name, final ELEMENT... sequenceElements) {
         return construct(name, Arrays.asList(sequenceElements));
     }
 
+    /**
+     * Construct a TYPE {@link BiologicalSequence} from sequence element {@link List}.
+     *
+     * @param sequenceElementList The sequence element {@link List}.
+     * @return The TYPE {@link BiologicalSequence} from the sequence.
+     */
     protected final TYPE construct(final List<ELEMENT> sequenceElementList) {
         return construct("", sequenceElementList);
     }
 
+    /**
+     * Construct a TYPE {@link BiologicalSequence} from name and sequence element {@link List}.
+     *
+     * @param name The name of the biological sequence.
+     * @param sequenceElementList The sequence element {@link List}.
+     * @return The TYPE {@link BiologicalSequence} from the sequence.
+     */
     protected final TYPE construct(final String name, final List<ELEMENT> sequenceElementList) {
         return construct(name, new String(createLetterList(sequenceElementList)));
     }
@@ -148,6 +174,12 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
         return letters;
     }
 
+    /**
+     * Construct a TYPE {@link BiologicalSequence} from the given sequence {@link String}.
+     *
+     * @param sequence The sequence {@link String}.
+     * @return The TYPE {@link BiologicalSequence} from the sequence.
+     */
     protected final TYPE construct(final String sequence) {
         return construct("", sequence);
     }
@@ -230,6 +262,11 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
         return sequenceAsElements;
     }
 
+    /**
+     * Creates an ELEMENT array with the appropriate size of the available {@link SequenceElement}s.
+     *
+     * @return An array with the appropriate size of {@link SequenceElement}s.
+     */
     protected abstract ELEMENT[] createEmptyElementArray();
 
     /**
@@ -278,7 +315,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      *
      * @param elementSet The desirable elements.
      * @return The ratio of the target elements.
-     * @throws IllegalArgumentException If elementSet is null.
+     * @throws IllegalArgumentException If elementSet contains null value.
      */
     public final double getElementsRatio(final Set<ELEMENT> elementSet) {
         return collectSequenceElementOccurrences().accumulatedOccurrenceRatio(elementSet);
@@ -312,7 +349,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      *
      * @param elementSet The desired elements.
      * @return The sum of the target elements in the {@link BiologicalSequence}.
-     * @throws IllegalArgumentException If elementSet is null.
+     * @throws IllegalArgumentException If elementSet contains null value.
      */
     public final int getElementsNumber(final Set<ELEMENT> elementSet) {
         return collectSequenceElementOccurrences().sumOccurrences(elementSet);
@@ -408,6 +445,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      * @param element The element to append.
      * @return A new {@link BiologicalSequence} which stands from the sequence of the original {@link BiologicalSequence}
      *          and the appended element.
+     * @throws IllegalArgumentException If element is null.
      */
     public final TYPE append(final ELEMENT element) {
         return construct(sequence + validateElement(element).getLetter());
@@ -424,6 +462,8 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      *
      * @param startPosition The beginning element position in the {@link BiologicalSequence} inclusive.
      * @return The {@link BiologicalSequence} part from start position (inclusive) to the end.
+     * @throws IllegalArgumentException If startPosition is negative number.
+     * @throws IllegalArgumentException If startPosition is bigger or equals than sequence length.
      */
     public final TYPE cut(final int startPosition) {
         return cut(startPosition, sequenceLength);
@@ -436,6 +476,9 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      * @param startPosition The beginning element position in the {@link BiologicalSequence} inclusive.
      * @param endPosition The end element position in the {@link BiologicalSequence} exclusive.
      * @return The {@link BiologicalSequence} part from start position (inclusive) to end position (exclusive).
+     * @throws IllegalArgumentException If startPosition is negative number.
+     * @throws IllegalArgumentException If endPosition is bigger or equals than sequence length.
+     * @throws IllegalArgumentException If startPosition is greater or equal than endPosition.
      */
     public final TYPE cut(final int startPosition, final int endPosition) {
         Preconditions.checkArgument(startPosition >= 0, "Start position should bigger than 0");
@@ -451,6 +494,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      * @see BiologicalSequence#findPatternsWithMismatch(BiologicalSequence, int)
      * @param pattern The pattern {@link BiologicalSequence}.
      * @return The number of found patterns.
+     * @throws IllegalArgumentException If pattern is null.
      */
     public int patternCount(final TYPE pattern) {
         return patternMatching(pattern).size();
@@ -465,6 +509,8 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      * @param pattern The pattern {@link BiologicalSequence}.
      * @param d The maximum permitted mismatch.
      * @return The number of found patterns.
+     * @throws IllegalArgumentException If pattern is null.
+     * @throws IllegalArgumentException If <i>d</i> is negative number.
      */
     public int patternCountWithMismatches(final TYPE pattern, final int d) {
         return patternMatchingWithMismatches(pattern, d).size();
@@ -477,6 +523,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      * @see BiologicalSequence#findPatternsWithMismatch(BiologicalSequence, int)
      * @param pattern The pattern {@link BiologicalSequence}.
      * @return The beginning indexes of found patterns.
+     * @throws IllegalArgumentException If pattern is null.
      */
     public List<Integer> patternMatching(final TYPE pattern) {
         return patternMatchingWithMismatches(pattern, 0);
@@ -490,6 +537,8 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      * @param pattern he pattern {@link BiologicalSequence}.
      * @param d The maximum permitted mismatch.
      * @return The position of found patterns.
+     * @throws IllegalArgumentException If pattern is null.
+     * @throws IllegalArgumentException If <i>d</i> is negative number.
      */
     public List<Integer> patternMatchingWithMismatches(final TYPE pattern, final int d) {
         Preconditions.checkArgument(d >= 0, "The maximum different value (d) should greater or equals than 0");
@@ -508,6 +557,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      *
      * @param pattern A pattern for compare against the subsequences.
      * @return The minimum mismatches between pattern and the subsequences.
+     * @throws IllegalArgumentException If pattern is null.
      */
     public int findMinimumMismatchSubSequenceNumber(final TYPE pattern) {
         validatePattern(pattern);
@@ -536,6 +586,8 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      *
      * @param pattern The pattern to find.
      * @return The first indices of the occurrences inside the {@link TYPE} sequence.
+     * @throws IllegalArgumentException If pattern is null.
+     * @throws IllegalArgumentException If <i>d</i> is negative number.
      */
     private List<Integer> findPatternsWithMismatch(final TYPE pattern, final int d) {
         int lengthDiff = sequenceLength - pattern.sequenceLength;
@@ -553,6 +605,8 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      *
      * @param k The findable <i>k</i> long sequences.
      * @return The most frequent <i>k</i> long occurrences.
+     * @throws IllegalArgumentException If <i>k</i> is smaller than 1.
+     * @throws IllegalArgumentException If <i>k</i> is bigger than sequence length.
      */
     public Set<TYPE> findMostFrequentSubSequences(final int k) {
         return findMostFrequentMismatchSubSequences(k, 0);
@@ -565,6 +619,9 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      * @param k The findable <i>k</i> long sequences.
      * @param d The maximum permitted different elements.
      * @return The most frequent <i>k</i> long occurrences with at most <i>d</i> mismatches.
+     * @throws IllegalArgumentException If <i>k</i> is smaller than 1.
+     * @throws IllegalArgumentException If <i>k</i> is bigger than sequence length.
+     * @throws IllegalArgumentException If <i>d</i> is negative number.
      */
     public Set<TYPE> findMostFrequentMismatchSubSequences(final int k, final int d) {
         return getMismatchOccurrenceMap(k, d).filterMostFrequentOccurrences();
@@ -575,6 +632,8 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      *
      * @param k The size of the subsequnces.
      * @return All <i>k</i> long subsequences in a {@link Set}.
+     * @throws IllegalArgumentException If <i>k</i> is smaller than 1.
+     * @throws IllegalArgumentException If <i>k</i> is bigger than sequence length.
      */
     public Set<TYPE> getSubSequences(final int k) {
         return getMismatchSubSequences(k, 0);
@@ -586,6 +645,9 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      * @param k The size of the subsequnces.
      * @param d The maximum permitted different elements.
      * @return All <i>k</i> long subsequences with <i>d</i> mismatch in a {@link Set}.
+     * @throws IllegalArgumentException If <i>k</i> is smaller than 1.
+     * @throws IllegalArgumentException If <i>k</i> is bigger than sequence length.
+     * @throws IllegalArgumentException If <i>d</i> is negative number.
      */
     public Set<TYPE> getMismatchSubSequences(final int k, final int d) {
         return findFrequentMismatchSubSequences(k, d, 1);
@@ -598,6 +660,9 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      * @param k The findable <i>k</i> long sequences.
      * @param t The threshold of the occurrences of the <i>k</i> long sequences in the DNA.
      * @return All <i>k</i> long sequences which occurrences are greater or equals than <i>t</i>.
+     * @throws IllegalArgumentException If <i>k</i> is smaller than 1.
+     * @throws IllegalArgumentException If <i>k</i> is bigger than sequence length.
+     * @throws IllegalArgumentException If <i>t</i> is smaller than 1.
      */
     public Set<TYPE> findFrequentSubSequences(final int k, final int t) {
         return findFrequentMismatchSubSequences(k, 0, t);
@@ -612,6 +677,10 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      * @param t The threshold of the occurrences of the <i>k</i> long sequences in the DNA.
      * @return All <i>k</i> long sequences at most <i>d</i> mismatches which occurrences
      *             are greater or equals than <i>t</i>.
+     * @throws IllegalArgumentException If <i>k</i> is smaller than 1.
+     * @throws IllegalArgumentException If <i>k</i> is bigger than sequence length.
+     * @throws IllegalArgumentException If <i>d</i> is negative number.
+     * @throws IllegalArgumentException If <i>t</i> is smaller than 1.
      */
     public Set<TYPE> findFrequentMismatchSubSequences(final int k, final int d, final int t) {
         return getMismatchOccurrenceMap(k, d).filterGreaterOrEqualsOccurrences(t);
@@ -649,7 +718,12 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      * @param L The window size which determines the search area.
      * @param t The threshold of the occurrences.
      * @return A {@link Set} of <i>k</i> long sequence parts which occurrences are greater
-     *             or equal than <i>t</i> in <i>L</i> clumps.
+     *          or equal than <i>t</i> in <i>L</i> clumps.
+     * @throws IllegalArgumentException If <i>k</i> is smaller than 1.
+     * @throws IllegalArgumentException If <i>k</i> is bigger than L.
+     * @throws IllegalArgumentException If <i>L</i> is smaller than 1.
+     * @throws IllegalArgumentException If <i>L</i> is bigger or equal than sequence length.
+     * @throws IllegalArgumentException If <i>t</i> is smaller than 1.
      */
     @SuppressWarnings("unchecked")
     public Set<TYPE> findPatternsInClumps(final int k, final int L, final int t) {
@@ -679,6 +753,12 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
         return patternSet;
     }
 
+    /**
+     * Get the <i>k</i> long subsequences and their occurrence number in {@link OccurrenceMap}.
+     *
+     * @param k The parameter for the <i>k</i> long subsequences.
+     * @return An {@link OccurrenceMap} with the subsequences.
+     */
     protected final OccurrenceMap<TYPE> getOccurrenceMap(final int k) {
         return getMismatchOccurrenceMap(k, 0);
     }
@@ -718,6 +798,9 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      * @param k The <i>k</i> long subsequences.
      * @param d The maximum permitted different elements.
      * @return The occurrence map of the sequence elements and their mismatches.
+     * @throws IllegalArgumentException If <i>k</i> is smaller than 1.
+     * @throws IllegalArgumentException If <i>k</i> is bigger than sequence length.
+     * @throws IllegalArgumentException If <i>d</i> is negative number.
      */
     @SuppressWarnings("unchecked")
     protected final OccurrenceMap<TYPE> getMismatchOccurrenceMap(final int k, final int d) {
@@ -766,6 +849,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      *
      * @param d The maximum permitted different elements.
      * @return All elements which are different at most <i>d</i> elements.
+     * @throws IllegalArgumentException If <i>d</i> is negative number.
      */
     public Set<TYPE> generateMismatches(final int d) {
         Preconditions.checkArgument(d >= 0, "Maximum mismatch number (d) should be greater or equals than 0");

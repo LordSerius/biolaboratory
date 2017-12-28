@@ -3,7 +3,11 @@ package hu.bioinformatics.biolaboratory.utils.datastructures;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
 
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -32,7 +36,7 @@ public class CountableOccurrenceMap<K> extends OccurrenceMap<K> {
      * @param occurrences The key-occurrence {@link Map}.
      * @param <K> The type of the key.
      * @return A new {@link CountableOccurrenceMap} about the input {@link Map}.
-     * @throws IllegalArgumentException If the occurrences contain null key, null value, or negative values.
+     * @throws IllegalArgumentException If occurrences contain null key, null value, or negative values.
      */
     public static <K> CountableOccurrenceMap<K> build(Map<K, Integer> occurrences) {
         Preconditions.checkArgument(occurrences == null
@@ -47,6 +51,7 @@ public class CountableOccurrenceMap<K> extends OccurrenceMap<K> {
      * @param elementSet The keys of the {@link CountableOccurrenceMap}.
      * @param <K> The type of the keys.
      * @return A new {@link CountableOccurrenceMap} with 0 occurrence values.
+     * @throws IllegalArgumentException If elementSet contain null key, null value, or negative values.
      */
     public static <K> CountableOccurrenceMap<K> build(Set<K> elementSet) {
         Preconditions.checkArgument(elementSet == null
@@ -160,6 +165,7 @@ public class CountableOccurrenceMap<K> extends OccurrenceMap<K> {
      *
      * @param otherOccurrenceMap The other {@link CountableOccurrenceMap} to merge.
      * @return The union of the two {@link CountableOccurrenceMap} with an extended key set.
+     * @throws IllegalArgumentException If otherOccurrenceMap is null.
      */
     public CountableOccurrenceMap<K> mergeCountable(final CountableOccurrenceMap<K> otherOccurrenceMap) {
         return filterMergeCountable(otherOccurrenceMap, entry -> true);
@@ -171,6 +177,8 @@ public class CountableOccurrenceMap<K> extends OccurrenceMap<K> {
      * @param otherOccurrenceMap The {@link CountableOccurrenceMap} to merge with.
      * @param filterPredicate The filter condition.
      * @return A merged and filtered {@link CountableOccurrenceMap}.
+     * @throws IllegalArgumentException If otherOccurrenceMa is null.
+     * @throws IllegalArgumentException If filterPredicate is null.
      */
     public CountableOccurrenceMap<K> filterMergeCountable(final CountableOccurrenceMap<K> otherOccurrenceMap, final Predicate<Map.Entry<K, Integer>> filterPredicate) {
         return (CountableOccurrenceMap<K>) filterMerge(otherOccurrenceMap, filterPredicate);
@@ -184,6 +192,8 @@ public class CountableOccurrenceMap<K> extends OccurrenceMap<K> {
      * @param otherOccurrenceMap The other {@link OccurrenceMap} to merge with.
      * @param filterPredicate The filtering predicate.
      * @return The merge of the two {@link OccurrenceMap}.
+     * @throws IllegalArgumentException If otherOccurrenceMap is null.
+     * @throws IllegalArgumentException If filterPredicate is null.
      */
     @Override
     public OccurrenceMap<K> filterMerge(final OccurrenceMap<K> otherOccurrenceMap, final Predicate<Map.Entry<K, Integer>> filterPredicate) {
@@ -193,6 +203,13 @@ public class CountableOccurrenceMap<K> extends OccurrenceMap<K> {
         return super.filterMerge(otherOccurrenceMap, filterPredicate);
     }
 
+    /**
+     * Performs a stricter validation than the superclass. The input key has to be in the key elements.
+     *
+     * @param key The key to validate.
+     * @return The same key.
+     * @throws IllegalArgumentException If key is null or not in the key elements.
+     */
     @Override
     protected K validateKey(final K key) {
         super.validateKey(key);
@@ -224,8 +241,15 @@ public class CountableOccurrenceMap<K> extends OccurrenceMap<K> {
         return filterOccurrences(entry -> entry.getValue() <= threshold).keySet();
     }
 
+    /**
+     * Validates the threshold to query the occurrences.
+     *
+     * @param threshold The target threshold.
+     * @return The same instance if valid.
+     * @throws IllegalArgumentException If threshold is negative number.
+     */
     @Override
-    protected int validateThreshold(int threshold) {
+    protected int validateThreshold(final int threshold) {
         Preconditions.checkArgument(threshold >= 0, "Threshold should not be negative number");
         return threshold;
     }

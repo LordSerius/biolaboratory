@@ -3,11 +3,12 @@ package hu.bioinformatics.biolaboratory.resource.datahandlers;
 import hu.bioinformatics.biolaboratory.resource.extension.ResourceLocalizer;
 import hu.bioinformatics.biolaboratory.resource.read.ResourceReader;
 import hu.bioinformatics.biolaboratory.utils.CommentedString;
-import org.apache.commons.lang3.Validate;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.List;
+
+import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * Provides an abstract class to load object from different external resources.
@@ -20,8 +21,8 @@ public abstract class ResourceLoader<RES> {
 
     public ResourceLoader(final ResourceLocalizer resourceLocalizer,
                           final ResourceReader resourceReader) {
-        this.resourceLocalizer = resourceLocalizer;
-        this.reader = Validate.notNull(resourceReader);
+        this.resourceLocalizer = notNull(resourceLocalizer);
+        this.reader = notNull(resourceReader);
     }
     /**
      * Load an object from an external resource.

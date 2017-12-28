@@ -45,7 +45,8 @@ public class SequenceUtilsTestDataProvider {
                 { null, "ABCD", 0 },
                 { "ABCD", null, 1 },
                 { "ABC", "ABCD", 2 },
-                { "ABCD", "ABC", 3 }
+                { "ABCD", "ABC", 3 },
+                { "ABCD", "ABCD", -1 }
         };
     }
 
@@ -54,7 +55,6 @@ public class SequenceUtilsTestDataProvider {
     @DataProvider(name = VALID_HAMMING_DISTANCE_MISMATCH_COMPARATOR_DATA_PROVIDER_NAME)
     Object[][] validHammingDistanceThresholdComparatorDataProvider() {
         return new Object[][] {
-                { "", "", -1, GREATER },
                 { "", "", 0, EQUAL },
                 { "", "", 1, SMALLER },
                 { "ABCD", "ABCD", 0, EQUAL },

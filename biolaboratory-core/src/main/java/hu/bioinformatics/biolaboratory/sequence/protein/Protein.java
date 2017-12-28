@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import static hu.bioinformatics.biolaboratory.utils.Validation.*;
+import static hu.bioinformatics.biolaboratory.utils.Validation.validateCollection;
+import static hu.bioinformatics.biolaboratory.utils.Validation.validateNotEmptyCollection;
+import static hu.bioinformatics.biolaboratory.utils.Validation.validateNotEmptyVarargs;
 
 /**
  * Represents a single protein about the amino acid sequence.
@@ -15,7 +17,7 @@ import static hu.bioinformatics.biolaboratory.utils.Validation.*;
  * @author Attila Radi
  */
 public class Protein extends BiologicalSequence<Protein, AminoAcid> {
-    private static final Pattern sequenceValidator = Pattern.compile(initializeSequenceValidator());
+    private static final Pattern SEQUENCE_VALIDATOR_PATTERN = Pattern.compile(initializeSequenceValidator());
 
     private static String initializeSequenceValidator() {
         AminoAcid[] aminoAcidList = AminoAcid.values();
@@ -33,6 +35,7 @@ public class Protein extends BiologicalSequence<Protein, AminoAcid> {
      *
      * @param sequence The input amino acid sequence.
      * @return A new {@link Protein} object which contains the amino acid sequence in uppercase.
+     * @throws IllegalArgumentException If sequence null, blank, or contains else than {@link AminoAcid} letter.
      */
     public static Protein build(final String sequence) {
         return new Protein(validateSequence(sequence));
@@ -46,6 +49,8 @@ public class Protein extends BiologicalSequence<Protein, AminoAcid> {
      * @param name The name of the sequence.
      * @param sequence The input amino acid sequence.
      * @return A new {@link Protein} object which contains the amino acid sequence in uppercase.
+     * @throws IllegalArgumentException If name is null.
+     * @throws IllegalArgumentException If sequence null, blank, or contains else than {@link AminoAcid} letter.
      */
     public static Protein build(final String name, final String sequence) {
         return new Protein(validateName(name), validateSequence(sequence));
@@ -56,6 +61,7 @@ public class Protein extends BiologicalSequence<Protein, AminoAcid> {
      *
      * @param aminoAcids The input amino acids.
      * @return A new {@link Protein} object which stands from the amino acids.
+     * @throws IllegalArgumentException If aminoAcids contains null element.
      */
     public static Protein build(final AminoAcid... aminoAcids) {
         return new Protein(validateNotEmptyVarargs(aminoAcids));
@@ -67,9 +73,11 @@ public class Protein extends BiologicalSequence<Protein, AminoAcid> {
      * @param name The name of the sequence.
      * @param aminoAcids The input amino acids.
      * @return A new {@link Protein} object which stands from the amino acids.
+     * @throws IllegalArgumentException If name is null.
+     * @throws IllegalArgumentException If aminoAcids contains null element.
      */
     public static Protein build(final String name, final AminoAcid... aminoAcids) {
-        return new Protein(validateName(name), validateVarargs(aminoAcids));
+        return new Protein(validateName(name), validateNotEmptyVarargs(aminoAcids));
     }
 
     /**
@@ -77,6 +85,7 @@ public class Protein extends BiologicalSequence<Protein, AminoAcid> {
      *
      * @param aminoAcidList The input amino acids in a {@link List}.
      * @return A new {@link Protein} object which stand from the amino acids.
+     * @throws IllegalArgumentException If aminoAcidList contains null element.
      */
     public static Protein build(final List<AminoAcid> aminoAcidList) {
         return new Protein(validateNotEmptyCollection(aminoAcidList));
@@ -88,6 +97,8 @@ public class Protein extends BiologicalSequence<Protein, AminoAcid> {
      * @param name The name of the sequence.
      * @param aminoAcidList The input amino acids in a {@link List}.
      * @return A new {@link Protein} object which stand from the amino acids.
+     * @throws IllegalArgumentException If name is null.
+     * @throws IllegalArgumentException If aminoAcidList contains null element.
      */
     public static Protein build(final String name, final List<AminoAcid> aminoAcidList) {
         return new Protein(validateName(name), validateCollection(aminoAcidList));
@@ -95,7 +106,7 @@ public class Protein extends BiologicalSequence<Protein, AminoAcid> {
 
     private static String validateSequence(final String sequence) {
         String uppercaseSequence = formatSequence(sequence);
-        Preconditions.checkArgument(sequenceValidator.matcher(uppercaseSequence).matches(), "Protein should contains only the letters of nucleotides");
+        Preconditions.checkArgument(SEQUENCE_VALIDATOR_PATTERN.matcher(uppercaseSequence).matches(), "Protein should contains only the letters of nucleotides");
         return uppercaseSequence;
     }
 

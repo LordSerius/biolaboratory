@@ -22,8 +22,14 @@ public enum DnaNucleotide implements SequenceElement {
     GUANINE("guanine", 'G'),
     THYMINE("thymine", 'T');
 
+    /**
+     * Set of all {@link DnaNucleotide}s.
+     */
     public static final Set<DnaNucleotide> NUCLEOTIDE_SET = Sets.newHashSet(values());
 
+    /**
+     * {@link DnaNucleotide} - {@link DnaNucleotide} {@link Map} about the complements.
+     */
     public static final Map<DnaNucleotide, DnaNucleotide> NUCLEOTIDE_COMPLEMENTS =
             Maps.newHashMap(ImmutableMap.of(
                     ADENINE, THYMINE,
@@ -45,6 +51,7 @@ public enum DnaNucleotide implements SequenceElement {
      *
      * @param nucleotideLetter The nucleotide letter in {@link String} format.
      * @return The corresponding nucleotide.
+     * @throws IllegalArgumentException If nucleotideLetter is not part of {@link DnaNucleotide}s.
      */
     public static DnaNucleotide findDnaNucleotideComplement(final String nucleotideLetter) {
         return NUCLEOTIDE_COMPLEMENTS.get(findDnaNucleotide(nucleotideLetter));
@@ -55,6 +62,7 @@ public enum DnaNucleotide implements SequenceElement {
      *
      * @param nucleotideLetter The nucleotide letter.
      * @return The corresponding nucleotide.
+     * @throws IllegalArgumentException If nucleotideLetter is not part of {@link DnaNucleotide}s.
      */
     public static DnaNucleotide findDnaNucleotideComplement(final char nucleotideLetter) {
         return NUCLEOTIDE_COMPLEMENTS.get(findDnaNucleotide(nucleotideLetter));
@@ -65,6 +73,7 @@ public enum DnaNucleotide implements SequenceElement {
      *
      * @param dnaNucleotideLetter The DNA nucleotide letter.
      * @return The corresponding DNA nucleotide.
+     * @throws IllegalArgumentException If dnaNucleotideLetter is not 1 character after trim.
      */
     public static DnaNucleotide findDnaNucleotide(final String dnaNucleotideLetter) {
         Preconditions.checkArgument(StringUtils.isNotBlank(dnaNucleotideLetter), "DNA nucleotide letter should not be empty");
@@ -78,6 +87,7 @@ public enum DnaNucleotide implements SequenceElement {
      *
      * @param nucleotideLetter The nucleotide letter.
      * @return The corresponding nucleotide.
+     * @throws IllegalArgumentException If nucleotideLetter is not part of {@link DnaNucleotide}s.
      */
     public static DnaNucleotide findDnaNucleotide(final char nucleotideLetter) {
         DnaNucleotide dnaNucleotide = CHARACTER_NUCLEOTIDE_LOOKUP.get(Character.toUpperCase(nucleotideLetter));

@@ -33,6 +33,12 @@ class Motifs {
     private double totalEntropy = Double.NEGATIVE_INFINITY;
     private Set<Dna> consensusDnaSet;
 
+    /**
+     * Creates {@link Motifs} about the given {@link DnaArray}.
+     *
+     * @param dnaArray The {@link DnaArray} to make {@link Motifs} from.
+     * @return The {@link Motifs} representation of the {@link DnaArray}.
+     */
     public static Motifs build(final DnaArray dnaArray) {
         Preconditions.checkArgument(dnaArray != null, "DNA array should not be null");
         return new Motifs(dnaArray);

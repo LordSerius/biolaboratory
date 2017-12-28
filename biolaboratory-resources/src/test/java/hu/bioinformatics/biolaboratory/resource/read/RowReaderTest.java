@@ -57,7 +57,6 @@ public class RowReaderTest {
                 { null, Stream.builder().add("oneliner").build() },
                 { "", Stream.builder().add("oneliner").build() },
                 { PATH, Stream.empty() },
-                { PATH, Stream.builder().add("").build() },
                 { PATH, Stream.builder().add("two").add("line").build() }
         };
     }
@@ -67,6 +66,7 @@ public class RowReaderTest {
     @DataProvider(name = VALID_PROCESS_RESOURCE_DATA_PROVIDER_NAME)
     private Object[][] validProcessResourceDataProvider() {
         return new Object[][] {
+                { Stream.builder().add("").build(), new CommentedString("", "") },
                 { Stream.builder().add("oneliner").build(), new CommentedString("", "oneliner") }
         };
     }

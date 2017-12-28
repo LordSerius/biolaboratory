@@ -3,7 +3,12 @@ package hu.bioinformatics.biolaboratory.utils.datastructures;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -23,6 +28,7 @@ public class OccurrenceMaps {
      * @param occurrenceMaps Vararg or array of {@link OccurrenceMap}s.
      * @param <K> Every {@link OccurrenceMap} has to have K type.
      * @return The merge of the {@link OccurrenceMap}s.
+     * @throws IllegalArgumentException If occurrenceMaps contains null value.
      * @see OccurrenceMap#merge(OccurrenceMap)
      */
     @SafeVarargs
@@ -37,6 +43,7 @@ public class OccurrenceMaps {
      * @param occurrenceMapCollection A {@link Collection} of {@link OccurrenceMap}s.
      * @param <K> Every {@link OccurrenceMap} has to have K type.
      * @return The merge of the {@link OccurrenceMap} collection.
+     * @throws  IllegalArgumentException If occurrenceMapCollection contains null value.
      * @see OccurrenceMap#merge(OccurrenceMap)
      */
     public static <K> OccurrenceMap<K> mergeOccurrenceMaps(final Collection<OccurrenceMap<K>> occurrenceMapCollection) {
@@ -52,6 +59,8 @@ public class OccurrenceMaps {
      * @param occurrenceMaps Vararg or array of {@link OccurrenceMap}s.
      * @param <K> Every {@link OccurrenceMap} has to have K type.
      * @return The merge of the filtered {@link OccurrenceMap} collection.
+     * @throws IllegalArgumentException If filterPredicate is null.
+     * @throws IllegalArgumentException If occurrenceMaps contains null value.
      * @see OccurrenceMap#filterMerge(OccurrenceMap, Predicate)
      */
     @SafeVarargs
@@ -68,6 +77,8 @@ public class OccurrenceMaps {
      * @param occurrenceMapCollection A {@link Collection} of {@link OccurrenceMap}s.
      * @param <K> Every {@link OccurrenceMap} has to have K type.
      * @return The merge of the filtered {@link OccurrenceMap} collection.
+     * @throws IllegalArgumentException If filterPredicate is null.
+     * @throws IllegalArgumentException If occurrenceMapCollection contains null value.
      * @see OccurrenceMap#filterMerge(OccurrenceMap, Predicate)
      */
     private static <K> OccurrenceMap<K> filterMergeOccurrenceMaps(
@@ -97,6 +108,7 @@ public class OccurrenceMaps {
      * @param occurrenceMaps Vararg or array of {@link OccurrenceMap}s.
      * @param <K> Every {@link OccurrenceMap} has to have K type.
      * @return An {@link OccurrenceMap} with the most frequent occurrences after the merging.
+     * @throws IllegalArgumentException If occurrencaMaps contains null element.
      * @see OccurrenceMap#filterMostFrequentOccurrences()
      */
     @SafeVarargs
@@ -110,6 +122,7 @@ public class OccurrenceMaps {
      * @param occurrenceMapCollection A {@link Collection} of {@link OccurrenceMap}s.
      * @param <K> Every {@link OccurrenceMap} has to have K type.
      * @return An {@link OccurrenceMap} with the most frequent occurrences after the merging.
+     * @throws IllegalArgumentException If occurrenceMapCollection contains null element.
      * @see OccurrenceMap#filterMostFrequentOccurrences()
      */
     public static <K> OccurrenceMap<K> getMostFrequentOccurrences(final Collection<OccurrenceMap<K>> occurrenceMapCollection) {
