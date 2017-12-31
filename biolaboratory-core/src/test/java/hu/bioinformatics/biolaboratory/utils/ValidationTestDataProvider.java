@@ -1,5 +1,6 @@
 package hu.bioinformatics.biolaboratory.utils;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import org.testng.annotations.DataProvider;
 
@@ -71,11 +72,11 @@ public class ValidationTestDataProvider {
     @DataProvider(name = VALID_VALIDATE_COLLECTION_DATA_PROVIDER_NAME)
     Object[][] validValidateCollectionDataProvider() {
         return new Object[][] {
-                { Lists.newArrayList() },
-                { Lists.newArrayList("") },
-                { Lists.newArrayList("A") },
-                { Lists.newArrayList("A", "") },
-                { Lists.newArrayList("A", "C") }
+                { ImmutableList.of() },
+                { ImmutableList.of("") },
+                { ImmutableList.of("A") },
+                { ImmutableList.of("A", "") },
+                { ImmutableList.of("A", "C") }
         };
     }
 
@@ -85,7 +86,7 @@ public class ValidationTestDataProvider {
     Object[][] invalidValidateNotEmptyCollectionDataProvider() {
         return new Object[][] {
                 { null },
-                { Lists.newArrayList() },
+                { ImmutableList.of() },
                 { Lists.newArrayList("A", null) }
         };
     }
@@ -95,10 +96,10 @@ public class ValidationTestDataProvider {
     @DataProvider(name = VALID_VALIDATE_NOT_EMPTY_COLLECTION_DATA_PROVIDER_NAME)
     Object[][] validValidateNotEmptyCollectionDataProvider() {
         return new Object[][] {
-                { Lists.newArrayList("") },
-                { Lists.newArrayList("A") },
-                { Lists.newArrayList("A", "") },
-                { Lists.newArrayList("A", "C") }
+                { ImmutableList.of("") },
+                { ImmutableList.of("A") },
+                { ImmutableList.of("A", "") },
+                { ImmutableList.of("A", "C") }
         };
     }
 }

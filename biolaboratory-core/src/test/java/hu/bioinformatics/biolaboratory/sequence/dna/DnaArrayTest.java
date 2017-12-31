@@ -71,6 +71,45 @@ public class DnaArrayTest {
         assertThat(equalsResult, is(equalTo(isEquals)));
     }
 
+    @Test(dataProvider = DnaArrayTestDataProvider.INVALID_ADD_ELEMENTS_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldAddElementsThrowException(DnaArray dnaArray, Dna[] dnas) {
+        dnaArray.add(dnas);
+        fail();
+    }
+
+    @Test(dataProvider = DnaArrayTestDataProvider.VALID_ADD_ELEMENTS_DATA_PROVIDER_NAME)
+    public void shouldAddElementsReturn(DnaArray dnaArray, Dna[] dnas, DnaArray controlDnaArray) {
+        DnaArray addedDnaArray = dnaArray.add(dnas);
+        assertThat(addedDnaArray, is(equalTo(controlDnaArray)));
+    }
+
+    @Test(dataProvider = DnaArrayTestDataProvider.INVALID_ADD_LIST_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldAddListThrowException(DnaArray dnaArray, List<Dna> dnaList) {
+        dnaArray.add(dnaList);
+        fail();
+    }
+
+    @Test(dataProvider = DnaArrayTestDataProvider.VALID_ADD_LIST_DATA_PROVIDER_NAME)
+    public void shouldAddListReturn(DnaArray dnaArray, List<Dna> dnaList, DnaArray controlDnaArray) {
+        DnaArray addedDnaList = dnaArray.add(dnaList);
+        assertThat(addedDnaList, is(equalTo(controlDnaArray)));
+    }
+
+    @Test(dataProvider = DnaArrayTestDataProvider.INVALID_ADD_DNA_ARRAY_DATA_PROVIDER_NAME,
+            expectedExceptions = IllegalArgumentException.class)
+    public void shouldAddDnaArrayThrowException(DnaArray dnaArray, DnaArray otherDnaArray) {
+        dnaArray.add(otherDnaArray);
+        fail();
+    }
+
+    @Test(dataProvider = DnaArrayTestDataProvider.VALID_ADD_DNA_ARRAY_DATA_PROVIDER_NAME)
+    public void shouldAddDnaArrayReturn(DnaArray dnaArray, DnaArray otherDnaArray, DnaArray controlDnaArray) {
+        DnaArray addedDnaList = dnaArray.add(otherDnaArray);
+        assertThat(addedDnaList, is(equalTo(controlDnaArray)));
+    }
+
     @Test(dataProvider = DnaArrayTestDataProvider.INVALID_FIND_MOST_FREQUENT_MOTIFS_DATA_PROVIDER_NAME,
             expectedExceptions = IllegalArgumentException.class)
     public void shouldFindMostFrequentMotifsExhaustingThrowException(DnaArray dnaArray, int k, int d) {

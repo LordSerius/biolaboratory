@@ -1,5 +1,6 @@
 package hu.bioinformatics.biolaboratory.sequence.dna;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import hu.bioinformatics.biolaboratory.utils.collectors.DnaCollectors;
 import hu.bioinformatics.biolaboratory.utils.datahandlers.DnaArrayLoader;
@@ -36,7 +37,7 @@ public class DnaArrayTestDataProvider {
     @DataProvider(name = VALID_DNA_ARRAY_LIST_DATA_PROVIDER_NAME)
     Object[][] validDnaArrayListDataProvider() {
         return new Object[][] {
-                { DnaCollectors.stringToDnaList("A", "C", "G", "T"), Lists.newArrayList("A", "C", "G", "T") }
+                { DnaCollectors.stringToDnaList("A", "C", "G", "T"), ImmutableList.of("A", "C", "G", "T") }
         };
     }
 
@@ -59,8 +60,76 @@ public class DnaArrayTestDataProvider {
                 { DnaArray.build(DnaCollectors.stringToDnaList("AA", "AC", "AG", "AT")), DnaArray.build(DnaCollectors.stringToDnaList("AA", "AC", "AG", "AT", "CA")), false },
                 { DnaArray.build(DnaCollectors.stringToDnaList("AA", "AC", "AG", "AT")), DnaArray.build(DnaCollectors.stringToDnaList("AA", "AA", "AG", "CT")), false },
                 { DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "G", "T")), DnaArray.build(DnaCollectors.stringToDnaList("A", "A", "G", "T")), false },
-                { DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "G", "T")), DnaArray.build(DnaCollectors.stringToDnaList(Lists.newArrayList("A", "C", "G", "T"))), true },
-                { DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "G", "T")), DnaArray.build(DnaCollectors.stringToDnaList(Lists.newArrayList("A", "G", "C", "T"))), true }
+                { DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "G", "T")), DnaArray.build(DnaCollectors.stringToDnaList(ImmutableList.of("A", "C", "G", "T"))), true },
+                { DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "G", "T")), DnaArray.build(DnaCollectors.stringToDnaList(ImmutableList.of("A", "G", "C", "T"))), true }
+        };
+    }
+
+    static final String INVALID_ADD_ELEMENTS_DATA_PROVIDER_NAME = "invalidAddElementsDataProvider";
+
+    @DataProvider(name = INVALID_ADD_ELEMENTS_DATA_PROVIDER_NAME)
+    Object[][] invalidAddElementsDataProvider() {
+        return new Object[][] {
+                { DnaArray.build(DnaCollectors.stringToDnaList("A", "C")), null },
+                { DnaArray.build(DnaCollectors.stringToDnaList("A", "C")), new Dna[] { Dna.build("A"), null } },
+                { DnaArray.build(DnaCollectors.stringToDnaList("A", "C")), DnaCollectors.stringToDnas("AA") },
+                { DnaArray.build(DnaCollectors.stringToDnaList("ACGT")), DnaCollectors.stringToDnas("ACG") }
+        };
+    }
+
+    static final String VALID_ADD_ELEMENTS_DATA_PROVIDER_NAME = "validAddElementsDataProvider";
+
+    @DataProvider(name = VALID_ADD_ELEMENTS_DATA_PROVIDER_NAME)
+    Object[][] validAddElementsDataProvider() {
+        return new Object[][] {
+                { DnaArray.build(DnaCollectors.stringToDnaList("A", "C")), DnaCollectors.stringToDnas(), DnaArray.build(DnaCollectors.stringToDnaList("A", "C")) },
+                { DnaArray.build(DnaCollectors.stringToDnaList("A", "C")), DnaCollectors.stringToDnas("A"), DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "A")) },
+                { DnaArray.build(DnaCollectors.stringToDnaList("A", "C")), DnaCollectors.stringToDnas("A", "G"), DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "A", "G")) }
+        };
+    }
+
+    static final String INVALID_ADD_LIST_DATA_PROVIDER_NAME = "invalidAddListDataProvider";
+
+    @DataProvider(name = INVALID_ADD_LIST_DATA_PROVIDER_NAME)
+    Object[][] invalidAddListDataProvider() {
+        return new Object[][] {
+                { DnaArray.build(DnaCollectors.stringToDnaList("A", "C")), null },
+                { DnaArray.build(DnaCollectors.stringToDnaList("A", "C")), Lists.newArrayList(Dna.build("A"), null) },
+                { DnaArray.build(DnaCollectors.stringToDnaList("A", "C")), DnaCollectors.stringToDnaList("AA") },
+                { DnaArray.build(DnaCollectors.stringToDnaList("ACGT")), DnaCollectors.stringToDnaList("ACG") }
+        };
+    }
+
+    static final String VALID_ADD_LIST_DATA_PROVIDER_NAME = "validAddListDataProvider";
+
+    @DataProvider(name = VALID_ADD_LIST_DATA_PROVIDER_NAME)
+    Object[][] validAddListDataProvider() {
+        return new Object[][] {
+                { DnaArray.build(DnaCollectors.stringToDnaList("A", "C")), DnaCollectors.stringToDnaList(), DnaArray.build(DnaCollectors.stringToDnaList("A", "C")) },
+                { DnaArray.build(DnaCollectors.stringToDnaList("A", "C")), DnaCollectors.stringToDnaList("A"), DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "A")) },
+                { DnaArray.build(DnaCollectors.stringToDnaList("A", "C")), DnaCollectors.stringToDnaList("A", "G"), DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "A", "G")) }
+
+        };
+    }
+
+    static final String INVALID_ADD_DNA_ARRAY_DATA_PROVIDER_NAME = "invalidAddDnaArrayDataProvider";
+
+    @DataProvider(name = INVALID_ADD_DNA_ARRAY_DATA_PROVIDER_NAME)
+    Object[][] invalidAddDnaArrayDataProvider() {
+        return new Object[][] {
+                { DnaArray.build(DnaCollectors.stringToDnaList("A", "C")), null },
+                { DnaArray.build(DnaCollectors.stringToDnaList("A", "C")), DnaArray.build(DnaCollectors.stringToDnaList("AA")) },
+                { DnaArray.build(DnaCollectors.stringToDnaList("ACGT")), DnaArray.build(DnaCollectors.stringToDnas("ACG")) }
+        };
+    }
+
+    static final String VALID_ADD_DNA_ARRAY_DATA_PROVIDER_NAME = "validAddDnaArrayDataProvider";
+
+    @DataProvider(name = VALID_ADD_DNA_ARRAY_DATA_PROVIDER_NAME)
+    Object[][] validAddDnaArrayDataProvider() {
+        return new Object[][] {
+                { DnaArray.build(DnaCollectors.stringToDnaList("A", "C")), DnaArray.build(DnaCollectors.stringToDnaList("A")), DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "A")) },
+                { DnaArray.build(DnaCollectors.stringToDnaList("A", "C")), DnaArray.build(DnaCollectors.stringToDnaList("A", "G")), DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "A", "G")) }
         };
     }
 

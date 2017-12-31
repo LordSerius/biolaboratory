@@ -1,7 +1,8 @@
 package hu.bioinformatics.biolaboratory.sequence;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import hu.bioinformatics.biolaboratory.sequence.dna.Dna;
 import hu.bioinformatics.biolaboratory.sequence.dna.DnaNucleotide;
@@ -244,8 +245,8 @@ public class BiologicalSequenceTestDataProvider {
         return new Object[][] {
                 { Dna.build("ACGT"), null },
                 { Dna.build("ACGT"), Sets.newHashSet(DnaNucleotide.ADENINE, null) },
-                { Dna.build("ACGT"), Sets.newHashSet(RnaNucleotide.URACIL) },
-                { Dna.build("ACGT"), Sets.newHashSet(RnaNucleotide.ADENINE) }
+                { Dna.build("ACGT"), ImmutableSet.of(RnaNucleotide.URACIL) },
+                { Dna.build("ACGT"), ImmutableSet.of(RnaNucleotide.ADENINE) }
         };
     }
 
@@ -254,12 +255,12 @@ public class BiologicalSequenceTestDataProvider {
     @DataProvider(name = VALID_GET_ELEMENTS_NUMBER_ABOUT_SET_DATA_PROVIDER_NAME)
     Object[][] validGetElementsNumberAboutSetDataProvider() {
         return new Object[][] {
-                { Dna.build("ACGT"),Sets.newHashSet(), 0 },
-                { Dna.build("ACGT"), Sets.newHashSet(DnaNucleotide.ADENINE), 1 },
-                { Dna.build("ACGT"), Sets.newHashSet(DnaNucleotide.ADENINE, DnaNucleotide.CYTOSINE), 2 },
-                { Dna.build("ACGT"), Sets.newHashSet(DnaNucleotide.ADENINE, DnaNucleotide.CYTOSINE, DnaNucleotide.GUANINE), 3 },
-                { Dna.build("ACGT"), Sets.newHashSet(DnaNucleotide.ADENINE, DnaNucleotide.CYTOSINE, DnaNucleotide.GUANINE, DnaNucleotide.THYMINE), 4 },
-                { Dna.build("AAA"),Sets.newHashSet(DnaNucleotide.GUANINE), 0 },
+                { Dna.build("ACGT"), ImmutableSet.of(), 0 },
+                { Dna.build("ACGT"), ImmutableSet.of(DnaNucleotide.ADENINE), 1 },
+                { Dna.build("ACGT"), ImmutableSet.of(DnaNucleotide.ADENINE, DnaNucleotide.CYTOSINE), 2 },
+                { Dna.build("ACGT"), ImmutableSet.of(DnaNucleotide.ADENINE, DnaNucleotide.CYTOSINE, DnaNucleotide.GUANINE), 3 },
+                { Dna.build("ACGT"), ImmutableSet.of(DnaNucleotide.ADENINE, DnaNucleotide.CYTOSINE, DnaNucleotide.GUANINE, DnaNucleotide.THYMINE), 4 },
+                { Dna.build("AAA"), ImmutableSet.of(DnaNucleotide.GUANINE), 0 },
         };
     }
 
@@ -268,12 +269,12 @@ public class BiologicalSequenceTestDataProvider {
     @DataProvider(name = VALID_GET_RATIOS_ABOUT_SET_DATA_PROVIDER_NAME)
     Object[][] validGetRatioAboutSetDataProvider() {
         return new Object[][] {
-                { Dna.build("ACGT"),Sets.newHashSet(), 0.0d },
-                { Dna.build("ACGT"), Sets.newHashSet(DnaNucleotide.ADENINE), 0.25d },
-                { Dna.build("ACGT"), Sets.newHashSet(DnaNucleotide.ADENINE, DnaNucleotide.CYTOSINE), 0.5d },
-                { Dna.build("ACGT"), Sets.newHashSet(DnaNucleotide.ADENINE, DnaNucleotide.CYTOSINE, DnaNucleotide.GUANINE), 0.75d },
-                { Dna.build("ACGT"), Sets.newHashSet(DnaNucleotide.ADENINE, DnaNucleotide.CYTOSINE, DnaNucleotide.GUANINE, DnaNucleotide.THYMINE), 1.0d },
-                { Dna.build("AAA"),Sets.newHashSet(DnaNucleotide.GUANINE), 0.0d },
+                { Dna.build("ACGT"), ImmutableSet.of(), 0.0d },
+                { Dna.build("ACGT"), ImmutableSet.of(DnaNucleotide.ADENINE), 0.25d },
+                { Dna.build("ACGT"), ImmutableSet.of(DnaNucleotide.ADENINE, DnaNucleotide.CYTOSINE), 0.5d },
+                { Dna.build("ACGT"), ImmutableSet.of(DnaNucleotide.ADENINE, DnaNucleotide.CYTOSINE, DnaNucleotide.GUANINE), 0.75d },
+                { Dna.build("ACGT"), ImmutableSet.of(DnaNucleotide.ADENINE, DnaNucleotide.CYTOSINE, DnaNucleotide.GUANINE, DnaNucleotide.THYMINE), 1.0d },
+                { Dna.build("AAA"), ImmutableSet.of(DnaNucleotide.GUANINE), 0.0d },
         };
     }
 
@@ -378,16 +379,16 @@ public class BiologicalSequenceTestDataProvider {
     @DataProvider(name = VALID_PATTERN_ARGUMENTS_DATA_PROVIDER_NAME)
     Object[][] validPatternArgumentsDataProvider() {
         return new Object[][] {
-                { Dna.build("ACAACTATGCATACTATCGGGAACTATCCT"), Dna.build("ACTAT"), Lists.newArrayList(3, 12, 22) },
-                { Dna.build("GCGCG"), Dna.build("GCG"), Lists.newArrayList(0, 2) },
-                { Dna.build("GATATATGCATATACTT"), Dna.build("ATAT"), Lists.newArrayList(1, 3, 9) },
-                { Dna.build("TTTTACACTTTTTTGTGTAAAAA"), Dna.build("ACAC"), Lists.newArrayList(4) },
-                { Dna.build("AAAGAGTGTCTGATAGCAGCTTCTGAACTGGTTACCTGCCGTGAGTAAATTAAATTTTATTGACTTAGGTCACTAAATACTTTAACCAATATAGGCATAGCGCACAGACAGATAATAATTACAGAGTACACAACATCCAT"), Dna.build("AAA"), Lists.newArrayList(0, 46, 51, 74) },
-                { Dna.build("AGCGTGCCGAAATATGCCGCCAGACCTGCTGCGGTGGCCTCGCCGACTTCACGGATGCCAAGTGCATAGAGGAAGCGAGCAAAGGTGGTTTCTTTCGCTTTATCCAGCGCGTTAACCACGTTCTGTGCCGACTTT"), Dna.build("TTT"), Lists.newArrayList(88, 92, 98, 132) },
-                { Dna.build("ATATATA"), Dna.build("ATA"), Lists.newArrayList(0, 2, 4) },
-                { Dna.build("AAA"), Dna.build("G"), Lists.newArrayList() },
-                { Dna.build("AAA"), Dna.build("A"), Lists.newArrayList(0, 1, 2) },
-                { Dna.build("AAA"), Dna.build("AAA"), Lists.newArrayList(0)}
+                { Dna.build("ACAACTATGCATACTATCGGGAACTATCCT"), Dna.build("ACTAT"), ImmutableList.of(3, 12, 22) },
+                { Dna.build("GCGCG"), Dna.build("GCG"), ImmutableList.of(0, 2) },
+                { Dna.build("GATATATGCATATACTT"), Dna.build("ATAT"), ImmutableList.of(1, 3, 9) },
+                { Dna.build("TTTTACACTTTTTTGTGTAAAAA"), Dna.build("ACAC"), ImmutableList.of(4) },
+                { Dna.build("AAAGAGTGTCTGATAGCAGCTTCTGAACTGGTTACCTGCCGTGAGTAAATTAAATTTTATTGACTTAGGTCACTAAATACTTTAACCAATATAGGCATAGCGCACAGACAGATAATAATTACAGAGTACACAACATCCAT"), Dna.build("AAA"), ImmutableList.of(0, 46, 51, 74) },
+                { Dna.build("AGCGTGCCGAAATATGCCGCCAGACCTGCTGCGGTGGCCTCGCCGACTTCACGGATGCCAAGTGCATAGAGGAAGCGAGCAAAGGTGGTTTCTTTCGCTTTATCCAGCGCGTTAACCACGTTCTGTGCCGACTTT"), Dna.build("TTT"), ImmutableList.of(88, 92, 98, 132) },
+                { Dna.build("ATATATA"), Dna.build("ATA"), ImmutableList.of(0, 2, 4) },
+                { Dna.build("AAA"), Dna.build("G"), ImmutableList.of() },
+                { Dna.build("AAA"), Dna.build("A"), ImmutableList.of(0, 1, 2) },
+                { Dna.build("AAA"), Dna.build("AAA"),ImmutableList.of(0)}
         };
     }
 
@@ -422,19 +423,19 @@ public class BiologicalSequenceTestDataProvider {
     @DataProvider(name = VALID_PATTERN_ARGUMENTS_WITH_MISMATCHES_DATA_PROVIDER_NAME)
     Object[][] validPatternArgumentsWithMismatchesDataProvider() {
         return new Object[][] {
-                { Dna.build("A"), Dna.build("G"), 0, Lists.newArrayList() },
-                { Dna.build("A"), Dna.build("G"), 5, Lists.newArrayList(0) },
-                { Dna.build("CGCCCGAATCCAGAACGCATTCCCATATTTCGGGACCACTGGCCTCCACGGTACGGACGTCAATCAAAT"), Dna.build("ATTCTGGA"), 3, Lists.newArrayList(6, 7, 26, 27) },
-                { Dna.build("TTTTTTAAATTTTAAATTTTTT"), Dna.build("AAA"), 2, Lists.newArrayList(4, 5, 6, 7, 8, 11, 12, 13, 14, 15) },
-                { Dna.build("GAGCGCTGGGTTAACTCGCTACTTCCCGACGAGCGCTGTGGCGCAAATTGGCGATGAAACTGCAGAGAGAACTGGTCATCCAACTGAATTCTCCCCGCTATCGCATTTTGATGCGCGCCGCGTCGATT"), Dna.build("GAGCGCTGG"), 2, Lists.newArrayList(0, 30, 66) },
-                { Dna.build("CCAAATCCCCTCATGGCATGCATTCCCGCAGTATTTAATCCTTTCATTCTGCATATAAGTAGTGAAGGTATAGAAACCCGTTCAAGCCCGCAGCGGTAAAACCGAGAACCATGATGAATGCACGGCGATTGCGCCATAATCCAAACA"), Dna.build("AATCCTTTCA"), 3, Lists.newArrayList(3, 36, 74, 137) },
-                { Dna.build("CCGTCATCCGTCATCCTCGCCACGTTGGCATGCATTCCGTCATCCCGTCAGGCATACTTCTGCATATAAGTACAAACATCCGTCATGTCAAAGGGAGCCCGCAGCGGTAAAACCGAGAACCATGATGAATGCACGGCGATTGC"), Dna.build("CCGTCATCC"), 3, Lists.newArrayList(0, 7, 36, 44, 48, 72, 79, 112) },
-                { Dna.build("AAAAAA"), Dna.build("TTT"), 3, Lists.newArrayList(0, 1, 2, 3) },
-                { Dna.build("CCACCT"), Dna.build("CCA"), 0, Lists.newArrayList(0) },
-                { Dna.build("AGTC"), Dna.build("AGTC"), 5, Lists.newArrayList(0) },
-                { Dna.build("TTTAGAGCCTTCAGAGG"), Dna.build("GAGG"), 2, Lists.newArrayList(2, 4, 11, 13) },
-                { Dna.build("AAA"), Dna.build("AA"), 0, Lists.newArrayList(0, 1) },
-                { Dna.build("ATA"), Dna.build("ATA"), 1, Lists.newArrayList(0) }
+                { Dna.build("A"), Dna.build("G"), 0, ImmutableList.of() },
+                { Dna.build("A"), Dna.build("G"), 5, ImmutableList.of(0) },
+                { Dna.build("CGCCCGAATCCAGAACGCATTCCCATATTTCGGGACCACTGGCCTCCACGGTACGGACGTCAATCAAAT"), Dna.build("ATTCTGGA"), 3, ImmutableList.of(6, 7, 26, 27) },
+                { Dna.build("TTTTTTAAATTTTAAATTTTTT"), Dna.build("AAA"), 2, ImmutableList.of(4, 5, 6, 7, 8, 11, 12, 13, 14, 15) },
+                { Dna.build("GAGCGCTGGGTTAACTCGCTACTTCCCGACGAGCGCTGTGGCGCAAATTGGCGATGAAACTGCAGAGAGAACTGGTCATCCAACTGAATTCTCCCCGCTATCGCATTTTGATGCGCGCCGCGTCGATT"), Dna.build("GAGCGCTGG"), 2, ImmutableList.of(0, 30, 66) },
+                { Dna.build("CCAAATCCCCTCATGGCATGCATTCCCGCAGTATTTAATCCTTTCATTCTGCATATAAGTAGTGAAGGTATAGAAACCCGTTCAAGCCCGCAGCGGTAAAACCGAGAACCATGATGAATGCACGGCGATTGCGCCATAATCCAAACA"), Dna.build("AATCCTTTCA"), 3, ImmutableList.of(3, 36, 74, 137) },
+                { Dna.build("CCGTCATCCGTCATCCTCGCCACGTTGGCATGCATTCCGTCATCCCGTCAGGCATACTTCTGCATATAAGTACAAACATCCGTCATGTCAAAGGGAGCCCGCAGCGGTAAAACCGAGAACCATGATGAATGCACGGCGATTGC"), Dna.build("CCGTCATCC"), 3, ImmutableList.of(0, 7, 36, 44, 48, 72, 79, 112) },
+                { Dna.build("AAAAAA"), Dna.build("TTT"), 3, ImmutableList.of(0, 1, 2, 3) },
+                { Dna.build("CCACCT"), Dna.build("CCA"), 0, ImmutableList.of(0) },
+                { Dna.build("AGTC"), Dna.build("AGTC"), 5, ImmutableList.of(0) },
+                { Dna.build("TTTAGAGCCTTCAGAGG"), Dna.build("GAGG"), 2, ImmutableList.of(2, 4, 11, 13) },
+                { Dna.build("AAA"), Dna.build("AA"), 0, ImmutableList.of(0, 1) },
+                { Dna.build("ATA"), Dna.build("ATA"), 1, ImmutableList.of(0) }
         };
     }
 

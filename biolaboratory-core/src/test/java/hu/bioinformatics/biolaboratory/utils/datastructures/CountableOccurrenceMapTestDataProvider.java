@@ -100,7 +100,7 @@ public class CountableOccurrenceMapTestDataProvider {
         return new Object[][] {
                 { CountableOccurrenceMap.build(), null },
                 { CountableOccurrenceMap.build(), "A" },
-                { CountableOccurrenceMap.build(Sets.newHashSet("A")), "C" }
+                { CountableOccurrenceMap.build(ImmutableSet.of("A")), "C" }
         };
     }
 
@@ -111,8 +111,8 @@ public class CountableOccurrenceMapTestDataProvider {
         return new Object[][] {
                 { CountableOccurrenceMap.build(), null },
                 { CountableOccurrenceMap.build(), new String[] {"A"} },
-                { CountableOccurrenceMap.build(Sets.newHashSet("A")), new String[] { "A", null } },
-                { CountableOccurrenceMap.build(Sets.newHashSet("A")), new String[] { "A", "C" } }
+                { CountableOccurrenceMap.build(ImmutableSet.of("A")), new String[] { "A", null } },
+                { CountableOccurrenceMap.build(ImmutableSet.of("A")), new String[] { "A", "C" } }
         };
     }
 
@@ -122,9 +122,9 @@ public class CountableOccurrenceMapTestDataProvider {
     Object[][] invalidOperationSetDataProvider() {
         return new Object[][] {
                 { CountableOccurrenceMap.build(), null },
-                { CountableOccurrenceMap.build(), Sets.newHashSet("A") },
+                { CountableOccurrenceMap.build(), ImmutableSet.of("A") },
                 { CountableOccurrenceMap.build(), Sets.newHashSet("A", null) },
-                { CountableOccurrenceMap.build(Sets.newHashSet("A")), Sets.newHashSet("A", "C") }
+                { CountableOccurrenceMap.build(ImmutableSet.of("A")), ImmutableSet.of("A", "C") }
         };
     }
 

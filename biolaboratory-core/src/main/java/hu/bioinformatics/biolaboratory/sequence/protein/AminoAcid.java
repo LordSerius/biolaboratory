@@ -1,11 +1,11 @@
 package hu.bioinformatics.biolaboratory.sequence.protein;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import hu.bioinformatics.biolaboratory.sequence.SequenceElement;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -67,7 +67,7 @@ public enum AminoAcid implements SequenceElement {
                 { VALINE.getLetter(), VALINE }
         };
 
-        Map<Character, AminoAcid> lookupTable = Maps.newHashMap();
+        Map<Character, AminoAcid> lookupTable = new HashMap<>();
         for (Object[] row : rawMapElements) {
             lookupTable.put((Character) row[0], (AminoAcid) row[1]);
         }

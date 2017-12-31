@@ -1,5 +1,6 @@
 package hu.bioinformatics.biolaboratory.utils.datastructures;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import org.testng.annotations.DataProvider;
@@ -26,8 +27,8 @@ public class OccurrenceMapsTestDataProvider {
     @DataProvider(name = VALID_MERGE_OCCURRENCE_MAPS_DATA_PROVIDER_NAME)
     Object[][] validMergeOccurrenceMapsDataProvider() {
         return new Object[][] {
-                { Lists.newArrayList(OccurrenceMap.build(ImmutableMap.of("AG", 1)), OccurrenceMap.build(ImmutableMap.of("CG", 1)), OccurrenceMap.build(ImmutableMap.of("AA", 1)), OccurrenceMap.build(ImmutableMap.of("AG", 1)), OccurrenceMap.build()), OccurrenceMap.build(ImmutableMap.of("AA", 1, "AG", 2, "CG", 1)) },
-                { Lists.newArrayList(OccurrenceMap.build(), OccurrenceMap.build(), OccurrenceMap.build()), OccurrenceMap.build() }
+                { ImmutableList.of(OccurrenceMap.build(ImmutableMap.of("AG", 1)), OccurrenceMap.build(ImmutableMap.of("CG", 1)), OccurrenceMap.build(ImmutableMap.of("AA", 1)), OccurrenceMap.build(ImmutableMap.of("AG", 1)), OccurrenceMap.build()), OccurrenceMap.build(ImmutableMap.of("AA", 1, "AG", 2, "CG", 1)) },
+                { ImmutableList.of(OccurrenceMap.build(), OccurrenceMap.build(), OccurrenceMap.build()), OccurrenceMap.build() }
         };
     }
 
@@ -36,8 +37,8 @@ public class OccurrenceMapsTestDataProvider {
     @DataProvider(name = VALID_GET_MOST_FREQUENT_OCCURRENCES_DATA_PROVIDER_NAME)
     Object[][] validGetMostFrequentOccurrencesDataProvider() {
         return new Object[][] {
-                { Lists.newArrayList(OccurrenceMap.build(ImmutableMap.of("AG", 1)), OccurrenceMap.build(ImmutableMap.of("CG", 1)), OccurrenceMap.build(ImmutableMap.of("AA", 1)), OccurrenceMap.build(ImmutableMap.of("AG", 1)), OccurrenceMap.build()), OccurrenceMap.build(ImmutableMap.of("AG", 2)) },
-                { Lists.newArrayList(OccurrenceMap.build(), OccurrenceMap.build(), OccurrenceMap.build()), OccurrenceMap.build() }
+                { ImmutableList.of(OccurrenceMap.build(ImmutableMap.of("AG", 1)), OccurrenceMap.build(ImmutableMap.of("CG", 1)), OccurrenceMap.build(ImmutableMap.of("AA", 1)), OccurrenceMap.build(ImmutableMap.of("AG", 1)), OccurrenceMap.build()), OccurrenceMap.build(ImmutableMap.of("AG", 2)) },
+                { ImmutableList.of(OccurrenceMap.build(), OccurrenceMap.build(), OccurrenceMap.build()), OccurrenceMap.build() }
         };
     }
 }

@@ -2,11 +2,11 @@ package hu.bioinformatics.biolaboratory.sequence.dna;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import hu.bioinformatics.biolaboratory.sequence.SequenceElement;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,7 +31,7 @@ public enum DnaNucleotide implements SequenceElement {
      * {@link DnaNucleotide} - {@link DnaNucleotide} {@link Map} about the complements.
      */
     public static final Map<DnaNucleotide, DnaNucleotide> NUCLEOTIDE_COMPLEMENTS =
-            Maps.newHashMap(ImmutableMap.of(
+            new HashMap<>(ImmutableMap.of(
                     ADENINE, THYMINE,
                     GUANINE, CYTOSINE,
                     THYMINE, ADENINE,
@@ -39,7 +39,7 @@ public enum DnaNucleotide implements SequenceElement {
             ));
 
     private static final Map<Character, DnaNucleotide> CHARACTER_NUCLEOTIDE_LOOKUP =
-            Maps.newHashMap(ImmutableMap.of(
+            new HashMap<>(ImmutableMap.of(
                     ADENINE.getLetter(), ADENINE,
                     CYTOSINE.getLetter(), CYTOSINE,
                     GUANINE.getLetter(), GUANINE,

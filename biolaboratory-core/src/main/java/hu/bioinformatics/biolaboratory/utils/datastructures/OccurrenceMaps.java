@@ -1,11 +1,11 @@
 package hu.bioinformatics.biolaboratory.utils.datastructures;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Maps;
 
 import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -87,7 +87,7 @@ public class OccurrenceMaps {
 
         List<Map<K, Integer>> occurrenceMapList = getOccurrences(validateCollection(occurrenceMapCollection));
 
-        Map<K, Integer> mergedOccurrences = Maps.newHashMap();
+        Map<K, Integer> mergedOccurrences = new HashMap<>();
         for (Map<K, Integer> occurrence : occurrenceMapList) {
             for (K key : occurrence.keySet()) {
                 int totalOccurrence = 0;
@@ -129,7 +129,7 @@ public class OccurrenceMaps {
         List<Map<K, Integer>> occurrenceMapList = getOccurrences(validateCollection(occurrenceMapCollection));
 
         int mostFrequentOccurrenceNumber = 0;
-        Map<K, Integer> mostFrequentOccurrences = Maps.newHashMap();
+        Map<K, Integer> mostFrequentOccurrences = new HashMap<>();
         for (Map<K, Integer> occurrence : occurrenceMapList) {
             for (K key : occurrence.keySet()) {
                 int totalOccurrence = 0;

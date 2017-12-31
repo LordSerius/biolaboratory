@@ -1,7 +1,6 @@
 package hu.bioinformatics.biolaboratory.utils.datastructures;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import java.util.AbstractMap;
@@ -63,7 +62,7 @@ public class OccurrenceMap<K> {
      * Default constructor creates an empty {@link Map}.
      */
     protected OccurrenceMap() {
-        occurrenceMap = Maps.newHashMap();
+        occurrenceMap = new HashMap<>();
     }
 
     /**
@@ -73,7 +72,7 @@ public class OccurrenceMap<K> {
      * @param occurrenceMap A key - integer pair map.
      */
     protected OccurrenceMap(final Map<K, Integer> occurrenceMap) {
-        this.occurrenceMap = occurrenceMap == null ? Maps.newHashMap() : Maps.newHashMap(occurrenceMap);
+        this.occurrenceMap = occurrenceMap == null ? new HashMap<>() : new HashMap<>(occurrenceMap);
     }
 
     /**
@@ -92,7 +91,7 @@ public class OccurrenceMap<K> {
      * @return The inner occurrence {@link Map}.
      */
     public final Map<K, Integer> getOccurrencesInMap() {
-        Map<K, Integer> copyOccurrenceMap = Maps.newHashMap();
+        Map<K, Integer> copyOccurrenceMap = new HashMap<>();
         copyOccurrenceMap.putAll(occurrenceMap);
         return copyOccurrenceMap;
     }
@@ -263,7 +262,7 @@ public class OccurrenceMap<K> {
 
     private Map<K, Double> innerOccurrenceRatio(final Set<K> keySet) {
         if (occurrenceMap.isEmpty()) {
-            HashMap<K, Double> nullMap = Maps.newHashMap();
+            HashMap<K, Double> nullMap = new HashMap<>();
             nullMap.put(null, 1.0);
             return nullMap;
         }
@@ -271,7 +270,7 @@ public class OccurrenceMap<K> {
         int totalOccurrence = sumTotalOccurrence();
         Map<K, Double> zeroRatio = keySet.stream()
                 .collect(Collectors.toMap(key -> key, key -> 0.0));
-        return Maps.newHashMap(totalOccurrence == 0 ? zeroRatio :
+        return new HashMap<>(totalOccurrence == 0 ? zeroRatio :
                 zeroRatio.entrySet().stream()
                         .collect(Collectors.toMap(Map.Entry::getKey, entry -> (double) getOccurrence(entry.getKey()) / totalOccurrence)));
     }
@@ -338,7 +337,7 @@ public class OccurrenceMap<K> {
     }
 
     private CountableOccurrenceMap<K> innerToCountableWithSet(final Set<K> zeroElementSet) {
-        HashMap<K, Integer> extendedOccurrenceMap = Maps.newHashMap(occurrenceMap);
+        HashMap<K, Integer> extendedOccurrenceMap = new HashMap<>(occurrenceMap);
         zeroElementSet.forEach(key -> extendedOccurrenceMap.put(key, 0));
         return CountableOccurrenceMap.build(extendedOccurrenceMap);
     }
@@ -383,7 +382,7 @@ public class OccurrenceMap<K> {
     protected final Map<K, Integer> filterMergeOccurrences(final OccurrenceMap<K> otherOccurrenceMap, final Predicate<Map.Entry<K, Integer>> filterPredicate) {
         Preconditions.checkArgument(otherOccurrenceMap != null, "Cannot merge with null");
         Preconditions.checkArgument(filterPredicate != null, "Filter predicate should not be null");
-        Map<K, Integer> mergedOccurrences = Maps.newHashMap();
+        Map<K, Integer> mergedOccurrences = new HashMap<>();
         Map<K, Integer> otherOccurrences = otherOccurrenceMap.getOccurrencesInMap();
         for (Map.Entry<K, Integer> entry : occurrenceMap.entrySet()) {
             K key = entry.getKey();

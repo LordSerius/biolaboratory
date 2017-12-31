@@ -1,10 +1,10 @@
 package hu.bioinformatics.biolaboratory.utils.datastructures;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Sets;
 
 import java.util.AbstractMap;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -65,7 +65,7 @@ public class CountableOccurrenceMap<K> extends OccurrenceMap<K> {
     }
 
     private CountableOccurrenceMap(Set<K> elementSet) {
-        if (elementSet == null) elementSet = Sets.newHashSet();
+        if (elementSet == null) elementSet = new HashSet<>();
         occurrenceMap = elementSet.stream()
                 .map(key -> new AbstractMap.SimpleEntry<>(key, 0))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
@@ -81,12 +81,12 @@ public class CountableOccurrenceMap<K> extends OccurrenceMap<K> {
      * @return A {@link Set} about the occurrences' key.
      */
     public Set<K> getElementSet() {
-        return Sets.newHashSet(occurrenceMap.keySet());
+        return new HashSet<>(occurrenceMap.keySet());
     }
 
     @Override
     public CountableOccurrenceMap<K> copy() {
-        return new CountableOccurrenceMap<K>(occurrenceMap);
+        return new CountableOccurrenceMap<>(occurrenceMap);
     }
 
     @Override

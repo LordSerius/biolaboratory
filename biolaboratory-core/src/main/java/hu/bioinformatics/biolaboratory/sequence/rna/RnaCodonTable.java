@@ -1,20 +1,20 @@
 package hu.bioinformatics.biolaboratory.sequence.rna;
 
-import hu.bioinformatics.biolaboratory.sequence.protein.AminoAcid;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Maps;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.name.Names;
-import hu.bioinformatics.biolaboratory.guice.GuiceResourceModule;
 import hu.bioinformatics.biolaboratory.guice.GuiceProductionModule;
-import hu.bioinformatics.biolaboratory.utils.CommentedString;
+import hu.bioinformatics.biolaboratory.guice.GuiceResourceModule;
 import hu.bioinformatics.biolaboratory.resource.extension.ResourceLocalizer;
 import hu.bioinformatics.biolaboratory.resource.read.LineReader;
 import hu.bioinformatics.biolaboratory.resource.read.ResourceReader;
+import hu.bioinformatics.biolaboratory.sequence.protein.AminoAcid;
+import hu.bioinformatics.biolaboratory.utils.CommentedString;
 
 import java.util.AbstractMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -38,7 +38,7 @@ public class RnaCodonTable {
     static final Rna START_CODON = Rna.build("AUG");
 
     private static Map<Rna, Optional<AminoAcid>> initializeCodonTable() {
-        return Maps.newHashMap(getRawCodonTable().stream()
+        return new HashMap<>(getRawCodonTable().stream()
                 .map(CommentedString::getString)
                 .map(TABULATOR_REGEX_PATTERN::split)
                 .map(rnaAminoAcid -> new AbstractMap.SimpleEntry<>(Rna.build(rnaAminoAcid[0]),

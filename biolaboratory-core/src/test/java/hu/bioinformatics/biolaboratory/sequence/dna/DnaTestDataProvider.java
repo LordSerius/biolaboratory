@@ -1,5 +1,6 @@
 package hu.bioinformatics.biolaboratory.sequence.dna;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import hu.bioinformatics.biolaboratory.sequence.rna.Rna;
 import hu.bioinformatics.biolaboratory.utils.collectors.DnaCollectors;
@@ -49,7 +50,7 @@ public class DnaTestDataProvider {
     static Object[][] invalidBuildFromElementListDataProvider() {
         return new Object[][] {
                 { null },
-                { Lists.newArrayList() },
+                {ImmutableList.of()},
                 { Lists.newArrayList(DnaNucleotide.ADENINE, null) }
         };
     }
@@ -221,18 +222,18 @@ public class DnaTestDataProvider {
     @DataProvider(name = MINIMUM_SKEW_DATA_PROVIDER_NAME)
     Object[][] minimumSkewDataProvider() {
         return new Object[][] {
-                { Dna.build("TAAAGACTGCCGAGAGGCCAACACGAGTGCTAGAACGAGGGGCGTAAACGCGGGTCCGAT"), Lists.newArrayList(10, 23) },
-                { Dna.build("ACCG"), Lists.newArrayList(2) },
-                { Dna.build("ACCC"), Lists.newArrayList(3) },
-                { Dna.build("CCGGGT"), Lists.newArrayList(1) },
-                { Dna.build("CCGGCCGG"), Lists.newArrayList(1, 5) },
-                { Dna.build("A"), Lists.newArrayList(0) },
-                { Dna.build("AT"), Lists.newArrayList(0, 1) },
-                { Dna.build("GGG"), Lists.newArrayList(0) },
-                { Dna.build("AAGGGAAA"), Lists.newArrayList(0, 1) },
-                { Dna.build("TTCGAAA"), Lists.newArrayList(2) },
-                { Dna.build("AAAGTTTCAAA"), Lists.newArrayList(0, 1, 2, 7, 8, 9, 10) },
-                { testDnaLoader.load("minimum-skew-extra-dataset.dna"), Lists.newArrayList(89968, 89969, 89970, 90344, 90345) }
+                { Dna.build("TAAAGACTGCCGAGAGGCCAACACGAGTGCTAGAACGAGGGGCGTAAACGCGGGTCCGAT"), ImmutableList.of(10, 23) },
+                { Dna.build("ACCG"), ImmutableList.of(2) },
+                { Dna.build("ACCC"), ImmutableList.of(3) },
+                { Dna.build("CCGGGT"), ImmutableList.of(1) },
+                { Dna.build("CCGGCCGG"), ImmutableList.of(1, 5) },
+                { Dna.build("A"), ImmutableList.of(0) },
+                { Dna.build("AT"), ImmutableList.of(0, 1) },
+                { Dna.build("GGG"), ImmutableList.of(0) },
+                { Dna.build("AAGGGAAA"), ImmutableList.of(0, 1) },
+                { Dna.build("TTCGAAA"), ImmutableList.of(2) },
+                { Dna.build("AAAGTTTCAAA"), ImmutableList.of(0, 1, 2, 7, 8, 9, 10) },
+                { testDnaLoader.load("minimum-skew-extra-dataset.dna"), ImmutableList.of(89968, 89969, 89970, 90344, 90345) }
         };
     }
 

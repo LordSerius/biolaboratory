@@ -1,8 +1,6 @@
 package hu.bioinformatics.biolaboratory.sequence.dna;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.UncheckedExecutionException;
 import hu.bioinformatics.biolaboratory.sequence.BiologicalSequence;
 import hu.bioinformatics.biolaboratory.sequence.rna.Rna;
@@ -10,6 +8,9 @@ import hu.bioinformatics.biolaboratory.sequence.rna.RnaNucleotide;
 import hu.bioinformatics.biolaboratory.utils.datastructures.OccurrenceMap;
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
@@ -300,8 +301,8 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
                 .generateMismatches(d);
 
         for(int i = 0; i < lengthDiff; i++) {
-            Set<Dna> nextMismatchesSet = Sets.newHashSet();
-            Set<Dna> generatedMismatchesSet = Sets.newHashSet();
+            Set<Dna> nextMismatchesSet = new HashSet<>();
+            Set<Dna> generatedMismatchesSet = new HashSet<>();
 
             for (Dna mismatchPattern : mismatchSet) {
                 occurrenceMap.increase(mismatchPattern);
@@ -420,13 +421,13 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
         if (skew == null) {
             skew = createSkew();
         }
-        return Lists.newArrayList(skew);
+        return new ArrayList<>(skew);
     }
 
     private List<Integer> createSkew() {
         int guanineCytosineRatio = 0;
         int minimumGuanineCytosineRatio = guanineCytosineRatio;
-        List<Integer> minimumRatioGuanineCytosineIndexList = Lists.newLinkedList();
+        List<Integer> minimumRatioGuanineCytosineIndexList = new LinkedList<>();
         for (int i = 0; i < sequenceLength; i++) {
             switch (DnaNucleotide.findDnaNucleotide(sequence.charAt(i))) {
                 case GUANINE:

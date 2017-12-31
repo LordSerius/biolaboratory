@@ -70,4 +70,29 @@ public class Validation {
         Preconditions.checkArgument(collection != null, "Collection should not be null");
         return noNullElements(collection, "Input collection element should not be null");
     }
+
+    /**
+     * TODO
+     *
+     * @param object
+     * @param <T>
+     * @return
+     */
+    public static <T> T validateNotEmpty(final T object) {
+        Preconditions.checkArgument(object != null, "Input argument should not be null");
+        return object;
+    }
+
+    /**
+     * TODO
+     *
+     * @param object
+     * @param parameterName
+     * @param <T>
+     * @return
+     */
+    public static <T> T validateNotEmpty(final T object, final String parameterName) {
+        Preconditions.checkArgument(object != null, parameterName + " should not be null");
+        return object;
+    }
 }

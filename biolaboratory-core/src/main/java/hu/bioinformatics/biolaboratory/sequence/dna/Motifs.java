@@ -3,7 +3,6 @@ package hu.bioinformatics.biolaboratory.sequence.dna;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import hu.bioinformatics.biolaboratory.utils.DoubleUtils;
 import hu.bioinformatics.biolaboratory.utils.datastructures.CountableOccurrenceMap;
 import hu.bioinformatics.biolaboratory.utils.datastructures.OccurrenceMap;
@@ -83,7 +82,7 @@ class Motifs {
      * @return The consensus {@link Dna}s in {@link Set}.
      */
     public Set<Dna> consensus() {
-        return Sets.newHashSet(createConsensusDnaSet());
+        return new HashSet<>(createConsensusDnaSet());
     }
 
     /**
@@ -107,17 +106,17 @@ class Motifs {
                     .map(OccurrenceMap::filterMostFrequentOccurrences)
                     .collect(Collectors.toCollection(ArrayList::new));
 
-            Set<List<DnaNucleotide>> consensusPrefixes = Sets.newHashSet();
+            Set<List<DnaNucleotide>> consensusPrefixes = new HashSet<>();
             for (DnaNucleotide dnaNucleotide : maximumColumnOccurrences.get(0)) {
                 consensusPrefixes.add(Lists.newArrayList(dnaNucleotide));
             }
             int length = maximumColumnOccurrences.size();
 
             for (int i = 1; i < length; i++) {
-                Set<List<DnaNucleotide>> newConsensusPrefixes = Sets.newHashSet();
+                Set<List<DnaNucleotide>> newConsensusPrefixes = new HashSet<>();
                 for (List<DnaNucleotide> prefix : consensusPrefixes) {
                     for (DnaNucleotide dnaNucleotide : maximumColumnOccurrences.get(i)) {
-                        List<DnaNucleotide> extendedPrefix = Lists.newArrayList(prefix);
+                        List<DnaNucleotide> extendedPrefix = new ArrayList<>(prefix);
                         extendedPrefix.add(dnaNucleotide);
                         newConsensusPrefixes.add(extendedPrefix);
                     }
@@ -182,7 +181,7 @@ class Motifs {
      * @return The profile of the {@link DnaArray}.
      */
     public List<Map<DnaNucleotide, Double>> profile() {
-        return Lists.newArrayList(createProfile());
+        return new ArrayList<>(createProfile());
     }
 
     private synchronized List<Map<DnaNucleotide, Double>> createProfile() {
@@ -234,13 +233,13 @@ class Motifs {
      * @return Immutable {@link List} of occurrences.
      */
     public List<CountableOccurrenceMap<DnaNucleotide>> count() {
-        return Lists.newArrayList(createCountMotifs());
+        return new ArrayList<>(createCountMotifs());
     }
 
     private synchronized List<CountableOccurrenceMap<DnaNucleotide>> createCountMotifs() {
         if (motifCounts == null) {
             DnaNucleotide[][] motifs = createMotifs();
-            motifCounts = Lists.newArrayListWithCapacity(dnaArray.getSamplesLength());
+            motifCounts = new ArrayList<>(dnaArray.getSamplesLength());
             for (int j = 0; j < dnaArray.getSamplesLength(); j++) {
                 CountableOccurrenceMap<DnaNucleotide> nucleotideOccurrenceMap = CountableOccurrenceMap.build(DnaNucleotide.NUCLEOTIDE_SET);
                 for (int i = 0; i < dnaArray.getSampleNumber(); i++) {

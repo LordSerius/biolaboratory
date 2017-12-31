@@ -1,5 +1,6 @@
 package hu.bioinformatics.biolaboratory.sequence.protein;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import org.testng.annotations.DataProvider;
 
@@ -39,7 +40,7 @@ public class ProteinTestDataProvider {
     static Object[][] invalidBuildFromElementListDataProvider() {
         return new Object[][] {
                 { null },
-                { Lists.newArrayList() },
+                {ImmutableList.of()},
                 { Lists.newArrayList(AminoAcid.GLYCINE, null) }
         };
     }

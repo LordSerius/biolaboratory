@@ -1,12 +1,12 @@
 package hu.bioinformatics.biolaboratory.sequence.rna;
 
-import hu.bioinformatics.biolaboratory.sequence.SequenceElement;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import hu.bioinformatics.biolaboratory.sequence.SequenceElement;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -28,7 +28,7 @@ public enum RnaNucleotide implements SequenceElement {
     public static final Set<RnaNucleotide> NUCLEOTIDE_SET = Sets.newHashSet(values());
 
     private static final Map<Character, RnaNucleotide> CHARACTER_NUCLEOTIDE_LOOKUP =
-            Maps.newHashMap(ImmutableMap.of(
+            new HashMap<>(ImmutableMap.of(
                     ADENINE.getLetter(), ADENINE,
                     CYTOSINE.getLetter(), CYTOSINE,
                     GUANINE.getLetter(), GUANINE,

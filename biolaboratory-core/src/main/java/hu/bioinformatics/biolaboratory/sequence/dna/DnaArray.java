@@ -1,10 +1,8 @@
 package hu.bioinformatics.biolaboratory.sequence.dna;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-import hu.bioinformatics.biolaboratory.utils.Validation;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -14,6 +12,9 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import static hu.bioinformatics.biolaboratory.utils.Validation.validateNotEmptyCollection;
+import static hu.bioinformatics.biolaboratory.utils.Validation.validateNotEmptyVarargs;
 
 /**
  * A collection of {@link Dna}s which provide motif finding methods on them. Every included {@link Dna} should be the
@@ -36,8 +37,7 @@ public class DnaArray {
      * @throws IllegalArgumentException If dna elements have different lengths.
      */
     public static DnaArray build(final Dna... dnas) {
-        Validation.validateNotEmptyVarargs(dnas);
-        return innerBuild(Arrays.asList(dnas));
+        return innerBuild(Arrays.asList(validateNotEmptyVarargs(dnas)));
     }
 
     /**
@@ -48,23 +48,22 @@ public class DnaArray {
      * @throws IllegalArgumentException If dna elements have different lengths.
      */
     public static DnaArray build(final List<Dna> dnaList) {
-        Validation.validateNotEmptyCollection(dnaList);
-        return innerBuild(dnaList);
+        return innerBuild(validateNotEmptyCollection(dnaList));
     }
 
     private static DnaArray innerBuild(final List<Dna> dnaList) {
-        validateDnaArray(dnaList);
-        return new DnaArray(dnaList);
+        return new DnaArray(validateDnaArray(dnaList));
     }
 
-    private static void validateDnaArray(final List<Dna> dnaList) {
+    private static List<Dna> validateDnaArray(final List<Dna> dnaList) {
         int length = dnaList.get(0).getSequenceLength();
         Preconditions.checkArgument(dnaList.stream()
                 .allMatch(dna -> dna.getSequenceLength() == length), "DNA lengths inside DNA array should be the same");
+        return dnaList;
     }
 
     private DnaArray(final List<Dna> sampleList) {
-        this.sampleList = Lists.newArrayList(sampleList);
+        this.sampleList = new ArrayList<>(sampleList);
         this.sampleNumber = sampleList.size();
         this.samplesLength = sampleList.get(0).getSequenceLength();
         this.motifs = Motifs.build(this);
@@ -85,7 +84,7 @@ public class DnaArray {
      * @return The copy of the DNA array elements.
      */
     public List<Dna> getSampleList() {
-        return Lists.newArrayList(sampleList);
+        return new ArrayList<>(sampleList);
     }
 
     /**
@@ -135,7 +134,7 @@ public class DnaArray {
     private <T> boolean equalsWithList(List<T> rightHand) {
         if (sampleList.size() != rightHand.size()) return false;
 
-        List<T> rightHandCopy = Lists.newArrayList(rightHand);
+        List<T> rightHandCopy = new ArrayList<>(rightHand);
         for (Dna dna : sampleList) {
             if (!rightHandCopy.remove(dna)) return false;
         }
@@ -156,6 +155,47 @@ public class DnaArray {
                 output += "\n";
         }
         return output;
+    }
+
+    /**
+     * TODO: documentation
+     *
+     * @param dnas
+     * @return
+     */
+    public DnaArray add(final Dna... dnas) {
+        Preconditions.checkArgument(dnas != null, "Dna varargs should not be null");
+        return dnas.length == 0 ? DnaArray.build(sampleList) : innerAdd(DnaArray.build(dnas));
+    }
+
+    /**
+     * TODO: documentation
+     *
+     * @param dnaList
+     * @return
+     */
+    public DnaArray add(final List<Dna> dnaList) {
+        Preconditions.checkArgument(dnaList != null, "Dna list should not be null");
+        return dnaList.isEmpty() ? DnaArray.build(sampleList) : innerAdd(DnaArray.build(dnaList));
+    }
+
+    /**
+     * TODO: documentation
+     *
+     * @param otherDnaArray
+     * @return
+     */
+    public DnaArray add(final DnaArray otherDnaArray) {
+        Preconditions.checkArgument(otherDnaArray != null, "Other DNA array should not be null");
+        return innerAdd(otherDnaArray);
+    }
+
+    private DnaArray innerAdd(final DnaArray otherDnaArray) {
+        Preconditions.checkArgument(samplesLength == otherDnaArray.samplesLength, "DNA array lengths are differ");
+        List<Dna> addedList = new ArrayList<>(sampleNumber + otherDnaArray.samplesLength);
+        addedList.addAll(sampleList);
+        addedList.addAll(otherDnaArray.sampleList);
+        return new DnaArray(addedList);
     }
 
     /**
@@ -239,7 +279,7 @@ public class DnaArray {
                 .collect(Collectors.toMap(Function.identity(), this::innerPatternProbability));
 
         double highestProbability = 0.0;
-        Set<Dna> mostProbableSamples = Sets.newHashSet();
+        Set<Dna> mostProbableSamples = new HashSet<>();
 
         for (Map.Entry<Dna, Double> patternProbabilityPair : patternProbabilityMap.entrySet()) {
             double patternProbability = patternProbabilityPair.getValue();
@@ -278,4 +318,22 @@ public class DnaArray {
                 .mapToDouble(i -> profile.get(i).get(sequenceElements[i]))
                 .reduce(1.0, (a, b) -> a * b);
     }
+
+//    public Set<Dna> greedyMotifSearch(final int k, final int t) {
+//        Set<Dna> subSequenceSet = sampleList.get(0).getSubSequences(k);
+//
+//        Set<DnaArray> generatorDnaArraySet = subSequenceSet.stream()
+//                .map(dna -> new DnaArray(Lists.newArrayList(dna)))
+//                .collect(Collectors.toCollection(HashSet::new));
+//
+//        for (Dna dna : sampleList.subList(1, samplesLength)) {
+//            Set<DnaArray> newGeneratorDnaArraySet = new HashSet<>();
+//            for (DnaArray generatorDnaArray : generatorDnaArraySet) {
+//                Set<Dna> dnas = generatorDnaArray.profileMostProbableSubSequence(dna);
+//                dnas.stream()
+//                        .map()
+//            }
+//        }
+//        return null;
+//    }
 }

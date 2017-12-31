@@ -45,7 +45,7 @@ public class DnaCollectorsTestDataProvider {
     private Object[][] invalidStringCollectionDataProvider() {
         return new Object[][] {
                 { null },
-                { Lists.newArrayList("A", "invalid item", "G") },
+                { ImmutableList.of("A", "invalid item", "G") },
                 { Lists.newArrayList("A", null) }
         };
     }
@@ -56,7 +56,7 @@ public class DnaCollectorsTestDataProvider {
     private Object[][] invalidCommentedStringCollectionDataProvider() {
         return new Object[][] {
                 { null },
-                { Lists.newArrayList(new CommentedString("comment", "A"), new CommentedString("comment", "invalid item"), new CommentedString("comment", "G")) },
+                { ImmutableList.of(new CommentedString("comment", "A"), new CommentedString("comment", "invalid item"), new CommentedString("comment", "G")) },
                 { Lists.newArrayList(new CommentedString("comment", "A"), null) }
         };
     }

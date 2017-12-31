@@ -2,7 +2,6 @@ package hu.bioinformatics.biolaboratory.utils.datastructures;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.testng.annotations.DataProvider;
 
@@ -185,7 +184,7 @@ public class OccurrenceMapTestDataProvider {
 
     @DataProvider(name = ALL_OCCURRENCE_RATIOS_DATA_PROVIDER)
     Object[][] allOccurrenceRatiosDataProvider() {
-        HashMap<String, Double> nullMap = Maps.newHashMap();
+        HashMap<String, Double> nullMap = new HashMap<>();
         nullMap.put(null, 1.0);
         return new Object[][] {
                 { OccurrenceMap.build(), nullMap },
@@ -197,7 +196,7 @@ public class OccurrenceMapTestDataProvider {
 
     @DataProvider(name = OCCURRENCE_RATIOS_DATA_PROVIDER)
     Object[][] occurrenceRatiosDataProvider() {
-        HashMap<String, Double> nullMap = Maps.newHashMap();
+        HashMap<String, Double> nullMap = new HashMap<>();
         nullMap.put(null, 1.0);
         return new Object[][] {
                 { OccurrenceMap.build(), new String[] {}, nullMap },
@@ -215,7 +214,7 @@ public class OccurrenceMapTestDataProvider {
 
     @DataProvider(name = OCCURRENCE_RATIOS_SET_DATA_PROVIDER)
     Object[][] occurrenceRatiosSetDataProvider() {
-        HashMap<String, Double> nullMap = Maps.newHashMap();
+        HashMap<String, Double> nullMap = new HashMap<>();
         nullMap.put(null, 1.0);
         return new Object[][] {
                 { OccurrenceMap.build(), ImmutableSet.of(), nullMap },

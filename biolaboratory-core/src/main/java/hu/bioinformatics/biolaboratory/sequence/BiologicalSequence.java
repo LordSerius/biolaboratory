@@ -1,8 +1,6 @@
 package hu.bioinformatics.biolaboratory.sequence;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import com.sun.javafx.binding.StringFormatter;
 import hu.bioinformatics.biolaboratory.utils.SequenceUtils;
 import hu.bioinformatics.biolaboratory.utils.datastructures.CountableOccurrenceMap;
@@ -10,6 +8,8 @@ import hu.bioinformatics.biolaboratory.utils.datastructures.OccurrenceMap;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -74,7 +74,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
     @SafeVarargs
     protected BiologicalSequence(final String name, final ELEMENT... sequenceElements) {
         this(name, Arrays.asList(sequenceElements));
-        this.sequenceAsElements = sequenceElements;
+        this.sequenceAsElements = sequenceElements.clone();
     }
 
     /**
@@ -737,7 +737,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
         String firstWindowPart = window.sequence.substring(0, k);
         String lastWindowPart = window.sequence.substring(L - k, L);
         OccurrenceMap<TYPE> occurrenceMap = window.getOccurrenceMap(k);
-        Set<TYPE> patternSet = Sets.newHashSet();
+        Set<TYPE> patternSet = new HashSet<>();
         patternSet.addAll(occurrenceMap.filterGreaterOrEqualsOccurrences(t));
 
         for(int i = 0; i < lengthDiff; i++) {
@@ -813,8 +813,8 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
                                     .generateMismatches(d);
 
         for (int i = 0; i < lengthDiff; i++) {
-            Set<TYPE> nextMismatchesSet = Sets.newHashSet();
-            Set<TYPE> generatedMismatchesSet = Sets.newHashSet();
+            Set<TYPE> nextMismatchesSet = new HashSet<TYPE>();
+            Set<TYPE> generatedMismatchesSet = new HashSet<TYPE>();
 
             for (TYPE mismatchPattern : mismatchSet) {
                 occurrenceMap.increase(mismatchPattern);
@@ -854,7 +854,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
     public Set<TYPE> generateMismatches(final int d) {
         Preconditions.checkArgument(d >= 0, "Maximum mismatch number (d) should be greater or equals than 0");
 
-        Map<String, Integer> mismatchMap = Maps.newHashMap();
+        Map<String, Integer> mismatchMap = new HashMap<>();
 
         ELEMENT[] elementArray = getElementArray();
         for (ELEMENT element : elementArray) {
@@ -867,7 +867,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
         }
 
         for (int i = 1; i < sequenceLength; i++) {
-            Map<String, Integer> newMismatchMap = Maps.newHashMap();
+            Map<String, Integer> newMismatchMap = new HashMap<>();
             for (String prefix : mismatchMap.keySet()){
                 int mismatchCount = mismatchMap.get(prefix);
                 for (ELEMENT element : elementArray) {

@@ -4,6 +4,8 @@ import com.google.common.collect.Lists;
 import hu.bioinformatics.biolaboratory.sequence.protein.Protein;
 import org.testng.annotations.DataProvider;
 
+import java.util.ArrayList;
+
 /**
  * Provides test data for {@link RnaTest}.
  *
@@ -42,7 +44,7 @@ public class RnaTestDataProvider {
     static Object[][] invalidBuildFromElementListDataProvider() {
         return new Object[][] {
                 { null },
-                { Lists.newArrayList() },
+                { new ArrayList<>()},
                 { Lists.newArrayList(RnaNucleotide.ADENINE, null) }
         };
     }
