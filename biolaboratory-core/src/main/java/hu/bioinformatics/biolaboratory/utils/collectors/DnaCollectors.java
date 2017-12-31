@@ -1,16 +1,14 @@
 package hu.bioinformatics.biolaboratory.utils.collectors;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import hu.bioinformatics.biolaboratory.sequence.dna.Dna;
 import hu.bioinformatics.biolaboratory.utils.CommentedString;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static hu.bioinformatics.biolaboratory.utils.Validation.validateCollection;
 import static hu.bioinformatics.biolaboratory.utils.Validation.validateVarargs;
@@ -24,29 +22,25 @@ import static hu.bioinformatics.biolaboratory.utils.Validation.validateVarargs;
 public class DnaCollectors {
 
     /**
-     * Transforms a {@link String}s to a {@link Dna} {@link Set}.
+     * Transforms {@link String}s to a {@link Dna} {@link Set}.
      *
      * @param sequences Strings of DNA sequences.
      * @return A {@link Set} of {@link Dna} about the sequences.
      * @throws IllegalArgumentException If varargs is null or contains null element.
      */
     public static Set<Dna> stringToDnaSet(final String... sequences) {
-        return Arrays.stream(validateVarargs(sequences))
-                .map(mapStringToDna())
-                .collect(Collectors.toCollection(HashSet::new));
+        return Sets.newHashSet(stringToDnas(sequences));
     }
 
     /**
-     * Transforms a {@link CommentedString}s to a {@link Dna} {@link Set}.
+     * Transforms {@link CommentedString}s to a {@link Dna} {@link Set}.
      *
      * @param sequences {@link CommentedString}s of DNA sequences.
      * @return A {@link Set} of {@link Dna} about the sequences.
      * @throws IllegalArgumentException If varargs is null or contains null element.
      */
     public static Set<Dna> commentedStringToDnaSet(final CommentedString... sequences) {
-        return Arrays.stream(validateVarargs(sequences))
-                .map(mapCommentedStringToDna())
-                .collect(Collectors.toCollection(HashSet::new));
+        return Sets.newHashSet(commentedStringToDnas(sequences));
     }
 
     /**
@@ -57,9 +51,7 @@ public class DnaCollectors {
      * @throws IllegalArgumentException If collection is null or contains null element.
      */
     public static Set<Dna> stringToDnaSet(final Collection<String> sequenceCollection) {
-        return validateCollection(sequenceCollection).stream()
-                .map(mapStringToDna())
-                .collect(Collectors.toCollection(HashSet::new));
+        return Sets.newHashSet(stringToDnas(sequenceCollection));
     }
 
     /**
@@ -70,36 +62,29 @@ public class DnaCollectors {
      * @throws IllegalArgumentException If collection is null or contains null element.
      */
     public static Set<Dna> commentedStringToDnaSet(final Collection<CommentedString> sequenceCollection) {
-        return validateCollection(sequenceCollection).stream()
-                .map(mapCommentedStringToDna())
-                .collect(Collectors.toCollection(HashSet::new));
+        return Sets.newHashSet(commentedStringToDnas(sequenceCollection));
     }
 
     /**
-     * Transforms a {@link String}s to a {@link Dna} {@link List}.
+     * Transforms {@link String}s to a {@link Dna} {@link List}.
      *
      * @param sequences Strings of DNA sequences.
      * @return A {@link List} of {@link Dna} about the sequences.
      * @throws IllegalArgumentException If varargs is null or contains null element.
      */
     public static List<Dna> stringToDnaList(final String... sequences) {
-        return Arrays.stream(validateVarargs(sequences))
-                .map(mapStringToDna())
-                .collect(Collectors.toCollection(ArrayList::new));
+        return Lists.newArrayList(stringToDnas(sequences));
     }
 
     /**
-     * Transforms a {@link CommentedString}s to a {@link Dna} {@link List}.
+     * Transforms {@link CommentedString}s to a {@link Dna} {@link List}.
      *
      * @param sequences {@link CommentedString}s of DNA sequences.
-     * @return A {@link Set} of {@link Dna} about the sequences.
+     * @return A {@link List} of {@link Dna} about the sequences.
      * @throws IllegalArgumentException If varargs is null or contains null element.
      */
     public static List<Dna> commentedStringToDnaList(final CommentedString... sequences) {
-        validateVarargs(sequences);
-        return Arrays.stream(sequences)
-                .map(mapCommentedStringToDna())
-                .collect(Collectors.toCollection(ArrayList::new));
+        return Lists.newArrayList(commentedStringToDnas(sequences));
     }
 
     /**
@@ -110,22 +95,74 @@ public class DnaCollectors {
      * @throws IllegalArgumentException If collection is null or contains null element.
      */
     public static List<Dna> stringToDnaList(final Collection<String> sequenceCollection) {
-        return validateCollection(sequenceCollection).stream()
-                .map(mapStringToDna())
-                .collect(Collectors.toCollection(ArrayList::new));
+        return Lists.newArrayList(stringToDnas(sequenceCollection));
     }
 
     /**
      * Transforms a {@link CommentedString} {@link Collection} to a {@link Dna} {@link List}.
      *
      * @param sequenceCollection A {@link Collection} of DNA sequences.
-     * @return A {@link Set} of {@link Dna} about the sequences.
+     * @return A {@link List} of {@link Dna} about the sequences.
      * @throws IllegalArgumentException If collection is null or contains null element.
      */
     public static List<Dna> commentedStringToDnaList(final Collection<CommentedString> sequenceCollection) {
-        return validateCollection(sequenceCollection).stream()
+        return Lists.newArrayList(commentedStringToDnas(sequenceCollection));
+    }
+
+    /**
+     * Transforms {@link String}s to a {@link Dna} array.
+     *
+     * @param sequences Strings of DNA sequences.
+     * @return An array of {@link Dna} about the sequences.
+     * @throws IllegalArgumentException If varargs is null or contains null element.
+     */
+    public static Dna[] stringToDnas(final String... sequences) {
+        return innerStringToDna(Lists.newArrayList(validateVarargs(sequences)));
+    }
+
+    /**
+     * Transforms {@link CommentedString}s to a {@link Dna} array.
+     *
+     * @param sequences {@link CommentedString}s of DNA sequences.
+     * @return A n array of {@link Dna} about the sequences.
+     * @throws IllegalArgumentException If varargs is null or contains null element.
+     */
+    public static Dna[] commentedStringToDnas(final CommentedString... sequences) {
+        return innerCommentedStringToDna(Lists.newArrayList(validateVarargs(sequences)));
+    }
+
+    /**
+     * Transforms a {@link String} {@link Collection} to a {@link Dna} array.
+     *
+     * @param sequenceCollection A {@link Collection} of DNA sequences.
+     * @return An array of {@link Dna} about the sequences.
+     * @throws IllegalArgumentException If collection is null or contains null element.
+     */
+    public static Dna[] stringToDnas(final Collection<String> sequenceCollection) {
+        return innerStringToDna(validateCollection(sequenceCollection));
+    }
+
+    /**
+     * Transforms a {@link CommentedString} {@link Collection} to a {@link Dna} array.
+     *
+     * @param sequenceCollection A {@link Collection} of DNA sequences.
+     * @return An array of {@link Dna} about the sequences.
+     * @throws IllegalArgumentException If collection is null or contains null element.
+     */
+    public static Dna[] commentedStringToDnas(final Collection<CommentedString> sequenceCollection) {
+        return innerCommentedStringToDna(validateCollection(sequenceCollection));
+    }
+
+    private static Dna[] innerStringToDna(final Collection<String> sequenceCollection) {
+        return sequenceCollection.stream()
+                .map(mapStringToDna())
+                .toArray(Dna[]::new);
+    }
+
+    private static Dna[] innerCommentedStringToDna(final Collection<CommentedString> sequenceCollection) {
+        return sequenceCollection.stream()
                 .map(mapCommentedStringToDna())
-                .collect(Collectors.toCollection(ArrayList::new));
+                .toArray(Dna[]::new);
     }
 
     private static Function<String, Dna> mapStringToDna() {

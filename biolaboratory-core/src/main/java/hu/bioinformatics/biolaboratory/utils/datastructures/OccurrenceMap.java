@@ -477,8 +477,7 @@ public class OccurrenceMap<K> {
      */
     @SafeVarargs
     protected final K[] validateKeys(final K... keys) {
-        validateVarargs(keys);
-        Arrays.stream(keys).forEach(this::validateKey);
+        Arrays.stream(validateVarargs(keys)).forEach(this::validateKey);
         return keys;
     }
 
@@ -490,8 +489,7 @@ public class OccurrenceMap<K> {
      * @throws IllegalArgumentException If the key set contains null elements.
      */
     protected Set<K> validateKeySet(final Set<K> keySet) {
-        validateCollection(keySet);
-        keySet.forEach(this::validateKey);
+        validateCollection(keySet).forEach(this::validateKey);
         return keySet;
     }
 
