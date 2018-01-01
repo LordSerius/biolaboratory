@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import hu.bioinformatics.biolaboratory.resource.extension.ResourceReaderProvider;
 import hu.bioinformatics.biolaboratory.resource.extension.ResourceValidator;
 import hu.bioinformatics.biolaboratory.resource.read.wrapper.ReaderWrapperFactory;
-import hu.bioinformatics.biolaboratory.utils.CommentedString;
+import hu.bioinformatics.biolaboratory.utils.datastructures.CommentedString;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 

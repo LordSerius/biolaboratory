@@ -5,7 +5,7 @@ import hu.bioinformatics.biolaboratory.resource.extension.ResourceLocalizer;
 import hu.bioinformatics.biolaboratory.resource.read.ResourceReader;
 import hu.bioinformatics.biolaboratory.sequence.dna.Dna;
 import hu.bioinformatics.biolaboratory.sequence.dna.DnaArray;
-import hu.bioinformatics.biolaboratory.utils.CommentedString;
+import hu.bioinformatics.biolaboratory.utils.datastructures.CommentedString;
 import hu.bioinformatics.biolaboratory.utils.datahandlers.DnaArrayLoader;
 
 import javax.inject.Inject;

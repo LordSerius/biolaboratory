@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import hu.bioinformatics.biolaboratory.sequence.dna.Dna;
-import hu.bioinformatics.biolaboratory.utils.CommentedString;
+import hu.bioinformatics.biolaboratory.utils.datastructures.CommentedString;
 import org.testng.annotations.DataProvider;
 
 import java.util.ArrayList;

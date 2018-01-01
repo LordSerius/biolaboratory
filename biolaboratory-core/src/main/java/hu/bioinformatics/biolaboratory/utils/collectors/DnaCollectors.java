@@ -3,7 +3,7 @@ package hu.bioinformatics.biolaboratory.utils.collectors;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import hu.bioinformatics.biolaboratory.sequence.dna.Dna;
-import hu.bioinformatics.biolaboratory.utils.CommentedString;
+import hu.bioinformatics.biolaboratory.utils.datastructures.CommentedString;
 
 import java.util.Collection;
 import java.util.List;

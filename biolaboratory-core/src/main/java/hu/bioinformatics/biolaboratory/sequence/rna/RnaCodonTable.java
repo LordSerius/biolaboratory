@@ -11,7 +11,7 @@ import hu.bioinformatics.biolaboratory.resource.extension.ResourceLocalizer;
 import hu.bioinformatics.biolaboratory.resource.read.LineReader;
 import hu.bioinformatics.biolaboratory.resource.read.ResourceReader;
 import hu.bioinformatics.biolaboratory.sequence.protein.AminoAcid;
-import hu.bioinformatics.biolaboratory.utils.CommentedString;
+import hu.bioinformatics.biolaboratory.utils.datastructures.CommentedString;
 
 import java.util.AbstractMap;
 import java.util.HashMap;

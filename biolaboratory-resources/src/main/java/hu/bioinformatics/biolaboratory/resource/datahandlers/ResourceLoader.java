@@ -2,7 +2,7 @@ package hu.bioinformatics.biolaboratory.resource.datahandlers;
 
 import hu.bioinformatics.biolaboratory.resource.extension.ResourceLocalizer;
 import hu.bioinformatics.biolaboratory.resource.read.ResourceReader;
-import hu.bioinformatics.biolaboratory.utils.CommentedString;
+import hu.bioinformatics.biolaboratory.utils.datastructures.CommentedString;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;

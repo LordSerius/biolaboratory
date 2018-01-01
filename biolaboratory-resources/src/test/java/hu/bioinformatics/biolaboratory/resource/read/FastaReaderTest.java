@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import hu.bioinformatics.biolaboratory.guice.GuiceResourceMockModule;
 import hu.bioinformatics.biolaboratory.guice.GuiceResourceModule;
 import hu.bioinformatics.biolaboratory.resource.read.wrapper.ReaderWrapperFactory;
-import hu.bioinformatics.biolaboratory.utils.CommentedString;
+import hu.bioinformatics.biolaboratory.utils.datastructures.CommentedString;
 import org.mockito.Spy;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;

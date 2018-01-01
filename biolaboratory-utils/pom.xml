@@ -9,16 +9,8 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>biolaboratory-resources</artifactId>
+    <artifactId>biolaboratory-utils</artifactId>
 
-    <name>biolaboratory-resources</name>
-
-    <dependencies>
-        <dependency>
-            <groupId>hu.bioinformatics</groupId>
-            <artifactId>biolaboratory-utils</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
+    <name>biolaboratory-utils</name>
 
 </project>

@@ -1,4 +1,4 @@
-package hu.bioinformatics.biolaboratory.utils;
+package hu.bioinformatics.biolaboratory.utils.datastructures;
 
 import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.builder.HashCodeBuilder;

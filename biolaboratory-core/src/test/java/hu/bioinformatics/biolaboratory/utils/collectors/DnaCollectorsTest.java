@@ -1,7 +1,7 @@
 package hu.bioinformatics.biolaboratory.utils.collectors;
 
 import hu.bioinformatics.biolaboratory.sequence.dna.Dna;
-import hu.bioinformatics.biolaboratory.utils.CommentedString;
+import hu.bioinformatics.biolaboratory.utils.datastructures.CommentedString;
 import org.testng.annotations.Test;
 
 import java.util.Collection;

@@ -4,7 +4,7 @@ import hu.bioinformatics.biolaboratory.guice.GuiceResourceModule;
 import hu.bioinformatics.biolaboratory.resource.extension.ResourceLocalizer;
 import hu.bioinformatics.biolaboratory.resource.read.ResourceReader;
 import hu.bioinformatics.biolaboratory.sequence.dna.Dna;
-import hu.bioinformatics.biolaboratory.utils.CommentedString;
+import hu.bioinformatics.biolaboratory.utils.datastructures.CommentedString;
 import hu.bioinformatics.biolaboratory.utils.datahandlers.DnaListLoader;
 
 import javax.inject.Inject;

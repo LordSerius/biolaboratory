@@ -1,5 +1,6 @@
-package hu.bioinformatics.biolaboratory.utils;
+package hu.bioinformatics.biolaboratory.utils.datastructures;
 
+import org.hamcrest.Matchers;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -72,7 +73,7 @@ public class CommentedStringTest {
     @Test(dataProvider = EQUALS_DATA_PROVIDER_NAME)
     public void shouldEqualsReturn(CommentedString leftHand, CommentedString rightHand, boolean isEquals) {
         assertThat(isEquals, allOf(
-                is(equalTo(leftHand.equals(rightHand))),
+                Matchers.is(equalTo(leftHand.equals(rightHand))),
                 is(equalTo(leftHand.hashCode() == rightHand.hashCode()))
         ));
     }
