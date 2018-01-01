@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import static hu.bioinformatics.biolaboratory.utils.Validation.validateCollection;
-import static hu.bioinformatics.biolaboratory.utils.Validation.validateNotEmptyCollection;
-import static hu.bioinformatics.biolaboratory.utils.Validation.validateNotEmptyVarargs;
+import static hu.bioinformatics.biolaboratory.utils.Validation.notNullCollection;
+import static hu.bioinformatics.biolaboratory.utils.Validation.notEmptyCollection;
+import static hu.bioinformatics.biolaboratory.utils.Validation.notEmptyVarargs;
 
 /**
  * Represents a single protein about the amino acid sequence.
@@ -64,7 +64,7 @@ public class Protein extends BiologicalSequence<Protein, AminoAcid> {
      * @throws IllegalArgumentException If aminoAcids contains null element.
      */
     public static Protein build(final AminoAcid... aminoAcids) {
-        return new Protein(validateNotEmptyVarargs(aminoAcids));
+        return new Protein(notEmptyVarargs(aminoAcids));
     }
 
     /**
@@ -77,7 +77,7 @@ public class Protein extends BiologicalSequence<Protein, AminoAcid> {
      * @throws IllegalArgumentException If aminoAcids contains null element.
      */
     public static Protein build(final String name, final AminoAcid... aminoAcids) {
-        return new Protein(validateName(name), validateNotEmptyVarargs(aminoAcids));
+        return new Protein(validateName(name), notEmptyVarargs(aminoAcids));
     }
 
     /**
@@ -88,7 +88,7 @@ public class Protein extends BiologicalSequence<Protein, AminoAcid> {
      * @throws IllegalArgumentException If aminoAcidList contains null element.
      */
     public static Protein build(final List<AminoAcid> aminoAcidList) {
-        return new Protein(validateNotEmptyCollection(aminoAcidList));
+        return new Protein(notEmptyCollection(aminoAcidList));
     }
 
     /**
@@ -101,7 +101,7 @@ public class Protein extends BiologicalSequence<Protein, AminoAcid> {
      * @throws IllegalArgumentException If aminoAcidList contains null element.
      */
     public static Protein build(final String name, final List<AminoAcid> aminoAcidList) {
-        return new Protein(validateName(name), validateCollection(aminoAcidList));
+        return new Protein(validateName(name), notNullCollection(aminoAcidList));
     }
 
     private static String validateSequence(final String sequence) {

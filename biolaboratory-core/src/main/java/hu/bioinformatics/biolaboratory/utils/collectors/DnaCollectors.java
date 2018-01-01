@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 
-import static hu.bioinformatics.biolaboratory.utils.Validation.validateCollection;
-import static hu.bioinformatics.biolaboratory.utils.Validation.validateVarargs;
+import static hu.bioinformatics.biolaboratory.utils.Validation.notNullCollection;
+import static hu.bioinformatics.biolaboratory.utils.Validation.notNullVarargs;
 
 /**
  * Transforms different {@link String} {@link Collection}s to target {@link Dna} {@link Collection}.
@@ -117,7 +117,7 @@ public class DnaCollectors {
      * @throws IllegalArgumentException If varargs is null or contains null element.
      */
     public static Dna[] stringToDnas(final String... sequences) {
-        return innerStringToDna(Lists.newArrayList(validateVarargs(sequences)));
+        return innerStringToDna(Lists.newArrayList(notNullVarargs(sequences)));
     }
 
     /**
@@ -128,7 +128,7 @@ public class DnaCollectors {
      * @throws IllegalArgumentException If varargs is null or contains null element.
      */
     public static Dna[] commentedStringToDnas(final CommentedString... sequences) {
-        return innerCommentedStringToDna(Lists.newArrayList(validateVarargs(sequences)));
+        return innerCommentedStringToDna(Lists.newArrayList(notNullVarargs(sequences)));
     }
 
     /**
@@ -139,7 +139,7 @@ public class DnaCollectors {
      * @throws IllegalArgumentException If collection is null or contains null element.
      */
     public static Dna[] stringToDnas(final Collection<String> sequenceCollection) {
-        return innerStringToDna(validateCollection(sequenceCollection));
+        return innerStringToDna(notNullCollection(sequenceCollection));
     }
 
     /**
@@ -150,7 +150,7 @@ public class DnaCollectors {
      * @throws IllegalArgumentException If collection is null or contains null element.
      */
     public static Dna[] commentedStringToDnas(final Collection<CommentedString> sequenceCollection) {
-        return innerCommentedStringToDna(validateCollection(sequenceCollection));
+        return innerCommentedStringToDna(notNullCollection(sequenceCollection));
     }
 
     private static Dna[] innerStringToDna(final Collection<String> sequenceCollection) {

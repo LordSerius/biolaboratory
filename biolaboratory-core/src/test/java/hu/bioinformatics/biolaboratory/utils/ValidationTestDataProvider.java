@@ -5,26 +5,74 @@ import com.google.common.collect.Lists;
 import org.testng.annotations.DataProvider;
 
 /**
- * Data provier for {@link ValidationTest}.
+ * Data provider for {@link ValidationTest}.
  *
  * @author Attila Radi
  */
 public class ValidationTestDataProvider {
 
-    static final String INVALID_VALIDATE_VARARGS_DATA_PROVIDER_NAME = "invalidValidateVarargsDataProvider";
+    static final String INVALID_NOT_EMPTY_VARARGS_DATA_PROVIDER_NAME = "invalidNotEmptyVarargsDataProvider";
 
-    @DataProvider(name = INVALID_VALIDATE_VARARGS_DATA_PROVIDER_NAME)
-    Object[][] invalidValidateVarargsDataProvider() {
+    @DataProvider(name = INVALID_NOT_EMPTY_VARARGS_DATA_PROVIDER_NAME)
+    Object[][] invalidNotEmptyVarargsDataProvider() {
+        return new Object[][] {
+                { null },
+                { new String[] {} },
+                { new String[] { "A", null } }
+        };
+    }
+
+    static final String VALID_NOT_EMPTY_VARARGS_DATA_PROVIDER_NAME = "validNotEmptyVarargsDataProvider";
+
+    @DataProvider(name = VALID_NOT_EMPTY_VARARGS_DATA_PROVIDER_NAME)
+    Object[][] validNotEmptyVarargsDataProvider() {
+        return new Object[][] {
+                { new String[] { "" } },
+                { new String[] { "A" } },
+                { new String[] { "A", "" } },
+                { new String[] { "A", "C" } }
+        };
+    }
+
+    static final String INVALID_NOT_EMPTY_VARARGS_WITH_ARGUMENT_NAME_DATA_PROVIDER_NAME = "invalidNotEmptyVarargsWithArgumentNameDataProvider";
+
+    @DataProvider(name = INVALID_NOT_EMPTY_VARARGS_WITH_ARGUMENT_NAME_DATA_PROVIDER_NAME)
+    Object[][] invalidNotEmptyVarargsWithArgumentsDataProvider() {
+        return new Object[][] {
+                { "varargs", null },
+                { "varargs", new String[] {} },
+                { "varargs", new String[] { "A", null } }
+        };
+    }
+
+    static final String VALID_NOT_EMPTY_VARARGS_WITH_ARGUMENT_NAME_DATA_PROVIDER_NAME = "validNotEmptyVarargsWithArgumentNameDataProvider";
+
+    @DataProvider(name = VALID_NOT_EMPTY_VARARGS_WITH_ARGUMENT_NAME_DATA_PROVIDER_NAME)
+    Object[][] validNotEmptyVarargsDataWithArgumentNameProvider() {
+        return new Object[][] {
+                { "varargs", new String[] { "" } },
+                { "varargs", new String[] { "A" } },
+                { "varargs", new String[] { "A", "" } },
+                { "varargs", new String[] { "A", "C" } },
+                { "", new String[] { "A", "C" } },
+                { null, new String[] { "A", "C" } }
+        };
+    }
+
+    static final String INVALID_NOT_NULL_VARARGS_DATA_PROVIDER_NAME = "invalidNotNullVarargsDataProvider";
+
+    @DataProvider(name = INVALID_NOT_NULL_VARARGS_DATA_PROVIDER_NAME)
+    Object[][] invalidNotNullVarargsDataProvider() {
         return new Object[][] {
                 { null },
                 { new String[] { "A", null } }
         };
     }
 
-    static final String VALID_VALIDATE_VARARGS_DATA_PROVIDER_NAME = "validValidateVarargsDataProvider";
+    static final String VALID_NOT_NULL_VARARGS_DATA_PROVIDER_NAME = "validNotNullVarargsDataProvider";
 
-    @DataProvider(name = VALID_VALIDATE_VARARGS_DATA_PROVIDER_NAME)
-    Object[][] validValidateVarargsDataProvider() {
+    @DataProvider(name = VALID_NOT_NULL_VARARGS_DATA_PROVIDER_NAME)
+    Object[][] validNotNullVarargsDataProvider() {
         return new Object[][] {
                 { new String[] {} },
                 { new String[] { "" } },
@@ -34,43 +82,93 @@ public class ValidationTestDataProvider {
         };
     }
 
-    static final String INVALID_VALIDATE_NOT_EMPTY_VARARGS_DATA_PROVIDER_NAME = "invalidValidateNotEmptyVarargsDataProvider";
+    static final String INVALID_NOT_NULL_VARARGS_WITH_ARGUMENT_NAME_DATA_PROVIDER_NAME = "invalidNotNullVarargsWithArgumentNameDataProvider";
 
-    @DataProvider(name = INVALID_VALIDATE_NOT_EMPTY_VARARGS_DATA_PROVIDER_NAME)
-    Object[][] invalidValidateNotEmptyVarargsDataProvider() {
+    @DataProvider(name = INVALID_NOT_NULL_VARARGS_WITH_ARGUMENT_NAME_DATA_PROVIDER_NAME)
+    Object[][] invalidNotNullVarargsWithArgumentNameDataProvider() {
+        return new Object[][] {
+                { "varargs", null },
+                { "varargs", new String[] { "A", null } }
+        };
+    }
+
+    static final String VALID_NOT_NULL_VARARGS_WITH_ARGUMENT_NAME_DATA_PROVIDER_NAME = "validNotNullVarargsWithArgumentNameDataProvider";
+
+    @DataProvider(name = VALID_NOT_NULL_VARARGS_WITH_ARGUMENT_NAME_DATA_PROVIDER_NAME)
+    Object[][] validNotNullVarargsWithArgumentNameDataProvider() {
+        return new Object[][] {
+                { "varargs", new String[] {} },
+                { "varargs", new String[] { "" } },
+                { "varargs", new String[] { "A" } },
+                { "varargs", new String[] { "A", "" } },
+                { "varargs", new String[] { "A", "C" } },
+                { "", new String[] { "A", "C" } },
+                { null, new String[] { "A", "C" } }
+        };
+    }
+
+    static final String INVALID_NOT_EMPTY_COLLECTION_DATA_PROVIDER_NAME = "invalidNotEmptyCollectionDataProvider";
+
+    @DataProvider(name = INVALID_NOT_EMPTY_COLLECTION_DATA_PROVIDER_NAME)
+    Object[][] invalidNotEmptyCollectionDataProvider() {
         return new Object[][] {
                 { null },
-                { new String[] {} },
-                { new String[] { "A", null } }
+                { ImmutableList.of() },
+                { Lists.newArrayList("A", null) }
         };
     }
 
-    static final String VALID_VALIDATE_NOT_EMPTY_VARARGS_DATA_PROVIDER_NAME = "validValidateNotEmptyVarargsDataProvider";
+    static final String VALID_NOT_EMPTY_COLLECTION_DATA_PROVIDER_NAME = "validNotEmptyCollectionDataProvider";
 
-    @DataProvider(name = VALID_VALIDATE_NOT_EMPTY_VARARGS_DATA_PROVIDER_NAME)
-    Object[][] validValidateNotEmptyVarargsDataProvider() {
+    @DataProvider(name = VALID_NOT_EMPTY_COLLECTION_DATA_PROVIDER_NAME)
+    Object[][] validNotEmptyCollectionDataProvider() {
         return new Object[][] {
-                { new String[] { "" } },
-                { new String[] { "A" } },
-                { new String[] { "A", "" } },
-                { new String[] { "A", "C" } }
+                { ImmutableList.of("") },
+                { ImmutableList.of("A") },
+                { ImmutableList.of("A", "") },
+                { ImmutableList.of("A", "C") }
         };
     }
 
-    static final String INVALID_VALIDATE_COLLECTION_DATA_PROVIDER_NAME = "invalidValidateCollectionDataProvider";
+    static final String INVALID_NOT_EMPTY_COLLECTION_WITH_ARGUMENT_NAME_DATA_PROVIDER_NAME = "invalidNotEmptyCollectionWithArgumentNameDataProvider";
 
-    @DataProvider(name = INVALID_VALIDATE_COLLECTION_DATA_PROVIDER_NAME)
-    Object[][] invalidValidateCollectionDataProvider() {
+    @DataProvider(name = INVALID_NOT_EMPTY_COLLECTION_WITH_ARGUMENT_NAME_DATA_PROVIDER_NAME)
+    Object[][] invalidNotEmptyCollectionWithArgumentNameDataProvider() {
+        return new Object[][] {
+                { "collection", null },
+                { "collection", ImmutableList.of() },
+                { "collection", Lists.newArrayList("A", null) }
+        };
+    }
+
+    static final String VALID_NOT_EMPTY_COLLECTION_WITH_ARGUMENT_NAME_DATA_PROVIDER_NAME = "validNotEmptyCollectionWithArgumentNameDataProvider";
+
+    @DataProvider(name = VALID_NOT_EMPTY_COLLECTION_WITH_ARGUMENT_NAME_DATA_PROVIDER_NAME)
+    Object[][] validNotEmptyCollectionWithArgumentNameDataProvider() {
+        return new Object[][] {
+                { "collection", ImmutableList.of("") },
+                { "collection", ImmutableList.of("A") },
+                { "collection", ImmutableList.of("A", "") },
+                { "collection", ImmutableList.of("A", "C") },
+                { "", ImmutableList.of("A", "C") },
+                { null, ImmutableList.of("A", "C") }
+        };
+    }
+
+    static final String INVALID_NOT_NULL_COLLECTION_DATA_PROVIDER_NAME = "invalidNotNullCollectionDataProvider";
+
+    @DataProvider(name = INVALID_NOT_NULL_COLLECTION_DATA_PROVIDER_NAME)
+    Object[][] invalidNotNullCollectionDataProvider() {
         return new Object[][] {
                 { null },
                 { Lists.newArrayList("A", null) }
         };
     }
 
-    static final String VALID_VALIDATE_COLLECTION_DATA_PROVIDER_NAME = "validValidateCollectionDataProvider";
+    static final String VALID_NOT_NULL_COLLECTION_DATA_PROVIDER_NAME = "validNotNullCollectionDataProvider";
 
-    @DataProvider(name = VALID_VALIDATE_COLLECTION_DATA_PROVIDER_NAME)
-    Object[][] validValidateCollectionDataProvider() {
+    @DataProvider(name = VALID_NOT_NULL_COLLECTION_DATA_PROVIDER_NAME)
+    Object[][] validNotNullCollectionDataProvider() {
         return new Object[][] {
                 { ImmutableList.of() },
                 { ImmutableList.of("") },
@@ -80,26 +178,70 @@ public class ValidationTestDataProvider {
         };
     }
 
-    static final String INVALID_VALIDATE_NOT_EMPTY_COLLECTION_DATA_PROVIDER_NAME = "invalidValidateNotEmptyCollectionDataProvider";
+    static final String INVALID_NOT_NULL_COLLECTION_WITH_ARGUMENT_NAME_DATA_PROVIDER_NAME = "invalidNotNullCollectionWithArgumentNameDataProvider";
 
-    @DataProvider(name = INVALID_VALIDATE_NOT_EMPTY_COLLECTION_DATA_PROVIDER_NAME)
-    Object[][] invalidValidateNotEmptyCollectionDataProvider() {
+    @DataProvider(name = INVALID_NOT_NULL_COLLECTION_WITH_ARGUMENT_NAME_DATA_PROVIDER_NAME)
+    Object[][] invalidNotNullCollectionWithArgumentNameDataProvider() {
         return new Object[][] {
-                { null },
-                { ImmutableList.of() },
-                { Lists.newArrayList("A", null) }
+                { "collection", null },
+                { "collection", Lists.newArrayList("A", null) }
         };
     }
 
-    static final String VALID_VALIDATE_NOT_EMPTY_COLLECTION_DATA_PROVIDER_NAME = "validValidateNotEmptyCollectionDataProvider";
+    static final String VALID_NOT_NULL_COLLECTION_WITH_ARGUMENT_NAME_DATA_PROVIDER_NAME = "validNotNullCollectionWithArgumentNameDataProvider";
 
-    @DataProvider(name = VALID_VALIDATE_NOT_EMPTY_COLLECTION_DATA_PROVIDER_NAME)
-    Object[][] validValidateNotEmptyCollectionDataProvider() {
+    @DataProvider(name = VALID_NOT_NULL_COLLECTION_WITH_ARGUMENT_NAME_DATA_PROVIDER_NAME)
+    Object[][] validNotNullCollectionWithArgumentNameDataProvider() {
         return new Object[][] {
-                { ImmutableList.of("") },
-                { ImmutableList.of("A") },
-                { ImmutableList.of("A", "") },
-                { ImmutableList.of("A", "C") }
+                { "collection", ImmutableList.of() },
+                { "collection", ImmutableList.of("") },
+                { "collection", ImmutableList.of("A") },
+                { "collection", ImmutableList.of("A", "") },
+                { "collection", ImmutableList.of("A", "C") },
+                { "", ImmutableList.of("A", "C") },
+                { null, ImmutableList.of("A", "C") }
+        };
+    }
+
+    static final String INVALID_NOT_NULL_ARGUMENT_DATA_PROVIDER_NAME = "invalidNotNullArgumentDataProvider";
+
+    @DataProvider(name = INVALID_NOT_NULL_ARGUMENT_DATA_PROVIDER_NAME)
+    Object[][] invalidNotNullArgumentDataProvider() {
+        return new Object[][] {
+                { null }
+        };
+    }
+
+    static final String VALID_NOT_NULL_ARGUMENT_DATA_PROVIDER_NAME = "validNotNullArgumentDataProvider";
+
+    @DataProvider(name = VALID_NOT_NULL_ARGUMENT_DATA_PROVIDER_NAME)
+    Object[][] validNotNullArgumentDataProvider() {
+        return new Object[][] {
+                { "" },
+                { new Object() },
+                { "object" }
+        };
+    }
+
+    static final String INVALID_NOT_NULL_ARGUMENT_WITH_ARGUMENT_NAME_DATA_PROVIDER_NAME = "invalidNotNullArgumentWithArgumentNameDataProvider";
+
+    @DataProvider(name = INVALID_NOT_NULL_ARGUMENT_WITH_ARGUMENT_NAME_DATA_PROVIDER_NAME)
+    Object[][] invalidNotNullArgumentWithArgumentNameDataProvider() {
+        return new Object[][] {
+                { "argument", null }
+        };
+    }
+
+    static final String VALID_NOT_NULL_ARGUMENT_WITH_ARGUMENT_NAME_DATA_PROVIDER_NAME = "validNotNullArgumentWithArgumentNameDataProvider";
+
+    @DataProvider(name = VALID_NOT_NULL_ARGUMENT_WITH_ARGUMENT_NAME_DATA_PROVIDER_NAME)
+    Object[][] validNotNullArgumentWithArgumentNameDataProvider() {
+        return new Object[][] {
+                { "argument", "" },
+                { "argument", new Object() },
+                { "argument", "object" },
+                { "", "object" },
+                { null, "object" }
         };
     }
 }

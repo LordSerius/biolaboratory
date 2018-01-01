@@ -15,8 +15,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static hu.bioinformatics.biolaboratory.utils.Validation.validateCollection;
-import static hu.bioinformatics.biolaboratory.utils.Validation.validateVarargs;
+import static hu.bioinformatics.biolaboratory.utils.Validation.notNullCollection;
+import static hu.bioinformatics.biolaboratory.utils.Validation.notNullVarargs;
 
 /**
  * A data structure which contains different not null keys and the occurrence numbers.
@@ -476,7 +476,7 @@ public class OccurrenceMap<K> {
      */
     @SafeVarargs
     protected final K[] validateKeys(final K... keys) {
-        Arrays.stream(validateVarargs(keys)).forEach(this::validateKey);
+        Arrays.stream(notNullVarargs(keys)).forEach(this::validateKey);
         return keys;
     }
 
@@ -488,7 +488,7 @@ public class OccurrenceMap<K> {
      * @throws IllegalArgumentException If the key set contains null elements.
      */
     protected Set<K> validateKeySet(final Set<K> keySet) {
-        validateCollection(keySet).forEach(this::validateKey);
+        notNullCollection(keySet).forEach(this::validateKey);
         return keySet;
     }
 

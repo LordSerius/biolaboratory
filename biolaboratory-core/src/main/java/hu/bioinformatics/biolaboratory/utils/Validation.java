@@ -12,6 +12,9 @@ import static org.apache.commons.lang3.Validate.noNullElements;
  * @author Attila Radi
  */
 public class Validation {
+    private static final String DEFAULT_INPUT_COLLECTION_NAME = "Input collection";
+    private static final String DEFAULT_INPUT_ARGUMENT_NAME = "Input argument";
+    private static final String DEFAULT_INPUT_VARARGS_NAME = "Input varargs";
 
     /**
      * Throws {@link IllegalArgumentException} if the input varargs is empty or contains null element.
@@ -22,9 +25,24 @@ public class Validation {
      * @throws IllegalArgumentException If varargs is null, empty, or contains null element.
      */
     @SafeVarargs
-    public static <T> T[] validateNotEmptyVarargs(final T... varargs) {
-        validateVarargs(varargs);
-        Preconditions.checkArgument(varargs.length > 0, "Input varargs should be az least 1");
+    public static <T> T[] notEmptyVarargs(final T... varargs) {
+        return notEmptyVarargs(DEFAULT_INPUT_VARARGS_NAME, varargs);
+    }
+
+    /**
+     * Throws {@link IllegalArgumentException} if the input varargs is empty or contains null element. Gives the
+     * argument's name in case of exception.
+     *
+     * @param argumentName The name of the argument.
+     * @param varargs The input varargs to validate.
+     * @param <T> The type of the elements.
+     * @return The same varargs if they valid.
+     * @throws IllegalArgumentException If varargs is null, empty, or contains null element.
+     */
+    @SafeVarargs
+    public static <T> T[] notEmptyVarargs(final String argumentName, final T... varargs) {
+        notNullVarargs(argumentName, varargs);
+        Preconditions.checkArgument(varargs.length > 0, argumentName + " should be az least 1");
         return varargs;
     }
 
@@ -37,9 +55,23 @@ public class Validation {
      * @throws IllegalArgumentException If varargs is null or contains null element.
      */
     @SafeVarargs
-    public static <T> T[] validateVarargs(final T... varargs) {
-        Preconditions.checkArgument(varargs != null, "Varargs should not be null");
-        return noNullElements(varargs, "Input vararg element should not be null");
+    public static <T> T[] notNullVarargs(final T... varargs) {
+        return notNullVarargs(DEFAULT_INPUT_VARARGS_NAME, varargs);
+    }
+
+    /**
+     * Throws {@link IllegalArgumentException} if the input varargs contains null element. Gives the argument's name
+     * in case of exception.
+     *
+     * @param argumentName The name of the argument.
+     * @param varargs The input varargs to validate.
+     * @param <T> The type of the elements.
+     * @return The same varargs if they valid.
+     * @throws IllegalArgumentException If varargs is null or contains null element.
+     */
+    @SafeVarargs
+    public static <T> T[] notNullVarargs(final String argumentName, final T... varargs) {
+        return noNullElements(notNullArgument(argumentName, varargs), argumentName + " element should not be null");
     }
 
     /**
@@ -51,9 +83,23 @@ public class Validation {
      * @return The same collection if it is valid.
      * @throws IllegalArgumentException If collection is null, empty, or contains null element.
      */
-    public static <COL extends Collection<T>, T> COL validateNotEmptyCollection(final COL collection) {
-        validateCollection(collection);
-        Preconditions.checkArgument(!collection.isEmpty(), "Collection size should be not empty");
+    public static <COL extends Collection<T>, T> COL notEmptyCollection(final COL collection) {
+        return notEmptyCollection(DEFAULT_INPUT_COLLECTION_NAME, collection);
+    }
+
+    /**
+     * Throws {@link IllegalArgumentException} if the input {@link Collection} is empty or contains null element.
+     * Gives the argument's name in case of exception.
+     *
+     * @param collection The input collection to validate.
+     * @param <COL> {@link Collection} or its inherited types.
+     * @param <T> The type of the collection.
+     * @return The same collection if it is valid.
+     * @throws IllegalArgumentException If collection is null or contains null element.
+     */
+    public static <COL extends Collection<T>, T> COL notEmptyCollection(final String argumentName, final COL collection) {
+        notNullCollection(argumentName, collection);
+        Preconditions.checkArgument(!collection.isEmpty(), argumentName + " size should be not empty");
         return collection;
     }
 
@@ -66,33 +112,47 @@ public class Validation {
      * @return The same collection if it is valid.
      * @throws IllegalArgumentException If collection is null or contains null element.
      */
-    public static <COL extends Collection<T>, T> COL validateCollection(final COL collection) {
-        Preconditions.checkArgument(collection != null, "Collection should not be null");
-        return noNullElements(collection, "Input collection element should not be null");
+    public static <COL extends Collection<T>, T> COL notNullCollection(final COL collection) {
+        return notNullCollection(DEFAULT_INPUT_COLLECTION_NAME, collection);
     }
 
     /**
-     * TODO
+     * Throws {@link IllegalArgumentException} if the input {@link Collection} contains null element. Gives the argument's
+     * name in case of exception.
      *
-     * @param object
-     * @param <T>
-     * @return
+     * @param argumentName The name of the argument.
+     * @param collection The input collection to validate.
+     * @param <COL> {@link Collection} or its inherited types.
+     * @param <T> The type of the collection.
+     * @return The same collection if it is valid.
+     * @throws IllegalArgumentException If collection is null or contains null element.
      */
-    public static <T> T validateNotEmpty(final T object) {
-        Preconditions.checkArgument(object != null, "Input argument should not be null");
-        return object;
+    public static <COL extends Collection<T>, T> COL notNullCollection(final String argumentName, final COL collection) {
+        return noNullElements(notNullArgument(argumentName, collection), argumentName + " element should not be null");
     }
 
     /**
-     * TODO
+     * Throws {@link IllegalArgumentException} if argument is null.
      *
-     * @param object
-     * @param parameterName
-     * @param <T>
-     * @return
+     * @param argument The argument to validate.
+     * @param <T> The type of the argument.
+     * @return The same object if it is valid.
+     * @throws IllegalArgumentException If argument is null.
      */
-    public static <T> T validateNotEmpty(final T object, final String parameterName) {
-        Preconditions.checkArgument(object != null, parameterName + " should not be null");
-        return object;
+    public static <T> T notNullArgument(final T argument) {
+        return notNullArgument(DEFAULT_INPUT_ARGUMENT_NAME, argument);
+    }
+
+    /**
+     * Throws {@link IllegalArgumentException} if argument is null. Gives the argument's name in case of exception.
+     *
+     * @param argumentName The name of the argument.
+     * @param <T> The type of the argument.
+     * @return The same object if it is valid.
+     * @throws IllegalArgumentException If argument is null.
+     */
+    public static <T> T notNullArgument(final String argumentName, final T argument) {
+        Preconditions.checkArgument(argument != null, argumentName + " should not be null");
+        return argument;
     }
 }

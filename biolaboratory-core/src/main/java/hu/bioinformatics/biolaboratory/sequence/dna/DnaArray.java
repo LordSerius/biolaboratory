@@ -13,8 +13,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static hu.bioinformatics.biolaboratory.utils.Validation.validateNotEmptyCollection;
-import static hu.bioinformatics.biolaboratory.utils.Validation.validateNotEmptyVarargs;
+import static hu.bioinformatics.biolaboratory.utils.Validation.notEmptyCollection;
+import static hu.bioinformatics.biolaboratory.utils.Validation.notEmptyVarargs;
 
 /**
  * A collection of {@link Dna}s which provide motif finding methods on them. Every included {@link Dna} should be the
@@ -37,7 +37,7 @@ public class DnaArray {
      * @throws IllegalArgumentException If dna elements have different lengths.
      */
     public static DnaArray build(final Dna... dnas) {
-        return innerBuild(Arrays.asList(validateNotEmptyVarargs(dnas)));
+        return innerBuild(Arrays.asList(notEmptyVarargs(dnas)));
     }
 
     /**
@@ -48,7 +48,7 @@ public class DnaArray {
      * @throws IllegalArgumentException If dna elements have different lengths.
      */
     public static DnaArray build(final List<Dna> dnaList) {
-        return innerBuild(validateNotEmptyCollection(dnaList));
+        return innerBuild(notEmptyCollection(dnaList));
     }
 
     private static DnaArray innerBuild(final List<Dna> dnaList) {

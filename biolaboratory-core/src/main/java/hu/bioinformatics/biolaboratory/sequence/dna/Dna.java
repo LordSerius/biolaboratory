@@ -20,9 +20,9 @@ import java.util.concurrent.Future;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
-import static hu.bioinformatics.biolaboratory.utils.Validation.validateCollection;
-import static hu.bioinformatics.biolaboratory.utils.Validation.validateNotEmptyCollection;
-import static hu.bioinformatics.biolaboratory.utils.Validation.validateNotEmptyVarargs;
+import static hu.bioinformatics.biolaboratory.utils.Validation.notNullCollection;
+import static hu.bioinformatics.biolaboratory.utils.Validation.notEmptyCollection;
+import static hu.bioinformatics.biolaboratory.utils.Validation.notEmptyVarargs;
 
 /**
  * Represents a single DNA about the genome sequence in 5' -> 3' order.
@@ -82,7 +82,7 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
      * @throws IllegalArgumentException If nucleotides contains null element.
      */
     public static Dna build(final DnaNucleotide... nucleotides) {
-        return new Dna(validateNotEmptyVarargs(nucleotides));
+        return new Dna(notEmptyVarargs(nucleotides));
     }
 
     /**
@@ -95,7 +95,7 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
      * @throws IllegalArgumentException If nucleotides contains null element.
      */
     public static Dna build(final String name, final DnaNucleotide... nucleotides) {
-        return new Dna(validateName(name), validateNotEmptyVarargs(nucleotides));
+        return new Dna(validateName(name), notEmptyVarargs(nucleotides));
     }
 
     /**
@@ -108,7 +108,7 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
      * @throws IllegalArgumentException If nucleotideList contains null element.
      */
     public static Dna build(final List<DnaNucleotide> nucleotideList) {
-        return new Dna(validateNotEmptyCollection(nucleotideList));
+        return new Dna(notEmptyCollection(nucleotideList));
     }
 
     /**
@@ -119,7 +119,7 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
      * @return A new {@link Dna} object which stand from the nucleotides
      */
     public static Dna build(final String name, final List<DnaNucleotide> nucleotideList) {
-        return new Dna(validateName(name), validateCollection(nucleotideList));
+        return new Dna(validateName(name), notNullCollection(nucleotideList));
     }
 
     private static String validateSequence(final String sequence) {

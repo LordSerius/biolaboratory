@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import static hu.bioinformatics.biolaboratory.utils.Validation.validateCollection;
-import static hu.bioinformatics.biolaboratory.utils.Validation.validateNotEmptyCollection;
-import static hu.bioinformatics.biolaboratory.utils.Validation.validateNotEmptyVarargs;
+import static hu.bioinformatics.biolaboratory.utils.Validation.notNullCollection;
+import static hu.bioinformatics.biolaboratory.utils.Validation.notEmptyCollection;
+import static hu.bioinformatics.biolaboratory.utils.Validation.notEmptyVarargs;
 
 /**
  * Represents a single RNA about the genome sequence.
@@ -66,7 +66,7 @@ public class Rna extends BiologicalSequence<Rna, RnaNucleotide> {
      * @throws IllegalArgumentException If nucleotides contains null element.
      */
     public static Rna build(final RnaNucleotide... nucleotides) {
-        return new Rna(validateNotEmptyVarargs(nucleotides));
+        return new Rna(notEmptyVarargs(nucleotides));
     }
 
     /**
@@ -79,7 +79,7 @@ public class Rna extends BiologicalSequence<Rna, RnaNucleotide> {
      * @throws IllegalArgumentException If nucleotides contains null element.
      */
     public static Rna build(final String name, final RnaNucleotide... nucleotides) {
-        return new Rna(validateName(name), validateNotEmptyVarargs(nucleotides));
+        return new Rna(validateName(name), notEmptyVarargs(nucleotides));
     }
 
     /**
@@ -90,7 +90,7 @@ public class Rna extends BiologicalSequence<Rna, RnaNucleotide> {
      * @throws IllegalArgumentException If nucleotideList contains null element.
      */
     public static Rna build(final List<RnaNucleotide> nucleotideList) {
-        return new Rna(validateNotEmptyCollection(nucleotideList));
+        return new Rna(notEmptyCollection(nucleotideList));
     }
 
     /**
@@ -103,7 +103,7 @@ public class Rna extends BiologicalSequence<Rna, RnaNucleotide> {
      * @throws IllegalArgumentException If nucleotideList contains null element.
      */
     public static Rna build(final String name, final List<RnaNucleotide> nucleotideList) {
-        return new Rna(validateName(name), validateCollection(nucleotideList));
+        return new Rna(validateName(name), notNullCollection(nucleotideList));
     }
 
     private static String validateSequence(final String sequence) {

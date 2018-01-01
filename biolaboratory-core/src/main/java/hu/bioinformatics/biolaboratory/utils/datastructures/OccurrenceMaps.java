@@ -12,8 +12,8 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static hu.bioinformatics.biolaboratory.utils.Validation.validateCollection;
-import static hu.bioinformatics.biolaboratory.utils.Validation.validateVarargs;
+import static hu.bioinformatics.biolaboratory.utils.Validation.notNullCollection;
+import static hu.bioinformatics.biolaboratory.utils.Validation.notNullVarargs;
 
 /**
  * Utility class which provides multiple operations on multiple {@link OccurrenceMap}.
@@ -66,7 +66,7 @@ public class OccurrenceMaps {
     @SafeVarargs
     private static <K> OccurrenceMap<K> filterMergeOccurrenceMaps(
             final Predicate<Map.Entry<K, Integer>> filterPredicate, final OccurrenceMap<K>... occurrenceMaps) {
-        return filterMergeOccurrenceMaps(filterPredicate, Arrays.asList(validateVarargs(occurrenceMaps)));
+        return filterMergeOccurrenceMaps(filterPredicate, Arrays.asList(notNullVarargs(occurrenceMaps)));
     }
 
     /**
@@ -85,7 +85,7 @@ public class OccurrenceMaps {
             final Predicate<Map.Entry<K, Integer>> filterPredicate, final Collection<OccurrenceMap<K>> occurrenceMapCollection) {
         Preconditions.checkArgument(filterPredicate != null, "Filter predicate should no be null");
 
-        List<Map<K, Integer>> occurrenceMapList = getOccurrences(validateCollection(occurrenceMapCollection));
+        List<Map<K, Integer>> occurrenceMapList = getOccurrences(notNullCollection(occurrenceMapCollection));
 
         Map<K, Integer> mergedOccurrences = new HashMap<>();
         for (Map<K, Integer> occurrence : occurrenceMapList) {
@@ -113,7 +113,7 @@ public class OccurrenceMaps {
      */
     @SafeVarargs
     public static <K> OccurrenceMap<K> getMostFrequentOccurrences(final OccurrenceMap<K>... occurrenceMaps) {
-        return getMostFrequentOccurrences(Arrays.asList(validateVarargs(occurrenceMaps)));
+        return getMostFrequentOccurrences(Arrays.asList(notNullVarargs(occurrenceMaps)));
     }
 
     /**
@@ -126,7 +126,7 @@ public class OccurrenceMaps {
      * @see OccurrenceMap#filterMostFrequentOccurrences()
      */
     public static <K> OccurrenceMap<K> getMostFrequentOccurrences(final Collection<OccurrenceMap<K>> occurrenceMapCollection) {
-        List<Map<K, Integer>> occurrenceMapList = getOccurrences(validateCollection(occurrenceMapCollection));
+        List<Map<K, Integer>> occurrenceMapList = getOccurrences(notNullCollection(occurrenceMapCollection));
 
         int mostFrequentOccurrenceNumber = 0;
         Map<K, Integer> mostFrequentOccurrences = new HashMap<>();
