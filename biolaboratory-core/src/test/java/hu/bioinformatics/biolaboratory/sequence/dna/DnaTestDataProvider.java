@@ -22,7 +22,7 @@ public class DnaTestDataProvider {
     static final String INVALID_DNA_SEQUENCES_DATA_PROVIDER_NAME = "invalidDnaSequencesDataProvider";
 
     @DataProvider(name = INVALID_DNA_SEQUENCES_DATA_PROVIDER_NAME)
-    Object[][] invalidDnaSequencesDataProvider() {
+    private Object[][] invalidDnaSequencesDataProvider() {
         return new Object[][] {
                 { "", null },
                 { "", "" },
@@ -36,7 +36,7 @@ public class DnaTestDataProvider {
     static final String INVALID_BUILD_FROM_ELEMENTS_DATA_PROVIDER_NAME = "invalidBuildFromElementsDataProvider";
 
     @DataProvider(name = INVALID_BUILD_FROM_ELEMENTS_DATA_PROVIDER_NAME)
-    static Object[][] invalidBuildFromElementsDataProvider() {
+    static private Object[][] invalidBuildFromElementsDataProvider() {
         return new Object[][] {
                 { null },
                 { new DnaNucleotide[0] },
@@ -47,7 +47,7 @@ public class DnaTestDataProvider {
     static final String INVALID_BUILD_FROM_ELEMENT_LIST_DATA_PROVIDER_NAME = "invalidBuildFromElementListDataProvider";
 
     @DataProvider(name = INVALID_BUILD_FROM_ELEMENT_LIST_DATA_PROVIDER_NAME)
-    static Object[][] invalidBuildFromElementListDataProvider() {
+    static private Object[][] invalidBuildFromElementListDataProvider() {
         return new Object[][] {
                 { null },
                 {ImmutableList.of()},
@@ -58,7 +58,7 @@ public class DnaTestDataProvider {
     static final String VALID_DNA_SEQUENCES_DATA_PROVIDER_NAME = "validDnaSequencesDataProvider";
 
     @DataProvider(name = VALID_DNA_SEQUENCES_DATA_PROVIDER_NAME)
-    Object[][] validDnaSequencesDataProvider() {
+    private Object[][] validDnaSequencesDataProvider() {
         return new Object[][] {
                 { "", "A", "", "A" },
                 { " ", "G", "", "G" },
@@ -73,7 +73,7 @@ public class DnaTestDataProvider {
     static final String VALID_BUILD_FROM_ELEMENTS_DATA_PROVIDER_NAME = "validBuildFromElementsDataProvider";
 
     @DataProvider(name = VALID_BUILD_FROM_ELEMENTS_DATA_PROVIDER_NAME)
-    static Object[][] validBuildFromElementsDataProvider() {
+    static private Object[][] validBuildFromElementsDataProvider() {
         return new Object[][] {
                 { new DnaNucleotide[] { DnaNucleotide.ADENINE }, "A" },
                 { new DnaNucleotide[] { DnaNucleotide.ADENINE, DnaNucleotide.CYTOSINE, DnaNucleotide.GUANINE, DnaNucleotide.THYMINE }, "ACGT" }
@@ -83,7 +83,7 @@ public class DnaTestDataProvider {
     static final String INVALID_GENERATE_PATTERN_DNAS_DATA_PROVIDER_NAME = "invalidGeneratePatternDnasDataProvider";
 
     @DataProvider(name = INVALID_GENERATE_PATTERN_DNAS_DATA_PROVIDER_NAME)
-    static Object[][] invalidGeneratePatternDnasDataProvider() {
+    static private Object[][] invalidGeneratePatternDnasDataProvider() {
         return new Object[][] {
                 { -1 },
                 { 0 }
@@ -93,7 +93,7 @@ public class DnaTestDataProvider {
     static final String VALID_GENERATE_PATTERN_DNAS_DATA_PROVIDER_NAME = "validGeneratePatternDnasDataProvider";
 
     @DataProvider(name = VALID_GENERATE_PATTERN_DNAS_DATA_PROVIDER_NAME)
-    static Object[][] validGeneratePatternDnasDataProvider() {
+    static private Object[][] validGeneratePatternDnasDataProvider() {
         return new Object[][] {
                 { 1, DnaCollectors.stringToDnaSet("A", "C", "G", "T") },
                 { 2, DnaCollectors.stringToDnaSet("AA", "AC", "AG", "AT", "CA", "CC", "CG", "CT", "GA", "GC", "GG", "GT", "TA", "TC", "TG", "TT") },
@@ -109,7 +109,7 @@ public class DnaTestDataProvider {
      * @return Some valid cases for the mostFrequentSubSequences() method.
      */
     @DataProvider(name = VALID_MOST_FREQUENT_SUBSEQUENCES_DATA_PROVIDER_NAME)
-    Object[][] provideValidMostFrequentSubsequences() {
+    private Object[][] provideValidMostFrequentSubsequences() {
         return new Object[][] {
                 { Dna.build("AGTC"), 4 , DnaCollectors.stringToDnaSet("AGTC") },
                 { Dna.build("AGTC"), 1 , DnaCollectors.stringToDnaSet("A", "G", "T", "C") },
@@ -130,7 +130,7 @@ public class DnaTestDataProvider {
      * @return Some valid solution for the getComplement() method.
      */
     @DataProvider(name = VALID_COMPLEMENT_SEQUENCES_DATA_PROVIDER_NAME)
-    Object[][] provideValidComplementSequences() {
+    private Object[][] provideValidComplementSequences() {
         return new Object[][] {
                 { Dna.build("A"), Dna.build("T") },
                 { Dna.build("G"), Dna.build("C") },
@@ -150,7 +150,7 @@ public class DnaTestDataProvider {
      * @return Some valid solution for the getReverseComplement() method.
      */
     @DataProvider(name = VALID_REVERSE_COMPLEMENT_SEQUENCES_DATA_PROVIDER_NAME)
-    Object[][] provideValidReverseComplementSequences() {
+    private Object[][] provideValidReverseComplementSequences() {
         return new Object[][] {
                 { Dna.build("A"), Dna.build("T") },
                 { Dna.build("G"), Dna.build("C") },
@@ -170,7 +170,7 @@ public class DnaTestDataProvider {
      * @return Valid test cases and solution for the isComplement() method.
      */
     @DataProvider(name = IS_COMPLEMENT_STATEMENTS_DATA_PROVIDER_NAME)
-    Object[][] provideIsComplementStatements() {
+    private Object[][] provideIsComplementStatements() {
         return new Object[][] {
                 { Dna.build("A"), Dna.build("T"), true },
                 { Dna.build("G"), Dna.build("C"), true },
@@ -191,7 +191,7 @@ public class DnaTestDataProvider {
      * @return Valid test cases and solution for the isReverseComplement() method.
      */
     @DataProvider(name = IS_REVERSE_COMPLEMENT_STATEMENTS_DATA_PROVIDER_NAME)
-    Object[][] provideIsReverseComplementStatements() {
+    private Object[][] provideIsReverseComplementStatements() {
         return new Object[][] {
                 { Dna.build("A"), Dna.build("T"), true },
                 { Dna.build("G"), Dna.build("C"), true },
@@ -207,7 +207,7 @@ public class DnaTestDataProvider {
     static final String GUANINE_CYTOSINE_RATIO_DATA_PROVIDER_NAME = "guanineCytosineRatioDataProvider";
 
     @DataProvider(name = GUANINE_CYTOSINE_RATIO_DATA_PROVIDER_NAME)
-    Object[][] guanineCytosineDataProvider() {
+    private Object[][] guanineCytosineDataProvider() {
         return new Object[][] {
                 { Dna.build("AAAA"), 0.0 },
                 { Dna.build("GGCC"), 1.0 },
@@ -220,7 +220,7 @@ public class DnaTestDataProvider {
     static final String MINIMUM_SKEW_DATA_PROVIDER_NAME = "minimumSkewDataProvider";
     
     @DataProvider(name = MINIMUM_SKEW_DATA_PROVIDER_NAME)
-    Object[][] minimumSkewDataProvider() {
+    private Object[][] minimumSkewDataProvider() {
         return new Object[][] {
                 { Dna.build("TAAAGACTGCCGAGAGGCCAACACGAGTGCTAGAACGAGGGGCGTAAACGCGGGTCCGAT"), ImmutableList.of(10, 23) },
                 { Dna.build("ACCG"), ImmutableList.of(2) },
@@ -240,7 +240,7 @@ public class DnaTestDataProvider {
     static final String INVALID_FIND_FREQUENT_PATTERNS_DATA_PROVIDER_NAME = "invalidFindFrequentPatternsDataProvider";
 
     @DataProvider(name = INVALID_FIND_FREQUENT_PATTERNS_DATA_PROVIDER_NAME)
-    Object[][] invalidFindFrequentPatternsDataProvider() {
+    private Object[][] invalidFindFrequentPatternsDataProvider() {
         return new Object[][] {
                 { Dna.build("ACGT"), 0, 1, 1 },
                 { Dna.build("ACGT"), 1, -1, 1 },
@@ -251,7 +251,7 @@ public class DnaTestDataProvider {
     static final String VALID_FIND_FREQUENT_PATTERNS_DATA_PROVIDER_NAME = "findFrequentPatternsDataProvider";
     
     @DataProvider(name = VALID_FIND_FREQUENT_PATTERNS_DATA_PROVIDER_NAME)
-    Object[][] validFindFrequentPatternsDataProvider() {
+    private Object[][] validFindFrequentPatternsDataProvider() {
         return new Object[][] {
                 { Dna.build("ACGT"), 4, 0, 1, DnaCollectors.stringToDnaSet("ACGT") },
                 { Dna.build("ACGT"), 4, 1, 2, DnaCollectors.stringToDnaSet("ACGT", "CCGT", "GCGT", "TCGT", "AAGT", "AGGT", "ATGT", "ACAT", "ACCT", "ACTT", "ACGA", "ACGC", "ACGG") },
@@ -263,7 +263,7 @@ public class DnaTestDataProvider {
     static final String INVALID_GET_MISMATCH_SUB_SEQUENCES_DATA_PROVIDER_NAME = "invalidGetMismatchSubSequencesDataProvider";
 
     @DataProvider(name = INVALID_GET_MISMATCH_SUB_SEQUENCES_DATA_PROVIDER_NAME)
-    Object[][] invalidFindMostFrequentMismatchSubSequencesDataProvider() {
+    private Object[][] invalidFindMostFrequentMismatchSubSequencesDataProvider() {
         return new Object[][] {
                 { Dna.build("ACGT"), 0, 1 },
                 { Dna.build("ACGT"), 1, -1 }
@@ -273,7 +273,7 @@ public class DnaTestDataProvider {
     static final String VALID_FIND_MOST_FREQUENT_PATTERNS_DATA_PROVIDER_NAME = "findMostFrequentPatternsDataProvider";
     
     @DataProvider(name = VALID_FIND_MOST_FREQUENT_PATTERNS_DATA_PROVIDER_NAME)
-    Object[][] validFindMostFrequentPatternsDataProvider() {
+    private Object[][] validFindMostFrequentPatternsDataProvider() {
         return new Object[][] {
                 { Dna.build("ACGTTGCATGTCGCATGATGCATGAGAGCT"), 4, 1, DnaCollectors.stringToDnaSet("ATGT", "ACAT") },
                 { Dna.build("AAAAAAAAAA"), 2, 1, DnaCollectors.stringToDnaSet("AT", "TA") },
@@ -289,7 +289,7 @@ public class DnaTestDataProvider {
     static final String TRANSCRIPT_STRAIGHT_DATA_PROVIDER_NAME = "transcriptStraightDataProvider";
 
     @DataProvider(name = TRANSCRIPT_STRAIGHT_DATA_PROVIDER_NAME)
-    Object[][] transcriptStraightDataProvider() {
+    private Object[][] transcriptStraightDataProvider() {
         return new Object[][] {
                 { Dna.build("A"), Rna.build("A") },
                 { Dna.build("T"), Rna.build("U") },
@@ -301,7 +301,7 @@ public class DnaTestDataProvider {
     static final String TRANSCRIPT_REVERSE_COMPLEMENT_DATA_PROVIDER_NAME = "transcriptReverseComplementDataProvider";
 
     @DataProvider(name = TRANSCRIPT_REVERSE_COMPLEMENT_DATA_PROVIDER_NAME)
-    Object[][] transcriptReverseComplementDataProvider() {
+    private Object[][] transcriptReverseComplementDataProvider() {
         return new Object[][] {
                 { Dna.build("A"), Rna.build("U") },
                 { Dna.build("T"), Rna.build("A") },
@@ -313,7 +313,7 @@ public class DnaTestDataProvider {
     static final String TRANSCRIPT_DNA_DATA_PROVIDER_NAME = "transcriptDnaDataProvider";
 
     @DataProvider(name = TRANSCRIPT_DNA_DATA_PROVIDER_NAME)
-    Object[][] transcriptDnaDataProvider() {
+    private Object[][] transcriptDnaDataProvider() {
         return new Object[][] {
                 { Dna.build("A"), new Rna[] { Rna.build("A"), Rna.build("U") }},
                 { Dna.build("T"), new Rna[] { Rna.build("U"), Rna.build("A") }},

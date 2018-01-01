@@ -24,7 +24,7 @@ public class DnaArrayTestDataProvider {
     static final String INVALID_DNA_ARRAY_LIST_DATA_PROVIDER_NAME = "invalidDnaArrayListDataProvider";
 
     @DataProvider(name = INVALID_DNA_ARRAY_LIST_DATA_PROVIDER_NAME)
-    Object[][] invalidDnaArrayListDataProvider() {
+    private Object[][] invalidDnaArrayListDataProvider() {
         return new Object[][] {
                 { null },
                 { Lists.newArrayList(Dna.build("A"), null) },
@@ -35,7 +35,7 @@ public class DnaArrayTestDataProvider {
     static final String VALID_DNA_ARRAY_LIST_DATA_PROVIDER_NAME = "validDnaArrayListDataProvider";
 
     @DataProvider(name = VALID_DNA_ARRAY_LIST_DATA_PROVIDER_NAME)
-    Object[][] validDnaArrayListDataProvider() {
+    private Object[][] validDnaArrayListDataProvider() {
         return new Object[][] {
                 { DnaCollectors.stringToDnaList("A", "C", "G", "T"), ImmutableList.of("A", "C", "G", "T") }
         };
@@ -44,7 +44,7 @@ public class DnaArrayTestDataProvider {
     static final String DNA_ARRAY_COPY_DATA_PROVIDER_NAME = "dnaArrayCopyDataProvider";
 
     @DataProvider(name = DNA_ARRAY_COPY_DATA_PROVIDER_NAME)
-    Object[][] copyDataProvider() {
+    private Object[][] copyDataProvider() {
         return new Object[][] {
                 { DnaArray.build(DnaCollectors.stringToDnaList("A", "C")) }
         };
@@ -53,7 +53,7 @@ public class DnaArrayTestDataProvider {
     static final String DNA_ARRAY_EQUALS_DATA_PROVIDER_NAME = "dnaArrayEqualsDataProvider";
 
     @DataProvider(name = DNA_ARRAY_EQUALS_DATA_PROVIDER_NAME)
-    Object[][] equalsDataProvider() {
+    private Object[][] equalsDataProvider() {
         return new Object[][] {
                 { DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "G", "T")), null, false },
                 { DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "G", "T")), DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "G")), false },
@@ -68,7 +68,7 @@ public class DnaArrayTestDataProvider {
     static final String INVALID_ADD_ELEMENTS_DATA_PROVIDER_NAME = "invalidAddElementsDataProvider";
 
     @DataProvider(name = INVALID_ADD_ELEMENTS_DATA_PROVIDER_NAME)
-    Object[][] invalidAddElementsDataProvider() {
+    private Object[][] invalidAddElementsDataProvider() {
         return new Object[][] {
                 { DnaArray.build(DnaCollectors.stringToDnaList("A", "C")), null },
                 { DnaArray.build(DnaCollectors.stringToDnaList("A", "C")), new Dna[] { Dna.build("A"), null } },
@@ -80,7 +80,7 @@ public class DnaArrayTestDataProvider {
     static final String VALID_ADD_ELEMENTS_DATA_PROVIDER_NAME = "validAddElementsDataProvider";
 
     @DataProvider(name = VALID_ADD_ELEMENTS_DATA_PROVIDER_NAME)
-    Object[][] validAddElementsDataProvider() {
+    private Object[][] validAddElementsDataProvider() {
         return new Object[][] {
                 { DnaArray.build(DnaCollectors.stringToDnaList("A", "C")), DnaCollectors.stringToDnas(), DnaArray.build(DnaCollectors.stringToDnaList("A", "C")) },
                 { DnaArray.build(DnaCollectors.stringToDnaList("A", "C")), DnaCollectors.stringToDnas("A"), DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "A")) },
@@ -91,7 +91,7 @@ public class DnaArrayTestDataProvider {
     static final String INVALID_ADD_LIST_DATA_PROVIDER_NAME = "invalidAddListDataProvider";
 
     @DataProvider(name = INVALID_ADD_LIST_DATA_PROVIDER_NAME)
-    Object[][] invalidAddListDataProvider() {
+    private Object[][] invalidAddListDataProvider() {
         return new Object[][] {
                 { DnaArray.build(DnaCollectors.stringToDnaList("A", "C")), null },
                 { DnaArray.build(DnaCollectors.stringToDnaList("A", "C")), Lists.newArrayList(Dna.build("A"), null) },
@@ -103,7 +103,7 @@ public class DnaArrayTestDataProvider {
     static final String VALID_ADD_LIST_DATA_PROVIDER_NAME = "validAddListDataProvider";
 
     @DataProvider(name = VALID_ADD_LIST_DATA_PROVIDER_NAME)
-    Object[][] validAddListDataProvider() {
+    private Object[][] validAddListDataProvider() {
         return new Object[][] {
                 { DnaArray.build(DnaCollectors.stringToDnaList("A", "C")), DnaCollectors.stringToDnaList(), DnaArray.build(DnaCollectors.stringToDnaList("A", "C")) },
                 { DnaArray.build(DnaCollectors.stringToDnaList("A", "C")), DnaCollectors.stringToDnaList("A"), DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "A")) },
@@ -115,7 +115,7 @@ public class DnaArrayTestDataProvider {
     static final String INVALID_ADD_DNA_ARRAY_DATA_PROVIDER_NAME = "invalidAddDnaArrayDataProvider";
 
     @DataProvider(name = INVALID_ADD_DNA_ARRAY_DATA_PROVIDER_NAME)
-    Object[][] invalidAddDnaArrayDataProvider() {
+    private Object[][] invalidAddDnaArrayDataProvider() {
         return new Object[][] {
                 { DnaArray.build(DnaCollectors.stringToDnaList("A", "C")), null },
                 { DnaArray.build(DnaCollectors.stringToDnaList("A", "C")), DnaArray.build(DnaCollectors.stringToDnaList("AA")) },
@@ -126,7 +126,7 @@ public class DnaArrayTestDataProvider {
     static final String VALID_ADD_DNA_ARRAY_DATA_PROVIDER_NAME = "validAddDnaArrayDataProvider";
 
     @DataProvider(name = VALID_ADD_DNA_ARRAY_DATA_PROVIDER_NAME)
-    Object[][] validAddDnaArrayDataProvider() {
+    private Object[][] validAddDnaArrayDataProvider() {
         return new Object[][] {
                 { DnaArray.build(DnaCollectors.stringToDnaList("A", "C")), DnaArray.build(DnaCollectors.stringToDnaList("A")), DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "A")) },
                 { DnaArray.build(DnaCollectors.stringToDnaList("A", "C")), DnaArray.build(DnaCollectors.stringToDnaList("A", "G")), DnaArray.build(DnaCollectors.stringToDnaList("A", "C", "A", "G")) }
@@ -136,7 +136,7 @@ public class DnaArrayTestDataProvider {
     static final String INVALID_FIND_MOST_FREQUENT_MOTIFS_DATA_PROVIDER_NAME = "invalidFindMostFrequentMotifsDataProvider";
 
     @DataProvider(name = INVALID_FIND_MOST_FREQUENT_MOTIFS_DATA_PROVIDER_NAME)
-    Object[][] invalidFindMostFrequentMotifsDataProvider() {
+    private Object[][] invalidFindMostFrequentMotifsDataProvider() {
         return new Object[][] {
                 { DnaArray.build(Dna.build("ACGT")), 0, 1 },
                 { DnaArray.build(Dna.build("ACGT")), 5, 1 },
@@ -147,7 +147,7 @@ public class DnaArrayTestDataProvider {
     static final String VALID_FIND_MOST_FREQUENT_MOTIFS_EXHAUSTING_DATA_PROVIDER_NAME = "validFindMostFrequentMotifsExhaustingDataProvider";
 
     @DataProvider(name = VALID_FIND_MOST_FREQUENT_MOTIFS_EXHAUSTING_DATA_PROVIDER_NAME)
-    Object[][] validFindMostFrequentMotifsExhaustingDataProvider() {
+    private Object[][] validFindMostFrequentMotifsExhaustingDataProvider() {
         return new Object[][] {
                 { DnaArray.build(DnaCollectors.stringToDnaList("AAAAAA", "AAAAAA", "AAAAAA", "AAAAAA")), 2, 0, DnaCollectors.stringToDnaSet("AA") },
                 { DnaArray.build(DnaCollectors.stringToDnaList("AAAAAA")), 2, 1, DnaCollectors.stringToDnaSet("AA", "AC", "AG", "AT", "CA", "GA", "TA") },
@@ -166,7 +166,7 @@ public class DnaArrayTestDataProvider {
     static final String INVALID_FIND_MOST_FREQUENT_MOTIFS_MEDIAN_STRING_DATA_PROVIDER_NAME = "invalidFindMostFrequentMotifsMedianStringDataProvider";
 
     @DataProvider(name = INVALID_FIND_MOST_FREQUENT_MOTIFS_MEDIAN_STRING_DATA_PROVIDER_NAME)
-    Object[][] invalidFindMostFrequentMotifsMedianStringDataProvider() {
+    private Object[][] invalidFindMostFrequentMotifsMedianStringDataProvider() {
         return new Object[][] {
                 { DnaArray.build(DnaCollectors.stringToDnaList("ACGT", "ACGT")), 0 },
                 { DnaArray.build(DnaCollectors.stringToDnaList("ACGT", "ACGT")), 5 }
@@ -176,7 +176,7 @@ public class DnaArrayTestDataProvider {
     static final String VALID_FIND_MOST_FREQUENT_MOTIFS_MEDIAN_STRING_DATA_PROVIDER_NAME = "validFindMostFrequentMotifsMedianStringDataProvider";
 
     @DataProvider(name = VALID_FIND_MOST_FREQUENT_MOTIFS_MEDIAN_STRING_DATA_PROVIDER_NAME)
-    Object[][] validFindMostFrequentMotifsMedianStringDataProvider() {
+    private Object[][] validFindMostFrequentMotifsMedianStringDataProvider() {
         return new Object[][] {
                 { DnaArray.build(DnaCollectors.stringToDnaList("ACGT")), 1, DnaCollectors.stringToDnaSet("A", "C", "G", "T") },
                 { DnaArray.build(DnaCollectors.stringToDnaList("ACGT")), 4, DnaCollectors.stringToDnaSet("ACGT") },
@@ -191,7 +191,7 @@ public class DnaArrayTestDataProvider {
     static final String INVALID_PROFILE_MOST_PROBABLE_SUB_SEQUENCE_DATA_PROVIDER_NAME = "invalidProfileMostProbableSubSequenceDataProvider";
 
     @DataProvider(name = INVALID_PROFILE_MOST_PROBABLE_SUB_SEQUENCE_DATA_PROVIDER_NAME)
-    Object[][] invalidProfileMostProbableSubSequenceDataProvider() {
+    private Object[][] invalidProfileMostProbableSubSequenceDataProvider() {
         return new Object[][] {
                 { DnaArray.build(DnaCollectors.stringToDnaList("ACGT")), null},
                 { DnaArray.build(DnaCollectors.stringToDnaList("ACGT")), Dna.build("ACG")}
@@ -201,7 +201,7 @@ public class DnaArrayTestDataProvider {
     static final String VALID_PROFILE_MOST_PROBABLE_SUB_SEQUENCE_DATA_PROVIDER_NAME = "validProfileMostProbableSubSequenceDataProvider";
 
     @DataProvider(name = VALID_PROFILE_MOST_PROBABLE_SUB_SEQUENCE_DATA_PROVIDER_NAME)
-    Object[][] validProfileMostProbableSubSequenceDataProvider() {
+    private Object[][] validProfileMostProbableSubSequenceDataProvider() {
         return new Object[][] {
                 { DnaArray.build(DnaCollectors.stringToDnaList("ACGT")), Dna.build("AAAA"), DnaCollectors.stringToDnaSet("AAAA") },
                 { DnaArray.build(DnaCollectors.stringToDnaList("ACGT")), Dna.build("AAAAA"), DnaCollectors.stringToDnaSet("AAAA") },
@@ -214,7 +214,7 @@ public class DnaArrayTestDataProvider {
     static final String INVALID_PATTERN_PROBABILITY_DATA_PROVIDER_NAME = "invalidPatternProbabilityDataProvider";
 
     @DataProvider(name = INVALID_PATTERN_PROBABILITY_DATA_PROVIDER_NAME)
-    Object[][] invalidPatternProbabilityDataProvider() {
+    private Object[][] invalidPatternProbabilityDataProvider() {
         return new Object[][] {
                 { DnaArray.build(DnaCollectors.stringToDnaList("ACGT")), null },
                 { DnaArray.build(DnaCollectors.stringToDnaList("ACGT")), Dna.build("ACG") },
@@ -225,7 +225,7 @@ public class DnaArrayTestDataProvider {
     static final String VALID_PATTERN_PROBABILITY_DATA_PROVIDER_NAME = "validPatternProbabilityDataProvider";
 
     @DataProvider(name = VALID_PATTERN_PROBABILITY_DATA_PROVIDER_NAME)
-    Object[][] validPatternProbabilityDataProvider() {
+    private Object[][] validPatternProbabilityDataProvider() {
         return new Object[][] {
                 { DnaArray.build(DnaCollectors.stringToDnaList("AAAA")), Dna.build("AAAA"), 1.0d },
                 { DnaArray.build(DnaCollectors.stringToDnaList("AAAA")), Dna.build("TTTT"), 0.0d },

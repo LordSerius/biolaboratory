@@ -31,7 +31,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String COPY_DATA_PROVIDER_NAME = "copyDataProvider";
 
     @DataProvider(name = COPY_DATA_PROVIDER_NAME)
-    Object[][] copyDataProvider() {
+    private Object[][] copyDataProvider() {
         return new Object[][] {
                 { Dna.build("AGTC") },
                 { Dna.build("name", "AGTC") }
@@ -41,7 +41,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String INVALID_CHANGE_NAME_DATA_PROVIDER_NAME = "invalidChangeNameDataProvider";
 
     @DataProvider(name = INVALID_CHANGE_NAME_DATA_PROVIDER_NAME)
-    Object[][] invalidChangeNameDataProvider() {
+    private Object[][] invalidChangeNameDataProvider() {
         return new Object[][] {
                 { Dna.build("ACGT"), null }
         };
@@ -50,7 +50,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String VALID_CHANGE_NAME_DATA_PROVIDER_NAME = "validChangeNameDataProvider";
 
     @DataProvider(name = VALID_CHANGE_NAME_DATA_PROVIDER_NAME)
-    Object[][] validChangeNameDataProvider() {
+    private Object[][] validChangeNameDataProvider() {
         return new Object[][] {
                 { Dna.build("ACGT"), "name", "name" },
                 { Dna.build("ACGT"), " name", "name" },
@@ -64,7 +64,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String INVALID_GET_ELEMENT_DATA_PROVIDER_NAME = "invalidGetElementDataProvider";
 
     @DataProvider(name = INVALID_GET_ELEMENT_DATA_PROVIDER_NAME)
-    Object[][] invalidGetElementDataProvider() {
+    private Object[][] invalidGetElementDataProvider() {
         return new Object[][] {
                 { Dna.build("ACGT"), -1 },
                 { Dna.build("ACGT"), 5 }
@@ -74,7 +74,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String VALID_GET_ELEMENT_DATA_PROVIDER_NAME = "validGetElementDataProvider";
 
     @DataProvider(name = VALID_GET_ELEMENT_DATA_PROVIDER_NAME)
-    Object[][] validGetElementDataProvider() {
+    private Object[][] validGetElementDataProvider() {
         return new Object[][] {
                 { Dna.build("ACGT"), 0, DnaNucleotide.ADENINE },
                 { Dna.build("ACGT"), 1, DnaNucleotide.CYTOSINE},
@@ -85,7 +85,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String GET_SEQUENCE_AS_ELEMENTS_DATA_PROVIDER_NAME = "getSequenceAsElementsDataProvider";
 
     @DataProvider(name = GET_SEQUENCE_AS_ELEMENTS_DATA_PROVIDER_NAME)
-    static Object[][] getSequenceAsElementsDataProvider() {
+    static private Object[][] getSequenceAsElementsDataProvider() {
         return new Object[][] {
                 { Rna.build("A"), new RnaNucleotide[] { RnaNucleotide.ADENINE } },
                 { Rna.build("ACGU"), new RnaNucleotide[] { RnaNucleotide.ADENINE, RnaNucleotide.CYTOSINE, RnaNucleotide.GUANINE, RnaNucleotide.URACIL } }
@@ -95,7 +95,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String EQUALS_DATA_PROVIDER_NAME = "equalsDataProvider";
 
     @DataProvider(name = EQUALS_DATA_PROVIDER_NAME)
-    Object[][] equalsDataProvider() {
+    private Object[][] equalsDataProvider() {
         return new Object[][] {
                 { Dna.build("AGTC"), null, false },
                 { Dna.build("AGTC"), "AGTC", false },
@@ -120,7 +120,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String HASH_DATA_PROVIDER_NAME = "hashDataProvider";
 
     @DataProvider(name = HASH_DATA_PROVIDER_NAME)
-    Object[][] hashDataProvider() {
+    private Object[][] hashDataProvider() {
         return new Object[][] {
                 { Dna.build("AGTC"), "", false },
                 { Dna.build("AGTC"), "                ", false },
@@ -137,7 +137,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String GET_ELEMENT_OCCURRENCES_DATA_PROVIDER_NAME = "getElementOccurrencesDataProvider";
 
     @DataProvider(name = GET_ELEMENT_OCCURRENCES_DATA_PROVIDER_NAME)
-    Object[][] nucleotideOccurrencesDataProvider() {
+    private Object[][] nucleotideOccurrencesDataProvider() {
         return new Object[][]{
                 { Dna.build("ACCGGGTTTT"), CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 1, DnaNucleotide.CYTOSINE, 2, DnaNucleotide.GUANINE, 3, DnaNucleotide.THYMINE, 4)) },
                 { Dna.build("AAA"), CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 3, DnaNucleotide.CYTOSINE, 0, DnaNucleotide.GUANINE, 0, DnaNucleotide.THYMINE, 0)) },
@@ -148,7 +148,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String INVALID_GET_ELEMENT_NUMBER_DATA_PROVIDER_NAME = "invalidGetElementNumberDataProvider";
 
     @DataProvider(name = INVALID_GET_ELEMENT_NUMBER_DATA_PROVIDER_NAME)
-    Object[][] invalidGetElementNumberDataProvider() {
+    private Object[][] invalidGetElementNumberDataProvider() {
         return new Object[][] {
                 { Dna.build("ACGT"), null },
                 { Dna.build("ACGT"), RnaNucleotide.URACIL },
@@ -159,7 +159,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String VALID_GET_ELEMENT_NUMBER_DATA_PROVIDER_NAME = "validGetElementNumberDataProvider";
 
     @DataProvider(name = VALID_GET_ELEMENT_NUMBER_DATA_PROVIDER_NAME)
-    Object[][] validGetElementNumberDataProvider() {
+    private Object[][] validGetElementNumberDataProvider() {
         return new Object[][] {
                 { Dna.build("ACCGGGTTTT"), DnaNucleotide.ADENINE, 1 },
                 { Dna.build("ACCGGGTTTT"), DnaNucleotide.CYTOSINE, 2 },
@@ -179,7 +179,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String VALID_GET_RATIO_DATA_PROVIDER_NAME = "validGetRatioDataProvider";
 
     @DataProvider(name = VALID_GET_RATIO_DATA_PROVIDER_NAME)
-    Object[][] validGetRatioDataProvider() {
+    private Object[][] validGetRatioDataProvider() {
         return new Object[][] {
                 { Dna.build("ACCGGGTTTT"), DnaNucleotide.ADENINE, 0.1d },
                 { Dna.build("ACCGGGTTTT"), DnaNucleotide.CYTOSINE, 0.2d },
@@ -199,7 +199,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String INVALID_GET_ELEMENTS_DATA_PROVIDER_NAME = "invalidGetElementsDataProvider";
 
     @DataProvider(name = INVALID_GET_ELEMENTS_DATA_PROVIDER_NAME)
-    Object[][] invalidGetElementsDataProvider() {
+    private Object[][] invalidGetElementsDataProvider() {
         return new Object[][] {
                 { Dna.build("ACGT"), null },
                 { Dna.build("ACGT"), new DnaNucleotide[] { DnaNucleotide.ADENINE, null } },
@@ -211,7 +211,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String VALID_GET_ELEMENTS_NUMBER_DATA_PROVIDER_NAME = "validGetElementsNumberDataProvider";
 
     @DataProvider(name = VALID_GET_ELEMENTS_NUMBER_DATA_PROVIDER_NAME)
-    Object[][] validGetElementsNumberDataProvider() {
+    private Object[][] validGetElementsNumberDataProvider() {
         return new Object[][] {
                 { Dna.build("ACGT"), new DnaNucleotide[] {}, 0 },
                 { Dna.build("ACGT"), new DnaNucleotide[] { DnaNucleotide.ADENINE }, 1 },
@@ -226,7 +226,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String VALID_GET_RATIOS_DATA_PROVIDER_NAME = "validGetRatiosDataProvider";
 
     @DataProvider(name = VALID_GET_RATIOS_DATA_PROVIDER_NAME)
-    Object[][] validGetRatiosDataProvider() {
+    private Object[][] validGetRatiosDataProvider() {
         return new Object[][] {
                 { Dna.build("ACGT"), new DnaNucleotide[] {}, 0.0d },
                 { Dna.build("ACGT"), new DnaNucleotide[] { DnaNucleotide.ADENINE }, 0.25d },
@@ -241,7 +241,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String INVALID_GET_ELEMENTS_ABOUT_SET_DATA_PROVIDER_NAME = "invalidGetElementsAboutSet";
 
     @DataProvider(name = INVALID_GET_ELEMENTS_ABOUT_SET_DATA_PROVIDER_NAME)
-    Object[][] invalidGetElementsAboutSetDataProvider() {
+    private Object[][] invalidGetElementsAboutSetDataProvider() {
         return new Object[][] {
                 { Dna.build("ACGT"), null },
                 { Dna.build("ACGT"), Sets.newHashSet(DnaNucleotide.ADENINE, null) },
@@ -253,7 +253,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String VALID_GET_ELEMENTS_NUMBER_ABOUT_SET_DATA_PROVIDER_NAME = "validGetElementsNumberAboutSetDataProvider";
 
     @DataProvider(name = VALID_GET_ELEMENTS_NUMBER_ABOUT_SET_DATA_PROVIDER_NAME)
-    Object[][] validGetElementsNumberAboutSetDataProvider() {
+    private Object[][] validGetElementsNumberAboutSetDataProvider() {
         return new Object[][] {
                 { Dna.build("ACGT"), ImmutableSet.of(), 0 },
                 { Dna.build("ACGT"), ImmutableSet.of(DnaNucleotide.ADENINE), 1 },
@@ -267,7 +267,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String VALID_GET_RATIOS_ABOUT_SET_DATA_PROVIDER_NAME = "validGetRatiosAboutSetDataProvider";
 
     @DataProvider(name = VALID_GET_RATIOS_ABOUT_SET_DATA_PROVIDER_NAME)
-    Object[][] validGetRatioAboutSetDataProvider() {
+    private Object[][] validGetRatioAboutSetDataProvider() {
         return new Object[][] {
                 { Dna.build("ACGT"), ImmutableSet.of(), 0.0d },
                 { Dna.build("ACGT"), ImmutableSet.of(DnaNucleotide.ADENINE), 0.25d },
@@ -281,7 +281,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String INVALID_APPEND_DATA_PROVIDER_NAME = "invalidAppendDataProvider";
 
     @DataProvider(name = INVALID_APPEND_DATA_PROVIDER_NAME)
-    static Object[][] invalidAppendDataProvider() {
+    static private Object[][] invalidAppendDataProvider() {
         return new Object[][] {
                 { Rna.build("A"), null },
                 { Rna.build("A"), Dna.build("A") },
@@ -292,7 +292,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String INVALID_APPEND_ELEMENT_DATA_PROVIDER_NAME = "invalidAppendElementDataProvider";
 
     @DataProvider(name = INVALID_APPEND_ELEMENT_DATA_PROVIDER_NAME)
-    static Object[][] invalidAppendElementDataProvider() {
+    static private Object[][] invalidAppendElementDataProvider() {
         return new Object[][] {
                 { Rna.build("A"), null },
                 { Rna.build("A"), DnaNucleotide.ADENINE},
@@ -303,7 +303,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String VALID_APPEND_DATA_PROVIDER_NAME = "validAppendDataProvider";
 
     @DataProvider(name = VALID_APPEND_DATA_PROVIDER_NAME)
-    static Object[][] validAppendDataProvider() {
+    static private Object[][] validAppendDataProvider() {
         return new Object[][] {
                 { Rna.build("ACGU"), Rna.build("A"), Rna.build("ACGUA") },
                 { Rna.build("ACGU"), Rna.build("ACGU"), Rna.build("ACGUACGU") }
@@ -313,7 +313,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String VALID_APPEND_ELEMENT_DATA_PROVIDER_NAME = "validAppendElementDataProvider";
 
     @DataProvider(name = VALID_APPEND_ELEMENT_DATA_PROVIDER_NAME)
-    static Object[][] validAppendElementDataProvider() {
+    static private Object[][] validAppendElementDataProvider() {
         return new Object[][] {
                 { Rna.build("ACGU"), RnaNucleotide.ADENINE, Rna.build("ACGUA") }
         };
@@ -322,7 +322,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String INVALID_CUT_PARTS_DATA_PROVIDER_NAME = "invalidCutPartsDataProvider";
 
     @DataProvider(name = INVALID_CUT_PARTS_DATA_PROVIDER_NAME)
-    Object[][] invalidCutPartsDataProvider() {
+    private Object[][] invalidCutPartsDataProvider() {
         return new Object[][] {
                 { Dna.build("ACGT"), -1, 1 },
                 { Dna.build("ACGT"), 0, 5 },
@@ -334,7 +334,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String VALID_CUT_PARTS_DATA_PROVIDER_NAME = "validCutPartsDataProvider";
 
     @DataProvider(name = VALID_CUT_PARTS_DATA_PROVIDER_NAME)
-    Object[][] validCutPartsDataProvider() {
+    private Object[][] validCutPartsDataProvider() {
         return new Object[][] {
                 { Dna.build("ACGT"), 0, 2, Dna.build("AC") },
                 { Dna.build("ACGT"), 0, 1, Dna.build("A") },
@@ -345,7 +345,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String INVALID_CUT_TO_END_DATA_PROVIDER_NAME = "invalidCutToEndDataProvider";
 
     @DataProvider(name = INVALID_CUT_TO_END_DATA_PROVIDER_NAME)
-    Object[][] invalidCutToEndDataProviderName() {
+    private Object[][] invalidCutToEndDataProviderName() {
         return new Object[][] {
                 { Dna.build("ACGT"), -1 },
                 { Dna.build("ACGT"), 5 }
@@ -355,7 +355,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String VALID_CUT_TO_END_DATA_PROVIDER_NAME = "validCutToEndDataProvider";
 
     @DataProvider(name = VALID_CUT_TO_END_DATA_PROVIDER_NAME)
-    Object[][] validCutToEndDataProvider() {
+    private Object[][] validCutToEndDataProvider() {
         return new Object[][] {
                 { Dna.build("ACGT"), 0, Dna.build("ACGT") },
                 { Dna.build("ACGT"), 3, Dna.build("T") },
@@ -366,7 +366,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String INVALID_PATTERN_ARGUMENTS_DATA_PROVIDER_NAME = "invalidPatternArgumentsDataProvider";
 
     @DataProvider(name = INVALID_PATTERN_ARGUMENTS_DATA_PROVIDER_NAME)
-    Object[][] invalidPatternArgumentsDataProvider() {
+    private Object[][] invalidPatternArgumentsDataProvider() {
         return new Object[][] {
                 { Dna.build("AGTC"), null },
                 { Dna.build("AGTC"), Dna.build("AGTCA") },
@@ -377,7 +377,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String VALID_PATTERN_ARGUMENTS_DATA_PROVIDER_NAME = "validPatternArgumentsDataProvider";
 
     @DataProvider(name = VALID_PATTERN_ARGUMENTS_DATA_PROVIDER_NAME)
-    Object[][] validPatternArgumentsDataProvider() {
+    private Object[][] validPatternArgumentsDataProvider() {
         return new Object[][] {
                 { Dna.build("ACAACTATGCATACTATCGGGAACTATCCT"), Dna.build("ACTAT"), ImmutableList.of(3, 12, 22) },
                 { Dna.build("GCGCG"), Dna.build("GCG"), ImmutableList.of(0, 2) },
@@ -395,7 +395,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String VALID_FIND_MINIMUM_MISMATCH_SUB_SEQUENCES_NUMBER_DATA_PROVIDER_NAME = "findMinimumMismatchSubSequencesNumberDataProvider";
 
     @DataProvider(name = VALID_FIND_MINIMUM_MISMATCH_SUB_SEQUENCES_NUMBER_DATA_PROVIDER_NAME)
-    Object[][] validFindMinimumMismatchSubSequencesNumberDataProvider() {
+    private Object[][] validFindMinimumMismatchSubSequencesNumberDataProvider() {
         return new Object[][] {
                 { Dna.build("ACGT"), Dna.build("A"), 0},
                 { Dna.build("ACGT"), Dna.build("AA"), 1 },
@@ -409,7 +409,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String INVALID_PATTERN_ARGUMENTS_WITH_MISMATCHES_DATA_PROVIDER_NAME = "invalidPatternArgumentsWithMismatches";
 
     @DataProvider(name = INVALID_PATTERN_ARGUMENTS_WITH_MISMATCHES_DATA_PROVIDER_NAME)
-    Object[][] invalidPatternArgumentsWithMismatchesDataProvider() {
+    private Object[][] invalidPatternArgumentsWithMismatchesDataProvider() {
         return new Object[][] {
                 { Dna.build("AGTC"), null, 1 },
                 { Dna.build("AGTC"), Dna.build("AGTCA"), 1 },
@@ -421,7 +421,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String VALID_PATTERN_ARGUMENTS_WITH_MISMATCHES_DATA_PROVIDER_NAME = "validPatternArgumentsWithMismatches";
 
     @DataProvider(name = VALID_PATTERN_ARGUMENTS_WITH_MISMATCHES_DATA_PROVIDER_NAME)
-    Object[][] validPatternArgumentsWithMismatchesDataProvider() {
+    private Object[][] validPatternArgumentsWithMismatchesDataProvider() {
         return new Object[][] {
                 { Dna.build("A"), Dna.build("G"), 0, ImmutableList.of() },
                 { Dna.build("A"), Dna.build("G"), 5, ImmutableList.of(0) },
@@ -442,7 +442,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String INVALID_GET_SUB_SEQUENCES_DATA_PROVIDER_NAME = "invalidGetSubSequencesDataProvider";
 
     @DataProvider(name = INVALID_GET_SUB_SEQUENCES_DATA_PROVIDER_NAME)
-    Object[][] provideInvalidFindableSequenceNumbers() {
+    private Object[][] provideInvalidFindableSequenceNumbers() {
         return new Object[][] {
                 { Dna.build("AGTC"), 5 },
                 { Dna.build("AGTC"), 0 }
@@ -452,7 +452,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String VALID_GET_SUB_SEQUENCES_DATA_PROVIDER_NAME = "validGetSubSequencesDataProvider";
 
     @DataProvider(name = VALID_GET_SUB_SEQUENCES_DATA_PROVIDER_NAME)
-    public static Object[][] getSubSequencesDataProvider() {
+    private Object[][] getSubSequencesDataProvider() {
         return new Object[][] {
                 { Dna.build("ACGT"), 2, DnaCollectors.stringToDnaSet("AC", "CG", "GT") },
                 { Dna.build("AAAA"), 2, DnaCollectors.stringToDnaSet("AA") },
@@ -463,7 +463,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String VALID_FIND_MOST_FREQUENT_SUB_SEQUENCES_DATA_PROVIDER_NAME = "validFindMostFrequentSubSequencesDataProvider";
 
     @DataProvider(name = VALID_FIND_MOST_FREQUENT_SUB_SEQUENCES_DATA_PROVIDER_NAME)
-    Object[][] validFindMostFrequentSubSequencesDataProvider() {
+    private Object[][] validFindMostFrequentSubSequencesDataProvider() {
         return new Object[][] {
                 { Dna.build("ACGT"), 2, DnaCollectors.stringToDnaSet("AC", "CG", "GT") },
                 { Dna.build("AAAGT"), 2, DnaCollectors.stringToDnaSet("AA") }
@@ -473,7 +473,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String INVALID_GET_MISMATCH_SUB_SEQUENCES_DATA_PROVIDER_NAME = "invalidGetMismatchSubSequencesDataProvider";
 
     @DataProvider(name = INVALID_GET_MISMATCH_SUB_SEQUENCES_DATA_PROVIDER_NAME)
-    Object[][] invalidFindMostFrequentMismatchSubSequencesDataProvider() {
+    private Object[][] invalidFindMostFrequentMismatchSubSequencesDataProvider() {
         return new Object[][] {
                 { Dna.build("ACGT"), 0, 1 },
                 { Dna.build("ACGT"), 1, -1 }
@@ -483,7 +483,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String VALID_GET_MISMATCH_SUB_SEQUENCES_DATA_PROVIDER_NAME = "validGetMismatchSubSequencesDataProvider";
 
     @DataProvider(name = VALID_GET_MISMATCH_SUB_SEQUENCES_DATA_PROVIDER_NAME)
-    Object[][] validGetMismatchSubSequencesDataProvider() {
+    private Object[][] validGetMismatchSubSequencesDataProvider() {
         return new Object[][] {
                 { Dna.build("ACGT"), 2, 1, DnaCollectors.stringToDnaSet("AA", "AC", "AG", "AT", "CA", "CC", "CG", "CT", "GA", "GC", "GG", "GT", "TC", "TG", "TT") },
                 { Dna.build("AAAA"), 2, 1, DnaCollectors.stringToDnaSet("AA", "CA", "GA", "TA", "AC", "AG", "AT") },
@@ -497,7 +497,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String VALID_FIND_MOST_FREQUENT_MISMATCH_SUB_SEQUENCES_DATA_PROVIDER_NAME = "validFindMostFrequentMismatchSubsequencesDataProvider";
 
     @DataProvider(name = VALID_FIND_MOST_FREQUENT_MISMATCH_SUB_SEQUENCES_DATA_PROVIDER_NAME)
-    Object[][] validFindMostFrequentMismatchSubSequencesDataProvider() {
+    private Object[][] validFindMostFrequentMismatchSubSequencesDataProvider() {
         return new Object[][] {
                 { Dna.build("ACGTTGCATGTCGCATGATGCATGAGAGCT"), 4, 1, DnaCollectors.stringToDnaSet("GATG", "ATGC", "ATGT") },
                 { Dna.build("AAAAAAAAAA"), 2, 1, DnaCollectors.stringToDnaSet("AA", "AC", "AG", "CA", "AT", "GA", "TA") },
@@ -513,7 +513,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String INVALID_FIND_FREQUENT_SUB_SEQUENCES_DATA_PROVIDER_NAME = "invalidFindFrequentSubSequencesDataProvider";
 
     @DataProvider(name = INVALID_FIND_FREQUENT_SUB_SEQUENCES_DATA_PROVIDER_NAME)
-    Object[][] invalidFindFrequentSubSequencesDAtaProvider() {
+    private Object[][] invalidFindFrequentSubSequencesDAtaProvider() {
         return new Object[][] {
                 { Dna.build("ACGT"), 0, 1 },
                 { Dna.build("ACGT"), 5, 1 },
@@ -524,7 +524,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String VALID_FIND_FREQUENT_SUB_SEQUENCES_DATA_PROVIDER_NAME = "validFindFrequentSubSequencesDataProvider";
 
     @DataProvider(name = VALID_FIND_FREQUENT_SUB_SEQUENCES_DATA_PROVIDER_NAME)
-    Object[][] validFindFrequentSubSequencesDataProvider() {
+    private Object[][] validFindFrequentSubSequencesDataProvider() {
         return new Object[][] {
                 { Dna.build("ACGT"), 2, 5, DnaCollectors.stringToDnaSet() },
                 { Dna.build("ACGT"), 2, 1, DnaCollectors.stringToDnaSet("AC", "CG", "GT") },
@@ -536,7 +536,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String INVALID_FIND_FREQUENT_MISMATCH_SUB_SEQUENCES_DATA_PROVIDER_NAME = "invalidFindFrequentMismatchSubSequencesDataProvider";
 
     @DataProvider(name = INVALID_FIND_FREQUENT_MISMATCH_SUB_SEQUENCES_DATA_PROVIDER_NAME)
-    Object[][] invalidFindFrequentMismatchSubSequencesDataProvider() {
+    private Object[][] invalidFindFrequentMismatchSubSequencesDataProvider() {
         return new Object[][] {
                 { Dna.build("ACGT"), 0, 1, 1 },
                 { Dna.build("ACGT"), 1, -1, 1 },
@@ -547,7 +547,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String VALID_FIND_FREQUENT_MISMATCH_SUB_SEQUENCES_DATA_PROVIDER_NAME = "validFindFrequentMismatchSubSequencesDataProvider";
 
     @DataProvider(name = VALID_FIND_FREQUENT_MISMATCH_SUB_SEQUENCES_DATA_PROVIDER_NAME)
-    Object[][] validFindFrequentMismatchSubSequencesDataProvider() {
+    private Object[][] validFindFrequentMismatchSubSequencesDataProvider() {
         return new Object[][] {
                 { Dna.build("ACGT"), 4, 0, 1, DnaCollectors.stringToDnaSet("ACGT") },
                 { Dna.build("ACGT"), 4, 1, 2, new HashSet<Dna>() },
@@ -558,7 +558,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String INVALID_SUBSEQUENCES_IN_CLUMPS_DATA_PROVIDER_NAME = "invalidSubsequencesInClumpsDataProvider";
 
     @DataProvider(name = INVALID_SUBSEQUENCES_IN_CLUMPS_DATA_PROVIDER_NAME)
-    Object[][] provideInvalidSubSequencesInClumps() {
+    private Object[][] provideInvalidSubSequencesInClumps() {
         return new Object[][] {
                 { Dna.build("ACGT"), 0, 4, 0 },
                 { Dna.build("ACGT"), 1, 5, 0 },
@@ -569,7 +569,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String VALID_SUBSEQUENCES_IN_CLUMPS_DATA_PROVIDER_NAME = "validSubsequencesInCLumpsDataProvider";
 
     @DataProvider(name = VALID_SUBSEQUENCES_IN_CLUMPS_DATA_PROVIDER_NAME)
-    Object[][] provideValidSubSequencesInClumps() {
+    private Object[][] provideValidSubSequencesInClumps() {
         return new Object[][] {
                 { Dna.build("A"), 1, 1, 1, DnaCollectors.stringToDnaSet("A") },
                 { Dna.build("A"), 1, 1, 2, DnaCollectors.stringToDnaSet() },
@@ -583,7 +583,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String INVALID_MISMATCH_NUMBERS_DATA_PROVIDER_NAME = "invalidMismatchNumbersDataProvider";
 
     @DataProvider(name = INVALID_MISMATCH_NUMBERS_DATA_PROVIDER_NAME)
-    Object[][] invalidMismatchNumbersDataProvider() {
+    private Object[][] invalidMismatchNumbersDataProvider() {
         return new Object[][] {
                 { Dna.build("ACGT"), -1 }
         };
@@ -592,7 +592,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String VALID_GENERATE_MISMATCHES_DATA_PROVIDER_NAME = "validGenerateMismatchesDataProvider";
 
     @DataProvider(name = VALID_GENERATE_MISMATCHES_DATA_PROVIDER_NAME)
-    Object[][] validGenerateMismatchesDataProvider() {
+    private Object[][] validGenerateMismatchesDataProvider() {
         return new Object[][] {
                 { Dna.build("ACGT"), 0, DnaCollectors.stringToDnaSet("ACGT") },
                 { Dna.build("ACGT"), 1, DnaCollectors.stringToDnaSet("ACGT", "CCGT", "GCGT", "TCGT", "AAGT", "AGGT", "ATGT", "ACAT", "ACCT", "ACTT", "ACGA", "ACGC", "ACGG") },
@@ -606,7 +606,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String INVALID_HAMMING_DISTANCE_DATA_PROVIDER_NAME = "invalidHammingDistanceDataProvider";
 
     @DataProvider(name = INVALID_HAMMING_DISTANCE_DATA_PROVIDER_NAME)
-    Object[][] invalidHammingDistanceDataProvider() {
+    private Object[][] invalidHammingDistanceDataProvider() {
         return new Object[][] {
                 { Dna.build("ACGT"), null },
                 { Dna.build("A"), Dna.build("ACGT") },
@@ -617,7 +617,7 @@ public class BiologicalSequenceTestDataProvider {
     static final String VALID_HAMMING_DISTANCE_DATA_PROVIDER_NAME = "validHammingDistanceDataProvider";
 
     @DataProvider(name = VALID_HAMMING_DISTANCE_DATA_PROVIDER_NAME)
-    Object[][] validHammingDistanceDataProvider() {
+    private Object[][] validHammingDistanceDataProvider() {
         return new Object[][] {
                 { Dna.build("A"), Dna.build("A"), 0 },
                 { Dna.build("A"), Dna.build("C"), 1 },

@@ -16,7 +16,7 @@ public class SequenceUtilsTestDataProvider {
     static final String INVALID_HAMMING_DISTANCE_DATA_PROVIDER_NAME = "invalidHammingDistanceDataProvider";
 
     @DataProvider(name = INVALID_HAMMING_DISTANCE_DATA_PROVIDER_NAME)
-    Object[][] invalidHammingDistanceDataProvider() {
+    private Object[][] invalidHammingDistanceDataProvider() {
         return new Object[][] {
                 { null, "ABCD" },
                 { "ABCD", null },
@@ -28,7 +28,7 @@ public class SequenceUtilsTestDataProvider {
     static final String VALID_HAMMING_DISTANCE_DATA_PROVIDER_NAME = "validHammingDistanceDataProvider";
 
     @DataProvider(name = VALID_HAMMING_DISTANCE_DATA_PROVIDER_NAME)
-    Object[][] validHammingDistanceDataProvider() {
+    private Object[][] validHammingDistanceDataProvider() {
         return new Object[][] {
                 { "", "", 0 },
                 { "ABCD", "ABCD", 0 },
@@ -40,7 +40,7 @@ public class SequenceUtilsTestDataProvider {
     static final String INVALID_HAMMING_DISTANCE_MISMATCH_COMPARATOR_DATA_PROVIDER_NAME = "invalidHammingDistanceMismatchComparatorDataProvider";
 
     @DataProvider(name = INVALID_HAMMING_DISTANCE_MISMATCH_COMPARATOR_DATA_PROVIDER_NAME)
-    Object[][] invalidHammingDistanceThresholdComparatorDataProvider() {
+    private Object[][] invalidHammingDistanceThresholdComparatorDataProvider() {
         return new Object[][] {
                 { null, "ABCD", 0 },
                 { "ABCD", null, 1 },
@@ -53,7 +53,7 @@ public class SequenceUtilsTestDataProvider {
     static final String VALID_HAMMING_DISTANCE_MISMATCH_COMPARATOR_DATA_PROVIDER_NAME = "validHammingDistanceMismatchComparatorDataProvider";
 
     @DataProvider(name = VALID_HAMMING_DISTANCE_MISMATCH_COMPARATOR_DATA_PROVIDER_NAME)
-    Object[][] validHammingDistanceThresholdComparatorDataProvider() {
+    private Object[][] validHammingDistanceThresholdComparatorDataProvider() {
         return new Object[][] {
                 { "", "", 0, EQUAL },
                 { "", "", 1, SMALLER },

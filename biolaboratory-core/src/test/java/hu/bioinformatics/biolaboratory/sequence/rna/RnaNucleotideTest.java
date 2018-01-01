@@ -44,7 +44,7 @@ public class RnaNucleotideTest {
     private static final String INVALID_FIND_RNA_NUCLEOTIDE_ABOUT_STRING_DATA_PROVIDER_NAME = "invalidFindRnaNucleotideAboutStringDataProvider";
 
     @DataProvider(name = INVALID_FIND_RNA_NUCLEOTIDE_ABOUT_STRING_DATA_PROVIDER_NAME)
-    private static Object[][] invalidFindRnaAboutStringDataProvider() {
+    private Object[][] invalidFindRnaAboutStringDataProvider() {
         return new Object[][] {
                 { null },
                 { "" },

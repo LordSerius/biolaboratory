@@ -44,7 +44,7 @@ public class DnaNucleotideTest {
     private static final String INVALID_FIND_DNA_NUCLEOTIDE_ABOUT_STRING_DATA_PROVIDER_NAME = "invalidFindDnaNucleotideAboutStringDataProvider";
 
     @DataProvider(name = INVALID_FIND_DNA_NUCLEOTIDE_ABOUT_STRING_DATA_PROVIDER_NAME)
-    private static Object[][] invalidFindDnaNucleotideAboutStringDataProvider() {
+    private Object[][] invalidFindDnaNucleotideAboutStringDataProvider() {
         return new Object[][] {
                 { null },
                 { "" },

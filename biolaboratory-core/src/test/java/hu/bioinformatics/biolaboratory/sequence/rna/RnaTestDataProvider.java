@@ -16,7 +16,7 @@ public class RnaTestDataProvider {
     static final String INVALID_BUILD_DATA_PROVIDER_NAME = "invalidBuildDataProvider";
 
     @DataProvider(name = INVALID_BUILD_DATA_PROVIDER_NAME)
-    static Object[][] invalidBuildDataProvider() {
+    static private Object[][] invalidBuildDataProvider() {
         return new Object[][] {
                 { "", null },
                 { "", "" },
@@ -30,7 +30,7 @@ public class RnaTestDataProvider {
     static final String INVALID_BUILD_FROM_ELEMENTS_DATA_PROVIDER_NAME = "invalidBuildFromElementsDataProvider";
 
     @DataProvider(name = INVALID_BUILD_FROM_ELEMENTS_DATA_PROVIDER_NAME)
-    static Object[][] invalidBuildFromElementsDataProvider() {
+    static private Object[][] invalidBuildFromElementsDataProvider() {
         return new Object[][] {
                 { null },
                 { new RnaNucleotide[0] },
@@ -41,7 +41,7 @@ public class RnaTestDataProvider {
     static final String INVALID_BUILD_FROM_ELEMENT_LIST_DATA_PROVIDER_NAME = "invalidBuildFromElementListDataProvider";
 
     @DataProvider(name = INVALID_BUILD_FROM_ELEMENT_LIST_DATA_PROVIDER_NAME)
-    static Object[][] invalidBuildFromElementListDataProvider() {
+    static private Object[][] invalidBuildFromElementListDataProvider() {
         return new Object[][] {
                 { null },
                 { new ArrayList<>()},
@@ -52,7 +52,7 @@ public class RnaTestDataProvider {
     static final String VALID_BUILD_DATA_PROVIDER_NAME = "validBuildDataProvider";
 
     @DataProvider(name = VALID_BUILD_DATA_PROVIDER_NAME)
-    static Object[][] validBuildDataProvider() {
+    static private Object[][] validBuildDataProvider() {
         return new Object[][] {
                 { "", "A", "", "A" },
                 { " ", "G", "", "G" },
@@ -67,7 +67,7 @@ public class RnaTestDataProvider {
     static final String VALID_BUILD_FROM_ELEMENTS_DATA_PROVIDER_NAME = "validBuildFromElementsDataProvider";
 
     @DataProvider(name = VALID_BUILD_FROM_ELEMENTS_DATA_PROVIDER_NAME)
-    static Object[][] validBuildFromElementsDataProvider() {
+    static private Object[][] validBuildFromElementsDataProvider() {
         return new Object[][] {
                 { new RnaNucleotide[] { RnaNucleotide.ADENINE }, "A" },
                 { new RnaNucleotide[] { RnaNucleotide.ADENINE, RnaNucleotide.CYTOSINE, RnaNucleotide.GUANINE, RnaNucleotide.URACIL }, "ACGU" }
@@ -77,7 +77,7 @@ public class RnaTestDataProvider {
     static final String INVALID_TRANSLATE_DATA_PROVIDER_NAME = "invalidTranslateDataProvider";
 
     @DataProvider(name = INVALID_TRANSLATE_DATA_PROVIDER_NAME)
-    static Object[][] invalidTranslateDataProvider() {
+    static private Object[][] invalidTranslateDataProvider() {
         return new Object[][] {
                 { Rna.build("A") },
                 { Rna.build("AAA") },
@@ -93,7 +93,7 @@ public class RnaTestDataProvider {
     static final String VALID_TRANSLATE_DATA_PROVIDER_NAME = "validTranslateDataProvider";
 
     @DataProvider(name = VALID_TRANSLATE_DATA_PROVIDER_NAME)
-    static Object[][] validTranslateDataProvider() {
+    static private Object[][] validTranslateDataProvider() {
         return new Object[][] {
                 { Rna.build("AUGUAA"), Protein.build("M") },
                 { Rna.build("AUGACAUAA"), Protein.build("MT") },

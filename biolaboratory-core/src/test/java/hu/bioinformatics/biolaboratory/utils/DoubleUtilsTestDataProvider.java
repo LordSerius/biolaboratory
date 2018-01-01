@@ -16,7 +16,7 @@ public class DoubleUtilsTestDataProvider {
     static final String INVALID_COMPARE_WITH_ERROR_DATA_PROVIDER_NAME = "invalidCompareWithErrorDataProviderName";
 
     @DataProvider(name = INVALID_COMPARE_WITH_ERROR_DATA_PROVIDER_NAME)
-    Object[][] invalidCompareWithErrorDataProvider() {
+    private Object[][] invalidCompareWithErrorDataProvider() {
         return new Object[][] {
                 { 0.0, 0.0, MAXIMUM_ERROR * 10 },
                 { 0.0, 0.0, -MAXIMUM_ERROR * 10 },
@@ -28,7 +28,7 @@ public class DoubleUtilsTestDataProvider {
     static final String VALID_COMPARE_WITH_ERROR_DATA_PROVIDER_NAME = "validCompareWithErrorDataProviderName";
 
     @DataProvider(name = VALID_COMPARE_WITH_ERROR_DATA_PROVIDER_NAME)
-    Object[][] validCompareWithErrorDataProvider() {
+    private Object[][] validCompareWithErrorDataProvider() {
         return new Object[][] {
                 { 0.0d, 0.0d, MAXIMUM_ERROR, 0 },
                 { 0.0d, MAXIMUM_ERROR, MAXIMUM_ERROR, 0 },
@@ -46,7 +46,7 @@ public class DoubleUtilsTestDataProvider {
     static final String COMPARE_DATA_PROVIDER_NAME = "compareDataProviderName";
 
     @DataProvider(name = COMPARE_DATA_PROVIDER_NAME)
-    Object[][] compareDataProvider() {
+    private Object[][] compareDataProvider() {
         return new Object[][] {
                 { 0.0d, 0.0d, 0 },
                 { -1.0d, 1.0d, 1},

@@ -25,7 +25,7 @@ public class MotifsTestDataProvider {
     static final String GET_MOTIFS_DATA_PROVIDER_NAME = "getMotifsDataProvider";
 
     @DataProvider(name = GET_MOTIFS_DATA_PROVIDER_NAME)
-    Object[][] getMotifsDataProvider() {
+    private Object[][] getMotifsDataProvider() {
         return new Object[][] {
                 { Motifs.build(DnaArray.build(DnaCollectors.stringToDnaList("ACGT"))), new DnaNucleotide[][] { {DnaNucleotide.ADENINE, DnaNucleotide.CYTOSINE, DnaNucleotide.GUANINE, DnaNucleotide.THYMINE} } },
                 { Motifs.build(DnaArray.build(DnaCollectors.stringToDnaList("ACGT", "ACGT"))), new DnaNucleotide[][] { { DnaNucleotide.ADENINE, DnaNucleotide.CYTOSINE, DnaNucleotide.GUANINE, DnaNucleotide.THYMINE  }, { DnaNucleotide.ADENINE, DnaNucleotide.CYTOSINE, DnaNucleotide.GUANINE, DnaNucleotide.THYMINE } } },
@@ -36,7 +36,7 @@ public class MotifsTestDataProvider {
     static final String CONSENSUS_DATA_PROVIDER_NAME = "consensusDataProvider";
 
     @DataProvider(name = CONSENSUS_DATA_PROVIDER_NAME)
-    Object[][] getConsensusDataProvider() {
+    private Object[][] getConsensusDataProvider() {
         return new Object[][] {
                 { Motifs.build(DnaArray.build(DnaCollectors.stringToDnaList("ACGT"))), DnaCollectors.stringToDnaSet("ACGT") },
                 { Motifs.build(DnaArray.build(DnaCollectors.stringToDnaList("ACGT", "ACGT"))), DnaCollectors.stringToDnaSet("ACGT") },
@@ -50,7 +50,7 @@ public class MotifsTestDataProvider {
     static final String ENTROPY_DATA_PROVIDER_NAME = "entropyDataProvider";
 
     @DataProvider(name = ENTROPY_DATA_PROVIDER_NAME)
-    Object[][] entropyDataProvider() {
+    private Object[][] entropyDataProvider() {
         return new Object[][] {
                 { Motifs.build(testDnaArrayLoader.load("motif-calculation.dnacol")), new double[] {1.157d, 1.371d, 0.0, 0.0, 0.469d, 0.469d, 0.469d, 1.361d, 0.922d, 1.157d, 1.571d, 0.971d } }
         };
@@ -59,7 +59,7 @@ public class MotifsTestDataProvider {
     static final String TOTAL_ENTROPY_DATA_PROVIDER_NAME = "totalEntropyDataProvider";
 
     @DataProvider(name = TOTAL_ENTROPY_DATA_PROVIDER_NAME)
-    Object[][] totalEntropyDataProvider() {
+    private Object[][] totalEntropyDataProvider() {
         return new Object[][] {
                 { Motifs.build(testDnaArrayLoader.load("motif-calculation.dnacol")), 9.916d }
         };
@@ -68,7 +68,7 @@ public class MotifsTestDataProvider {
     static final String COUNT_DATA_PROVIDER_NAME = "countDataProvider";
 
     @DataProvider(name = COUNT_DATA_PROVIDER_NAME)
-    Object[][] countMotifsDataProvider() {
+    private Object[][] countMotifsDataProvider() {
         return new Object[][] {
                 { Motifs.build(DnaArray.build(DnaCollectors.stringToDnaList("ACGT"))), ImmutableList.of(CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 1, DnaNucleotide.CYTOSINE, 0, DnaNucleotide.GUANINE, 0, DnaNucleotide.THYMINE, 0)), CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 0, DnaNucleotide.CYTOSINE, 1, DnaNucleotide.GUANINE, 0, DnaNucleotide.THYMINE, 0)), CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 0, DnaNucleotide.CYTOSINE, 0, DnaNucleotide.GUANINE, 1, DnaNucleotide.THYMINE, 0)), CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 0, DnaNucleotide.CYTOSINE, 0, DnaNucleotide.GUANINE, 0, DnaNucleotide.THYMINE, 1))) },
                 { Motifs.build(DnaArray.build(DnaCollectors.stringToDnaList("ACGT", "ACGT"))), ImmutableList.of(CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 2, DnaNucleotide.CYTOSINE, 0, DnaNucleotide.GUANINE, 0, DnaNucleotide.THYMINE, 0)), CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 0, DnaNucleotide.CYTOSINE, 2, DnaNucleotide.GUANINE, 0, DnaNucleotide.THYMINE, 0)), CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 0, DnaNucleotide.CYTOSINE, 0, DnaNucleotide.GUANINE, 2, DnaNucleotide.THYMINE, 0)), CountableOccurrenceMap.build(ImmutableMap.of(DnaNucleotide.ADENINE, 0, DnaNucleotide.CYTOSINE, 0, DnaNucleotide.GUANINE, 0, DnaNucleotide.THYMINE, 2))) },
@@ -82,7 +82,7 @@ public class MotifsTestDataProvider {
     static final String SCORE_DATA_PROVIDER_NAME = "scoreDataProvider";
 
     @DataProvider(name = SCORE_DATA_PROVIDER_NAME)
-    Object[][] scoreDataProvider() {
+    private Object[][] scoreDataProvider() {
         return new Object[][] {
                 { Motifs.build(DnaArray.build(DnaCollectors.stringToDnaList("ACGT"))), new int[] {0, 0, 0, 0} },
                 { Motifs.build(DnaArray.build(DnaCollectors.stringToDnaList("ACGT", "ACGT"))), new int[] {0, 0, 0, 0} },
@@ -94,7 +94,7 @@ public class MotifsTestDataProvider {
     static final String TOTAL_SCORE_DATA_PROVIDER_NAME = "totalScoreDataProvider";
 
     @DataProvider(name = TOTAL_SCORE_DATA_PROVIDER_NAME)
-    Object[][] totalScoreDataProvider() {
+    private Object[][] totalScoreDataProvider() {
         return new Object[][] {
                 { Motifs.build(DnaArray.build(DnaCollectors.stringToDnaList("ACGT"))), 0 },
                 { Motifs.build(DnaArray.build(DnaCollectors.stringToDnaList("ACGT", "ACGT"))), 0 },
@@ -106,7 +106,7 @@ public class MotifsTestDataProvider {
     static final String PROFILE_DATA_PROVIDER_NAME = "profileDataProvider";
 
     @DataProvider(name = PROFILE_DATA_PROVIDER_NAME)
-    Object[][] profileDataProvider() {
+    private Object[][] profileDataProvider() {
         return new Object[][] {
                 { Motifs.build(DnaArray.build(DnaCollectors.stringToDnaList("ACGT"))), ImmutableList.of(ImmutableMap.of(DnaNucleotide.ADENINE, 1.0, DnaNucleotide.CYTOSINE, 0.0, DnaNucleotide.GUANINE, 0.0, DnaNucleotide.THYMINE, 0.0), ImmutableMap.of(DnaNucleotide.ADENINE, 0.0, DnaNucleotide.CYTOSINE, 1.0, DnaNucleotide.GUANINE, 0.0, DnaNucleotide.THYMINE, 0.0), ImmutableMap.of(DnaNucleotide.ADENINE, 0.0, DnaNucleotide.CYTOSINE, 0.0, DnaNucleotide.GUANINE, 1.0, DnaNucleotide.THYMINE, 0.0), ImmutableMap.of(DnaNucleotide.ADENINE, 0.0, DnaNucleotide.CYTOSINE, 0.0, DnaNucleotide.GUANINE, 0.0, DnaNucleotide.THYMINE, 1.0)) },
                 { Motifs.build(DnaArray.build(DnaCollectors.stringToDnaList("ACGT", "ACGT"))), ImmutableList.of(ImmutableMap.of(DnaNucleotide.ADENINE, 1.0, DnaNucleotide.CYTOSINE, 0.0, DnaNucleotide.GUANINE, 0.0, DnaNucleotide.THYMINE, 0.0), ImmutableMap.of(DnaNucleotide.ADENINE, 0.0, DnaNucleotide.CYTOSINE, 1.0, DnaNucleotide.GUANINE, 0.0, DnaNucleotide.THYMINE, 0.0), ImmutableMap.of(DnaNucleotide.ADENINE, 0.0, DnaNucleotide.CYTOSINE, 0.0, DnaNucleotide.GUANINE, 1.0, DnaNucleotide.THYMINE, 0.0), ImmutableMap.of(DnaNucleotide.ADENINE, 0.0, DnaNucleotide.CYTOSINE, 0.0, DnaNucleotide.GUANINE, 0.0, DnaNucleotide.THYMINE, 1.0)) },

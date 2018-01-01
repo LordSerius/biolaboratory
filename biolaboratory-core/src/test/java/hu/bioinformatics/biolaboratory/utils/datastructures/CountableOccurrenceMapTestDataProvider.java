@@ -19,7 +19,7 @@ public class CountableOccurrenceMapTestDataProvider {
     static final String INVALID_BUILD_FROM_MAP_DATA_PROVIDER_NAME = "invalidBuildFromMapDataProvider";
 
     @DataProvider(name = INVALID_BUILD_FROM_MAP_DATA_PROVIDER_NAME)
-    Object[][] invalidBuildFromMapDataProvider() {
+    private Object[][] invalidBuildFromMapDataProvider() {
         Map<String, Integer> nullKeyMap = new HashMap<>();
         nullKeyMap.put("A", 1);
         nullKeyMap.put(null, 1);
@@ -38,7 +38,7 @@ public class CountableOccurrenceMapTestDataProvider {
     static final String VALID_BUILD_FROM_MAP_DATA_PROVIDER_NAME = "validBuildFromMapDataProvider";
 
     @DataProvider(name = VALID_BUILD_FROM_MAP_DATA_PROVIDER_NAME)
-    Object[][] validBuildFromMapDataProvider() {
+    private Object[][] validBuildFromMapDataProvider() {
         return new Object[][] {
                 { ImmutableMap.of() },
                 { null },
@@ -50,7 +50,7 @@ public class CountableOccurrenceMapTestDataProvider {
     static final String INVALID_BUILD_FROM_SET_DATA_PROVIDER_NAME = "invalidBuildFromSetDataProvider";
 
     @DataProvider(name = INVALID_BUILD_FROM_SET_DATA_PROVIDER_NAME)
-    Object[][] invalidBuildFromSetDataProvider() {
+    private Object[][] invalidBuildFromSetDataProvider() {
         return new Object[][] {
                 { Sets.newHashSet("A", null) }
         };
@@ -59,7 +59,7 @@ public class CountableOccurrenceMapTestDataProvider {
     static final String VALID_BUILD_FROM_SET_DATA_PROVIDER_NAME = "validBuildFromSetDataProvider";
 
     @DataProvider(name = VALID_BUILD_FROM_SET_DATA_PROVIDER_NAME)
-    Object[][] validBuildFromSetDataProvider() {
+    private Object[][] validBuildFromSetDataProvider() {
         return new Object[][] {
                 { null, CountableOccurrenceMap.build() },
                 { ImmutableSet.of(), CountableOccurrenceMap.build() },
@@ -70,7 +70,7 @@ public class CountableOccurrenceMapTestDataProvider {
     static final String IS_EQUALS_DATA_PROVIDER_NAME = "isEqualsDataProvider";
 
     @DataProvider(name = IS_EQUALS_DATA_PROVIDER_NAME)
-    Object[][] isEqualsDataProvider() {
+    private Object[][] isEqualsDataProvider() {
         return new Object[][] {
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), null, false },
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), "string", false },
@@ -87,7 +87,7 @@ public class CountableOccurrenceMapTestDataProvider {
     static final String COPY_DATA_PROVIDER_NAME = "copyDataProvider";
 
     @DataProvider(name = COPY_DATA_PROVIDER_NAME)
-    Object[][] copyDataProvider() {
+    private Object[][] copyDataProvider() {
         return new Object[][] {
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)) }
         };
@@ -96,7 +96,7 @@ public class CountableOccurrenceMapTestDataProvider {
     static final String INVALID_GET_OCCURRENCE_DATA_PROVIDER = "invalidGetOccurrenceDataProvider";
 
     @DataProvider(name = INVALID_GET_OCCURRENCE_DATA_PROVIDER)
-    Object[][] invalidGetOccurrenceDataProvider() {
+    private Object[][] invalidGetOccurrenceDataProvider() {
         return new Object[][] {
                 { CountableOccurrenceMap.build(), null },
                 { CountableOccurrenceMap.build(), "A" },
@@ -107,7 +107,7 @@ public class CountableOccurrenceMapTestDataProvider {
     static final String INVALID_OPERATION_COLLECTION_DATA_PROVIDER_NAME = "invalidOperationCollectionDataProvider";
 
     @DataProvider(name = INVALID_OPERATION_COLLECTION_DATA_PROVIDER_NAME)
-    Object[][] invalidOperationCollectionDataProvider() {
+    private Object[][] invalidOperationCollectionDataProvider() {
         return new Object[][] {
                 { CountableOccurrenceMap.build(), null },
                 { CountableOccurrenceMap.build(), new String[] {"A"} },
@@ -119,7 +119,7 @@ public class CountableOccurrenceMapTestDataProvider {
     static final String INVALID_OPERATION_SET_DATA_PROVIDER_NAME = "invalidOperationSetDataProvider";
 
     @DataProvider(name = INVALID_OPERATION_SET_DATA_PROVIDER_NAME)
-    Object[][] invalidOperationSetDataProvider() {
+    private Object[][] invalidOperationSetDataProvider() {
         return new Object[][] {
                 { CountableOccurrenceMap.build(), null },
                 { CountableOccurrenceMap.build(), ImmutableSet.of("A") },
@@ -131,7 +131,7 @@ public class CountableOccurrenceMapTestDataProvider {
     static final String SUB_SET_DATA_PROVIDER_NAME = "subSetDataProvider";
 
     @DataProvider(name = SUB_SET_DATA_PROVIDER_NAME)
-    Object[][] subSetsDataProvider() {
+    private Object[][] subSetsDataProvider() {
         return new Object[][] {
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), new String[] {}, CountableOccurrenceMap.build() },
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), new String[] {"A"}, CountableOccurrenceMap.build(ImmutableMap.of("A", 1)) },
@@ -144,7 +144,7 @@ public class CountableOccurrenceMapTestDataProvider {
     static final String SUB_SET_ABOUT_SET_DATA_PROVIDER_NAME = "subSetAboutSetDataProvider";
 
     @DataProvider(name = SUB_SET_ABOUT_SET_DATA_PROVIDER_NAME)
-    Object[][] subSetAboutSetDataProvider() {
+    private Object[][] subSetAboutSetDataProvider() {
         return new Object[][] {
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), ImmutableSet.of(), CountableOccurrenceMap.build() },
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), ImmutableSet.of("A"), CountableOccurrenceMap.build(ImmutableMap.of("A", 1)) },
@@ -156,7 +156,7 @@ public class CountableOccurrenceMapTestDataProvider {
     static final String MINIMUM_OCCURRENCE_VALUE_DATA_PROVIDER_NAME = "minimumOccurrenceValueDataProvider";
 
     @DataProvider(name = MINIMUM_OCCURRENCE_VALUE_DATA_PROVIDER_NAME)
-    Object[][] minimumOccurrenceValueDataProvider() {
+    private Object[][] minimumOccurrenceValueDataProvider() {
         return new Object[][] {
                 { CountableOccurrenceMap.build(), 0 },
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), 1 },
@@ -169,7 +169,7 @@ public class CountableOccurrenceMapTestDataProvider {
     static final String INVALID_DECREASE_DATA_PROVIDER_NAME = "invalidDecreaseDataProvider";
 
     @DataProvider(name = INVALID_DECREASE_DATA_PROVIDER_NAME)
-    Object[][] invalidDecreaseDataProvider() {
+    private Object[][] invalidDecreaseDataProvider() {
         return new Object[][] {
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "T", 0)), null },
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "T", 0)), "G" },
@@ -180,7 +180,7 @@ public class CountableOccurrenceMapTestDataProvider {
     static final String VALID_DECREASE_DATA_PROVIDER_NAME = "validDecreaseDataProvider";
 
     @DataProvider(name = VALID_DECREASE_DATA_PROVIDER_NAME)
-    Object[][] validDecreaseDataProvider() {
+    private Object[][] validDecreaseDataProvider() {
         return new Object[][] {
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 2, "G", 1)), "A", CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "G", 1)) },
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 2, "G", 1)), "G", CountableOccurrenceMap.build(ImmutableMap.of("A", 2, "G", 0)) },
@@ -191,7 +191,7 @@ public class CountableOccurrenceMapTestDataProvider {
     static final String INVALID_SUBTRACT_DATA_PROVIDER_NAME = "invalidSubtractDataProvider";
 
     @DataProvider(name = INVALID_SUBTRACT_DATA_PROVIDER_NAME)
-    Object[][] invalidSubtractDataProvider() {
+    private Object[][] invalidSubtractDataProvider() {
         return new Object[][] {
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "T", 0)), null, 2 },
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "T", 0)), "G", 2 },
@@ -204,7 +204,7 @@ public class CountableOccurrenceMapTestDataProvider {
     static final String VALID_SUBTRACT_DATA_PROVIDER_NAME = "validSubtractDataProvider";
 
     @DataProvider(name = VALID_SUBTRACT_DATA_PROVIDER_NAME)
-    Object[][] validSubtractDataProvider() {
+    private Object[][] validSubtractDataProvider() {
         return new Object[][] {
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 2, "G", 1)), "A", 0, CountableOccurrenceMap.build(ImmutableMap.of("A", 2, "G", 1)) },
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 0, "G", 1)), "A", 0, CountableOccurrenceMap.build(ImmutableMap.of("A", 0, "G", 1)) },
@@ -217,7 +217,7 @@ public class CountableOccurrenceMapTestDataProvider {
     static final String INVALID_INCREASE_DATA_PROVIDER_NAME = "invalidIncreaseDataProvider";
 
     @DataProvider(name = INVALID_INCREASE_DATA_PROVIDER_NAME)
-    Object[][] invalidIncreaseDataProvider() {
+    private Object[][] invalidIncreaseDataProvider() {
         return new Object[][] {
                 { CountableOccurrenceMap.build(), "A" },
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), null },
@@ -228,7 +228,7 @@ public class CountableOccurrenceMapTestDataProvider {
     static final String VALID_INCREASE_DATA_PROVIDER_NAME = "validIncreaseDataProvider";
 
     @DataProvider(name = VALID_INCREASE_DATA_PROVIDER_NAME)
-    Object[][] validIncreaseDataProvider() {
+    private Object[][] validIncreaseDataProvider() {
         return new Object[][] {
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), "A", CountableOccurrenceMap.build(ImmutableMap.of("A", 1)) },
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 1)), "A", CountableOccurrenceMap.build(ImmutableMap.of("A", 2)) },
@@ -240,7 +240,7 @@ public class CountableOccurrenceMapTestDataProvider {
     static final String INVALID_ADD_DATA_PROVIDER_NAME = "invalidAddDataProvider";
 
     @DataProvider(name = INVALID_ADD_DATA_PROVIDER_NAME)
-    Object[][] invalidAddDataProvider() {
+    private Object[][] invalidAddDataProvider() {
         return new Object[][] {
                 { CountableOccurrenceMap.build(), "A", 2 },
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), null, 2 },
@@ -252,7 +252,7 @@ public class CountableOccurrenceMapTestDataProvider {
     static final String VALID_ADD_DATA_PROVIDER_NAME = "validAddDataProvider";
 
     @DataProvider(name = VALID_ADD_DATA_PROVIDER_NAME)
-    Object[][] validAddDataProvider() {
+    private Object[][] validAddDataProvider() {
         return new Object[][] {
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), "A", 0, CountableOccurrenceMap.build(ImmutableMap.of("A", 0)) },
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), "A", 2, CountableOccurrenceMap.build(ImmutableMap.of("A", 2)) },
@@ -267,7 +267,7 @@ public class CountableOccurrenceMapTestDataProvider {
     static final String LESS_FREQUENT_OCCURRENCES_DATA_PROVIDER_NAME = "lessFrequentOccurrences";
 
     @DataProvider(name = LESS_FREQUENT_OCCURRENCES_DATA_PROVIDER_NAME)
-    Object[][] mostFrequentDataProvider() {
+    private Object[][] mostFrequentDataProvider() {
         return new Object[][] {
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "C", 3)), ImmutableSet.of("A") },
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 0, "C", 2)), ImmutableSet.of("A") },
@@ -279,7 +279,7 @@ public class CountableOccurrenceMapTestDataProvider {
     static final String FILTER_DATA_PROVIDER_NAME = "FilterDataProvider";
 
     @DataProvider(name = FILTER_DATA_PROVIDER_NAME)
-    Object[][] filterDataProvider() {
+    private Object[][] filterDataProvider() {
         Predicate<Map.Entry<String, Integer>> truePredicate = entry -> true;
         Predicate<Map.Entry<String, Integer>> falsePredicate = entry -> false;
         Predicate<Map.Entry<String, Integer>> filterPredicate = entry -> entry.getKey().equals("A");
@@ -297,7 +297,7 @@ public class CountableOccurrenceMapTestDataProvider {
     static final String INVALID_FILTER_RELATIONAL_DATA_PROVIDER_NAME = "invalidFilterGreaterOrEqualsDataProvider";
 
     @DataProvider(name = INVALID_FILTER_RELATIONAL_DATA_PROVIDER_NAME)
-    Object[][] invalidFilterGreaterOrEqualsDataProvider() {
+    private Object[][] invalidFilterGreaterOrEqualsDataProvider() {
         return new Object[][] {
                 { CountableOccurrenceMap.build(), -1 }
         };
@@ -306,7 +306,7 @@ public class CountableOccurrenceMapTestDataProvider {
     static final String VALID_FILTER_EQUALS_DATA_PROVIDER_NAME = "validFilterEqualsDataProvider";
 
     @DataProvider(name = VALID_FILTER_EQUALS_DATA_PROVIDER_NAME)
-    Object[][] validFilterEqualsDataProvider() {
+    private Object[][] validFilterEqualsDataProvider() {
         return new Object[][] {
                 { CountableOccurrenceMap.build(), 0, ImmutableSet.of() },
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 4, "G", 0, "C", 4, "T", 5)), 5, ImmutableSet.of("T") },
@@ -318,7 +318,7 @@ public class CountableOccurrenceMapTestDataProvider {
     static final String VALID_FILTER_SMALLER_DATA_PROVIDER_NAME = "validFilterSmallerDataProvider";
 
     @DataProvider(name = VALID_FILTER_SMALLER_DATA_PROVIDER_NAME)
-    Object[][] validFilterSmallerDataProvider() {
+    private Object[][] validFilterSmallerDataProvider() {
         return new Object[][] {
                 { CountableOccurrenceMap.build(), 0, ImmutableSet.of() },
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 4, "G", 0, "C", 4, "T", 5)), 5, ImmutableSet.of("A", "G", "C") },
@@ -330,7 +330,7 @@ public class CountableOccurrenceMapTestDataProvider {
     static final String VALID_FILTER_SMALLER_OR_EQUALS_DATA_PROVIDER_NAME = "validFilterSmallerOrEqualsDataProvider";
 
     @DataProvider(name = VALID_FILTER_SMALLER_OR_EQUALS_DATA_PROVIDER_NAME)
-    Object[][] validFilterSmallerOrEqualsDataProvider() {
+    private Object[][] validFilterSmallerOrEqualsDataProvider() {
         return new Object[][] {
                 { CountableOccurrenceMap.build(), 0, ImmutableSet.of() },
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 4, "G", 0, "C", 4, "T", 5)), 5, ImmutableSet.of("A", "G", "C", "T") },
@@ -342,7 +342,7 @@ public class CountableOccurrenceMapTestDataProvider {
     static final String VALID_FILTER_GREATER_DATA_PROVIDER_NAME = "validFilterGreaterDataProvider";
 
     @DataProvider(name = VALID_FILTER_GREATER_DATA_PROVIDER_NAME)
-    Object[][] validFilterGreaterDataProvider() {
+    private Object[][] validFilterGreaterDataProvider() {
         return new Object[][] {
                 { CountableOccurrenceMap.build(), 0, ImmutableSet.of() },
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 4, "G", 0, "C", 4, "T", 5)), 5, ImmutableSet.of() },
@@ -354,7 +354,7 @@ public class CountableOccurrenceMapTestDataProvider {
     static final String VALID_FILTER_GREATER_OR_EQUALS_DATA_PROVIDER_NAME = "validFilterGreaterOrEqualsDataProvider";
 
     @DataProvider(name = VALID_FILTER_GREATER_OR_EQUALS_DATA_PROVIDER_NAME)
-    Object[][] validFilterGreaterOrEqualsDataProvider() {
+    private Object[][] validFilterGreaterOrEqualsDataProvider() {
         return new Object[][] {
                 { CountableOccurrenceMap.build(), 0, ImmutableSet.of() },
                 { CountableOccurrenceMap.build(ImmutableMap.of("A", 4, "G", 0, "C", 4, "T", 5)), 5, ImmutableSet.of("T") },
@@ -366,7 +366,7 @@ public class CountableOccurrenceMapTestDataProvider {
     static final String FILTER_MERGE_COUNTABLE_DATA_PROVIDER_NAME = "filterMergeCountableDataProvider";
 
     @DataProvider(name = FILTER_MERGE_COUNTABLE_DATA_PROVIDER_NAME)
-    Object[][] filterMergeCountableDataProvider() {
+    private Object[][] filterMergeCountableDataProvider() {
         Predicate<Map.Entry<String, Integer>> filterPredicate = entry -> entry.getKey().equals("A");
 
         return new Object[][] {
@@ -384,7 +384,7 @@ public class CountableOccurrenceMapTestDataProvider {
     static final String INVALID_FILTER_MERGE_DATA_PROVIDER_NAME = "invalidFilterMergeDataProvider";
 
     @DataProvider(name = INVALID_FILTER_MERGE_DATA_PROVIDER_NAME)
-    Object[][] invalidFilterMergeDataProvider() {
+    private Object[][] invalidFilterMergeDataProvider() {
         Predicate<Map.Entry<String, Integer>> truePredicate = entry -> true;
 
         return new Object[][] {
@@ -396,7 +396,7 @@ public class CountableOccurrenceMapTestDataProvider {
     static final String VALID_FILTER_MERGE_DATA_PROVIDER_NAME = "validFilterMergeDataProvider";
 
     @DataProvider(name = VALID_FILTER_MERGE_DATA_PROVIDER_NAME)
-    Object[][] validFilterMergeDataProvider() {
+    private Object[][] validFilterMergeDataProvider() {
         Predicate<Map.Entry<String, Integer>> filterPredicate = entry -> entry.getKey().equals("A");
 
         return new Object[][] {
@@ -424,7 +424,7 @@ public class CountableOccurrenceMapTestDataProvider {
     static final String MERGE_COUNTABLE_DATA_PROVIDER_NAME = "mergeCountableDataProvider";
 
     @DataProvider(name = MERGE_COUNTABLE_DATA_PROVIDER_NAME)
-    Object[][] mergeCountableDataProvider() {
+    private Object[][] mergeCountableDataProvider() {
         return new Object[][] {
                 { CountableOccurrenceMap.build(), CountableOccurrenceMap.build(), CountableOccurrenceMap.build() },
                 { CountableOccurrenceMap.build(), CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), CountableOccurrenceMap.build(ImmutableMap.of("A", 0)) },
@@ -438,7 +438,7 @@ public class CountableOccurrenceMapTestDataProvider {
     static final String MERGE_DATA_PROVIDER_NAME = "mergeUncountableDataProvider";
 
     @DataProvider(name = MERGE_DATA_PROVIDER_NAME)
-    Object[][] mergeDataProvider() {
+    private Object[][] mergeDataProvider() {
         return new Object[][] {
                 { CountableOccurrenceMap.build(), CountableOccurrenceMap.build(), CountableOccurrenceMap.build() },
                 { CountableOccurrenceMap.build(), CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), CountableOccurrenceMap.build(ImmutableMap.of("A", 0)) },

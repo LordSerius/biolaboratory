@@ -18,7 +18,7 @@ public class AminoAcidTest {
     private static final String INVALID_FIND_AMINO_ACID_DATA_PROVIDER_NAME = "invalidFindAminoAcidDataProvider";
 
     @DataProvider(name = INVALID_FIND_AMINO_ACID_DATA_PROVIDER_NAME)
-    private static Object[][] invalidFindAminoAcidDataProvider() {
+    private Object[][] invalidFindAminoAcidDataProvider() {
         return new Object[][] {
                 { '-' }
         };
@@ -27,7 +27,7 @@ public class AminoAcidTest {
     private static final String VALID_FIND_AMINO_ACID_DATA_PROVIDER_NAME = "validFindAminoAcidDataProvider";
 
     @DataProvider(name = VALID_FIND_AMINO_ACID_DATA_PROVIDER_NAME)
-    private static Object[][] validFindAminoAcidDataProvider() {
+    private Object[][] validFindAminoAcidDataProvider() {
         return new Object[][] {
                 { 'R', AminoAcid.ARGININE },
                 { 'h', AminoAcid.HISTIDINE },
@@ -55,7 +55,7 @@ public class AminoAcidTest {
     private static final String INVALID_FIND_AMINO_ACID_ABOUT_STRING_DATA_PROVIDER_NAME = "invalidFindAminoAcidAboutStringDataProvider";
 
     @DataProvider(name = INVALID_FIND_AMINO_ACID_ABOUT_STRING_DATA_PROVIDER_NAME)
-    private static Object[][] invalidFindAminoAcidAboutStringDataProvider() {
+    private Object[][] invalidFindAminoAcidAboutStringDataProvider() {
         return new Object[][] {
                 { null },
                 { "" },
@@ -68,7 +68,7 @@ public class AminoAcidTest {
     private static final String VALID_FIND_AMINO_ACID_ABOUT_STRING_DATA_PROVIDER_NAME = "validFindAminoAcidAboutStringDataProvider";
 
     @DataProvider(name = VALID_FIND_AMINO_ACID_ABOUT_STRING_DATA_PROVIDER_NAME)
-    private static Object[][] validFindAminoAcidAboutStringDataProvider() {
+    private Object[][] validFindAminoAcidAboutStringDataProvider() {
         return new Object[][] {
                 { "R", AminoAcid.ARGININE },
                 { " h", AminoAcid.HISTIDINE },
