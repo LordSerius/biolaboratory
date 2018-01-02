@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import static hu.bioinformatics.biolaboratory.utils.Validation.notNullCollection;
-import static hu.bioinformatics.biolaboratory.utils.Validation.notEmptyCollection;
-import static hu.bioinformatics.biolaboratory.utils.Validation.notEmptyVarargs;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.notNullCollection;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.notEmptyCollection;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.notEmptyVarargs;
 
 /**
  * Represents a single protein about the amino acid sequence.

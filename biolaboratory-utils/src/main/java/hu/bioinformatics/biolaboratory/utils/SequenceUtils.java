@@ -5,6 +5,8 @@ import com.sun.javafx.binding.StringFormatter;
 
 import java.util.stream.IntStream;
 
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.notNullArgument;
+
 /**
  * Provides extra methods for {@link String} operations.
  *
@@ -64,8 +66,8 @@ public class SequenceUtils {
     }
 
     private static void validateSequences(final String sequence, final String otherSequence) {
-        Preconditions.checkArgument(sequence != null, StringFormatter.format("Sequence %s should not be null", sequence));
-        Preconditions.checkArgument(otherSequence != null, StringFormatter.format("Other sequence %s should not be null", otherSequence));
+        notNullArgument("Sequence", sequence);
+        notNullArgument("Other sequence", otherSequence);
         int length = sequence.length();
         Preconditions.checkArgument(sequence.length() == otherSequence.length(), StringFormatter.format("The length of the two sequences are not equal %d != %d", length, otherSequence.length()));
     }

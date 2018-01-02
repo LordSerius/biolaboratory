@@ -5,11 +5,11 @@ import com.google.common.collect.Lists;
 import org.testng.annotations.DataProvider;
 
 /**
- * Data provider for {@link ValidationTest}.
+ * Data provider for {@link ArgumentValidatorTest}.
  *
  * @author Attila Radi
  */
-public class ValidationTestDataProvider {
+public class ArgumentValidatorTestDataProvider {
 
     static final String INVALID_NOT_EMPTY_VARARGS_DATA_PROVIDER_NAME = "invalidNotEmptyVarargsDataProvider";
 
@@ -242,6 +242,246 @@ public class ValidationTestDataProvider {
                 { "argument", "object" },
                 { "", "object" },
                 { null, "object" }
+        };
+    }
+
+    static final String INVALID_SMALLER_ARGUMENT_DATA_PROVIDER = "invalidSmallerArgumentDataProvider";
+
+    @DataProvider(name = INVALID_SMALLER_ARGUMENT_DATA_PROVIDER)
+    private Object[][] invalidSmallerArgumentDataProvider() {
+        return new Object[][] {
+                { 1, 0 },
+                { 1, 1}
+        };
+    }
+
+    static final String VALID_SMALLER_ARGUMENT_DATA_PROVIDER = "validSmallerArgumentDataProvider";
+
+    @DataProvider(name = VALID_SMALLER_ARGUMENT_DATA_PROVIDER)
+    private Object[][] validSmallerArgumentDataProvider() {
+        return new Object[][] {
+                { 0, 1 }
+        };
+    }
+
+    static final String INVALID_SMALLER_ARGUMENT_WITH_ARGUMENT_NAME_DATA_PROVIDER = "invalidSmallerArgumentWithArgumentNameDataProvider";
+
+    @DataProvider(name = INVALID_SMALLER_ARGUMENT_WITH_ARGUMENT_NAME_DATA_PROVIDER)
+    private Object[][] invalidSmallerArgumentWithArgumentNameDataProvider() {
+        return new Object[][] {
+                { "argument", 1, 0 },
+                { "argument", 1, 1 }
+        };
+    }
+
+    static final String VALID_SMALLER_ARGUMENT_WITH_ARGUMENT_NAME_DATA_PROVIDER = "validSmallerArgumentWithArgumentNameDataProvider";
+
+    @DataProvider(name = VALID_SMALLER_ARGUMENT_WITH_ARGUMENT_NAME_DATA_PROVIDER)
+    private Object[][] validSmallerArgumentWithArgumentNameDataProvider() {
+        return new Object[][] {
+                { "argument", 0, 1 },
+                { "", 0, 1 },
+                { null, 0, 1 }
+        };
+    }
+
+    static final String INVALID_SMALLER_OR_EQUAL_ARGUMENT_DATA_PROVIDER = "invalidSmallerOrEqualArgumentDataProvider";
+
+    @DataProvider(name = INVALID_SMALLER_OR_EQUAL_ARGUMENT_DATA_PROVIDER)
+    private Object[][] invalidSmallerOrEqualArgumentDataProvider() {
+        return new Object[][] {
+                { 1, 0 }
+        };
+    }
+
+    static final String VALID_SMALLER_OR_EQUAL_ARGUMENT_DATA_PROVIDER = "validSmallerOrEqualArgumentDataProvider";
+
+    @DataProvider(name = VALID_SMALLER_OR_EQUAL_ARGUMENT_DATA_PROVIDER)
+    private Object[][] validSmallerOrEqualArgumentDataProvider() {
+        return new Object[][] {
+                { 0, 1 },
+                { 1, 1 }
+        };
+    }
+
+    static final String INVALID_SMALLER_OR_EQUAL_ARGUMENT_WITH_ARGUMENT_NAME_DATA_PROVIDER = "invalidSmallerOrEqualArgumentWithArgumentNameDataProvider";
+
+    @DataProvider(name = INVALID_SMALLER_OR_EQUAL_ARGUMENT_WITH_ARGUMENT_NAME_DATA_PROVIDER)
+    private Object[][] invalidSmallerOrEqualArgumentWithArgumentNameDataProvider() {
+        return new Object[][] {
+                { "argument", 1, 0 }
+        };
+    }
+
+    static final String VALID_SMALLER_OR_EQUAL_ARGUMENT_WITH_ARGUMENT_NAME_DATA_PROVIDER = "validSmallerOrEqualArgumentWithArgumentNameDataProvider";
+
+    @DataProvider(name = VALID_SMALLER_OR_EQUAL_ARGUMENT_WITH_ARGUMENT_NAME_DATA_PROVIDER)
+    private Object[][] validSmallerOrEqualArgumentWithArgumentNameDataProvider() {
+        return new Object[][] {
+                { "argument", 0, 1 },
+                { "argument", 1, 1 },
+                { "", 1, 1 },
+                { null, 1, 1 }
+        };
+    }
+
+    static final String INVALID_EQUAL_ARGUMENT_DATA_PROVIDER = "invalidEqualArgumentDataProvider";
+
+    @DataProvider(name = INVALID_EQUAL_ARGUMENT_DATA_PROVIDER)
+    private Object[][] invalidEqualArgumentDataProvider() {
+        return new Object[][] {
+                { 1, 0 },
+                { 1, 2 }
+        };
+    }
+
+    static final String VALID_EQUAL_ARGUMENT_DATA_PROVIDER = "validEqualArgumentDataProvider";
+
+    @DataProvider(name = VALID_EQUAL_ARGUMENT_DATA_PROVIDER)
+    private Object[][] validEqualArgumentDataProvider() {
+        return new Object[][] {
+                { 1, 1 }
+        };
+    }
+
+    static final String INVALID_EQUAL_ARGUMENT_WITH_ARGUMENT_NAME_DATA_PROVIDER = "invalidEqualArgumentWithArgumentNameDataProvider";
+
+    @DataProvider(name = INVALID_EQUAL_ARGUMENT_WITH_ARGUMENT_NAME_DATA_PROVIDER)
+    private Object[][] invalidEqualArgumentWithArgumentNameDataProvider() {
+        return new Object[][] {
+                { "argument", 1, 0 },
+                { "argument", 1, 2 }
+        };
+    }
+
+    static final String VALID_EQUAL_ARGUMENT_WITH_ARGUMENT_NAME_DATA_PROVIDER = "validEqualArgumentWithArgumentNameDataProvider";
+
+    @DataProvider(name = VALID_EQUAL_ARGUMENT_WITH_ARGUMENT_NAME_DATA_PROVIDER)
+    private Object[][] validEqualArgumentWithArgumentNameDataProvider() {
+        return new Object[][] {
+                { "argument", 1, 1 },
+                { "", 1, 1 },
+                { null, 1, 1 }
+        };
+    }
+
+    static final String INVALID_NOT_EQUAL_ARGUMENT_DATA_PROVIDER = "invalidNotEqualArgumentDataProvider";
+
+    @DataProvider(name = INVALID_NOT_EQUAL_ARGUMENT_DATA_PROVIDER)
+    private Object[][] invalidNotEqualArgumentDataProvider() {
+        return new Object[][] {
+                { 1, 1 }
+        };
+    }
+
+    static final String VALID_NOT_EQUAL_ARGUMENT_DATA_PROVIDER = "validNotEqualArgumentDataProvider";
+
+    @DataProvider(name = VALID_NOT_EQUAL_ARGUMENT_DATA_PROVIDER)
+    private Object[][] validNotEqualArgumentDataProvider() {
+        return new Object[][] {
+                { 1, 0 },
+                { 1, 2 }
+        };
+    }
+
+    static final String INVALID_NOT_EQUAL_ARGUMENT_WITH_ARGUMENT_NAME_DATA_PROVIDER = "invalidNotEqualArgumentWithArgumentNameDataProvider";
+
+    @DataProvider(name = INVALID_NOT_EQUAL_ARGUMENT_WITH_ARGUMENT_NAME_DATA_PROVIDER)
+    private Object[][] invalidNotEqualArgumentWithArgumentNameDataProvider() {
+        return new Object[][] {
+                { "argument", 1, 1 }
+        };
+    }
+
+    static final String VALID_NOT_EQUAL_ARGUMENT_WITH_ARGUMENT_NAME_DATA_PROVIDER = "validNotEqualArgumentWithArgumentNameDataProvider";
+
+    @DataProvider(name = VALID_NOT_EQUAL_ARGUMENT_WITH_ARGUMENT_NAME_DATA_PROVIDER)
+    private Object[][] validNotEqualArgumentWithArgumentNameDataProvider() {
+        return new Object[][] {
+                { "argument", 1, 0 },
+                { "argument", 1, 2 },
+                { "", 1, 2 },
+                { null, 1, 2 }
+        };
+    }
+
+    static final String INVALID_GREATER_OR_EQUAL_ARGUMENT_DATA_PROVIDER = "invalidGreaterOrEqualArgumentDataProvider";
+
+    @DataProvider(name = INVALID_GREATER_OR_EQUAL_ARGUMENT_DATA_PROVIDER)
+    private Object[][] invalidGreaterOrEqualArgumentDataProvider() {
+        return new Object[][] {
+                { 0, 1 }
+        };
+    }
+
+    static final String VALID_GREATER_OR_EQUAL_ARGUMENT_DATA_PROVIDER = "validGreaterOrEqualArgumentDataProvider";
+
+    @DataProvider(name = VALID_GREATER_OR_EQUAL_ARGUMENT_DATA_PROVIDER)
+    private Object[][] validGreaterOrEqualArgumentDataProvider() {
+        return new Object[][] {
+                { 1, 1 },
+                { 2, 1 }
+        };
+    }
+
+    static final String INVALID_GREATER_OR_EQUAL_ARGUMENT_WITH_ARGUMENT_NAME_DATA_PROVIDER = "invalidGreaterOrEqualArgumentWithArgumentNameDataProvider";
+
+    @DataProvider(name = INVALID_GREATER_OR_EQUAL_ARGUMENT_WITH_ARGUMENT_NAME_DATA_PROVIDER)
+    private Object[][] invalidGreaterOrEqualArgumentWithArgumentNameDataProvider() {
+        return new Object[][] {
+                { "argument", 0, 1 }
+        };
+    }
+
+    static final String VALID_GREATER_OR_EQUAL_ARGUMENT_WITH_ARGUMENT_NAME_DATA_PROVIDER = "validGreaterOrEqualArgumentWithArgumentNameDataProvider";
+
+    @DataProvider(name = VALID_GREATER_OR_EQUAL_ARGUMENT_WITH_ARGUMENT_NAME_DATA_PROVIDER)
+    private Object[][] validGreaterOrEqualArgumentWithArgumentNameDataProvider() {
+        return new Object[][] {
+                { "argument", 1, 1 },
+                { "argument", 2, 1 },
+                { "", 2, 1 },
+                { null, 2, 1 }
+        };
+    }
+
+    static final String INVALID_GREATER_ARGUMENT_DATA_PROVIDER = "invalidGreaterArgumentDataProvider";
+
+    @DataProvider(name = INVALID_GREATER_ARGUMENT_DATA_PROVIDER)
+    private Object[][] invalidGreaterArgumentDataProvider() {
+        return new Object[][] {
+                { 0, 1 },
+                { 1, 1 }
+        };
+    }
+
+    static final String VALID_GREATER_ARGUMENT_DATA_PROVIDER = "validGreaterArgumentDataProvider";
+
+    @DataProvider(name = VALID_GREATER_ARGUMENT_DATA_PROVIDER)
+    private Object[][] validGreaterArgumentDataProvider() {
+        return new Object[][] {
+                { 2, 1 }
+        };
+    }
+
+    static final String INVALID_GREATER_ARGUMENT_WITH_ARGUMENT_NAME_DATA_PROVIDER = "invalidGreateArgumentWithArgumentNameDataProvider";
+
+    @DataProvider(name = INVALID_GREATER_ARGUMENT_WITH_ARGUMENT_NAME_DATA_PROVIDER)
+    private Object[][] invalidGreaterArgumentWithArgumentNameDataProvider() {
+        return new Object[][] {
+                { "argument", 0, 1 },
+                { "argument", 1, 1 }
+        };
+    }
+
+    static final String VALID_GREATER_ARGUMENT_WITH_ARGUMENT_NAME_DATA_PROVIDER = "validGreaterArgumentWithArgumentNameDataProvider";
+
+    @DataProvider(name = VALID_GREATER_ARGUMENT_WITH_ARGUMENT_NAME_DATA_PROVIDER)
+    private Object[][] validGreaterArgumentWithArgumentNameDataProvider() {
+        return new Object[][] {
+                { "argument", 2, 1 },
+                { "", 2, 1 },
+                { null, 2, 1 }
         };
     }
 }

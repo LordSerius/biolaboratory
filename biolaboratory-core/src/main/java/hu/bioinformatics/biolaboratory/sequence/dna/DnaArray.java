@@ -13,8 +13,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static hu.bioinformatics.biolaboratory.utils.Validation.notEmptyCollection;
-import static hu.bioinformatics.biolaboratory.utils.Validation.notEmptyVarargs;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.notEmptyCollection;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.notEmptyVarargs;
 
 /**
  * A collection of {@link Dna}s which provide motif finding methods on them. Every included {@link Dna} should be the

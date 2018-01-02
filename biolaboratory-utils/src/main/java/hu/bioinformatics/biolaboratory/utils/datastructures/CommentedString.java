@@ -1,7 +1,8 @@
 package hu.bioinformatics.biolaboratory.utils.datastructures;
 
-import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.notNullArgument;
 
 /**
  * The commented string contains a comment and data information about the string.
@@ -21,8 +22,8 @@ public class CommentedString {
      * @throws IllegalArgumentException If string is null.
      */
     public CommentedString(final String comment, final String string) {
-        Preconditions.checkArgument(comment != null, "Comment should not be null");
-        Preconditions.checkArgument(string != null, "String should not be null");
+        notNullArgument("Comment", comment);
+        notNullArgument("String", string);
         this.comment = comment.trim();
         this.string = string.trim();
     }

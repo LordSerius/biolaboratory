@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 
-import static hu.bioinformatics.biolaboratory.utils.Validation.notNullCollection;
-import static hu.bioinformatics.biolaboratory.utils.Validation.notNullVarargs;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.notNullCollection;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.notNullVarargs;
 
 /**
  * Transforms different {@link String} {@link Collection}s to target {@link Dna} {@link Collection}.

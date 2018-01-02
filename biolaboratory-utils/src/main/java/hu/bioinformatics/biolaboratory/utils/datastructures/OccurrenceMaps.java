@@ -12,8 +12,8 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static hu.bioinformatics.biolaboratory.utils.Validation.notNullCollection;
-import static hu.bioinformatics.biolaboratory.utils.Validation.notNullVarargs;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.notNullCollection;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.notNullVarargs;
 
 /**
  * Utility class which provides multiple operations on multiple {@link OccurrenceMap}.
