@@ -22,7 +22,6 @@ public class OccurrenceMapsTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldMergeOccurrenceMapsThrowException(Collection<OccurrenceMap<String>> occurrenceMapCollection) {
         OccurrenceMaps.mergeOccurrenceMaps(occurrenceMapCollection);
-        fail();
     }
 
     @Test(dataProvider = OccurrenceMapsTestDataProvider.VALID_MERGE_OCCURRENCE_MAPS_DATA_PROVIDER_NAME)
@@ -40,7 +39,6 @@ public class OccurrenceMapsTest {
             occurrenceMapCollection.toArray(occurrenceMapArray);
         }
         OccurrenceMaps.mergeOccurrenceMaps(occurrenceMapArray);
-        fail();
     }
 
     @Test(dataProvider = OccurrenceMapsTestDataProvider.VALID_MERGE_OCCURRENCE_MAPS_DATA_PROVIDER_NAME)
@@ -54,8 +52,7 @@ public class OccurrenceMapsTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldGetMostFrequentOccurrencesThrowException(Collection<OccurrenceMap<String>> occurrenceMapCollection) {
        OccurrenceMaps.getMostFrequentOccurrences(occurrenceMapCollection);
-       fail();
-    }
+   }
 
     @Test(dataProvider = OccurrenceMapsTestDataProvider.VALID_GET_MOST_FREQUENT_OCCURRENCES_DATA_PROVIDER_NAME)
     public void shouldGetMostFrequentOccurrencesReturn(Collection<OccurrenceMap<String>> occurrenceMapCollection, OccurrenceMap<String> controlOccurrenceMap) {
@@ -72,7 +69,6 @@ public class OccurrenceMapsTest {
             occurrenceMapCollection.toArray(occurrenceMapArray);
         }
         OccurrenceMaps.getMostFrequentOccurrences(occurrenceMapArray);
-        fail();
     }
 
     @Test(dataProvider = OccurrenceMapsTestDataProvider.VALID_GET_MOST_FREQUENT_OCCURRENCES_DATA_PROVIDER_NAME)

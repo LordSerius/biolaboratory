@@ -1,6 +1,6 @@
 package hu.bioinformatics.biolaboratory.utils.datastructures;
 
-import com.google.common.base.Preconditions;
+import hu.bioinformatics.biolaboratory.utils.ArgumentValidator;
 
 import java.util.AbstractMap;
 import java.util.Arrays;
@@ -12,8 +12,8 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.notNullCollection;
-import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.notNullVarargs;
+import static com.google.common.base.Preconditions.checkArgument;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkNotNullArgument;
 
 /**
  * Utility class which provides multiple operations on multiple {@link OccurrenceMap}.
@@ -66,7 +66,7 @@ public class OccurrenceMaps {
     @SafeVarargs
     private static <K> OccurrenceMap<K> filterMergeOccurrenceMaps(
             final Predicate<Map.Entry<K, Integer>> filterPredicate, final OccurrenceMap<K>... occurrenceMaps) {
-        return filterMergeOccurrenceMaps(filterPredicate, Arrays.asList(notNullVarargs(occurrenceMaps)));
+        return filterMergeOccurrenceMaps(filterPredicate, Arrays.asList(ArgumentValidator.checkNotNullVarargs(occurrenceMaps)));
     }
 
     /**
@@ -83,9 +83,9 @@ public class OccurrenceMaps {
      */
     private static <K> OccurrenceMap<K> filterMergeOccurrenceMaps(
             final Predicate<Map.Entry<K, Integer>> filterPredicate, final Collection<OccurrenceMap<K>> occurrenceMapCollection) {
-        Preconditions.checkArgument(filterPredicate != null, "Filter predicate should no be null");
+        checkNotNullArgument("Filter predicate", filterPredicate);
 
-        List<Map<K, Integer>> occurrenceMapList = getOccurrences(notNullCollection(occurrenceMapCollection));
+        List<Map<K, Integer>> occurrenceMapList = getOccurrences(ArgumentValidator.checkNotNullCollection(occurrenceMapCollection));
 
         Map<K, Integer> mergedOccurrences = new HashMap<>();
         for (Map<K, Integer> occurrence : occurrenceMapList) {
@@ -113,7 +113,7 @@ public class OccurrenceMaps {
      */
     @SafeVarargs
     public static <K> OccurrenceMap<K> getMostFrequentOccurrences(final OccurrenceMap<K>... occurrenceMaps) {
-        return getMostFrequentOccurrences(Arrays.asList(notNullVarargs(occurrenceMaps)));
+        return getMostFrequentOccurrences(Arrays.asList(ArgumentValidator.checkNotNullVarargs(occurrenceMaps)));
     }
 
     /**
@@ -126,7 +126,7 @@ public class OccurrenceMaps {
      * @see OccurrenceMap#filterMostFrequentOccurrences()
      */
     public static <K> OccurrenceMap<K> getMostFrequentOccurrences(final Collection<OccurrenceMap<K>> occurrenceMapCollection) {
-        List<Map<K, Integer>> occurrenceMapList = getOccurrences(notNullCollection(occurrenceMapCollection));
+        List<Map<K, Integer>> occurrenceMapList = getOccurrences(ArgumentValidator.checkNotNullCollection(occurrenceMapCollection));
 
         int mostFrequentOccurrenceNumber = 0;
         Map<K, Integer> mostFrequentOccurrences = new HashMap<>();
@@ -151,7 +151,7 @@ public class OccurrenceMaps {
     private static <K> List<Map<K, Integer>> getOccurrences(final Collection<OccurrenceMap<K>> occurrenceMapCollection) {
         return occurrenceMapCollection.stream()
                 .map(map -> {
-                    Preconditions.checkArgument(map != null, "Cannot merge with null");
+                    checkArgument(map != null, "Cannot merge with null");
                     return map.getOccurrencesInMap();
                 })
                 .collect(Collectors.toList());

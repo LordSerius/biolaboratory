@@ -27,7 +27,6 @@ public class CountableOccurrenceMapTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldBuildFromMapThrowException(Map<String, Integer> occurrences) {
         CountableOccurrenceMap.build(occurrences);
-        fail();
     }
 
     @Test(dataProvider = CountableOccurrenceMapTestDataProvider.VALID_BUILD_FROM_MAP_DATA_PROVIDER_NAME)
@@ -41,7 +40,6 @@ public class CountableOccurrenceMapTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldBuildFromSetThrowException(Set<String> elementSet) {
         CountableOccurrenceMap.build(elementSet);
-        fail();
     }
 
     @Test(dataProvider = CountableOccurrenceMapTestDataProvider.VALID_BUILD_FROM_SET_DATA_PROVIDER_NAME)
@@ -68,28 +66,24 @@ public class CountableOccurrenceMapTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldGetOccurrenceThrowException(CountableOccurrenceMap<String> occurrenceMap, String key) {
         occurrenceMap.getOccurrence(key);
-        fail();
     }
 
     @Test(dataProvider = CountableOccurrenceMapTestDataProvider.INVALID_OPERATION_COLLECTION_DATA_PROVIDER_NAME,
             expectedExceptions = IllegalArgumentException.class)
     public void shouldSumOccurrencesFromArrayThrowException(CountableOccurrenceMap<String> occurrenceMap, String[] keys) {
         occurrenceMap.sumOccurrences(keys);
-        fail();
     }
 
     @Test(dataProvider = CountableOccurrenceMapTestDataProvider.INVALID_OPERATION_SET_DATA_PROVIDER_NAME,
             expectedExceptions = IllegalArgumentException.class)
     public void shouldSumOccurrencesAboutSetThrowException(CountableOccurrenceMap<String> occurrenceMap, Set<String> keySet) {
         occurrenceMap.sumOccurrences(keySet);
-        fail();
     }
 
     @Test(dataProvider = CountableOccurrenceMapTestDataProvider.INVALID_OPERATION_COLLECTION_DATA_PROVIDER_NAME,
             expectedExceptions = IllegalArgumentException.class)
     public void shouldSubSetThrowsException(CountableOccurrenceMap<String> occurrenceMap, String[] keys) {
         occurrenceMap.subSet(keys);
-        fail();
     }
 
     @Test(dataProvider = CountableOccurrenceMapTestDataProvider.SUB_SET_DATA_PROVIDER_NAME)
@@ -102,7 +96,6 @@ public class CountableOccurrenceMapTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldSubSetAboutSetThrowsException(CountableOccurrenceMap<String> occurrenceMap, Set<String> subSet) {
         occurrenceMap.subSet(subSet);
-        fail();
     }
 
     @Test(dataProvider = CountableOccurrenceMapTestDataProvider.SUB_SET_ABOUT_SET_DATA_PROVIDER_NAME)
@@ -121,7 +114,6 @@ public class CountableOccurrenceMapTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldDecreaseThrowException(CountableOccurrenceMap<String> occurrenceMap, String key) {
         occurrenceMap.decrease(key);
-        fail();
     }
 
     @Test(dataProvider = CountableOccurrenceMapTestDataProvider.VALID_DECREASE_DATA_PROVIDER_NAME)
@@ -134,7 +126,6 @@ public class CountableOccurrenceMapTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldSubtractThrowException(CountableOccurrenceMap<String> occurrenceMap, String key, int number) {
         occurrenceMap.subtract(key, number);
-        fail();
     }
 
     @Test(dataProvider = CountableOccurrenceMapTestDataProvider.VALID_SUBTRACT_DATA_PROVIDER_NAME)
@@ -147,7 +138,6 @@ public class CountableOccurrenceMapTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldIncreaseThrowException(CountableOccurrenceMap<String> occurrenceMap, String key) {
         occurrenceMap.increase(key);
-        fail();
     }
 
     @Test(dataProvider = CountableOccurrenceMapTestDataProvider.VALID_INCREASE_DATA_PROVIDER_NAME)
@@ -160,7 +150,6 @@ public class CountableOccurrenceMapTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldAddThrowException(CountableOccurrenceMap<String> occurrenceMap, String key, int number) {
         occurrenceMap.add(key, number);
-        fail();
     }
 
     @Test(dataProvider = CountableOccurrenceMapTestDataProvider.VALID_ADD_DATA_PROVIDER_NAME)
@@ -185,7 +174,6 @@ public class CountableOccurrenceMapTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldFilterEqualsOccurrencesThrowException(CountableOccurrenceMap<String> occurrenceMap, int threshold) {
         occurrenceMap.filterGreaterOrEqualsOccurrences(threshold);
-        fail();
     }
 
     @Test(dataProvider = CountableOccurrenceMapTestDataProvider.VALID_FILTER_EQUALS_DATA_PROVIDER_NAME)
@@ -198,7 +186,6 @@ public class CountableOccurrenceMapTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldFilterSmallerOccurrencesThrowException(CountableOccurrenceMap<String> occurrenceMap, int threshold) {
         occurrenceMap.filterSmallerOccurrences(threshold);
-        fail();
     }
 
     @Test(dataProvider = CountableOccurrenceMapTestDataProvider.VALID_FILTER_SMALLER_DATA_PROVIDER_NAME)
@@ -211,7 +198,6 @@ public class CountableOccurrenceMapTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldFilterSmallerOrEqualsOccurrencesThrowException(CountableOccurrenceMap<String> occurrenceMap, int threshold) {
         occurrenceMap.filterSmallerOrEqualsOccurrences(threshold);
-        fail();
     }
 
     @Test(dataProvider = CountableOccurrenceMapTestDataProvider.VALID_FILTER_SMALLER_OR_EQUALS_DATA_PROVIDER_NAME)
@@ -224,7 +210,6 @@ public class CountableOccurrenceMapTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldFilterGreaterOccurrencesThrowException(CountableOccurrenceMap<String> occurrenceMap, int threshold) {
         occurrenceMap.filterGreaterOrEqualsOccurrences(threshold);
-        fail();
     }
 
     @Test(dataProvider = CountableOccurrenceMapTestDataProvider.VALID_FILTER_GREATER_DATA_PROVIDER_NAME)
@@ -237,7 +222,6 @@ public class CountableOccurrenceMapTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldFilterGreaterOrEqualsOccurrencesThrowException(CountableOccurrenceMap<String> occurrenceMap, int threshold) {
         occurrenceMap.filterGreaterOrEqualsOccurrences(threshold);
-        fail();
     }
 
     @Test(dataProvider = CountableOccurrenceMapTestDataProvider.VALID_FILTER_GREATER_OR_EQUALS_DATA_PROVIDER_NAME)
@@ -256,7 +240,6 @@ public class CountableOccurrenceMapTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldFilterMergeThrowException(CountableOccurrenceMap<String> occurrenceMap, OccurrenceMap<String> otherOccurrenceMap, Predicate<Map.Entry<String, Integer>> filterPredicate) {
         occurrenceMap.filterMerge(otherOccurrenceMap, filterPredicate);
-        fail();
     }
 
     @Test(dataProvider = CountableOccurrenceMapTestDataProvider.VALID_FILTER_MERGE_DATA_PROVIDER_NAME)
@@ -281,34 +264,29 @@ public class CountableOccurrenceMapTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldOccurrenceRatioThrowException(CountableOccurrenceMap<String> occurrenceMap, String key) {
         occurrenceMap.getOccurrence(key);
-        fail();
     }
 
     @Test(dataProvider = CountableOccurrenceMapTestDataProvider.INVALID_OPERATION_COLLECTION_DATA_PROVIDER_NAME,
             expectedExceptions = IllegalArgumentException.class)
     public void shouldAccumulatedOccurrenceRatioThrowException(CountableOccurrenceMap<String> occurrenceMap, String[] keys) {
         occurrenceMap.accumulatedOccurrenceRatio(keys);
-        fail();
     }
 
     @Test(dataProvider = CountableOccurrenceMapTestDataProvider.INVALID_OPERATION_SET_DATA_PROVIDER_NAME,
             expectedExceptions = IllegalArgumentException.class)
     public void shouldAccumulatedOccurrenceRatioSetThrowException(CountableOccurrenceMap<String> occurrenceMap, Set<String> keySet) {
         occurrenceMap.accumulatedOccurrenceRatio(keySet);
-        fail();
     }
 
     @Test(dataProvider = CountableOccurrenceMapTestDataProvider.INVALID_OPERATION_COLLECTION_DATA_PROVIDER_NAME,
             expectedExceptions = IllegalArgumentException.class)
     public void shouldOccurrenceRatiosThrowException(CountableOccurrenceMap<String> occurrenceMap, String[] keys) {
         occurrenceMap.occurrenceRatios(keys);
-        fail();
     }
 
     @Test(dataProvider = CountableOccurrenceMapTestDataProvider.INVALID_OPERATION_SET_DATA_PROVIDER_NAME,
             expectedExceptions = IllegalArgumentException.class)
     public void shouldOccurrenceRatiosSetThrowException(CountableOccurrenceMap<String> occurrenceMap, Set<String> keySet) {
         occurrenceMap.occurrenceRatios(keySet);
-        fail();
     }
 }

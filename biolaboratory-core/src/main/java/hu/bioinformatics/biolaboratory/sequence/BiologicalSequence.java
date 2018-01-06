@@ -1,11 +1,9 @@
 package hu.bioinformatics.biolaboratory.sequence;
 
-import com.google.common.base.Preconditions;
-import com.sun.javafx.binding.StringFormatter;
+import hu.bioinformatics.biolaboratory.utils.ArgumentValidator;
 import hu.bioinformatics.biolaboratory.utils.SequenceUtils;
 import hu.bioinformatics.biolaboratory.utils.datastructures.CountableOccurrenceMap;
 import hu.bioinformatics.biolaboratory.utils.datastructures.OccurrenceMap;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -15,6 +13,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import static com.google.common.base.Preconditions.checkArgument;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkNotBlankString;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkNotNegativeNumber;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkNotNullArgument;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkPositiveNumber;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkSmallerNumberTo;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkSmallerOrEqualNumberTo;
 
 /**
  * Represents an immutable abstract biological sequence, which can be a DNA, RNA or a protein. Contains all of the common
@@ -39,8 +45,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      * @throws IllegalArgumentException If name is null.
      */
     protected static String validateName(final String name) {
-        Preconditions.checkArgument(name != null, "Name should not be null");
-        return name.trim();
+        return checkNotNullArgument("Name", name).trim();
     }
 
     /**
@@ -51,8 +56,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      * @throws IllegalArgumentException If sequence is blank.
      */
     protected static String formatSequence(final String sequence) {
-        Preconditions.checkArgument(StringUtils.isNotBlank(sequence), "Biological sequence cannot be blank");
-        return sequence.trim().toUpperCase();
+        return checkNotBlankString("Biological sequence", sequence).trim().toUpperCase();
     }
 
     /**
@@ -226,7 +230,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      * @throws IllegalArgumentException If name is null.
      */
     public TYPE changeName(final String name) {
-        Preconditions.checkArgument(name != null, "Sequence name should not be null");
+        checkNotNullArgument("Sequence", name);
         return construct(name.trim(), sequence);
     }
 
@@ -239,8 +243,8 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      * @throws IllegalArgumentException If index is greater than sequence length.
      */
     public final ELEMENT getElement(final int index) {
-        Preconditions.checkArgument(index >= 0, "Index should be greater or equal than 0");
-        Preconditions.checkArgument(index < sequenceLength, "Index should smaller than sequence length (%d)", sequenceLength);
+        checkNotNegativeNumber("Index", index);
+        checkSmallerNumberTo("Index", index, "sequence length", sequenceLength);
         return loadSequenceAsElements()[index];
     }
 
@@ -430,15 +434,6 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
         return construct(sequence + validateType(otherBiologicalSequence).getSequence());
     }
 
-    private TYPE validateType(final TYPE otherBiologicalSequence) {
-        Preconditions.checkArgument(compareTypes(otherBiologicalSequence), "Other biological sequence is null or has a different type");
-        return otherBiologicalSequence;
-    }
-
-    private boolean compareTypes(final TYPE otherBiologicalSequence) {
-        return otherBiologicalSequence != null && getClass() == otherBiologicalSequence.getClass();
-    }
-
     /**
      * Append the given biological sequence element to the end.
      *
@@ -452,8 +447,8 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
     }
 
     private ELEMENT validateElement(final ELEMENT element) {
-        Preconditions.checkArgument(element != null, "Element should not be null");
-        Preconditions.checkArgument(getElementSet().contains(element), "Element has invalid type");
+        checkNotNullArgument("Element", element);
+        checkArgument(getElementSet().contains(element), "Element has invalid type");
         return element;
     }
 
@@ -481,9 +476,9 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      * @throws IllegalArgumentException If startPosition is greater or equal than endPosition.
      */
     public final TYPE cut(final int startPosition, final int endPosition) {
-        Preconditions.checkArgument(startPosition >= 0, "Start position should bigger than 0");
-        Preconditions.checkArgument(endPosition <= sequenceLength, "End position should smaller or equals than the sequence length");
-        Preconditions.checkArgument(startPosition < endPosition, "Start position should smaller than the end position");
+        checkNotNegativeNumber("Start position", startPosition);
+        checkSmallerOrEqualNumberTo("End position", endPosition, "sequence length", sequenceLength);
+        checkSmallerNumberTo("Start position", startPosition, "end position", endPosition);
         return construct(sequence.substring(startPosition, endPosition));
     }
 
@@ -541,14 +536,13 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      * @throws IllegalArgumentException If <i>d</i> is negative number.
      */
     public List<Integer> patternMatchingWithMismatches(final TYPE pattern, final int d) {
-        Preconditions.checkArgument(d >= 0, "The maximum different value (d) should greater or equals than 0");
+        checkNotNegativeNumber("Maximum different value (d)", d);
         return findPatternsWithMismatch(validatePattern(pattern), d);
     }
 
     private TYPE validatePattern(final TYPE pattern) {
-        Preconditions.checkArgument(pattern != null, StringFormatter.format("%s should not be null", getBiologicalSequenceTypeName()));
-        Preconditions.checkArgument(compareTypes(pattern), StringFormatter.format("Pattern type (%s) is different than sequence type (%s)", pattern.getBiologicalSequenceTypeName(), getBiologicalSequenceTypeName()));
-        Preconditions.checkArgument(pattern.sequenceLength <= sequenceLength, StringFormatter.format("Pattern length should smaller or equals than %s sequence length", getBiologicalSequenceTypeName()));
+        validateType(pattern);
+        checkSmallerOrEqualNumberTo("Pattern length", pattern.sequenceLength, "sequence length", sequenceLength);
         return pattern;
     }
 
@@ -727,10 +721,10 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      */
     @SuppressWarnings("unchecked")
     public Set<TYPE> findPatternsInClumps(final int k, final int L, final int t) {
-        Preconditions.checkArgument(L > 0, "Clump length (L) should be greater than 0");
-        Preconditions.checkArgument(L <= sequenceLength, "Clump length (L) should be smaller or equals to the sequence length");
-        Preconditions.checkArgument(k > 0, "Findable subsequence length (k) should be greater than 0");
-        Preconditions.checkArgument(k <= L, "Findable subsequence length (k) should be smaller or equals to the clump length (L)");
+        checkPositiveNumber("Clump length (L)", L);
+        checkSmallerOrEqualNumberTo("Clump length (L)", L, "sequence length", sequenceLength);
+        checkPositiveNumber("Findable subsequence length (k)", k);
+        checkSmallerOrEqualNumberTo("Findable subsequence length (k)", k, "clump length", L);
 
         int lengthDiff = sequenceLength - L;
         TYPE window = construct(sequence.substring(0, L));
@@ -804,8 +798,8 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      */
     @SuppressWarnings("unchecked")
     protected final OccurrenceMap<TYPE> getMismatchOccurrenceMap(final int k, final int d) {
-        Preconditions.checkArgument(k > 0, "Findable subsequence length (k) should be greater than 0");
-        Preconditions.checkArgument(k <= sequenceLength, "Findable subsequence length (k) should be smaller or equals to the sequence length");
+        checkPositiveNumber("Findable subsequence (k)", k);
+        checkSmallerOrEqualNumberTo("Findable subsequence (k)", k, "sequence length", sequenceLength);
 
         OccurrenceMap<TYPE> occurrenceMap = OccurrenceMap.build();
         int lengthDiff = sequenceLength - k;
@@ -852,7 +846,7 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
      * @throws IllegalArgumentException If <i>d</i> is negative number.
      */
     public Set<TYPE> generateMismatches(final int d) {
-        Preconditions.checkArgument(d >= 0, "Maximum mismatch number (d) should be greater or equals than 0");
+        checkNotNegativeNumber("Maximum mismatch number (d)", d);
 
         Map<String, Integer> mismatchMap = new HashMap<>();
 
@@ -895,5 +889,9 @@ public abstract class BiologicalSequence<TYPE extends BiologicalSequence, ELEMEN
     public int getMismatchNumber(final TYPE otherBiologicalSequence) {
         validateType(otherBiologicalSequence);
         return SequenceUtils.hammingDistance(sequence, otherBiologicalSequence.sequence);
+    }
+
+    private TYPE validateType(final TYPE otherBiologicalSequence) {
+        return ArgumentValidator.checkSameTypeTo("Other biological sequence", otherBiologicalSequence, getBiologicalSequenceTypeName(), this);
     }
 }

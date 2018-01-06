@@ -20,7 +20,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.testng.Assert.fail;
 
 /**
  * Unit tests for {@link DnaSetRowLoader}.
@@ -67,7 +66,6 @@ public class DnaSetRowLoaderTest {
     public void shouldLoadThrowException(String filePath, Stream<String> lines) {
         ((MockReaderWrapperFactory) readerWrapperFactory).setLines(lines);
         dnaSetRowLoader.load(filePath);
-        fail();
     }
 
     @Test(dataProvider = VALID_LOAD_DATA_PROVIDER_NAME)

@@ -22,21 +22,18 @@ public class ProteinTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldBuildProteinThrowException(String name, String sequence) {
         Protein.build(name, sequence);
-        fail();
     }
 
     @Test(dataProvider = ProteinTestDataProvider.INVALID_BUILD_FROM_ELEMENTS_DATA_PROVIDER_NAME,
             expectedExceptions = IllegalArgumentException.class)
     public void shouldBuildFromNucleotidesThrowException(AminoAcid[] aminoAcids) {
         Protein.build(aminoAcids);
-        fail();
     }
 
     @Test(dataProvider = ProteinTestDataProvider.INVALID_BUILD_FROM_ELEMENT_LIST_DATA_PROVIDER_NAME,
             expectedExceptions = IllegalArgumentException.class)
     public void shouldBuildFromNucleotideListThrowException(List<AminoAcid> aminoAcidList) {
         Protein.build(aminoAcidList);
-        fail();
     }
 
     @Test(dataProvider = ProteinTestDataProvider.VALID_BUILD_PROTEIN_DATA_PROVIDER_NAME)

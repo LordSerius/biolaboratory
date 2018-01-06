@@ -6,7 +6,6 @@ import org.testng.annotations.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.testng.Assert.fail;
 
 /**
  * Test cases for {@link RnaNucleotide}.
@@ -74,7 +73,6 @@ public class RnaNucleotideTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldFindRnaNucleotideThrowException(char dnaLetter) {
         RnaNucleotide.findRnaNucleotide(dnaLetter);
-        fail();
     }
 
     @Test(dataProvider = VALID_FIND_RNA_NUCLEOTIDE_DATA_PROVIDER_NAME)
@@ -87,7 +85,6 @@ public class RnaNucleotideTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldFindDnaNucleotideAboutStringThrowException(String rnaLetter) {
         RnaNucleotide.findRnaNucleotide(rnaLetter);
-        fail();
     }
 
     @Test(dataProvider = VALID_FIND_RNA_NUCLEOTIDE_ABOUT_STRING_DATA_PROVIDER_NAME)

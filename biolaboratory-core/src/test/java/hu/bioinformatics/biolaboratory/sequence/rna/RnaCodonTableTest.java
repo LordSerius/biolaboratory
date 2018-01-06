@@ -33,7 +33,6 @@ public class RnaCodonTableTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldLookupThrowException(Rna rna) {
         RnaCodonTable.lookup(rna);
-        fail();
     }
 
     private static final String VALID_LOOKUP_DATA_PROVIDER_NAME = "validLookupDataProvider";

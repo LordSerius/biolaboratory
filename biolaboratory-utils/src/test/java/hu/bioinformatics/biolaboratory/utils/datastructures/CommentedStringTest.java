@@ -58,7 +58,6 @@ public class CommentedStringTest {
         expectedExceptions = IllegalArgumentException.class)
     public void shouldConstructorThrowException(String comment, String line) {
         new CommentedString(comment, line);
-        fail();
     }
 
     @Test(dataProvider = VALID_CONSTRUCTOR_DATA_PROVIDER_NAME)

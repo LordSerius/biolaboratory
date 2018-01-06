@@ -6,8 +6,6 @@ import org.testng.annotations.Test;
 
 import java.io.File;
 
-import static org.testng.Assert.fail;
-
 /**
  * Test cases for {@link DnaResourceValidator} class.
  *
@@ -51,7 +49,6 @@ public class DnaResourceValidatorTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldFailValidation(String filePath) {
         dnaResourceValidator.validate(filePath);
-        fail();
     }
     
     @Test(dataProvider = VALID_FILE_PATH_DATA_PROVIDER_NAME)

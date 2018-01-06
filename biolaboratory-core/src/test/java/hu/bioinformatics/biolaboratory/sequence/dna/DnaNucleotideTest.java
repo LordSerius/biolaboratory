@@ -106,7 +106,6 @@ public class DnaNucleotideTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldFindDnaNucleotideThrowException(char dnaNucleotideLetter) {
         DnaNucleotide.findDnaNucleotide(dnaNucleotideLetter);
-        fail();
     }
 
     @Test(dataProvider = VALID_FIND_DNA_NUCLEOTIDE_DATA_PROVIDER_NAME)
@@ -119,7 +118,6 @@ public class DnaNucleotideTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldFindDnaNucleotideAboutStringThrowException(String dnaNucleotideLetter) {
         DnaNucleotide.findDnaNucleotide(dnaNucleotideLetter);
-        fail();
     }
 
     @Test(dataProvider = VALID_FIND_DNA_NUCLEOTIDE_ABOUT_STRING_DATA_PROVIDER_NAME)
@@ -132,7 +130,6 @@ public class DnaNucleotideTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldFindDnaNucleotideComplementThrowException(char dnaNucleotideLetter) {
         DnaNucleotide.findDnaNucleotideComplement(dnaNucleotideLetter);
-        fail();
     }
 
     @Test(dataProvider = VALID_FIND_DNA_NUCLEOTIDE_COMPLEMENT_DATA_PROVIDER_NAME)
@@ -145,7 +142,6 @@ public class DnaNucleotideTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldFindDnaNucleotideComplementAboutStringThrowException(String dnaNucleotideLetter) {
         DnaNucleotide.findDnaNucleotide(dnaNucleotideLetter);
-        fail();
     }
 
     @Test(dataProvider = VALID_FIND_DNA_NUCLEOTIDE_COMPLEMENT_ABOUT_STRING_DATA_PROVIDER_NAME)

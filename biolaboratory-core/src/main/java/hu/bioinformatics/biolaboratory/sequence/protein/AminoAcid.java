@@ -1,13 +1,15 @@
 package hu.bioinformatics.biolaboratory.sequence.protein;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
 import hu.bioinformatics.biolaboratory.sequence.SequenceElement;
-import org.apache.commons.lang3.StringUtils;
+import hu.bioinformatics.biolaboratory.utils.ArgumentValidator;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
+import static com.google.common.base.Preconditions.checkArgument;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkNotBlankString;
 
 /**
  * Contains the nucleotide information and data which are the building pieces of a protein.
@@ -82,9 +84,9 @@ public enum AminoAcid implements SequenceElement {
      * @throws IllegalArgumentException If aminoAcidLetter is not 1 character after trim.
      */
     public static AminoAcid findAminoAcid(final String aminoAcidLetter) {
-        Preconditions.checkArgument(StringUtils.isNotBlank(aminoAcidLetter), "Amino acid letter should not be empty");
+        checkNotBlankString("Amino acid letter", aminoAcidLetter);
         String normalizedAminoAcidLetter = aminoAcidLetter.trim();
-        Preconditions.checkArgument(normalizedAminoAcidLetter.length() == 1, "This is not a letter");
+        ArgumentValidator.checkEqualNumberTo("Letter", normalizedAminoAcidLetter.length(), 1);
         return findAminoAcid(normalizedAminoAcidLetter.charAt(0));
     }
 
@@ -97,7 +99,7 @@ public enum AminoAcid implements SequenceElement {
      */
     public static AminoAcid findAminoAcid(final char aminoAcidLetter) {
         AminoAcid aminoAcid = CHARACTER_AMINO_ACD_LOOKUP.get(Character.toUpperCase(aminoAcidLetter));
-        Preconditions.checkArgument(aminoAcid != null, "\"" + aminoAcidLetter + "\" is not a amino acid letter");
+        checkArgument(aminoAcid != null, "\"" + aminoAcidLetter + "\" is not a amino acid letter");
         return aminoAcid;
     }
 

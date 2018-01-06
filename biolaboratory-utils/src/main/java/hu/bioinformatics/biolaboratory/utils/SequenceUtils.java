@@ -1,11 +1,10 @@
 package hu.bioinformatics.biolaboratory.utils;
 
-import com.google.common.base.Preconditions;
-import com.sun.javafx.binding.StringFormatter;
-
 import java.util.stream.IntStream;
 
-import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.notNullArgument;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkEqualNumberTo;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkNotNegativeNumber;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkNotNullArgument;
 
 /**
  * Provides extra methods for {@link String} operations.
@@ -51,7 +50,7 @@ public class SequenceUtils {
      */
     public static int hammingDistanceMismatchComparator(final String sequence, final String otherSequence, final int mismatch) {
         validateSequences(sequence, otherSequence);
-        Preconditions.checkArgument(mismatch >= 0, "Mismatch should be greater or equal than 0");
+        checkNotNegativeNumber("Mismatch", mismatch);
 
         int length = sequence.length();
         int currentMismatch = 0;
@@ -66,9 +65,8 @@ public class SequenceUtils {
     }
 
     private static void validateSequences(final String sequence, final String otherSequence) {
-        notNullArgument("Sequence", sequence);
-        notNullArgument("Other sequence", otherSequence);
-        int length = sequence.length();
-        Preconditions.checkArgument(sequence.length() == otherSequence.length(), StringFormatter.format("The length of the two sequences are not equal %d != %d", length, otherSequence.length()));
+        checkNotNullArgument("Sequence", sequence);
+        checkNotNullArgument("Other sequence", otherSequence);
+        checkEqualNumberTo("First sequence", sequence.length(), "second sequence", otherSequence.length());
     }
 }

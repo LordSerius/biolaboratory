@@ -97,7 +97,6 @@ public class AminoAcidTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldFindAminoAcidThrowException(char aminoAcidLetter) {
         AminoAcid.findAminoAcid(aminoAcidLetter);
-        fail();
     }
 
     @Test(dataProvider = VALID_FIND_AMINO_ACID_DATA_PROVIDER_NAME)
@@ -110,7 +109,6 @@ public class AminoAcidTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldFindAminoAcidAboutStringThrowException(String aminoAcidLetter) {
         AminoAcid.findAminoAcid(aminoAcidLetter);
-        fail();
     }
 
     @Test(dataProvider = VALID_FIND_AMINO_ACID_ABOUT_STRING_DATA_PROVIDER_NAME)

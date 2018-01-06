@@ -1,10 +1,10 @@
 package hu.bioinformatics.biolaboratory.sequence.dna;
 
-import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.UncheckedExecutionException;
 import hu.bioinformatics.biolaboratory.sequence.BiologicalSequence;
 import hu.bioinformatics.biolaboratory.sequence.rna.Rna;
 import hu.bioinformatics.biolaboratory.sequence.rna.RnaNucleotide;
+import hu.bioinformatics.biolaboratory.utils.ArgumentValidator;
 import hu.bioinformatics.biolaboratory.utils.datastructures.OccurrenceMap;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -20,9 +20,8 @@ import java.util.concurrent.Future;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
-import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.notNullCollection;
-import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.notEmptyCollection;
-import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.notEmptyVarargs;
+import static com.google.common.base.Preconditions.checkArgument;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkPositiveNumber;
 
 /**
  * Represents a single DNA about the genome sequence in 5' -> 3' order.
@@ -82,7 +81,7 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
      * @throws IllegalArgumentException If nucleotides contains null element.
      */
     public static Dna build(final DnaNucleotide... nucleotides) {
-        return new Dna(notEmptyVarargs(nucleotides));
+        return new Dna(ArgumentValidator.checkNotEmptyVarargs(nucleotides));
     }
 
     /**
@@ -95,7 +94,7 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
      * @throws IllegalArgumentException If nucleotides contains null element.
      */
     public static Dna build(final String name, final DnaNucleotide... nucleotides) {
-        return new Dna(validateName(name), notEmptyVarargs(nucleotides));
+        return new Dna(validateName(name), ArgumentValidator.checkNotEmptyVarargs(nucleotides));
     }
 
     /**
@@ -108,7 +107,7 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
      * @throws IllegalArgumentException If nucleotideList contains null element.
      */
     public static Dna build(final List<DnaNucleotide> nucleotideList) {
-        return new Dna(notEmptyCollection(nucleotideList));
+        return new Dna(ArgumentValidator.checkNotEmptyCollection(nucleotideList));
     }
 
     /**
@@ -119,12 +118,12 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
      * @return A new {@link Dna} object which stand from the nucleotides
      */
     public static Dna build(final String name, final List<DnaNucleotide> nucleotideList) {
-        return new Dna(validateName(name), notNullCollection(nucleotideList));
+        return new Dna(validateName(name), ArgumentValidator.checkNotNullCollection(nucleotideList));
     }
 
     private static String validateSequence(final String sequence) {
         String uppercaseSequence = formatSequence(sequence);
-        Preconditions.checkArgument(SEQUENCE_VALIDATOR_PATTERN.matcher(uppercaseSequence).matches(), "DNA should contains only the letters of nucleotides");
+        checkArgument(SEQUENCE_VALIDATOR_PATTERN.matcher(uppercaseSequence).matches(), "DNA should contains only the letters of nucleotides");
         return uppercaseSequence;
     }
 
@@ -136,7 +135,7 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
      * @throws IllegalArgumentException If length is smaller than 1.
      */
     public static Set<Dna> generatePatternDnas(final int length) {
-        Preconditions.checkArgument(length > 0, "Findable subsequence length (k) should be greater than 0");
+        checkPositiveNumber("Findable subsequence length (k)", length);
 
         return Dna.build(IntStream.range(0, length)
                 .mapToObj(index -> DnaNucleotide.values()[0])
@@ -290,8 +289,8 @@ public class Dna extends BiologicalSequence<Dna, DnaNucleotide> {
      * @throws IllegalArgumentException If <i>d</i> is negative number.
      */
     private OccurrenceMap<Dna> getReverseComplementMismatchOccurrenceMap(final int k, final int d) {
-        Preconditions.checkArgument(k > 0, "Findable subsequence length (k) should be greater than 0");
-        Preconditions.checkArgument(k <= sequenceLength, "Findable subsequence length (k) should be smaller or equals to the sequence length");
+        checkPositiveNumber("Findable subsequence (k)", k);
+        ArgumentValidator.checkSmallerOrEqualNumberTo("Findable subsequence (k)", k, "sequence length", sequenceLength);
 
         OccurrenceMap<Dna> occurrenceMap = OccurrenceMap.build();
         int lengthDiff = sequenceLength - k;

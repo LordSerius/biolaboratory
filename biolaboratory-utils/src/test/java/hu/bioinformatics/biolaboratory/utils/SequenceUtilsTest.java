@@ -18,7 +18,6 @@ public class SequenceUtilsTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldHammingDistanceThrowException(String sequence, String otherSequence) {
         SequenceUtils.hammingDistance(sequence, otherSequence);
-        fail();
     }
 
     @Test(dataProvider = SequenceUtilsTestDataProvider.VALID_HAMMING_DISTANCE_DATA_PROVIDER_NAME)
@@ -31,7 +30,6 @@ public class SequenceUtilsTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldHammingDistanceMismatchComparatorThrowException(String sequence, String otherSequence, int mismatch) {
         SequenceUtils.hammingDistanceMismatchComparator(sequence, otherSequence, mismatch);
-        fail();
     }
 
     @Test(dataProvider = SequenceUtilsTestDataProvider.VALID_HAMMING_DISTANCE_MISMATCH_COMPARATOR_DATA_PROVIDER_NAME)

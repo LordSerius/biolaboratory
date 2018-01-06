@@ -12,8 +12,12 @@ import java.util.List;
 import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.testng.Assert.fail;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.closeTo;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.sameInstance;
 
 /**
  * Unit tests for the {@link BiologicalSequence} class.
@@ -38,7 +42,6 @@ public class BiologicalSequenceTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldChangeNameThrowException(BiologicalSequence biologicalSequence, String name) {
         biologicalSequence.changeName(name);
-        fail();
     }
 
     @Test(dataProvider = BiologicalSequenceTestDataProvider.VALID_CHANGE_NAME_DATA_PROVIDER_NAME)
@@ -56,7 +59,6 @@ public class BiologicalSequenceTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldGetElementThrowException(BiologicalSequence biologicalSequence, int index) {
         biologicalSequence.getElement(index);
-        fail();
     }
 
     @Test(dataProvider = BiologicalSequenceTestDataProvider.VALID_GET_ELEMENT_DATA_PROVIDER_NAME)
@@ -93,7 +95,6 @@ public class BiologicalSequenceTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldGetElementNumberThrowException(BiologicalSequence biologicalSequence, SequenceElement sequenceElement) {
         biologicalSequence.getElementNumber(sequenceElement);
-        fail();
     }
 
     @Test(dataProvider = BiologicalSequenceTestDataProvider.VALID_GET_ELEMENT_NUMBER_DATA_PROVIDER_NAME)
@@ -106,7 +107,6 @@ public class BiologicalSequenceTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldGetElementsNumberThrowException(BiologicalSequence biologicalSequence, SequenceElement[] sequenceElements) {
         biologicalSequence.getElementsNumber(sequenceElements);
-        fail();
     }
 
     @Test(dataProvider = BiologicalSequenceTestDataProvider.VALID_GET_ELEMENTS_NUMBER_DATA_PROVIDER_NAME)
@@ -119,7 +119,6 @@ public class BiologicalSequenceTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldGetElementNumberAboutSetThrowException(BiologicalSequence biologicalSequence, Set<SequenceElement> sequenceElementSet) {
         biologicalSequence.getElementsNumber(sequenceElementSet);
-        fail();
     }
 
     @Test(dataProvider = BiologicalSequenceTestDataProvider.VALID_GET_ELEMENTS_NUMBER_ABOUT_SET_DATA_PROVIDER_NAME)
@@ -132,7 +131,6 @@ public class BiologicalSequenceTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldGetElementRatioThrowException(BiologicalSequence biologicalSequence, SequenceElement sequenceElement) {
         biologicalSequence.getElementRatio(sequenceElement);
-        fail();
     }
 
     @Test(dataProvider = BiologicalSequenceTestDataProvider.VALID_GET_RATIO_DATA_PROVIDER_NAME)
@@ -145,7 +143,6 @@ public class BiologicalSequenceTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldGetElementsRatioThrowException(BiologicalSequence biologicalSequence, SequenceElement[] sequenceElements) {
         biologicalSequence.getElementsRatio(sequenceElements);
-        fail();
     }
 
     @Test(dataProvider = BiologicalSequenceTestDataProvider.VALID_GET_RATIOS_DATA_PROVIDER_NAME)
@@ -158,7 +155,6 @@ public class BiologicalSequenceTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldGetElementRatioAboutSetThrowException(BiologicalSequence biologicalSequence, Set<SequenceElement> sequenceElementSet) {
         biologicalSequence.getElementsNumber(sequenceElementSet);
-        fail();
     }
 
     @Test(dataProvider = BiologicalSequenceTestDataProvider.VALID_GET_RATIOS_ABOUT_SET_DATA_PROVIDER_NAME)
@@ -171,14 +167,12 @@ public class BiologicalSequenceTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldAppendThrowException(BiologicalSequence biologicalSequence, BiologicalSequence otherBiologicalSequence) {
         biologicalSequence.append(otherBiologicalSequence);
-        fail();
     }
 
     @Test(dataProvider = BiologicalSequenceTestDataProvider.INVALID_APPEND_ELEMENT_DATA_PROVIDER_NAME,
             expectedExceptions = IllegalArgumentException.class)
     public void shouldAppendElementThrowElement(BiologicalSequence biologicalSequence, SequenceElement sequenceElement) {
         biologicalSequence.append(sequenceElement);
-        fail();
     }
 
     @Test(dataProvider = BiologicalSequenceTestDataProvider.VALID_APPEND_DATA_PROVIDER_NAME)
@@ -197,7 +191,6 @@ public class BiologicalSequenceTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldCutPartThrowException(BiologicalSequence biologicalSequence, int startPosition, int endPosition) {
         biologicalSequence.cut(startPosition, endPosition);
-        fail();
     }
 
     @Test(dataProvider = BiologicalSequenceTestDataProvider.VALID_CUT_PARTS_DATA_PROVIDER_NAME)
@@ -210,7 +203,6 @@ public class BiologicalSequenceTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldCutToTheEndThrowException(BiologicalSequence biologicalSequence, int startPosition) {
         biologicalSequence.cut(startPosition);
-        fail();
     }
 
     @Test(dataProvider = BiologicalSequenceTestDataProvider.VALID_CUT_TO_END_DATA_PROVIDER_NAME)
@@ -223,7 +215,6 @@ public class BiologicalSequenceTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldPatternMatchingThrowExceptionForBlankPattern(BiologicalSequence biologicalSequence, BiologicalSequence pattern) {
         biologicalSequence.patternMatching(pattern);
-        fail();
     }
 
     @Test(dataProvider = BiologicalSequenceTestDataProvider.VALID_PATTERN_ARGUMENTS_DATA_PROVIDER_NAME)
@@ -236,7 +227,6 @@ public class BiologicalSequenceTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldFindMinimumMismatchSubSequencesNumberThrowException(BiologicalSequence biologicalSequence, BiologicalSequence pattern) {
         biologicalSequence.findMinimumMismatchSubSequenceNumber(pattern);
-        fail();
     }
 
     @Test(dataProvider = BiologicalSequenceTestDataProvider.VALID_FIND_MINIMUM_MISMATCH_SUB_SEQUENCES_NUMBER_DATA_PROVIDER_NAME)
@@ -249,7 +239,6 @@ public class BiologicalSequenceTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldPatternCountThrowExceptionForBlankPattern(BiologicalSequence biologicalSequence, BiologicalSequence pattern) {
         biologicalSequence.patternCount(pattern);
-        fail();
     }
 
     @Test(dataProvider = BiologicalSequenceTestDataProvider.VALID_PATTERN_ARGUMENTS_DATA_PROVIDER_NAME)
@@ -262,14 +251,12 @@ public class BiologicalSequenceTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldThrowExceptionForPatternMatchingWithMismatches(BiologicalSequence biologicalSequence, BiologicalSequence pattern, int d) {
         biologicalSequence.patternMatchingWithMismatches(pattern, d);
-        fail();
     }
 
     @Test(dataProvider = BiologicalSequenceTestDataProvider.INVALID_PATTERN_ARGUMENTS_WITH_MISMATCHES_DATA_PROVIDER_NAME,
             expectedExceptions = IllegalArgumentException.class)
     public void shouldThrowExceptionForPatternCountWithMismatches(BiologicalSequence biologicalSequence, BiologicalSequence pattern, int d) {
         biologicalSequence.patternCountWithMismatches(pattern, d);
-        fail();
     }
 
     @Test(dataProvider = BiologicalSequenceTestDataProvider.VALID_PATTERN_ARGUMENTS_WITH_MISMATCHES_DATA_PROVIDER_NAME)
@@ -282,7 +269,6 @@ public class BiologicalSequenceTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldGetSubSequenceThrowException(BiologicalSequence biologicalSequence, int k) {
         biologicalSequence.getSubSequences(k);
-        fail();
     }
 
     @Test(dataProvider = BiologicalSequenceTestDataProvider.VALID_GET_SUB_SEQUENCES_DATA_PROVIDER_NAME)
@@ -295,7 +281,6 @@ public class BiologicalSequenceTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldGetMismatchSubSequencesThrowException(BiologicalSequence biologicalSequence, int k, int d) {
         biologicalSequence.getMismatchSubSequences(k, d);
-        fail();
     }
 
     @Test(dataProvider = BiologicalSequenceTestDataProvider.VALID_GET_MISMATCH_SUB_SEQUENCES_DATA_PROVIDER_NAME)
@@ -308,7 +293,6 @@ public class BiologicalSequenceTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldFindMostFrequentSubSequencesThrowException(BiologicalSequence biologicalSequence, int k) {
         biologicalSequence.findMostFrequentSubSequences(k);
-        fail();
     }
 
     @Test(dataProvider = BiologicalSequenceTestDataProvider.VALID_FIND_MOST_FREQUENT_SUB_SEQUENCES_DATA_PROVIDER_NAME)
@@ -321,7 +305,6 @@ public class BiologicalSequenceTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldFindMostFrequentMismatchSubSequencesThrowException(BiologicalSequence biologicalSequence, int k, int d) {
         biologicalSequence.findMostFrequentMismatchSubSequences(k, d);
-        fail();
     }
 
     @Test(dataProvider = BiologicalSequenceTestDataProvider.VALID_FIND_MOST_FREQUENT_MISMATCH_SUB_SEQUENCES_DATA_PROVIDER_NAME)
@@ -334,7 +317,6 @@ public class BiologicalSequenceTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldFindFrequentSubSequencesThrowException(BiologicalSequence biologicalSequence, int k, int t) {
         biologicalSequence.findFrequentSubSequences(k, t);
-        fail();
     }
 
     @Test(dataProvider = BiologicalSequenceTestDataProvider.VALID_FIND_FREQUENT_SUB_SEQUENCES_DATA_PROVIDER_NAME)
@@ -347,7 +329,6 @@ public class BiologicalSequenceTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldFindFrequentMismatchSubSequencesThrowException(BiologicalSequence biologicalSequence, int k, int d, int t) {
         biologicalSequence.findFrequentMismatchSubSequences(k, d, t);
-        fail();
     }
 
     @Test(dataProvider = BiologicalSequenceTestDataProvider.VALID_FIND_FREQUENT_MISMATCH_SUB_SEQUENCES_DATA_PROVIDER_NAME)
@@ -360,7 +341,6 @@ public class BiologicalSequenceTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldFindPatternsInClumpsThrowException(BiologicalSequence biologicalSequence, int k, int L, int t) {
         biologicalSequence.findPatternsInClumps(k, L, t);
-        fail();
     }
 
     @Test(dataProvider = BiologicalSequenceTestDataProvider.VALID_SUBSEQUENCES_IN_CLUMPS_DATA_PROVIDER_NAME)
@@ -373,7 +353,6 @@ public class BiologicalSequenceTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldGenerateMismatchesThrowException(BiologicalSequence biologicalSequence, int d) {
         biologicalSequence.generateMismatches(d);
-        fail();
     }
 
     @Test(dataProvider = BiologicalSequenceTestDataProvider.VALID_GENERATE_MISMATCHES_DATA_PROVIDER_NAME)
@@ -386,7 +365,6 @@ public class BiologicalSequenceTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldThrowExceptionForGetMismatchNumber(BiologicalSequence biologicalSequence1, BiologicalSequence biologicalSequence2) {
         biologicalSequence1.getMismatchNumber(biologicalSequence2);
-        fail();
     }
 
     @Test(dataProvider = BiologicalSequenceTestDataProvider.VALID_HAMMING_DISTANCE_DATA_PROVIDER_NAME)

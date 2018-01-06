@@ -1,8 +1,8 @@
 package hu.bioinformatics.biolaboratory.resource.extension.impl;
 
-import com.google.common.base.Preconditions;
 import hu.bioinformatics.biolaboratory.resource.extension.ResourceValidator;
-import org.apache.commons.lang3.StringUtils;
+
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkNotBlankString;
 
 /**
  * Validates the resource is not blank.
@@ -12,6 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 public class SimpleResourceValidator implements ResourceValidator {
     @Override
     public void validate(final String resourcePath) {
-        Preconditions.checkArgument(StringUtils.isNotBlank(resourcePath), "Resource path should not be blank");
+        checkNotBlankString("Resource path", resourcePath);
     }
 }

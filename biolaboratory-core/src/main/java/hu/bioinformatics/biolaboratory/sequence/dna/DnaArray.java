@@ -1,6 +1,6 @@
 package hu.bioinformatics.biolaboratory.sequence.dna;
 
-import com.google.common.base.Preconditions;
+import hu.bioinformatics.biolaboratory.utils.ArgumentValidator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,8 +13,13 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.notEmptyCollection;
-import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.notEmptyVarargs;
+import static com.google.common.base.Preconditions.checkArgument;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkEqualNumberTo;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkGreaterOrEqualNumberTo;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkNotNegativeNumber;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkNotNullArgument;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkNotNullVarargs;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkPositiveNumber;
 
 /**
  * A collection of {@link Dna}s which provide motif finding methods on them. Every included {@link Dna} should be the
@@ -37,7 +42,7 @@ public class DnaArray {
      * @throws IllegalArgumentException If dna elements have different lengths.
      */
     public static DnaArray build(final Dna... dnas) {
-        return innerBuild(Arrays.asList(notEmptyVarargs(dnas)));
+        return innerBuild(Arrays.asList(ArgumentValidator.checkNotEmptyVarargs(dnas)));
     }
 
     /**
@@ -48,7 +53,7 @@ public class DnaArray {
      * @throws IllegalArgumentException If dna elements have different lengths.
      */
     public static DnaArray build(final List<Dna> dnaList) {
-        return innerBuild(notEmptyCollection(dnaList));
+        return innerBuild(ArgumentValidator.checkNotEmptyCollection(dnaList));
     }
 
     private static DnaArray innerBuild(final List<Dna> dnaList) {
@@ -57,7 +62,7 @@ public class DnaArray {
 
     private static List<Dna> validateDnaArray(final List<Dna> dnaList) {
         int length = dnaList.get(0).getSequenceLength();
-        Preconditions.checkArgument(dnaList.stream()
+        checkArgument(dnaList.stream()
                 .allMatch(dna -> dna.getSequenceLength() == length), "DNA lengths inside DNA array should be the same");
         return dnaList;
     }
@@ -164,7 +169,7 @@ public class DnaArray {
      * @return
      */
     public DnaArray add(final Dna... dnas) {
-        Preconditions.checkArgument(dnas != null, "Dna varargs should not be null");
+        checkNotNullVarargs("DNA varargs", dnas);
         return dnas.length == 0 ? DnaArray.build(sampleList) : innerAdd(DnaArray.build(dnas));
     }
 
@@ -175,7 +180,7 @@ public class DnaArray {
      * @return
      */
     public DnaArray add(final List<Dna> dnaList) {
-        Preconditions.checkArgument(dnaList != null, "Dna list should not be null");
+        checkNotNullArgument("DNA list", dnaList);
         return dnaList.isEmpty() ? DnaArray.build(sampleList) : innerAdd(DnaArray.build(dnaList));
     }
 
@@ -186,12 +191,11 @@ public class DnaArray {
      * @return
      */
     public DnaArray add(final DnaArray otherDnaArray) {
-        Preconditions.checkArgument(otherDnaArray != null, "Other DNA array should not be null");
-        return innerAdd(otherDnaArray);
+        return innerAdd(checkNotNullArgument("Other DNA array", otherDnaArray));
     }
 
     private DnaArray innerAdd(final DnaArray otherDnaArray) {
-        Preconditions.checkArgument(samplesLength == otherDnaArray.samplesLength, "DNA array lengths are differ");
+        checkEqualNumberTo("Other DNA array samples length", otherDnaArray.samplesLength, "DNA array samples length", samplesLength);
         List<Dna> addedList = new ArrayList<>(sampleNumber + otherDnaArray.samplesLength);
         addedList.addAll(sampleList);
         addedList.addAll(otherDnaArray.sampleList);
@@ -212,9 +216,9 @@ public class DnaArray {
      * @throws IllegalArgumentException If <i>d</i> is negative number.
      */
     public Set<Dna> findMostFrequentMotifsExhausting(final int k, final int d) {
-        Preconditions.checkArgument(k > 0, "Findable subsequence length (k) should be greater than 0");
-        Preconditions.checkArgument(k <= samplesLength, "Findable subsequence length (k) should be smaller or equals to the samples length");
-        Preconditions.checkArgument(d >= 0, "Maximum mismatch number (d) should be greater or equals than 0");
+        checkPositiveNumber("Findable subsequence length (k)", k);
+        ArgumentValidator.checkSmallerOrEqualNumberTo("Findable subsequence length (k)", k, "samples length", samplesLength);
+        checkNotNegativeNumber("Maximum mismatch number (d)", d);
 
         Set<Set<Dna>> mostFrequentSampleSet = sampleList.stream()
                                                         .parallel()
@@ -239,8 +243,8 @@ public class DnaArray {
      * @throws IllegalArgumentException If <i>k</i> is bigger than samples length.
      */
     public Set<Dna> findMostFrequentMotifsMedianString(final int k) {
-        Preconditions.checkArgument(k <= samplesLength, "Findable subsequence length (k) should be smaller or equals to the samples length");
-        Preconditions.checkArgument(k <= samplesLength, "Findable subsequence length (k) should be smaller or equals to the samples length");
+        checkPositiveNumber("Findable subsequences length (k)", k);
+        ArgumentValidator.checkSmallerOrEqualNumberTo("Findable subsequences length (k)", k, "samples length", samplesLength);
 
         Set<Dna> mismatchSet = Dna.generatePatternDnas(k);
 
@@ -271,9 +275,8 @@ public class DnaArray {
      * @throws IllegalArgumentException If dna sequence length is smaller than samples length.
      */
     public Set<Dna> profileMostProbableSubSequence(final Dna dna) {
-        Preconditions.checkArgument(dna != null, "Dna should not be null");
-        Preconditions.checkArgument(dna.getSequenceLength() >=  samplesLength,
-                "Dna length should greater or equal than sample length");
+        checkNotNullArgument("DNA", dna);
+        checkGreaterOrEqualNumberTo("DNA length", dna.getSequenceLength(), "samples length", samplesLength);
 
         Map<Dna, Double> patternProbabilityMap = dna.getSubSequences(samplesLength).stream()
                 .collect(Collectors.toMap(Function.identity(), this::innerPatternProbability));
@@ -303,9 +306,8 @@ public class DnaArray {
      * @throws IllegalArgumentException If dna sequence length is not equal than samples length.
      */
     public double patternProbability(final Dna sample) {
-        Preconditions.checkArgument(sample != null, "Sample should not be null");
-        Preconditions.checkArgument(sample.getSequenceLength() ==  samplesLength,
-                "Sample length differs than array length");
+        checkNotNullArgument("Sample", sample);
+        checkEqualNumberTo("Sample length", sample.getSequenceLength(), "DNA array length", samplesLength);
         return innerPatternProbability(sample);
     }
 

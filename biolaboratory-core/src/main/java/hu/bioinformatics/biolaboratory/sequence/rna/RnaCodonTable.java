@@ -1,6 +1,5 @@
 package hu.bioinformatics.biolaboratory.sequence.rna;
 
-import com.google.common.base.Preconditions;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
@@ -11,6 +10,7 @@ import hu.bioinformatics.biolaboratory.resource.extension.ResourceLocalizer;
 import hu.bioinformatics.biolaboratory.resource.read.LineReader;
 import hu.bioinformatics.biolaboratory.resource.read.ResourceReader;
 import hu.bioinformatics.biolaboratory.sequence.protein.AminoAcid;
+import hu.bioinformatics.biolaboratory.utils.ArgumentValidator;
 import hu.bioinformatics.biolaboratory.utils.datastructures.CommentedString;
 
 import java.util.AbstractMap;
@@ -20,6 +20,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkNotNullArgument;
 
 /**
  * Contains the coding RNA sequences and its decoded amino acid representation. The return value is always an
@@ -67,8 +69,8 @@ public class RnaCodonTable {
      * @throws IllegalArgumentException If {@link Rna} is null or its sequence is not 3.
      */
     public static Optional<AminoAcid> lookup(final Rna rna) {
-        Preconditions.checkArgument(rna != null, "RNA should not be null");
-        Preconditions.checkArgument(rna.getSequenceLength() == 3, "RNA length should be 3");
+        checkNotNullArgument("RNA", rna);
+        ArgumentValidator.checkEqualNumberTo("RNA length", rna.getSequenceLength(), 3);
         return codonTable.get(rna);
     }
 }

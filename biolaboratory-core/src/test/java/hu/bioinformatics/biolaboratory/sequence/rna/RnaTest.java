@@ -9,7 +9,6 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.testng.Assert.fail;
 
 /**
  * Unit tests for {@link Rna} class
@@ -23,21 +22,18 @@ public class RnaTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldBuildThrowException(String name, String sequence) {
         Rna.build(name, sequence);
-        fail();
     }
 
     @Test(dataProvider = RnaTestDataProvider.INVALID_BUILD_FROM_ELEMENTS_DATA_PROVIDER_NAME,
             expectedExceptions = IllegalArgumentException.class)
     public void shouldBuildFromNucleotidesThrowException(RnaNucleotide[] rnaNucleotides) {
         Rna.build(rnaNucleotides);
-        fail();
     }
 
     @Test(dataProvider = RnaTestDataProvider.INVALID_BUILD_FROM_ELEMENT_LIST_DATA_PROVIDER_NAME,
             expectedExceptions = IllegalArgumentException.class)
     public void shouldBuildFromNucleotideListThrowException(List<RnaNucleotide> rnaNucleotideList) {
         Rna.build(rnaNucleotideList);
-        fail();
     }
 
     @Test(dataProvider = RnaTestDataProvider.VALID_BUILD_DATA_PROVIDER_NAME)
@@ -67,7 +63,6 @@ public class RnaTest {
             expectedExceptions = RnaTranslationException.class)
     public void shouldTranslateThrowException(Rna rna) throws RnaTranslationException {
         rna.translate();
-        fail();
     }
 
     @Test(dataProvider = RnaTestDataProvider.VALID_TRANSLATE_DATA_PROVIDER_NAME)

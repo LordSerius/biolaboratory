@@ -1,7 +1,7 @@
 package hu.bioinformatics.biolaboratory.utils.datastructures;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
+import hu.bioinformatics.biolaboratory.utils.ArgumentValidator;
 
 import java.util.AbstractMap;
 import java.util.Arrays;
@@ -15,8 +15,10 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.notNullCollection;
-import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.notNullVarargs;
+import static com.google.common.base.Preconditions.checkArgument;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkNotNegativeNumber;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkNotNullArgument;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkPositiveNumber;
 
 /**
  * A data structure which contains different not null keys and the occurrence numbers.
@@ -49,7 +51,7 @@ public class OccurrenceMap<K> {
      */
     public static <K> OccurrenceMap<K> build(final Map<K, Integer> occurrences) {
         if (occurrences == null) return new OccurrenceMap<>(null);
-        Preconditions.checkArgument(occurrences.entrySet().stream()
+        checkArgument(occurrences.entrySet().stream()
                         .allMatch(entry -> entry.getKey() != null && (entry.getValue() == null || entry.getValue() >= 0)),
                 "Occurrences should not contain null keys or negative elements");
         return new OccurrenceMap<>(
@@ -365,7 +367,7 @@ public class OccurrenceMap<K> {
      * @throws IllegalArgumentException If filterPredicate is null.
      */
     public OccurrenceMap<K> filterMerge(final OccurrenceMap<K> otherOccurrenceMap, final Predicate<Map.Entry<K, Integer>> filterPredicate) {
-        Preconditions.checkArgument(filterPredicate != null, "Filter predicate should not be null");
+        checkNotNullArgument("Filter predicate", filterPredicate);
         return new OccurrenceMap<>(filterMergeOccurrences(otherOccurrenceMap, filterPredicate.and(entry -> entry.getValue() > 0)));
     }
 
@@ -380,8 +382,8 @@ public class OccurrenceMap<K> {
      * @throws IllegalArgumentException If filterPredicate is null.
      */
     protected final Map<K, Integer> filterMergeOccurrences(final OccurrenceMap<K> otherOccurrenceMap, final Predicate<Map.Entry<K, Integer>> filterPredicate) {
-        Preconditions.checkArgument(otherOccurrenceMap != null, "Cannot merge with null");
-        Preconditions.checkArgument(filterPredicate != null, "Filter predicate should not be null");
+        checkNotNullArgument("Other occurrence map", otherOccurrenceMap);
+        checkNotNullArgument("Filter predicate", filterPredicate);
         Map<K, Integer> mergedOccurrences = new HashMap<>();
         Map<K, Integer> otherOccurrences = otherOccurrenceMap.getOccurrencesInMap();
         for (Map.Entry<K, Integer> entry : occurrenceMap.entrySet()) {
@@ -428,7 +430,7 @@ public class OccurrenceMap<K> {
         if (number == 0) return occurrence;
 
         int difference = occurrence - number;
-        Preconditions.checkArgument(difference >= 0, "Cannot subtract more occurrence than existing");
+        checkArgument(difference >= 0, "Cannot subtract more occurrence than existing");
         if (difference == 0) {
             occurrenceMap.remove(key);
         } else {
@@ -476,7 +478,7 @@ public class OccurrenceMap<K> {
      */
     @SafeVarargs
     protected final K[] validateKeys(final K... keys) {
-        Arrays.stream(notNullVarargs(keys)).forEach(this::validateKey);
+        Arrays.stream(ArgumentValidator.checkNotNullVarargs(keys)).forEach(this::validateKey);
         return keys;
     }
 
@@ -488,7 +490,7 @@ public class OccurrenceMap<K> {
      * @throws IllegalArgumentException If the key set contains null elements.
      */
     protected Set<K> validateKeySet(final Set<K> keySet) {
-        notNullCollection(keySet).forEach(this::validateKey);
+        ArgumentValidator.checkNotNullCollection(keySet).forEach(this::validateKey);
         return keySet;
     }
 
@@ -500,8 +502,7 @@ public class OccurrenceMap<K> {
      * @throws IllegalArgumentException If the key is null.
      */
     protected K validateKey(final K key) {
-        Preconditions.checkArgument(key != null, "Key should not be null");
-        return key;
+        return checkNotNullArgument("Key", key);
     }
 
     /**
@@ -511,7 +512,7 @@ public class OccurrenceMap<K> {
      * @throws IllegalArgumentException If number is lesser than 0.
      */
     protected void validateInputNumber(final int number) {
-        Preconditions.checkArgument(number >= 0, "Number should greater or equals than 0");
+        checkNotNegativeNumber("Number", number);
     }
     
     /**
@@ -589,8 +590,7 @@ public class OccurrenceMap<K> {
      * @throws IllegalArgumentException If threshold is smaller than 1.
      */
     protected int validateThreshold(final int threshold) {
-        Preconditions.checkArgument(threshold > 0, "Threshold should not smaller than 1");
-        return threshold;
+        return checkPositiveNumber("Threshold", threshold);
     }
 
     /**
@@ -612,7 +612,7 @@ public class OccurrenceMap<K> {
      * @throws IllegalArgumentException If filterPredicate is null.
      */
     protected final Map<K, Integer> filterOccurrences(final Predicate<Map.Entry<K, Integer>> filterPredicate) {
-        Preconditions.checkArgument(filterPredicate != null, "Filter predicate should not be null");
+        checkNotNullArgument("Filter predicate", filterPredicate);
         return occurrenceMap.entrySet().stream()
                 .filter(filterPredicate)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));

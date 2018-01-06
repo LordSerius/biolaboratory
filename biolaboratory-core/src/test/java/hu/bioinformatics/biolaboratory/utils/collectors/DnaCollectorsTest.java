@@ -11,7 +11,6 @@ import java.util.Set;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.testng.Assert.fail;
 
 /**
  * Test cases for {@link DnaCollectors} class.
@@ -25,7 +24,6 @@ public class DnaCollectorsTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldStringArrayToDnaListThrowException(String[] stringArray) {
         DnaCollectors.stringToDnaList(stringArray);
-        fail();
     }
 
     @Test(dataProvider = DnaCollectorsTestDataProvider.VALID_STRING_ARRAY_TO_DNA_LIST_DATA_PROVIDER_NAME)
@@ -38,7 +36,6 @@ public class DnaCollectorsTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldCommentedStringArrayToDnaListThrowException(CommentedString[] commentedStringArray) {
         DnaCollectors.commentedStringToDnaList(commentedStringArray);
-        fail();
     }
 
     @Test(dataProvider = DnaCollectorsTestDataProvider.VALID_COMMENTED_STRING_ARRAY_TO_DNA_LIST_DATA_PROVIDER_NAME)
@@ -51,7 +48,6 @@ public class DnaCollectorsTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldStringCollectionToDnaListThrowException(Collection<String> stringCollection) {
         DnaCollectors.stringToDnaList(stringCollection);
-        fail();
     }
     
     @Test(dataProvider = DnaCollectorsTestDataProvider.VALID_STRING_COLLECTION_TO_DNA_LIST_DATA_PROVIDER_NAME)
@@ -64,7 +60,6 @@ public class DnaCollectorsTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldCommentedStringCollectionToDnaListThrowException(Collection<CommentedString> commentedStringCollection) {
         DnaCollectors.commentedStringToDnaList(commentedStringCollection);
-        fail();
     }
 
     @Test(dataProvider = DnaCollectorsTestDataProvider.VALID_COMMENTED_STRING_COLLECTION_TO_DNA_LIST_DATA_PROVIDER_NAME)
@@ -77,7 +72,6 @@ public class DnaCollectorsTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldStringArrayToDnaSetThrowException(String[] stringArray) {
         DnaCollectors.stringToDnaSet(stringArray);
-        fail();
     }
 
     @Test(dataProvider = DnaCollectorsTestDataProvider.VALID_STRING_ARRAY_TO_DNA_SET_DATA_PROVIDER_NAME)
@@ -90,7 +84,6 @@ public class DnaCollectorsTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldCommentedStringArrayToDnaSetThrowException(CommentedString[] commentedStringArray) {
         DnaCollectors.commentedStringToDnaSet(commentedStringArray);
-        fail();
     }
 
     @Test(dataProvider = DnaCollectorsTestDataProvider.VALID_COMMENTED_STRING_ARRAY_TO_DNA_SET_DATA_PROVIDER_NAME)
@@ -103,7 +96,6 @@ public class DnaCollectorsTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldStringCollectionToDnaSetThrowException(Collection<String> stringCollection) {
         DnaCollectors.stringToDnaSet(stringCollection);
-        fail();
     }
 
     @Test(dataProvider = DnaCollectorsTestDataProvider.VALID_STRING_COLLECTION_TO_DNA_SET_DATA_PROVIDER_NAME)
@@ -116,7 +108,6 @@ public class DnaCollectorsTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldCommentedStringCollectionToDnaSetThrowException(Collection<CommentedString> comentedStringCollection) {
         DnaCollectors.commentedStringToDnaSet(comentedStringCollection);
-        fail();
     }
 
     @Test(dataProvider = DnaCollectorsTestDataProvider.VALID_COMMENTED_STRING_COLLECTION_TO_DNA_SET_DATA_PROVIDER_NAME)
@@ -129,7 +120,6 @@ public class DnaCollectorsTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldStringArrayToDnaArrayThrowException(String[] stringArray) {
         DnaCollectors.stringToDnas(stringArray);
-        fail();
     }
 
     @Test(dataProvider = DnaCollectorsTestDataProvider.VALID_STRING_ARRAY_TO_DNA_ARRAY_DATA_PROVIDER_NAME)
@@ -142,7 +132,6 @@ public class DnaCollectorsTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldCommentedStringArrayToDnaArrayThrowException(CommentedString[] commentedStringArray) {
         DnaCollectors.commentedStringToDnas(commentedStringArray);
-        fail();
     }
 
     @Test(dataProvider = DnaCollectorsTestDataProvider.VALID_COMMENTED_STRING_ARRAY_TO_DNA_ARRAY_DATA_PROVIDER_NAME)
@@ -155,7 +144,6 @@ public class DnaCollectorsTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldStringCollectionToDnaArrayThrowException(Collection<String> stringCollection) {
         DnaCollectors.stringToDnas(stringCollection);
-        fail();
     }
 
     @Test(dataProvider = DnaCollectorsTestDataProvider.VALID_STRING_COLLECTION_TO_DNA_ARRAY_DATA_PROVIDER_NAME)
@@ -168,7 +156,6 @@ public class DnaCollectorsTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldCommentedStringCollectionToDnaArrayThrowException(Collection<CommentedString> commentedStringCollection) {
         DnaCollectors.commentedStringToDnas(commentedStringCollection);
-        fail();
     }
 
     @Test(dataProvider = DnaCollectorsTestDataProvider.VALID_COMMENTED_STRING_COLLECTION_TO_DNA_ARRAY_DATA_PROVIDER_NAME)

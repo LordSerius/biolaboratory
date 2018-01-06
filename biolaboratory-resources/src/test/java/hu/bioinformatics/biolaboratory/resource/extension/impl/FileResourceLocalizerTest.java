@@ -59,14 +59,12 @@ public class FileResourceLocalizerTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldLocalizeResourceThrowException(String resourceName) {
         fileResourceLocalizer.localizeResource(resourceName);
-        fail();
     }
 
     @Test(dataProvider = NOT_FOUND_LOCALIZE_RESOURCE_DATA_PROVIDER_NAME,
             expectedExceptions = UncheckedIOException.class)
     public void shouldLocalizeResourcesThrowFileNotFoundException(String resourceName) {
         fileResourceLocalizer.localizeResource(resourceName);
-        fail();
     }
 
     @Test(dataProvider = VALID_LOCALIZE_RESOURCE_DATA_PRIVIDER_NAME)

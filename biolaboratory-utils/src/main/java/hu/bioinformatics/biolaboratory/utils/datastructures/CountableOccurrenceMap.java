@@ -1,7 +1,5 @@
 package hu.bioinformatics.biolaboratory.utils.datastructures;
 
-import com.google.common.base.Preconditions;
-
 import java.util.AbstractMap;
 import java.util.Collections;
 import java.util.HashSet;
@@ -10,6 +8,9 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import static com.google.common.base.Preconditions.checkArgument;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkNotNegativeNumber;
 
 /**
  * An {@link OccurrenceMap} which has finite elements. It can store elements which has 0 occurrence and filtering with
@@ -39,7 +40,7 @@ public class CountableOccurrenceMap<K> extends OccurrenceMap<K> {
      * @throws IllegalArgumentException If occurrences contain null key, null value, or negative values.
      */
     public static <K> CountableOccurrenceMap<K> build(Map<K, Integer> occurrences) {
-        Preconditions.checkArgument(occurrences == null
+        checkArgument(occurrences == null
                         || occurrences.entrySet().stream().allMatch(entry -> entry.getKey() != null && entry.getValue() != null && entry.getValue() >= 0),
                 "Occurrences should not contain null keys or values");
         return new CountableOccurrenceMap<>(occurrences);
@@ -54,7 +55,7 @@ public class CountableOccurrenceMap<K> extends OccurrenceMap<K> {
      * @throws IllegalArgumentException If elementSet contain null key, null value, or negative values.
      */
     public static <K> CountableOccurrenceMap<K> build(Set<K> elementSet) {
-        Preconditions.checkArgument(elementSet == null
+        checkArgument(elementSet == null
                         || elementSet.stream().allMatch(Objects::nonNull),
                 "Null element is not permitted");
         return new CountableOccurrenceMap<>(elementSet);
@@ -127,10 +128,10 @@ public class CountableOccurrenceMap<K> extends OccurrenceMap<K> {
         validateInputNumber(number);
         int occurrence = occurrenceMap.getOrDefault(key, 0);
         if (number == 0) return occurrence;
-        Preconditions.checkArgument(occurrence > 0, "Cannot decrease occurrence from 0");
+        checkArgument(occurrence > 0, "Cannot decrease occurrence from 0");
 
         int difference = occurrence - number;
-        Preconditions.checkArgument(difference >= 0, "Cannot subtract more occurrence than existing");
+        checkArgument(difference >= 0, "Cannot subtract more occurrence than existing");
         occurrenceMap.put(key, difference);
 
         return difference;
@@ -213,7 +214,7 @@ public class CountableOccurrenceMap<K> extends OccurrenceMap<K> {
     @Override
     protected K validateKey(final K key) {
         super.validateKey(key);
-        Preconditions.checkArgument(occurrenceMap.containsKey(key), "The given key is not member of the key set");
+        checkArgument(occurrenceMap.containsKey(key), "The given key is not member of the key set");
         return key;
     }
 
@@ -250,8 +251,7 @@ public class CountableOccurrenceMap<K> extends OccurrenceMap<K> {
      */
     @Override
     protected int validateThreshold(final int threshold) {
-        Preconditions.checkArgument(threshold >= 0, "Threshold should not be negative number");
-        return threshold;
+        return checkNotNegativeNumber("Threshold", threshold);
     }
 
     @Override

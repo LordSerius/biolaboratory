@@ -76,7 +76,6 @@ public class RowReaderTest {
     public void shouldProcessResourcesThrowException(String path, Stream<String> content) throws IOException {
         ((MockReaderWrapperFactory) readerWrapperFactory).setLines(content);
         rowReader.read(path);
-        fail();
     }
 
     @Test(dataProvider = VALID_PROCESS_RESOURCE_DATA_PROVIDER_NAME)

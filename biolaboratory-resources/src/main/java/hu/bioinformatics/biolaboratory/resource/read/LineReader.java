@@ -1,6 +1,5 @@
 package hu.bioinformatics.biolaboratory.resource.read;
 
-import com.google.common.base.Preconditions;
 import hu.bioinformatics.biolaboratory.guice.GuiceResourceModule;
 import hu.bioinformatics.biolaboratory.resource.extension.ResourceReaderProvider;
 import hu.bioinformatics.biolaboratory.resource.extension.ResourceValidator;
@@ -14,6 +13,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * Reads a resource line by line. The lines contains only sequences.
@@ -40,7 +41,7 @@ public class LineReader extends ResourceReader {
         List<CommentedString> lines = reader.lines()
                 .map(line -> new CommentedString("", line))
                 .collect(Collectors.toCollection(ArrayList::new));
-        Preconditions.checkArgument(lines.size() >= 1, "Resource is empty");
+        checkArgument(lines.size() >= 1, "Resource is empty");
         return lines;
     }
 }

@@ -1,7 +1,6 @@
 package hu.bioinformatics.biolaboratory.resource.extension;
 
-import com.google.common.base.Preconditions;
-import org.apache.commons.lang3.StringUtils;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkNotBlankString;
 
 /**
  * Validates a resources with extension.
@@ -11,7 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 public abstract class ResourceExtensionValidator implements ResourceValidator {
     @Override
     public final void validate(final String resourcePath) {
-        Preconditions.checkArgument(StringUtils.isNotBlank(resourcePath), "Resource path should not be null");
+        checkNotBlankString("Resource path", resourcePath);
         validateExtension(resourcePath);
     }
 

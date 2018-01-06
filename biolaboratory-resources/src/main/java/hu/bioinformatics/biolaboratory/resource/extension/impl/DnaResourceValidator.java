@@ -1,9 +1,10 @@
 package hu.bioinformatics.biolaboratory.resource.extension.impl;
 
-import com.google.common.base.Preconditions;
 import hu.bioinformatics.biolaboratory.resource.extension.ResourceExtensionValidator;
 
 import java.util.regex.Pattern;
+
+import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * Validate DNA resource extensions.
@@ -16,6 +17,6 @@ public class DnaResourceValidator extends ResourceExtensionValidator {
 
     @Override
     protected void validateExtension(final String resourcePath) {
-        Preconditions.checkArgument(DNA_EXTENSION.matcher(resourcePath).matches(), "Resource should have .dna extension");
+        checkArgument(DNA_EXTENSION.matcher(resourcePath).matches(), "Resource should have .dna extension");
     }
 }

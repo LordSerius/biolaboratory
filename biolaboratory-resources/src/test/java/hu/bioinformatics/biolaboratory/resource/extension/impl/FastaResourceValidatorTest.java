@@ -49,7 +49,6 @@ public class FastaResourceValidatorTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldValidateThrowException(String fastaPath) {
         fastaResourceValidator.validate(fastaPath);
-        fail();
     }
 
     @Test(dataProvider = VALID_VALIDATE_DATA_PROVIDER_NAME)

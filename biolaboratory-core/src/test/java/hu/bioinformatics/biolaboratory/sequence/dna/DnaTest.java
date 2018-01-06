@@ -29,21 +29,18 @@ public class DnaTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldBuildThrowException(String name, String sequence) {
         Dna.build(name, sequence);
-        fail();
     }
 
     @Test(dataProvider = DnaTestDataProvider.INVALID_BUILD_FROM_ELEMENTS_DATA_PROVIDER_NAME,
             expectedExceptions = IllegalArgumentException.class)
     public void shouldBuildFromNucleotidesThrowException(DnaNucleotide[] dnaNucleotides) {
         Dna.build(dnaNucleotides);
-        fail();
     }
 
     @Test(dataProvider = DnaTestDataProvider.INVALID_BUILD_FROM_ELEMENT_LIST_DATA_PROVIDER_NAME,
             expectedExceptions = IllegalArgumentException.class)
     public void shouldBuildFromNucleotideListThrowException(List<DnaNucleotide> dnaNucleotideList) {
         Dna.build(dnaNucleotideList);
-        fail();
     }
     
     @Test(dataProvider = DnaTestDataProvider.VALID_DNA_SEQUENCES_DATA_PROVIDER_NAME)
@@ -73,7 +70,6 @@ public class DnaTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldGeneratePatternDnasThrowException(int length) {
         Dna.generatePatternDnas(length);
-        fail();
     }
 
     @Test(dataProvider = DnaTestDataProvider.VALID_GENERATE_PATTERN_DNAS_DATA_PROVIDER_NAME)
@@ -138,7 +134,6 @@ public class DnaTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldFindFrequentPatternsThrowException(Dna dna, int k, int d, int t) {
         dna.findFrequentMismatchPatterns(k, d, t);
-        fail();
     }
 
     @Test(dataProvider = DnaTestDataProvider.VALID_FIND_FREQUENT_PATTERNS_DATA_PROVIDER_NAME)
@@ -151,7 +146,6 @@ public class DnaTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldFindMostFrequentPatternsThrowException(Dna dna, int k, int d) {
         dna.findMostFrequentMismatchPatterns(k, d);
-        fail();
     }
     
     @Test(dataProvider = DnaTestDataProvider.VALID_FIND_MOST_FREQUENT_PATTERNS_DATA_PROVIDER_NAME)

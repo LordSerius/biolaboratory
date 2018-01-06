@@ -1,18 +1,17 @@
 package hu.bioinformatics.biolaboratory.resource.read;
 
-import com.google.common.base.Preconditions;
 import hu.bioinformatics.biolaboratory.resource.extension.ResourceReaderProvider;
 import hu.bioinformatics.biolaboratory.resource.extension.ResourceValidator;
 import hu.bioinformatics.biolaboratory.resource.read.wrapper.ReaderWrapperFactory;
 import hu.bioinformatics.biolaboratory.utils.datastructures.CommentedString;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Validate;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.UncheckedIOException;
 import java.util.List;
+
+import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * Provides the template for reading a resource.
@@ -35,9 +34,9 @@ public abstract class ResourceReader {
     public ResourceReader(final ResourceValidator resourceValidator,
                           final ResourceReaderProvider resourceReaderProvider,
                           final ReaderWrapperFactory readerWrapperFactory) {
-        this.resourceValidator = Validate.notNull(resourceValidator, "Resource validator should not be null");
-        this.resourceReaderProvider = Validate.notNull(resourceReaderProvider, "Resource provider should not be null");
-        this.readerWrapperFactory = Validate.notNull(readerWrapperFactory, "ReaderWrapperFactory should not be null");
+        this.resourceValidator = notNull(resourceValidator, "Resource validator should not be null");
+        this.resourceReaderProvider = notNull(resourceReaderProvider, "Resource provider should not be null");
+        this.readerWrapperFactory = notNull(readerWrapperFactory, "ReaderWrapperFactory should not be null");
     }
 
     /**
@@ -45,13 +44,13 @@ public abstract class ResourceReader {
      *
      * @param resourcePath The resource path of the target resource.
      * @return The read lines.
+     * @throws UncheckedIOException If resource reading has problem.
      */
     public final List<CommentedString> read(final String resourcePath) {
-        Preconditions.checkArgument(StringUtils.isNotBlank(resourcePath), "The input resource path should not be blank");
         resourceValidator.validate(resourcePath);
 
         BufferedReader br = null;
-        List<CommentedString> lines = null;
+        List<CommentedString> lines;
 
         try {
             br = readerWrapperFactory.wrap(resourceReaderProvider.provideReader(resourcePath));
@@ -66,7 +65,6 @@ public abstract class ResourceReader {
                 throw new UncheckedIOException(e);
             }
         }
-
         return lines;
     }
 

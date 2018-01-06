@@ -1,6 +1,5 @@
 package hu.bioinformatics.biolaboratory.resource.read;
 
-import com.google.common.base.Preconditions;
 import hu.bioinformatics.biolaboratory.guice.GuiceResourceModule;
 import hu.bioinformatics.biolaboratory.resource.extension.ResourceReaderProvider;
 import hu.bioinformatics.biolaboratory.resource.extension.ResourceValidator;
@@ -14,6 +13,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * Reads resources which have only one line. The line must be a sequence without description.
@@ -43,7 +44,7 @@ public class RowReader extends ResourceReader {
                 .map(line -> new CommentedString("", line))
                 .limit(2)
                 .collect(Collectors.toCollection(ArrayList::new));
-        Preconditions.checkArgument(rawBiologicalSequenceList.size() == 1, "The resource should have exactly 1 lines");
+        checkArgument(rawBiologicalSequenceList.size() == 1, "The resource should have exactly 1 lines");
         return rawBiologicalSequenceList;
     }
 }

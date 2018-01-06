@@ -1,9 +1,9 @@
 package hu.bioinformatics.biolaboratory.resource.read.wrapper;
 
-import com.google.common.base.Preconditions;
-
 import java.io.BufferedReader;
 import java.io.Reader;
+
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkNotNullArgument;
 
 /**
  * Wraps a {@link java.io.Reader} inside a {@link java.io.BufferedReader}.
@@ -19,7 +19,7 @@ public class ReaderWrapperFactory {
      * @return The wrapped {@link Reader} in a {@link BufferedReader}.
      */
     public BufferedReader wrap(final Reader reader) {
-        Preconditions.checkArgument(reader != null, "Reader should not be null");
+        checkNotNullArgument("Reader", reader);
         return new BufferedReader(reader);
     }
 }

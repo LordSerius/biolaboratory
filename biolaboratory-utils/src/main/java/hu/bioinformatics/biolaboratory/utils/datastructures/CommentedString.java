@@ -2,7 +2,7 @@ package hu.bioinformatics.biolaboratory.utils.datastructures;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.notNullArgument;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkNotNullArgument;
 
 /**
  * The commented string contains a comment and data information about the string.
@@ -22,8 +22,8 @@ public class CommentedString {
      * @throws IllegalArgumentException If string is null.
      */
     public CommentedString(final String comment, final String string) {
-        notNullArgument("Comment", comment);
-        notNullArgument("String", string);
+        checkNotNullArgument("Comment", comment);
+        checkNotNullArgument("String", string);
         this.comment = comment.trim();
         this.string = string.trim();
     }

@@ -1,6 +1,5 @@
 package hu.bioinformatics.biolaboratory.resource.read;
 
-import com.google.common.base.Preconditions;
 import hu.bioinformatics.biolaboratory.guice.GuiceResourceModule;
 import hu.bioinformatics.biolaboratory.resource.extension.ResourceReaderProvider;
 import hu.bioinformatics.biolaboratory.resource.extension.ResourceValidator;
@@ -15,6 +14,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * Reads fasta format files, and returns with its row. The reader ignores the beginning prompt of the each sequences.
@@ -52,7 +53,7 @@ public class FastaReader extends ResourceReader {
             line = line.trim();
             if (line.startsWith(PROMPT)) {
                 if (description != null) {
-                    Preconditions.checkArgument(!concatenatedSequence.isEmpty(), "Multiple header is detected");
+                    checkArgument(!concatenatedSequence.isEmpty(), "Multiple header is detected");
                     commentedStringList.add(new CommentedString(description, concatenatedSequence));
                     concatenatedSequence = "";
                 }
@@ -61,7 +62,7 @@ public class FastaReader extends ResourceReader {
                 concatenatedSequence += line;
             }
         }
-        Preconditions.checkArgument(description != null && !concatenatedSequence.isEmpty(), "Multiple header is detected");
+        checkArgument(description != null && !concatenatedSequence.isEmpty(), "Multiple header is detected");
         commentedStringList.add(new CommentedString(description, concatenatedSequence));
 
         return commentedStringList;

@@ -3,15 +3,13 @@ package hu.bioinformatics.biolaboratory.utils.collectors;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import hu.bioinformatics.biolaboratory.sequence.dna.Dna;
+import hu.bioinformatics.biolaboratory.utils.ArgumentValidator;
 import hu.bioinformatics.biolaboratory.utils.datastructures.CommentedString;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
-
-import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.notNullCollection;
-import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.notNullVarargs;
 
 /**
  * Transforms different {@link String} {@link Collection}s to target {@link Dna} {@link Collection}.
@@ -117,7 +115,7 @@ public class DnaCollectors {
      * @throws IllegalArgumentException If varargs is null or contains null element.
      */
     public static Dna[] stringToDnas(final String... sequences) {
-        return innerStringToDna(Lists.newArrayList(notNullVarargs(sequences)));
+        return innerStringToDna(Lists.newArrayList(ArgumentValidator.checkNotNullVarargs(sequences)));
     }
 
     /**
@@ -128,7 +126,7 @@ public class DnaCollectors {
      * @throws IllegalArgumentException If varargs is null or contains null element.
      */
     public static Dna[] commentedStringToDnas(final CommentedString... sequences) {
-        return innerCommentedStringToDna(Lists.newArrayList(notNullVarargs(sequences)));
+        return innerCommentedStringToDna(Lists.newArrayList(ArgumentValidator.checkNotNullVarargs(sequences)));
     }
 
     /**
@@ -139,7 +137,7 @@ public class DnaCollectors {
      * @throws IllegalArgumentException If collection is null or contains null element.
      */
     public static Dna[] stringToDnas(final Collection<String> sequenceCollection) {
-        return innerStringToDna(notNullCollection(sequenceCollection));
+        return innerStringToDna(ArgumentValidator.checkNotNullCollection(sequenceCollection));
     }
 
     /**
@@ -150,7 +148,7 @@ public class DnaCollectors {
      * @throws IllegalArgumentException If collection is null or contains null element.
      */
     public static Dna[] commentedStringToDnas(final Collection<CommentedString> sequenceCollection) {
-        return innerCommentedStringToDna(notNullCollection(sequenceCollection));
+        return innerCommentedStringToDna(ArgumentValidator.checkNotNullCollection(sequenceCollection));
     }
 
     private static Dna[] innerStringToDna(final Collection<String> sequenceCollection) {

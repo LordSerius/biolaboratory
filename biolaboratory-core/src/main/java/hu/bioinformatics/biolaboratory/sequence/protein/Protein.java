@@ -1,15 +1,13 @@
 package hu.bioinformatics.biolaboratory.sequence.protein;
 
-import com.google.common.base.Preconditions;
 import hu.bioinformatics.biolaboratory.sequence.BiologicalSequence;
+import hu.bioinformatics.biolaboratory.utils.ArgumentValidator;
 
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.notNullCollection;
-import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.notEmptyCollection;
-import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.notEmptyVarargs;
+import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * Represents a single protein about the amino acid sequence.
@@ -64,7 +62,7 @@ public class Protein extends BiologicalSequence<Protein, AminoAcid> {
      * @throws IllegalArgumentException If aminoAcids contains null element.
      */
     public static Protein build(final AminoAcid... aminoAcids) {
-        return new Protein(notEmptyVarargs(aminoAcids));
+        return new Protein(ArgumentValidator.checkNotEmptyVarargs(aminoAcids));
     }
 
     /**
@@ -77,7 +75,7 @@ public class Protein extends BiologicalSequence<Protein, AminoAcid> {
      * @throws IllegalArgumentException If aminoAcids contains null element.
      */
     public static Protein build(final String name, final AminoAcid... aminoAcids) {
-        return new Protein(validateName(name), notEmptyVarargs(aminoAcids));
+        return new Protein(validateName(name), ArgumentValidator.checkNotEmptyVarargs(aminoAcids));
     }
 
     /**
@@ -88,7 +86,7 @@ public class Protein extends BiologicalSequence<Protein, AminoAcid> {
      * @throws IllegalArgumentException If aminoAcidList contains null element.
      */
     public static Protein build(final List<AminoAcid> aminoAcidList) {
-        return new Protein(notEmptyCollection(aminoAcidList));
+        return new Protein(ArgumentValidator.checkNotEmptyCollection(aminoAcidList));
     }
 
     /**
@@ -101,12 +99,12 @@ public class Protein extends BiologicalSequence<Protein, AminoAcid> {
      * @throws IllegalArgumentException If aminoAcidList contains null element.
      */
     public static Protein build(final String name, final List<AminoAcid> aminoAcidList) {
-        return new Protein(validateName(name), notNullCollection(aminoAcidList));
+        return new Protein(validateName(name), ArgumentValidator.checkNotNullCollection(aminoAcidList));
     }
 
     private static String validateSequence(final String sequence) {
         String uppercaseSequence = formatSequence(sequence);
-        Preconditions.checkArgument(SEQUENCE_VALIDATOR_PATTERN.matcher(uppercaseSequence).matches(), "Protein should contains only the letters of nucleotides");
+        checkArgument(SEQUENCE_VALIDATOR_PATTERN.matcher(uppercaseSequence).matches(), "Protein should contains only the letters of nucleotides");
         return uppercaseSequence;
     }
 

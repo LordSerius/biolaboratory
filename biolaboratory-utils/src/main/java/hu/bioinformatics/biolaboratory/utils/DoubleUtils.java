@@ -1,7 +1,5 @@
 package hu.bioinformatics.biolaboratory.utils;
 
-import com.google.common.base.Preconditions;
-
 /**
  * Provides methods to handle double values. It defines a default error precision for comparision which is 1e-6.
  *
@@ -34,14 +32,14 @@ public class DoubleUtils {
      *
      * @param leftHand The left hand of the comparision.
      * @param rightHand The right hand of the comparision.
-     * @param error
+     * @param error The maximum error for comparision.
      * @return  0, if the difference of the two values are between +/- error.
      *          -1, if the leftHand is bigger at least error than the rightHand.
      *          1, if the rightHand is bigger at least error than the leftHand.
      * @throws IllegalArgumentException If the error is bigger than 0.001.
      */
     public static int compareWithError(final double leftHand, final double rightHand, final double error) {
-        double normalizedError = validateError(error);
+        double normalizedError = normalizeError(error);
         double difference = rightHand - leftHand;
         if (-normalizedError <= difference && difference <= normalizedError) {
             return 0;
@@ -51,9 +49,7 @@ public class DoubleUtils {
         return -1;
     }
 
-    private static double validateError(final double error) {
-        double normalizedError = Math.abs(error);
-        Preconditions.checkArgument(normalizedError <= MAXIMUM_ERROR, "Error should not be bigger than " + MAXIMUM_ERROR);
-        return normalizedError;
+    private static double normalizeError(final double error) {
+        return ArgumentValidator.checkSmallerOrEqualNumberTo("Error", Math.abs(error), MAXIMUM_ERROR);
     }
 }

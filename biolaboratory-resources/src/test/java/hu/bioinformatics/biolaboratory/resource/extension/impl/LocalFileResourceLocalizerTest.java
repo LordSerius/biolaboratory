@@ -47,7 +47,6 @@ public class LocalFileResourceLocalizerTest {
         expectedExceptions = IllegalArgumentException.class)
     public void shouldLocalizeResourceThrowException(String resourceName) {
         localFileResourceLocalizer.localizeResource(resourceName);
-        fail();
     }
 
     @Test(dataProvider = VALID_LOCALIZE_RESOURCE_DATA_PRIVIDER_NAME)

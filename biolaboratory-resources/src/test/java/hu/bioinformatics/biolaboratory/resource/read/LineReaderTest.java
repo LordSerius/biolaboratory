@@ -74,7 +74,6 @@ public class LineReaderTest {
     public void shouldProcessResourcesThrowException(Stream<String> content) throws IOException {
         ((MockReaderWrapperFactory) readerWrapperFactory).setLines(content);
         lineReader.read(PATH);
-        fail();
     }
 
     @Test(dataProvider = VALID_PROCESS_RESOURCE_DATA_PROVIDER_NAME)

@@ -4,14 +4,11 @@ import com.google.common.base.Preconditions;
 import hu.bioinformatics.biolaboratory.sequence.BiologicalSequence;
 import hu.bioinformatics.biolaboratory.sequence.protein.AminoAcid;
 import hu.bioinformatics.biolaboratory.sequence.protein.Protein;
+import hu.bioinformatics.biolaboratory.utils.ArgumentValidator;
 
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
-
-import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.notNullCollection;
-import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.notEmptyCollection;
-import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.notEmptyVarargs;
 
 /**
  * Represents a single RNA about the genome sequence.
@@ -66,7 +63,7 @@ public class Rna extends BiologicalSequence<Rna, RnaNucleotide> {
      * @throws IllegalArgumentException If nucleotides contains null element.
      */
     public static Rna build(final RnaNucleotide... nucleotides) {
-        return new Rna(notEmptyVarargs(nucleotides));
+        return new Rna(ArgumentValidator.checkNotEmptyVarargs(nucleotides));
     }
 
     /**
@@ -79,7 +76,7 @@ public class Rna extends BiologicalSequence<Rna, RnaNucleotide> {
      * @throws IllegalArgumentException If nucleotides contains null element.
      */
     public static Rna build(final String name, final RnaNucleotide... nucleotides) {
-        return new Rna(validateName(name), notEmptyVarargs(nucleotides));
+        return new Rna(validateName(name), ArgumentValidator.checkNotEmptyVarargs(nucleotides));
     }
 
     /**
@@ -90,7 +87,7 @@ public class Rna extends BiologicalSequence<Rna, RnaNucleotide> {
      * @throws IllegalArgumentException If nucleotideList contains null element.
      */
     public static Rna build(final List<RnaNucleotide> nucleotideList) {
-        return new Rna(notEmptyCollection(nucleotideList));
+        return new Rna(ArgumentValidator.checkNotEmptyCollection(nucleotideList));
     }
 
     /**
@@ -103,7 +100,7 @@ public class Rna extends BiologicalSequence<Rna, RnaNucleotide> {
      * @throws IllegalArgumentException If nucleotideList contains null element.
      */
     public static Rna build(final String name, final List<RnaNucleotide> nucleotideList) {
-        return new Rna(validateName(name), notNullCollection(nucleotideList));
+        return new Rna(validateName(name), ArgumentValidator.checkNotNullCollection(nucleotideList));
     }
 
     private static String validateSequence(final String sequence) {

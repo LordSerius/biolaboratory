@@ -1,14 +1,16 @@
 package hu.bioinformatics.biolaboratory.sequence.rna;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import hu.bioinformatics.biolaboratory.sequence.SequenceElement;
-import org.apache.commons.lang3.StringUtils;
+import hu.bioinformatics.biolaboratory.utils.ArgumentValidator;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
+import static com.google.common.base.Preconditions.checkArgument;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkNotBlankString;
 
 /**
  * Contains the nucleotide information and data which are the building pieces of a RNA.
@@ -43,9 +45,9 @@ public enum RnaNucleotide implements SequenceElement {
      * @throws IllegalArgumentException If rnaNucleotideLetter is not 1 character after trim.
      */
     public static RnaNucleotide findRnaNucleotide(final String rnaNucleotideLetter) {
-        Preconditions.checkArgument(StringUtils.isNotBlank(rnaNucleotideLetter), "RNA nucleotide letter should not be empty");
+        checkNotBlankString("RNA nucleotide letter", rnaNucleotideLetter);
         String normalizedRnaNucleotideLetter = rnaNucleotideLetter.trim();
-        Preconditions.checkArgument(normalizedRnaNucleotideLetter.length() == 1, "This is not a letter");
+        ArgumentValidator.checkEqualNumberTo("Letter", normalizedRnaNucleotideLetter.length(), 1);
         return findRnaNucleotide(normalizedRnaNucleotideLetter.charAt(0));
     }
 
@@ -58,7 +60,7 @@ public enum RnaNucleotide implements SequenceElement {
      */
     public static RnaNucleotide findRnaNucleotide(final char nucleotideLetter) {
         RnaNucleotide rnaNucleotide = CHARACTER_NUCLEOTIDE_LOOKUP.get(Character.toUpperCase(nucleotideLetter));
-        Preconditions.checkArgument(rnaNucleotide != null, "\"" + nucleotideLetter + "\" is not a RNA nucleotide letter");
+        checkArgument(rnaNucleotide != null, "\"" + nucleotideLetter + "\" is not a RNA nucleotide letter");
         return rnaNucleotide;
     }
 

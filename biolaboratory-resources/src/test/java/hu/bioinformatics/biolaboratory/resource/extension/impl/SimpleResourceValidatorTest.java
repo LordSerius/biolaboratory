@@ -44,7 +44,6 @@ public class SimpleResourceValidatorTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldValidateThrowException(String fastaPath) {
         simpleResourceValidator.validate(fastaPath);
-        fail();
     }
 
     @Test(dataProvider = VALID_VALIDATE_DATA_PROVIDER_NAME)

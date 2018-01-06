@@ -29,7 +29,6 @@ public class ReaderWrapperFactoryTest {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void shouldWrapThrowsException() {
         readerWrapperFactory.wrap(null);
-        fail();
     }
 
     @Test

@@ -6,8 +6,8 @@ import hu.bioinformatics.biolaboratory.guice.GuiceResourceModule;
 import hu.bioinformatics.biolaboratory.resource.read.MockReaderWrapperFactory;
 import hu.bioinformatics.biolaboratory.resource.read.wrapper.ReaderWrapperFactory;
 import hu.bioinformatics.biolaboratory.sequence.dna.Dna;
-import hu.bioinformatics.biolaboratory.utils.datastructures.CommentedString;
 import hu.bioinformatics.biolaboratory.utils.collectors.DnaCollectors;
+import hu.bioinformatics.biolaboratory.utils.datastructures.CommentedString;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Guice;
@@ -21,7 +21,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.testng.Assert.fail;
 
 /**
  * Unit tests for {@link DnaListFastaLoader}.
@@ -74,7 +73,6 @@ public class DnaListFastaLoaderTest {
     public void shouldLoadThrowException(String filePath, Stream<String> lines) {
         ((MockReaderWrapperFactory) readerWrapperFactory).setLines(lines);
         dnaListFastaLoader.load(filePath);
-        fail();
     }
 
     @Test(dataProvider = VALID_LOAD_DATA_PROVIDER_NAME)

@@ -1,14 +1,16 @@
 package hu.bioinformatics.biolaboratory.sequence.dna;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import hu.bioinformatics.biolaboratory.sequence.SequenceElement;
-import org.apache.commons.lang3.StringUtils;
+import hu.bioinformatics.biolaboratory.utils.ArgumentValidator;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
+import static com.google.common.base.Preconditions.checkArgument;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkNotBlankString;
 
 /**
  * Contains the nucleotide information and data which are the building pieces of a DNA.
@@ -76,9 +78,9 @@ public enum DnaNucleotide implements SequenceElement {
      * @throws IllegalArgumentException If dnaNucleotideLetter is not 1 character after trim.
      */
     public static DnaNucleotide findDnaNucleotide(final String dnaNucleotideLetter) {
-        Preconditions.checkArgument(StringUtils.isNotBlank(dnaNucleotideLetter), "DNA nucleotide letter should not be empty");
+        checkNotBlankString("DNA nucleotide letter", dnaNucleotideLetter);
         String normalizedDnaNucleotideLetter = dnaNucleotideLetter.trim();
-        Preconditions.checkArgument(normalizedDnaNucleotideLetter.length() == 1, "This is not a letter");
+        ArgumentValidator.checkEqualNumberTo("Input letter", normalizedDnaNucleotideLetter.length(), 1);
         return findDnaNucleotide(normalizedDnaNucleotideLetter.charAt(0));
     }
 
@@ -91,7 +93,7 @@ public enum DnaNucleotide implements SequenceElement {
      */
     public static DnaNucleotide findDnaNucleotide(final char nucleotideLetter) {
         DnaNucleotide dnaNucleotide = CHARACTER_NUCLEOTIDE_LOOKUP.get(Character.toUpperCase(nucleotideLetter));
-        Preconditions.checkArgument(dnaNucleotide != null, "\"" + nucleotideLetter + "\" is not a DNA nucleotide letter");
+        checkArgument(dnaNucleotide != null, "\"" + nucleotideLetter + "\" is not a DNA nucleotide letter");
         return dnaNucleotide;
     }
 

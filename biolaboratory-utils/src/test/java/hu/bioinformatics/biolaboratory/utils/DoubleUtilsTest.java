@@ -19,7 +19,6 @@ public class DoubleUtilsTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldCompareWithErrorThrowException(double leftHand, double rightHand, double error) {
         DoubleUtils.compareWithError(leftHand, rightHand, error);
-        fail();
     }
 
     @Test(dataProvider = DoubleUtilsTestDataProvider.VALID_COMPARE_WITH_ERROR_DATA_PROVIDER_NAME)

@@ -33,7 +33,6 @@ public class DnaArrayTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldBuildThrowException(List<Dna> dnaList) {
         DnaArray.build(dnaList);
-        fail();
     }
 
     @Test(dataProvider = DnaArrayTestDataProvider.VALID_DNA_ARRAY_LIST_DATA_PROVIDER_NAME)
@@ -75,7 +74,6 @@ public class DnaArrayTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldAddElementsThrowException(DnaArray dnaArray, Dna[] dnas) {
         dnaArray.add(dnas);
-        fail();
     }
 
     @Test(dataProvider = DnaArrayTestDataProvider.VALID_ADD_ELEMENTS_DATA_PROVIDER_NAME)
@@ -88,7 +86,6 @@ public class DnaArrayTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldAddListThrowException(DnaArray dnaArray, List<Dna> dnaList) {
         dnaArray.add(dnaList);
-        fail();
     }
 
     @Test(dataProvider = DnaArrayTestDataProvider.VALID_ADD_LIST_DATA_PROVIDER_NAME)
@@ -101,7 +98,6 @@ public class DnaArrayTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldAddDnaArrayThrowException(DnaArray dnaArray, DnaArray otherDnaArray) {
         dnaArray.add(otherDnaArray);
-        fail();
     }
 
     @Test(dataProvider = DnaArrayTestDataProvider.VALID_ADD_DNA_ARRAY_DATA_PROVIDER_NAME)
@@ -114,7 +110,6 @@ public class DnaArrayTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldFindMostFrequentMotifsExhaustingThrowException(DnaArray dnaArray, int k, int d) {
         dnaArray.findMostFrequentMotifsExhausting(k, d);
-        fail();
     }
 
     @Test(dataProvider = DnaArrayTestDataProvider.VALID_FIND_MOST_FREQUENT_MOTIFS_EXHAUSTING_DATA_PROVIDER_NAME)
@@ -127,7 +122,6 @@ public class DnaArrayTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldFindMostFrequentMotifsMedianStringThrowException(DnaArray dnaArray, int k) {
         dnaArray.findMostFrequentMotifsMedianString(k);
-        fail();
     }
 
     @Test(dataProvider = DnaArrayTestDataProvider.VALID_FIND_MOST_FREQUENT_MOTIFS_MEDIAN_STRING_DATA_PROVIDER_NAME)
@@ -140,7 +134,6 @@ public class DnaArrayTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldProfileMostProbableSubSequenceThrowException(DnaArray dnaArray, Dna dna) {
         dnaArray.profileMostProbableSubSequence(dna);
-        fail();
     }
 
     @Test(dataProvider = DnaArrayTestDataProvider.VALID_PROFILE_MOST_PROBABLE_SUB_SEQUENCE_DATA_PROVIDER_NAME)
@@ -153,7 +146,6 @@ public class DnaArrayTest {
             expectedExceptions = IllegalArgumentException.class)
     public void shouldPatternProbabilityThrowException(DnaArray dnaArray, Dna pattern) {
         dnaArray.patternProbability(pattern);
-        fail();
     }
 
     @Test(dataProvider = DnaArrayTestDataProvider.VALID_PATTERN_PROBABILITY_DATA_PROVIDER_NAME)
