@@ -1,8 +1,8 @@
 package hu.bioinformatics.biolaboratory.utils;
 
-import com.sun.istack.internal.Nullable;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 
 /**
