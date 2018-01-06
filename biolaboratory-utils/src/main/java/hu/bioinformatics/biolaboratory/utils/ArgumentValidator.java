@@ -1,5 +1,6 @@
 package hu.bioinformatics.biolaboratory.utils;
 
+import com.sun.istack.internal.Nullable;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collection;
@@ -40,7 +41,7 @@ public class ArgumentValidator {
      * @throws IllegalArgumentException If varargs is null, empty, or contains null element.
      */
     @SafeVarargs
-    public static <T> T[] checkNotEmptyVarargs(final String argumentName, final T... varargs) {
+    public static <T> T[] checkNotEmptyVarargs(@Nullable final String argumentName, final T... varargs) {
         checkNotNullArgument(argumentName, varargs);
         checkPositiveNumber(argumentName, varargs.length);
         return innerCheckNotNullVarargs(argumentName, varargs);
@@ -70,7 +71,7 @@ public class ArgumentValidator {
      * @throws IllegalArgumentException If varargs is null or contains null element.
      */
     @SafeVarargs
-    public static <T> T[] checkNotNullVarargs(final String argumentName, final T... varargs) {
+    public static <T> T[] checkNotNullVarargs(@Nullable final String argumentName, final T... varargs) {
         checkNotNullArgument(argumentName, varargs);
         return innerCheckNotNullVarargs(argumentName, varargs);
     }
@@ -108,7 +109,7 @@ public class ArgumentValidator {
      * @return The same collection if it is valid.
      * @throws IllegalArgumentException If collection is null or contains null element.
      */
-    public static <COL extends Collection<T>, T> COL checkNotEmptyCollection(final String argumentName, final COL collection) {
+    public static <COL extends Collection<T>, T> COL checkNotEmptyCollection(@Nullable final String argumentName, final COL collection) {
         checkNotNullCollection(argumentName, collection);
         if (collection.isEmpty()) {
             throw new IllegalArgumentException(argumentName + " size should be not empty");
@@ -140,12 +141,12 @@ public class ArgumentValidator {
      * @return The same collection if it is valid.
      * @throws IllegalArgumentException If collection is null or contains null element.
      */
-    public static <COL extends Collection<T>, T> COL checkNotNullCollection(final String argumentName, final COL collection) {
+    public static <COL extends Collection<T>, T> COL checkNotNullCollection(@Nullable final String argumentName, final COL collection) {
         checkNotNullArgument(argumentName, collection);
         return innerCheckNotNullCollection(argumentName, collection);
     }
 
-    private static <COL extends Collection<T>, T> COL innerCheckNotNullCollection(final String argumentName, final COL collection) {
+    private static <COL extends Collection<T>, T> COL innerCheckNotNullCollection(@Nullable final String argumentName, final COL collection) {
         for (T element : collection) {
             if (element == null) {
                 throw new IllegalArgumentException(argumentName + " should not contain null element");
@@ -181,7 +182,7 @@ public class ArgumentValidator {
      * @throws IllegalArgumentException If argument or target is null.
      * @throws IllegalArgumentException If type of argument and targetObject are not the same.
      */
-    public static <T> T checkSameTypeTo(final String argumentName, final T argument, final Object targetObject) {
+    public static <T> T checkSameTypeTo(@Nullable final String argumentName, final T argument, final Object targetObject) {
         Class<?> argumentsType = checkNotNullArgument(argumentName, argument).getClass();
         Class<?> targetsType = checkNotNullArgument(targetObject).getClass();
         if (argumentsType != targetsType) {
@@ -203,7 +204,7 @@ public class ArgumentValidator {
      * @throws IllegalArgumentException If argument or target is null.
      * @throws IllegalArgumentException If type of argument and targetObject are not the same.
      */
-    public static <T> T checkSameTypeTo(final String argumentName, final T argument, final String targetObjectName, final Object targetObject) {
+    public static <T> T checkSameTypeTo(@Nullable final String argumentName, final T argument, @Nullable final String targetObjectName, final Object targetObject) {
         Class<?> argumentsType = checkNotNullArgument(argumentName, argument).getClass();
         Class<?> targetsType = checkNotNullArgument(targetObjectName, targetObject).getClass();
         if (argumentsType != targetsType) {
@@ -232,7 +233,7 @@ public class ArgumentValidator {
      * @return The same object if it is valid.
      * @throws IllegalArgumentException If argument is null.
      */
-    public static <T> T checkNotNullArgument(final String argumentName, final T argument) {
+    public static <T> T checkNotNullArgument(@Nullable final String argumentName, final T argument) {
         if (argument == null) {
             throw new IllegalArgumentException(argumentName + " should not be null");
         }
@@ -258,7 +259,7 @@ public class ArgumentValidator {
      * @return The same object if it is valid.
      * @throws IllegalArgumentException If string is blank.
      */
-    public static String checkNotBlankString(final String argumentName, final String string) {
+    public static String checkNotBlankString(@Nullable final String argumentName, final String string) {
         if (StringUtils.isBlank(string)) {
             throw new IllegalArgumentException(argumentName + " should not be blank");
         }
@@ -287,7 +288,7 @@ public class ArgumentValidator {
      * @return The same number if it is valid.
      * @throws IllegalArgumentException If number >= target.
      */
-    public static int checkSmallerNumberTo(final String argumentName, final int number, int target) {
+    public static int checkSmallerNumberTo(@Nullable final String argumentName, final int number, int target) {
         if (number >= target) {
             throw new IllegalArgumentException(argumentName + " (" + number + ") should smaller to " + target);
         }
@@ -305,7 +306,7 @@ public class ArgumentValidator {
      * @return The same number if it is valid.
      * @throws IllegalArgumentException If number >= target.
      */
-    public static int checkSmallerNumberTo(final String argumentName, final int number, final String targetName, int target) {
+    public static int checkSmallerNumberTo(@Nullable final String argumentName, final int number, @Nullable final String targetName, int target) {
         if (number >= target) {
             throw new IllegalArgumentException(argumentName + " (" + number + ") should smaller to " + targetName + " (" + target + ")");
         }
@@ -334,7 +335,7 @@ public class ArgumentValidator {
      * @return The same number if it is valid.
      * @throws IllegalArgumentException If number > target.
      */
-    public static int checkSmallerOrEqualNumberTo(final String argumentName, final int number, final int target) {
+    public static int checkSmallerOrEqualNumberTo(@Nullable final String argumentName, final int number, final int target) {
         if (number > target) {
             throw new IllegalArgumentException(argumentName + " (" + number + ") should equal to " + target);
         }
@@ -352,7 +353,7 @@ public class ArgumentValidator {
      * @return The same number if it is valid.
      * @throws IllegalArgumentException If number > target.
      */
-    public static int checkSmallerOrEqualNumberTo(final String argumentName, final int number, final String targetName, final int target) {
+    public static int checkSmallerOrEqualNumberTo(@Nullable final String argumentName, final int number, @Nullable final String targetName, final int target) {
         if (number > target) {
             throw new IllegalArgumentException(argumentName + " (" + number + ") should equal to " + targetName + " (" + target + ")");
         }
@@ -381,7 +382,7 @@ public class ArgumentValidator {
      * @return The same number if it is valid.
      * @throws IllegalArgumentException If number > target.
      */
-    public static double checkSmallerOrEqualNumberTo(final String argumentName, final double number, final double target) {
+    public static double checkSmallerOrEqualNumberTo(@Nullable final String argumentName, final double number, final double target) {
         if (number > target) {
             throw new IllegalArgumentException(argumentName + " (" + number + ") should equal to " + target);
         }
@@ -399,7 +400,7 @@ public class ArgumentValidator {
      * @return The same number if it is valid.
      * @throws IllegalArgumentException If number > target.
      */
-    public static double checkSmallerOrEqualNumberTo(final String argumentName, final double number, final String targetName, final double target) {
+    public static double checkSmallerOrEqualNumberTo(@Nullable final String argumentName, final double number, @Nullable final String targetName, final double target) {
         if (number > target) {
             throw new IllegalArgumentException(argumentName + " (" + number + ") should equal to " + targetName + " (" + target + ")");
         }
@@ -428,7 +429,7 @@ public class ArgumentValidator {
      * @return The same number if it is valid.
      * @throws IllegalArgumentException If number != target.
      */
-    public static int checkEqualNumberTo(final String argumentName, final int number, final int target) {
+    public static int checkEqualNumberTo(@Nullable final String argumentName, final int number, final int target) {
         if (number != target) {
             throw new IllegalArgumentException(argumentName + " (" + number + ") should equal to " + target);
         }
@@ -446,7 +447,7 @@ public class ArgumentValidator {
      * @return The same number if it is valid.
      * @throws IllegalArgumentException If number != target.
      */
-    public static int checkEqualNumberTo(final String argumentName, final int number, final String targetName, final int target) {
+    public static int checkEqualNumberTo(@Nullable final String argumentName, final int number, @Nullable final String targetName, final int target) {
         if (number != target) {
             throw new IllegalArgumentException(argumentName + " (" + number + ") should equal to " + targetName + " (" + target + ")");
         }
@@ -475,7 +476,7 @@ public class ArgumentValidator {
      * @return The same number if it is valid.
      * @throws IllegalArgumentException If number == target.
      */
-    public static int checkNotEqualNumberTo(final String argumentName, final int number, final int target) {
+    public static int checkNotEqualNumberTo(@Nullable final String argumentName, final int number, final int target) {
         if (number == target) {
             throw new IllegalArgumentException(argumentName + " (" + number + ") should not equal to " + target);
         }
@@ -493,7 +494,7 @@ public class ArgumentValidator {
      * @return The same number if it is valid.
      * @throws IllegalArgumentException If number == target.
      */
-    public static int checkNotEqualNumberTo(final String argumentName, final int number, final String targetName, final int target) {
+    public static int checkNotEqualNumberTo(@Nullable final String argumentName, final int number, @Nullable final String targetName, final int target) {
         if (number == target) {
             throw new IllegalArgumentException(argumentName + " (" + number + ") should not equal to " + targetName + " (" + target + ")");
         }
@@ -522,7 +523,7 @@ public class ArgumentValidator {
      * @return The same number if it is valid.
      * @throws IllegalArgumentException If number < target.
      */
-    public static int checkGreaterOrEqualNumberTo(final String argumentName, final int number, final int target) {
+    public static int checkGreaterOrEqualNumberTo(@Nullable final String argumentName, final int number, final int target) {
         if (number < target) {
             throw new IllegalArgumentException(argumentName + " (" + number + ") should greater or equal to " + target);
         }
@@ -540,7 +541,7 @@ public class ArgumentValidator {
      * @return The same number if it is valid.
      * @throws IllegalArgumentException If number < target.
      */
-    public static int checkGreaterOrEqualNumberTo(final String argumentName, final int number, final String targetName, final int target) {
+    public static int checkGreaterOrEqualNumberTo(@Nullable final String argumentName, final int number, @Nullable final String targetName, final int target) {
         if (number < target) {
             throw new IllegalArgumentException(argumentName + " (" + number + ") should greater or equal to " + targetName + " (" + target + ")");
         }
@@ -569,7 +570,7 @@ public class ArgumentValidator {
      * @return The same number if it is valid.
      * @throws IllegalArgumentException If number <= target.
      */
-    public static int checkGreaterNumberTo(final String argumentName, final int number, final int target) {
+    public static int checkGreaterNumberTo(@Nullable final String argumentName, final int number, final int target) {
         if (number <= target) {
             throw new IllegalArgumentException(argumentName + " (" + number + ") should greater to " + target);
         }
@@ -587,7 +588,7 @@ public class ArgumentValidator {
      * @return The same number if it is valid.
      * @throws IllegalArgumentException If number <= target.
      */
-    public static int checkGreaterNumberTo(final String argumentName, final int number, final String targetName, final int target) {
+    public static int checkGreaterNumberTo(@Nullable final String argumentName, final int number, @Nullable final String targetName, final int target) {
         if (number <= target) {
             throw new IllegalArgumentException(argumentName + " (" + number + ") should greater to " + targetName + " (" + target + ")");
         }
@@ -614,7 +615,7 @@ public class ArgumentValidator {
      * @return The same number if it is valid.
      * @throws IllegalArgumentException If number < 0.
      */
-    public static int checkNotNegativeNumber(final String argumentName, final int number) {
+    public static int checkNotNegativeNumber(@Nullable final String argumentName, final int number) {
         return checkGreaterOrEqualNumberTo(argumentName, number, 0);
     }
 
@@ -638,7 +639,7 @@ public class ArgumentValidator {
      * @return The same number if it is valid.
      * @throws IllegalArgumentException If number <= 0.
      */
-    public static int checkPositiveNumber(final String argumentName, final int number) {
+    public static int checkPositiveNumber(@Nullable final String argumentName, final int number) {
         if (number <= 0) {
             throw  new IllegalArgumentException(argumentName + " (" + number + ") should be positive");
         }
