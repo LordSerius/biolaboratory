@@ -1,7 +1,5 @@
 package hu.bioinformatics.biolaboratory.sequence.dna;
 
-import hu.bioinformatics.biolaboratory.utils.ArgumentValidator;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -16,10 +14,12 @@ import java.util.stream.IntStream;
 import static com.google.common.base.Preconditions.checkArgument;
 import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkEqualNumberTo;
 import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkGreaterOrEqualNumberTo;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkNotEmptyCollection;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkNotEmptyVarargs;
 import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkNotNegativeNumber;
 import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkNotNullArgument;
-import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkNotNullVarargs;
 import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkPositiveNumber;
+import static hu.bioinformatics.biolaboratory.utils.ArgumentValidator.checkSmallerOrEqualNumberTo;
 
 /**
  * A collection of {@link Dna}s which provide motif finding methods on them. Every included {@link Dna} should be the
@@ -42,7 +42,7 @@ public class DnaArray {
      * @throws IllegalArgumentException If dna elements have different lengths.
      */
     public static DnaArray build(final Dna... dnas) {
-        return innerBuild(Arrays.asList(ArgumentValidator.checkNotEmptyVarargs(dnas)));
+        return innerBuild(Arrays.asList(checkNotEmptyVarargs(dnas)));
     }
 
     /**
@@ -53,7 +53,7 @@ public class DnaArray {
      * @throws IllegalArgumentException If dna elements have different lengths.
      */
     public static DnaArray build(final List<Dna> dnaList) {
-        return innerBuild(ArgumentValidator.checkNotEmptyCollection(dnaList));
+        return innerBuild(checkNotEmptyCollection(dnaList));
     }
 
     private static DnaArray innerBuild(final List<Dna> dnaList) {
@@ -163,32 +163,38 @@ public class DnaArray {
     }
 
     /**
-     * TODO: documentation
+     * Return a {@link DnaArray} which is the sum of the {@link DnaArray}'s element and the given {@link Dna}s.
      *
-     * @param dnas
-     * @return
+     * @param dnas The {@link Dna}s to add to the {@link DnaArray}.
+     * @return A new {@link DnaArray} which is the sum of the existing elements and the given {@link Dna}s.
+     * @throws IllegalArgumentException If input varargs contains null value.
+     * @throws IllegalArgumentException If input varargs elements length differ than sequence length.
      */
     public DnaArray add(final Dna... dnas) {
-        checkNotNullVarargs("DNA varargs", dnas);
-        return dnas.length == 0 ? DnaArray.build(sampleList) : innerAdd(DnaArray.build(dnas));
+        checkNotNullArgument("DNA varargs", dnas);
+        return dnas.length == 0 ? copy() : innerAdd(DnaArray.build(dnas));
     }
 
     /**
-     * TODO: documentation
+     * Return a {@link DnaArray} which is the sum of the {@link DnaArray}'s element and the given {@link Dna} list.
      *
-     * @param dnaList
-     * @return
+     * @param dnaList The {@link Dna} list which elements add to the {@link DnaArray}.
+     * @return A new {@link DnaArray} which is the sum of the existing elements and the given {@link Dna} list's elements.
+     * @throws IllegalArgumentException If input list contains null element.
+     * @throws IllegalArgumentException If input list elements length differ than sequence length.
      */
     public DnaArray add(final List<Dna> dnaList) {
         checkNotNullArgument("DNA list", dnaList);
-        return dnaList.isEmpty() ? DnaArray.build(sampleList) : innerAdd(DnaArray.build(dnaList));
+        return dnaList.isEmpty() ? copy() : innerAdd(DnaArray.build(dnaList));
     }
 
     /**
-     * TODO: documentation
+     * Return a {@link DnaArray} which is the sum of the {@link DnaArray}'s element and the given {@link DnaArray}'s elements.
      *
-     * @param otherDnaArray
-     * @return
+     * @param otherDnaArray The other {@link DnaArray} which elements add to the {@link DnaArray}.
+     * @return A new {@link DnaArray} which is the sum of the existing elements and the given {@link DnaArray}.
+     * @throws IllegalArgumentException If other {@link DnaArray} is null.
+     * @throws IllegalArgumentException If other {@link DnaArray} sequence length is differ than sequence length.
      */
     public DnaArray add(final DnaArray otherDnaArray) {
         return innerAdd(checkNotNullArgument("Other DNA array", otherDnaArray));
@@ -217,7 +223,7 @@ public class DnaArray {
      */
     public Set<Dna> findMostFrequentMotifsExhausting(final int k, final int d) {
         checkPositiveNumber("Findable subsequence length (k)", k);
-        ArgumentValidator.checkSmallerOrEqualNumberTo("Findable subsequence length (k)", k, "samples length", samplesLength);
+        checkSmallerOrEqualNumberTo("Findable subsequence length (k)", k, "samples length", samplesLength);
         checkNotNegativeNumber("Maximum mismatch number (d)", d);
 
         Set<Set<Dna>> mostFrequentSampleSet = sampleList.stream()
@@ -244,7 +250,7 @@ public class DnaArray {
      */
     public Set<Dna> findMostFrequentMotifsMedianString(final int k) {
         checkPositiveNumber("Findable subsequences length (k)", k);
-        ArgumentValidator.checkSmallerOrEqualNumberTo("Findable subsequences length (k)", k, "samples length", samplesLength);
+        checkSmallerOrEqualNumberTo("Findable subsequences length (k)", k, "samples length", samplesLength);
 
         Set<Dna> mismatchSet = Dna.generatePatternDnas(k);
 
