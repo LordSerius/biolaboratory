@@ -84,6 +84,17 @@ public class CountableOccurrenceMapTestDataProvider {
         };
     }
 
+    static final String GET_ELEMENTS_SIZE_DATA_PROVIDER_NAME = "getElementsSizeDataProvider";
+
+    @DataProvider(name = GET_ELEMENTS_SIZE_DATA_PROVIDER_NAME)
+    private Object[][] getElementsSizeDataProvider() {
+        return new Object[][] {
+                { CountableOccurrenceMap.build(), 0 },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 0)), 1 },
+                { CountableOccurrenceMap.build(ImmutableMap.of("A", 1, "C", 2)), 2 }
+        };
+    }
+
     static final String COPY_DATA_PROVIDER_NAME = "copyDataProvider";
 
     @DataProvider(name = COPY_DATA_PROVIDER_NAME)

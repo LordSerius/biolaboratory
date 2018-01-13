@@ -17,6 +17,8 @@ public class ArgumentValidator {
     private static final String DEFAULT_INPUT_STRING_NAME = "Input string";
     private static final String DEFAULT_INPUT_VARARGS_NAME = "Input varargs";
 
+    private ArgumentValidator() {}
+
     /**
      * Throws {@link IllegalArgumentException} if the input varargs is empty or contains null element.
      *

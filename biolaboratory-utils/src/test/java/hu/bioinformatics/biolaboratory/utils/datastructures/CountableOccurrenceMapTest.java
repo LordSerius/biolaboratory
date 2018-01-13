@@ -13,7 +13,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.sameInstance;
-import static org.testng.Assert.fail;
 
 /**
  * Test cases for the {@link CountableOccurrenceMap} class.
@@ -51,6 +50,12 @@ public class CountableOccurrenceMapTest {
     @Test(dataProvider = CountableOccurrenceMapTestDataProvider.IS_EQUALS_DATA_PROVIDER_NAME)
     public void shouldEqualsReturn(CountableOccurrenceMap<String> occurrenceMap, Object rightHand, boolean isEquals) {
         assertThat(occurrenceMap.equals(rightHand), is(isEquals));
+    }
+
+    @Test(dataProvider = CountableOccurrenceMapTestDataProvider.GET_ELEMENTS_SIZE_DATA_PROVIDER_NAME)
+    public void shouldGetKeySizeReturn(CountableOccurrenceMap<String> occurrenceMap, int controlKeySize) {
+        int keysSize = occurrenceMap.getElementsSize();
+        assertThat(keysSize, is(equalTo(controlKeySize)));
     }
 
     @Test(dataProvider = CountableOccurrenceMapTestDataProvider.COPY_DATA_PROVIDER_NAME)

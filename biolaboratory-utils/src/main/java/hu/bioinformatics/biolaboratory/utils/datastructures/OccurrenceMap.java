@@ -41,13 +41,13 @@ public class OccurrenceMap<K> {
     }
 
     /**
-     * Builds a new {@link OccurrenceMap} with the given initial occurrences. The occurrences should contain
-     * values null or non negative numbers. The build method thows all occurrence which value is null or 0.
+     * Builds a new {@link OccurrenceMap} with the given initial occurrences. The occurrences should not be
+     * null or negative numbers.
      *
      * @param occurrences The initial occurrence map.
      * @param <K> The key type of the occurrences.
      * @return A new {@link OccurrenceMap} map with the given occurrences.
-     * @throws IllegalArgumentException If the occurrences contain negative values.
+     * @throws IllegalArgumentException If occurrences contain null keys, or negative values.
      */
     public static <K> OccurrenceMap<K> build(final Map<K, Integer> occurrences) {
         if (occurrences == null) return new OccurrenceMap<>(null);

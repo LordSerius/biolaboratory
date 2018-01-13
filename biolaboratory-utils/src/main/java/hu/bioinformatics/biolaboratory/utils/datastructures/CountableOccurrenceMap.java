@@ -31,13 +31,13 @@ public class CountableOccurrenceMap<K> extends OccurrenceMap<K> {
     }
 
     /**
-     * Build a {@link CountableOccurrenceMap} about the input {@link Map} of <i>K</i> and {@link Integer}. The ipnut
+     * Build a {@link CountableOccurrenceMap} about the input {@link Map} of <i>K</i> and {@link Integer}. The input
      * {@link Map} can only contain 0 or bigger values.
      *
      * @param occurrences The key-occurrence {@link Map}.
      * @param <K> The type of the key.
      * @return A new {@link CountableOccurrenceMap} about the input {@link Map}.
-     * @throws IllegalArgumentException If occurrences contain null key, null value, or negative values.
+     * @throws IllegalArgumentException If occurrences contain null keys, null values, or negative values.
      */
     public static <K> CountableOccurrenceMap<K> build(Map<K, Integer> occurrences) {
         checkArgument(occurrences == null
@@ -85,13 +85,23 @@ public class CountableOccurrenceMap<K> extends OccurrenceMap<K> {
         return new HashSet<>(occurrenceMap.keySet());
     }
 
+    /**
+     * Returns with the keys size.
+     *
+     * @return The size of the key set.
+     */
+    public final int getElementsSize() {
+        return occurrenceMap.size();
+    }
+
     @Override
     public CountableOccurrenceMap<K> copy() {
         return new CountableOccurrenceMap<>(occurrenceMap);
     }
 
+    @SafeVarargs
     @Override
-    public CountableOccurrenceMap<K> subSet(final K... keys) {
+    public final CountableOccurrenceMap<K> subSet(final K... keys) {
         return (CountableOccurrenceMap<K>) super.subSet(keys);
     }
 
